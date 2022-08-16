@@ -1,2 +1,2 @@
-# co-note
-Co:Note Extended Programming Note-Taking App For Students
+# Co:Note
+Extended note-taking app for programming students
