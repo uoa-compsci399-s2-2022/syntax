@@ -1,13 +1,15 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
-generator client {
-  provider        = "prisma-client-js"
-}
+
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
   userId            String
@@ -21,9 +23,12 @@ model Account {
   scope             String?
   id_token          String? @db.String
   session_state     String?
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@unique([provider, providerAccountId])
 }
+
 model Session {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique
@@ -31,6 +36,17 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+model Note {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  body  String
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([id, userId])
+}
+
 model User {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
@@ -39,19 +55,13 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  notes          Note[] //add note reference
+  notes         Note[]
 }
+
 model VerificationToken {
   identifier String   @id @default(auto()) @map("_id") @db.ObjectId
   token      String   @unique
   expires    DateTime
+
   @@unique([identifier, token])
-}
-model Note {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  title String
-  body  String
-  userId String?
-  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  @@unique([id, userId])
 }
