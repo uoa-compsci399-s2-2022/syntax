@@ -3,6 +3,13 @@ Extended note-taking app for programming students
 
 [![https://vercel.com/?utm_source=10outof10&utm_campaign=oss](powered-by-vercel.svg)](https://vercel.com/?utm_source=10outof10&utm_campaign=oss)
 
+## Getting Started
+```
+$ npm install
+$ npx prisma generate
+$ npm run dev
+```
+
 ## Team 10 out of 10
 | Name  | Role |
 | --- | --- |
