@@ -1,6 +1,6 @@
 {
-  "name": "Next.JS Progressive Web App",
-  "short_name": "Next PWA",
+  "name": "co:note",
+  "short_name": "co:note",
   "theme_color": "#ffffff",
   "background_color": "#004740",
   "display": "fullscreen",

@@ -8,6 +8,8 @@ import dynamic from "next/dynamic";
 import NotesList from "../components/NotesList";
 import Editor from "../components/Editor";
 
+import { Button } from '@nextui-org/react';
+
 const getAllNotesByUserID = require("../prisma/Note").getAllNotesByUserID;
 
 export const getServerSideProps = async ({ req, res }) => {
@@ -33,7 +35,7 @@ export default function Component({ notes }) {
 		return (
 			<>
 			Not signed in <br />
-			<button onClick={() => signIn()}>Sign in</button>
+			<Button onClick={() => signIn()}>Sign in</Button>
 		 </>
 		);
 	 }
@@ -42,7 +44,7 @@ export default function Component({ notes }) {
     return (
     <>
       Signed in as {session.user.email} <br />
-      <button onClick={() => signOut()}>Sign out</button>
+      <Button onClick={() => signOut()}>Sign out</Button>
 		{showEditor && <Editor />}
       <NotesList retrieved_notes={notes} showEditor={undefined} />
     </>
