@@ -1,13 +1,7 @@
-import { useSession, signIn, signOut, getSession, SessionProvider } from "next-auth/react"
-
+import { useSession, signIn, signOut, getSession } from "next-auth/react"
 import { useState } from "react";
-
-import Head from "next/head";
-import dynamic from "next/dynamic";
-
 import NotesList from "../components/NotesList";
 import Editor from "../components/Editor";
-
 import { Button } from '@nextui-org/react';
 
 const getAllNotesByUserID = require("../prisma/Note").getAllNotesByUserID;
