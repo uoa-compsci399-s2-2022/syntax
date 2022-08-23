@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
+import Tiptap from '../../components/Tiptap'
 
 import { getSession } from "next-auth/react";
 
@@ -46,7 +47,7 @@ const Note = ({ note }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      
+              <Tiptap noteContent={note.body}/>
               <h2 >{note.title}</h2>
            
               <p >{note.body}</p>
