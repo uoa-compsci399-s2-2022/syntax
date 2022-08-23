@@ -21,4 +21,4 @@ $ npm run dev
 
 ### Acknowledgements
 
-Our client Paravmir and sponsor Vercel.
+Our client Paravmir and sponsor Vercel. 
