@@ -18,3 +18,7 @@ $ npm run dev
 | [Sarah Kim](https://github.com/bonjuruu)  | Backend Developer  |
 | [Hayden White](https://github.com/HFx6)  | Backend Developer  |
 | [Kevin Yip](https://github.com/kyip053)  | Backend Developer  |
+
+### Acknowledgements
+
+Our client Paravmir and sponsor Vercel.
