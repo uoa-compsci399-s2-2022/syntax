@@ -121,7 +121,7 @@ const Menubar = ({ editor }) => {
   )
 }
 
-export default Tiptap => {
+export default () => {
   const editor = useEditor({
     extensions: [
       StarterKit,
