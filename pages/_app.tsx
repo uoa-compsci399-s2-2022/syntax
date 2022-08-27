@@ -3,6 +3,47 @@ import { NoteProvider } from "../modules/AppContext";
 import { NextUIProvider } from "@nextui-org/react";
 import Head from "next/head";
 import { AppProps } from "next/app";
+import { createTheme } from "@nextui-org/react";
+
+const lightTheme = createTheme({
+  type: "light",
+  theme: {
+    colors: {
+      cyan: "#8BE9FD",
+      green: "#50FA7B",
+      orange: "#FFB86C",
+      pink: "#FF79C6",
+      purple: "#BD93F9",
+      red: "#FF5555",
+      yellow: "#F1FA8C"
+    }
+  }
+})
+
+const darkTheme = createTheme({
+  type: "dark",
+  theme: {
+    colors: {
+      background: "#121212",
+      bg800: "#1E1E1E",
+      bg700: "#222222",
+      bg600: "#242424",
+      bg500: "#272727",
+      bg400: "#2C2C2C",
+      bg300: "#2E2E2E",
+      bg200: "#333333",
+      bg100: "#353535",
+      bg50: "#383838",
+      cyan: "#8BE9FD",
+      green: "#50FA7B",
+      orange: "#FFB86C",
+      pink: "#FF79C6",
+      purple: "#BD93F9",
+      red: "#FF5555",
+      yellow: "#F1FA8C"
+    }
+  }
+});
 
 export default function App({
   Component,
@@ -38,9 +79,9 @@ export default function App({
         <meta name="theme-color" content="#317EFB" />
       </Head>
       <SessionProvider session={session}>
-        <NextUIProvider>
+        <NextUIProvider theme={darkTheme}>
           <NoteProvider>
-            <Component {...pageProps} />
+            <Component {...pageProps}/>
           </NoteProvider>
         </NextUIProvider>
       </SessionProvider>
