@@ -1,9 +1,16 @@
 import { useEffect } from "react";
 import Image from "next/image";
 
+import { Button } from "@nextui-org/react";
 
-import { useNote, useDispatchNote, useNotes, useDispatchNotes } from "../modules/AppContext";
+import {
+  useNote,
+  useDispatchNote,
+  useNotes,
+  useDispatchNotes,
+} from "../modules/AppContext";
 import Link from "next/link";
+import NoteCard from "../components/NoteCard";
 
 const NotesList = ({ retrieved_notes, showEditor }) => {
   // this is where we assign the context to constants
@@ -44,45 +51,19 @@ const NotesList = ({ retrieved_notes, showEditor }) => {
   }, [retrieved_notes]);
 
   return (
-    <div >
+    <div>
       {notes.length > 0 ? (
-        <ul >
+        <ul style={{ "margin-left": "0", "margin-right": "0" }}>
           {notes.map((note) => (
-            <li key={note.id} >
-              <article >
-                <header >
-                  <h2 >{note.title}</h2>
-                </header>
-                <main >
-                  <p >{note.body}</p>
-                </main>
-                <footer >
-                  <ul >
-                    <li onClick={() => editNote(note)} >
-                      <button >
-                        <span >Edit</span>
-                      </button>
-                    </li>
-                    <li >
-                      <Link href={`/note/${note.id}`} target={`_blank`} rel={`noopener`}>
-                        <button >
-                          <span >Open</span>
-                        </button>
-                      </Link>
-                    </li>
-                    <li >
-                      <button onClick={() => deleteNote(note)} >
-                        <span >Delete</span>
-                      </button>
-                    </li>
-                  </ul>
-                </footer>
-              </article>
+            <li key={note.id}>
+              <a href={`/note/${note.id}`} target={`_self`}>
+                <NoteCard note={note} onClick />
+              </a>
             </li>
           ))}
         </ul>
       ) : (
-        <div >
+        <div>
           <p>Oops.. no notes yet</p>
         </div>
       )}

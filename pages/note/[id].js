@@ -1,10 +1,12 @@
-import Head from "next/head";
-import Image from "next/image";
-import Tiptap from '../../components/Tiptap'
+import NoteDisplay from "../../components/NoteDisplay";
+import NoteSidebar from "../../components/NoteSidebar";
 
-import { getSession } from "next-auth/react";
+import { useSession, signIn, signOut, getSession } from "next-auth/react";
+import { Button, Container } from "@nextui-org/react";
 
 const getNoteByID = require("../../prisma/Note").getNoteByID;
+
+const getAllNotesByUserID = require("../../prisma/Note").getAllNotesByUserID;
 
 export const getServerSideProps = async ({ req, res, params }) => {
   const session = await getSession({ req });
@@ -13,47 +15,41 @@ export const getServerSideProps = async ({ req, res, params }) => {
 
   if (!session) {
     res.statusCode = 403;
-    return { props: { note: null } };
+    return { props: { notes: [] } };
   }
+
+  const notes = await getAllNotesByUserID(session?.user?.id);
+  console.log({ notes });
 
   const note = await getNoteByID(id);
   console.log({ note });
 
   return {
-    props: { note },
+    props: { notes, note },
   };
 };
 
-const Note = ({ note }) => {
-  if (note == null) {
+export default function Note({ notes, note }) {
+  const { data: session, status } = useSession();
+  if (!session) {
     return (
       <>
-        <Head>
-          <title>Login to view note</title>
-          <meta name="description" content="Login to view this note" />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-
-              <h1 >Oops... You have to login to view this note</h1>
+        Not signed in <br />
+        <Button onClick={() => signIn()}>Sign in</Button>
       </>
     );
   }
 
   return (
     <>
-      <Head>
-        <title>{note.title}</title>
-        <meta name="description" content={`By ${note.user.name}`} />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-              <Tiptap noteContent={note.body}/>
-              <h2 >{note.title}</h2>
-           
-              <p >{note.body}</p>
-            
+      <Container
+        display="flex"
+        wrap="nowrap"
+        css={{ "min-height": "100vh", padding: "0", margin: "0" }}
+      >
+        <NoteSidebar notes={notes} />
+        <NoteDisplay note={note} css={{ background: "$background" }} />
+      </Container>
     </>
   );
-};
-
-export default Note;
+}

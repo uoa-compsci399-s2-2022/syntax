@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
 import { useNote, useDispatchNote, useNotes, useDispatchNotes } from "../modules/AppContext";
+import { Button, Textarea, Input } from "@nextui-org/react";
+
 
 import RandomID from "../modules/RandomID";
 
@@ -30,18 +32,18 @@ const Editor = () => {
   // user data
   const [userID, setUserID] = useState(null);
 
-  // function to update textarea content and height
+  // function to update Textarea content and height
   const updateField = (e) => {
-    // get textarea
+    // get Textarea
     let field = e.target;
 
-    //set body state to textarea value
+    //set body state to Textarea value
     setBody(field.value);
 
-    // reset textarea height
+    // reset Textarea height
     field.style.height = "inherit";
 
-    // Get the computed styles for the textarea
+    // Get the computed styles for the Textarea
     let computed = window?.getComputedStyle(field);
 
     // calculate the height
@@ -154,21 +156,21 @@ const Editor = () => {
     status === "authenticated" && (
       <>
         
-              <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" className={"form-input"} placeholder="Title" />
+              <Input value={title} onChange={(e) => setTitle(e.target.value)} type="text" className={"form-input"} placeholder="Title" />
            
-              <textarea
+              <Textarea
                 value={body}
                 onChange={(e) => updateField(e)}
                 name="note-body"
                 id="note-body"
-                className="form-textarea"
+                className="form-Textarea"
                 cols="10"
                 rows="2"
                 placeholder="Write something spec ✨"
-              ></textarea>
-              <button onClick={saveNote} disabled={isSaved} className="cta flex gap-2 items-end">
+              ></Textarea>
+              <Button onClick={saveNote} disabled={isSaved} className="cta flex gap-2 items-end">
                 <span className="">{isSaved ? "Saved" : "Save"}</span>
-              </button>
+              </Button>
       </>
     )
   );
