@@ -2,9 +2,9 @@ import { Card, Text } from "@nextui-org/react";
 
 const NoteCard = ({ note }) => {
   return (
-  <Card isPressable>
+  <Card isPressable >
     <Card.Header><Text h3>{note.title}</Text></Card.Header>
-    <Card.Body>{note.body}</Card.Body>
+    <Card.Body css={{ "padding-top": "0" }}>{note.body}</Card.Body>
   </Card>
   )
 };

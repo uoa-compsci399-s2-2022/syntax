@@ -57,7 +57,7 @@ const NotesList = ({ retrieved_notes, showEditor }) => {
           {notes.map((note) => (
             <li key={note.id}>
               <a href={`/note/${note.id}`} target={`_self`}>
-                <NoteCard note={note} onClick />
+                <NoteCard note={note} />
               </a>
             </li>
           ))}
