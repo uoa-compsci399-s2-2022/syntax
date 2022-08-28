@@ -1,6 +1,6 @@
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import { useState } from "react";
-import NotesList from "../components/NotesList";
+import NoteList from "../components/note/NoteList";
 import Editor from "../components/Editor";
 import { Container, Button } from "@nextui-org/react";
 import Link from "next/link";

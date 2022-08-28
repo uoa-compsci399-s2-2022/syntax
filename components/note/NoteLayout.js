@@ -1,7 +1,6 @@
 import NoteDisplay from "../../components/note/NoteDisplay";
-import NoteSidebar from "../../components/note/NoteSidebar";
-
-import { useSession, signIn, signOut, getSession } from "next-auth/react";
+import NoteSidebar from "./NoteSidebar";
+import { useSession, signIn, getSession } from "next-auth/react";
 import { Button, Container } from "@nextui-org/react";
 
 const getNoteByID = require("../../prisma/Note").getNoteByID;
@@ -29,7 +28,7 @@ export const getServerSideProps = async ({ req, res, params }) => {
   };
 };
 
-export default function Note({ notes, note }) {
+const NoteLayout = ({ notes, note }) => {
   const { data: session, status } = useSession();
   if (!session) {
     return (
@@ -39,18 +38,19 @@ export default function Note({ notes, note }) {
       </>
     );
   }
-
-  return (
-    <>
-      <Container
-        fluid
-        display="flex"
-        wrap="nowrap"
-        css={{ "min-width": "100%", "min-height": "100vh", padding: "0", margin: "0" }}
-      >
-        <NoteSidebar notes={notes} />
-        <NoteDisplay note={note} css={{ background: "$background" }} />
-      </Container>
-    </>
-  );
+    return (
+        <>
+          <Container
+            fluid
+            display="flex"
+            wrap="nowrap"
+            css={{ "min-width": "100%", "min-height": "100vh", padding: "0", margin: "0" }}
+          >
+            <NoteSidebar notes={notes} />
+            <NoteDisplay note={note} css={{ background: "$background" }} />
+          </Container>
+        </>
+      );
 }
+
+export default NoteLayout;

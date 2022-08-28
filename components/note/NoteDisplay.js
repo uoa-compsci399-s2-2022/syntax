@@ -1,6 +1,6 @@
 import Head from "next/head";
-import Tiptap from "../components/Tiptap";
-import NoteNavbar from "../components/NoteNavbar";
+import Tiptap from "../Tiptap";
+import NoteNavbar from "./NoteNavbar";
 import { Container, Text } from "@nextui-org/react";
 
 const NoteDisplay = ({ note }) => {
@@ -24,7 +24,7 @@ const NoteDisplay = ({ note }) => {
           <meta name="description" content={`By ${note.user.name}`} />
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <Container css={{ padding: "0" }}>
+        <Container css={{ padding: "0", "max-height": "100vh", overflow: "auto" }}>
           <NoteNavbar />
           <Container>
             <Text h1>{note.title}</Text>

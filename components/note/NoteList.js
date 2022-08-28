@@ -9,11 +9,11 @@ import {
   useDispatchNote,
   useNotes,
   useDispatchNotes,
-} from "../modules/AppContext";
+} from "../../modules/AppContext";
 import Link from "next/link";
-import NoteCard from "../components/NoteCard";
+import NoteCard from "./NoteCard";
 
-const NotesList = ({ retrieved_notes }) => {
+const NoteList = ({ retrieved_notes }) => {
   const router = useRouter();
 
   // this is where we assign the context to constants
@@ -54,6 +54,40 @@ const NotesList = ({ retrieved_notes }) => {
   }, [retrieved_notes]);
 
   return (
+    <>
+    <div>
+    {notes.length > 0 ? (
+      <ul style={{ margin: "20px 0 20px 0" }}>
+        {notes.map((note) => (
+          <li key={note.id} style={{ "margin-bottom": "20px"}}>
+            <a onClick={() => {router.push(`/note/${note.id}`)}}>
+              <NoteCard note={note} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <div>
+        <p>Oops.. no notes yet</p>
+      </div>
+    )}
+  </div>    <div>
+      {notes.length > 0 ? (
+        <ul style={{ margin: "20px 0 20px 0" }}>
+          {notes.map((note) => (
+            <li key={note.id} style={{ "margin-bottom": "20px"}}>
+              <a onClick={() => {router.push(`/note/${note.id}`)}}>
+                <NoteCard note={note} />
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div>
+          <p>Oops.. no notes yet</p>
+        </div>
+      )}
+    </div>
     <div>
       {notes.length > 0 ? (
         <ul style={{ margin: "20px 0 20px 0" }}>
@@ -71,7 +105,8 @@ const NotesList = ({ retrieved_notes }) => {
         </div>
       )}
     </div>
+    </>
   );
 };
 
-export default NotesList;
+export default NoteList;

@@ -1,12 +1,9 @@
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
-import { useState } from "react";
-import NotesList from "../components/NotesList";
-import NoteSidebar from "../components/NoteSidebar";
-import NoteNavbar from "../components/NoteNavbar";
-import Editor from "../components/Editor";
 import { Button, Container, Text } from "@nextui-org/react";
+import NoteSidebar from "../../components/note/NoteSidebar";
+import NoteNavbar from "../../components/note/NoteNavbar";
 
-const getAllNotesByUserID = require("../prisma/Note").getAllNotesByUserID;
+const getAllNotesByUserID = require("../../prisma/Note").getAllNotesByUserID;
 
 export const getServerSideProps = async ({ req, res }) => {
   const session = await getSession({ req });
@@ -42,16 +39,17 @@ export default function Component({ notes }) {
         display="flex"
         wrap="nowrap"
         css={{
+          "max-height": "100vh",
           "min-width": "100%",
-          "min-height": "100vh",
           padding: "0",
           margin: "0",
+          overflow: "hidden"
         }}
       >
         <NoteSidebar notes={notes} />
-        <Container css={{ padding: "0" }}>
+        <Container css={{ padding: "0", "max-height": "100vh", overflow: "auto" }}>
           <NoteNavbar />
-          <Container>
+          <Container >
             <Text h1>Hello! &#x1f44b;</Text>
             <hr />
             <Text>Create or select a note to get started.</Text>

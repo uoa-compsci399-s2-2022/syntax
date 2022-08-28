@@ -1,4 +1,4 @@
-import NotesList from "../../components/NotesList";
+import NoteList from "../../components/note/NoteList";
 
 export const getServerSideProps = ({ params }) => {
   return {
@@ -14,7 +14,7 @@ const User = ({ params }) => {
       <div>
           <div className="wrapper m-auto max-w-8xl">
             {/* Note list component */}
-            <NotesList />
+            <NoteList />
           </div>
       </div>
     </>
