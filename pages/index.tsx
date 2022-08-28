@@ -1,6 +1,6 @@
 import { useSession, signIn, signOut, getSession } from "next-auth/react"
 import { useState } from "react";
-import Editor from '../components/Tiptap'
+import ImageEditor from '../components/ImageEditor'
 import { Button } from '@nextui-org/react';
 
 const getAllNotesByUserID = require("../prisma/Note").getAllNotesByUserID;
@@ -37,7 +37,7 @@ export default function Component({ notes }) {
 		<>
 			Signed in as {session.user.email} <br />
 			<Button onClick={() => signOut()}>Sign out</Button>
-			<Editor/>
+			<ImageEditor/>
         </>
 	)
 }
