@@ -43,9 +43,10 @@ export default function Note({ notes, note }) {
   return (
     <>
       <Container
+        fluid
         display="flex"
         wrap="nowrap"
-        css={{ "min-height": "100vh", padding: "0", margin: "0" }}
+        css={{ "min-width": "100%", "min-height": "100vh", padding: "0", margin: "0" }}
       >
         <NoteSidebar notes={notes} />
         <NoteDisplay note={note} css={{ background: "$background" }} />

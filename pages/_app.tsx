@@ -62,7 +62,7 @@ export default function App({
         />
         <meta name="description" content="Description" />
         <meta name="keywords" content="Keywords" />
-        <title>co:note</title>
+        <title>syntax</title>
 
         <link rel="manifest" href="/manifest.json" />
         <link

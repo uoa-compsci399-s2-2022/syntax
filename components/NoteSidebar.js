@@ -5,7 +5,6 @@ import NotesList from "../components/NotesList";
 const NoteSidebar = ({ notes }) => {
   return (
     <Container
-      xs
       display="flex"
       wrap="nowrap"
       css={{
@@ -20,7 +19,7 @@ const NoteSidebar = ({ notes }) => {
           clearable
           placeholder="Search notes"
           type="search"
-          contentLeft={<MagnifyingGlassIcon />}
+          contentLeft={<MagnifyingGlassIcon style={{ height: "24px" }} />}
           css={{ width: "100%" }}
         />
         <NotesList retrieved_notes={notes} showEditor={undefined} />

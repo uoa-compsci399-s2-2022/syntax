@@ -37,7 +37,12 @@ export default function Component({ notes }) {
 
   return (
     <>
-      <Container display="flex" wrap="nowrap" css={{ "min-height": "100vh", padding: "0", margin: "0" }}>
+      <Container
+        fluid
+        display="flex"
+        wrap="nowrap"
+        css={{ "min-width": "100%", "min-height": "100vh", padding: "0", margin: "0" }}
+      >
         <NoteSidebar notes={notes} />
         <Container css={{ padding: "20px" }}>
           <NoteNavbar />
