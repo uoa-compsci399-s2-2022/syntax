@@ -1,7 +1,7 @@
 import { useSession, signIn, signOut, getSession } from "next-auth/react"
-import { useState } from "react";
 import Tiptap from '../components/Tiptap'
 import { Button } from '@nextui-org/react';
+import NotesList from "../components/NotesList";
 
 const getAllNotesByUserID = require("../prisma/Note").getAllNotesByUserID;
 
@@ -18,14 +18,14 @@ export const getServerSideProps = async ({ req, res }) => {
 	};
 };
 
-export default function Component({}) {
+export default function Component({ notes }) {
 	const { data: session } = useSession()
 	if (!session) {
 		return (
-			<>
+			<div>
 				Not signed in <br />
 				<Button onClick={() => signIn()}>Sign in</Button>
-			</>
+			</div>
 		);
 	}
 
@@ -33,7 +33,8 @@ export default function Component({}) {
 		<div>
 			Signed in as {session.user.email} <br />
 			<Button onClick={() => signOut()}>Sign out</Button>
-			<Tiptap/>
+			<Tiptap />
+			<NotesList retrieved_notes={notes}/>
         </div>
 	)
 }

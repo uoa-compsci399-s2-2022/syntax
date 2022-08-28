@@ -1,11 +1,13 @@
-export async function createNote(note) {
-    console.log(note)
-    let res = await fetch("/api/note", {
+export async function createNote(text) {
+
+    let note = {
+        title: "Temporary title, link this later",
+        body: text,
+    };
+    await fetch("/api/note", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: note,
+        body: JSON.stringify(note),
     });
-    console.log(res)
-    const message = await res.json();
-    console.log("Created note", { message });
+    document.location.reload()
 }
