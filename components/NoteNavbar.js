@@ -36,10 +36,13 @@ const NoteNavbar = () => {
       variant="sticky"
       disableShadow
       disableBlur
-      css={{ "background": "transparent" }}
-      containerCss={{ "justify-content": "flex-end", "background": "transparent" }}
+      css={{ background: "transparent" }}
+      containerCss={{
+        "justify-content": "flex-end",
+        background: "transparent",
+      }}
     >
-      <Navbar.Content>
+      <Navbar.Content gap={5}>
         <Navbar.Item>
           <Avatar
             size="md"
@@ -51,13 +54,8 @@ const NoteNavbar = () => {
             <Dropdown.Trigger>
               <Button
                 auto
-                color="warning"
+                light
                 icon={<EllipsisHorizontalIcon style={{ height: "30px" }} />}
-                css={{
-                  "&": {
-                    background: "$background",
-                  },
-                }}
               />
             </Dropdown.Trigger>
             <Dropdown.Menu
