@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 import { Button } from "@nextui-org/react";
 
@@ -12,7 +13,9 @@ import {
 import Link from "next/link";
 import NoteCard from "../components/NoteCard";
 
-const NotesList = ({ retrieved_notes, showEditor }) => {
+const NotesList = ({ retrieved_notes }) => {
+  const router = useRouter();
+
   // this is where we assign the context to constants
   // which we will use to read and modify our global state
   const notes = useNotes();
@@ -53,10 +56,10 @@ const NotesList = ({ retrieved_notes, showEditor }) => {
   return (
     <div>
       {notes.length > 0 ? (
-        <ul style={{margin: "20px 0 20px 0" }}>
+        <ul style={{ margin: "20px 0 20px 0" }}>
           {notes.map((note) => (
             <li key={note.id} style={{ "margin-bottom": "20px"}}>
-              <a href={`/note/${note.id}`} target={`_self`}>
+              <a onClick={() => {router.push(`/note/${note.id}`)}}>
                 <NoteCard note={note} />
               </a>
             </li>
