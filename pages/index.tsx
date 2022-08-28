@@ -1,9 +1,7 @@
+import { useRouter } from "next/router";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
-import { useState } from "react";
-import NoteList from "../components/note/NoteList";
-import Editor from "../components/Editor";
-import { Container, Button } from "@nextui-org/react";
-import Link from "next/link";
+import { Button } from "@nextui-org/react";
+
 
 const getAllNotesByUserID = require("../prisma/Note").getAllNotesByUserID;
 
@@ -24,6 +22,7 @@ export const getServerSideProps = async ({ req, res }) => {
 };
 
 export default function Component() {
+  const router = useRouter();
   const { data: session, status } = useSession();
 
   if (!session) {
@@ -39,11 +38,9 @@ export default function Component() {
     <>
       Signed in as {session.user.email} <br />
       <Button bordered onClick={() => signOut()}>Sign out</Button>
-      <Link href={`/note`} target={`_blank`} rel={`noopener`}>
-        <Button bordered>
+      <Button bordered onClick={() => router.push("/note")}>
           <span>Go to Notes</span>
         </Button>
-      </Link>
     </>
   );
 }

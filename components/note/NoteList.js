@@ -54,29 +54,16 @@ const NoteList = ({ retrieved_notes }) => {
   }, [retrieved_notes]);
 
   return (
-    <>
     <div>
-    {notes.length > 0 ? (
-      <ul style={{ margin: "20px 0 20px 0" }}>
-        {notes.map((note) => (
-          <li key={note.id} style={{ "margin-bottom": "20px"}}>
-            <a onClick={() => {router.push(`/note/${note.id}`)}}>
-              <NoteCard note={note} />
-            </a>
-          </li>
-        ))}
-      </ul>
-    ) : (
-      <div>
-        <p>Oops.. no notes yet</p>
-      </div>
-    )}
-  </div>    <div>
       {notes.length > 0 ? (
         <ul style={{ margin: "20px 0 20px 0" }}>
           {notes.map((note) => (
-            <li key={note.id} style={{ "margin-bottom": "20px"}}>
-              <a onClick={() => {router.push(`/note/${note.id}`)}}>
+            <li key={note.id} style={{ "margin-bottom": "20px" }}>
+              <a
+                onClick={() => {
+                  router.push(`/note/${note.id}`);
+                }}
+              >
                 <NoteCard note={note} />
               </a>
             </li>
@@ -88,24 +75,6 @@ const NoteList = ({ retrieved_notes }) => {
         </div>
       )}
     </div>
-    <div>
-      {notes.length > 0 ? (
-        <ul style={{ margin: "20px 0 20px 0" }}>
-          {notes.map((note) => (
-            <li key={note.id} style={{ "margin-bottom": "20px"}}>
-              <a onClick={() => {router.push(`/note/${note.id}`)}}>
-                <NoteCard note={note} />
-              </a>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <div>
-          <p>Oops.. no notes yet</p>
-        </div>
-      )}
-    </div>
-    </>
   );
 };
 
