@@ -7,8 +7,9 @@ export default async function handle(req, res) {
 
   const session = await getSession({ req });
   if (req.method == "POST") {
-    const { body } = req.body;
-    const note = await createNote(body);
+    const { title, body } = req.body;
+    console.log("POST")
+    const note = await createNote(title, body, session);
     return res.json(note);
   }
 

@@ -1,28 +1,19 @@
 import { useEffect } from "react";
-import Image from "next/image";
-
-
 import { useNote, useDispatchNote, useNotes, useDispatchNotes } from "../modules/AppContext";
 import Link from "next/link";
 
-const NotesList = ({ retrieved_notes, showEditor }) => {
-  // this is where we assign the context to constants
-  // which we will use to read and modify our global state
+const NotesList = ({ retrieved_notes }) => {
+
   const notes = useNotes();
   const setNotes = useDispatchNotes();
-
   const currentNote = useNote();
   const setCurrentNote = useDispatchNote();
 
-  // function to edit note by setting it to the currentNote state
-  // and adding the "edit" action which will then be read by the <Editor /> component
   const editNote = (note) => {
-    console.log({ note });
     note.action = "edit";
     setCurrentNote(note);
   };
 
-  // function to delete note by using the setNotes Dispatch notes function
   const deleteNote = async (note) => {
     let confirmDelete = confirm("Do you really want to delete this note?");
     try {
@@ -39,7 +30,6 @@ const NotesList = ({ retrieved_notes, showEditor }) => {
   };
 
   useEffect(() => {
-    // replace notes in notes context state
     setNotes({ note: retrieved_notes, type: "replace" });
   }, [retrieved_notes]);
 

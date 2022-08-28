@@ -1,6 +1,6 @@
 import { useSession, signIn, signOut, getSession } from "next-auth/react"
 import Tiptap from '../components/Tiptap'
-import { Button } from '@nextui-org/react';
+import { Button, Input } from '@nextui-org/react';
 import NotesList from "../components/NotesList";
 
 const getAllNotesByUserID = require("../prisma/Note").getAllNotesByUserID;
