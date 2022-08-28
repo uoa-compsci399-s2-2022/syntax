@@ -23,8 +23,6 @@ export const getServerSideProps = async({ req, res, params }) => {
 };
 
 const Note = ({ note }) => {
-
-
     if (note == null) {
         return ( <
             >
@@ -38,9 +36,7 @@ const Note = ({ note }) => {
             link rel = "icon"
             href = "/favicon.ico" / >
             <
-            /Head>
-
-            <
+            /Head> <
             h1 > Oops...You have to login to view this note < /h1> <
             />
         );
@@ -58,11 +54,7 @@ const Note = ({ note }) => {
         link rel = "icon"
         href = "/favicon.ico" / >
         <
-        /Head>
-
-        <
-        Tiptap content = { note.body }
-        /> <
+        /Head> <
         h2 > { note.title } < /h2> <
         p > { note.body } < /p> <
         />
