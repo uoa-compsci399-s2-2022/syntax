@@ -2,9 +2,9 @@ import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import { useState } from "react";
 import NotesList from "../components/NotesList";
 import NoteSidebar from "../components/NoteSidebar";
-import NoteDisplay from "../components/NoteDisplay";
+import NoteNavbar from "../components/NoteNavbar";
 import Editor from "../components/Editor";
-import { Button, Container } from "@nextui-org/react";
+import { Button, Container, Text } from "@nextui-org/react";
 
 const getAllNotesByUserID = require("../prisma/Note").getAllNotesByUserID;
 
@@ -39,8 +39,10 @@ export default function Component({ notes }) {
     <>
       <Container display="flex" wrap="nowrap" css={{ "min-height": "100vh", padding: "0", margin: "0" }}>
         <NoteSidebar notes={notes} />
-        <Container>
-          <Editor />
+        <Container css={{ padding: "20px" }}>
+          <NoteNavbar />
+          <Text h1>Hello! &#x1f44b;</Text>
+          <Text>Create or select a note to get started.</Text>
         </Container>
       </Container>
     </>

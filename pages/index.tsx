@@ -30,7 +30,7 @@ export default function Component() {
     return (
       <>
         Not signed in <br />
-        <Button onClick={() => signIn()}>Sign in</Button>
+        <Button bordered onClick={() => signIn()}>Sign in</Button>
       </>
     );
   }
@@ -38,9 +38,9 @@ export default function Component() {
   return (
     <>
       Signed in as {session.user.email} <br />
-      <Button onClick={() => signOut()}>Sign out</Button>
+      <Button bordered onClick={() => signOut()}>Sign out</Button>
       <Link href={`/note`} target={`_blank`} rel={`noopener`}>
-        <Button>
+        <Button bordered>
           <span>Go to Notes</span>
         </Button>
       </Link>

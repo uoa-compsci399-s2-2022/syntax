@@ -168,7 +168,7 @@ const Editor = () => {
                 rows="2"
                 placeholder="Write something spec ✨"
               ></Textarea>
-              <Button onClick={saveNote} disabled={isSaved} className="cta flex gap-2 items-end">
+              <Button bordered onClick={saveNote} disabled={isSaved} className="cta flex gap-2 items-end">
                 <span className="">{isSaved ? "Saved" : "Save"}</span>
               </Button>
       </>

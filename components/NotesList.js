@@ -55,7 +55,7 @@ const NotesList = ({ retrieved_notes, showEditor }) => {
       {notes.length > 0 ? (
         <ul style={{ "margin-left": "0", "margin-right": "0" }}>
           {notes.map((note) => (
-            <li key={note.id}>
+            <li key={note.id} style={{ "margin-bottom": "20px"}}>
               <a href={`/note/${note.id}`} target={`_self`}>
                 <NoteCard note={note} />
               </a>

@@ -9,6 +9,8 @@ const lightTheme = createTheme({
   type: "light",
   theme: {
     colors: {
+      layer1: "#E0E0E0",
+      layer2: "#000000",
       cyan: "#8BE9FD",
       green: "#50FA7B",
       orange: "#FFB86C",
@@ -34,7 +36,7 @@ const darkTheme = createTheme({
       bg200: "#333333",
       bg100: "#353535",
       bg50: "#383838",
-      cyan: "#8BE9FD",
+      primary: "#8BE9FD",
       green: "#50FA7B",
       orange: "#FFB86C",
       pink: "#FF79C6",
