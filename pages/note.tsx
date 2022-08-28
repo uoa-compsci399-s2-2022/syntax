@@ -41,13 +41,21 @@ export default function Component({ notes }) {
         fluid
         display="flex"
         wrap="nowrap"
-        css={{ "min-width": "100%", "min-height": "100vh", padding: "0", margin: "0" }}
+        css={{
+          "min-width": "100%",
+          "min-height": "100vh",
+          padding: "0",
+          margin: "0",
+        }}
       >
         <NoteSidebar notes={notes} />
-        <Container css={{ padding: "20px" }}>
+        <Container css={{ padding: "0" }}>
           <NoteNavbar />
-          <Text h1>Hello! &#x1f44b;</Text>
-          <Text>Create or select a note to get started.</Text>
+          <Container>
+            <Text h1>Hello! &#x1f44b;</Text>
+            <hr />
+            <Text>Create or select a note to get started.</Text>
+          </Container>
         </Container>
       </Container>
     </>

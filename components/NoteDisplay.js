@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Tiptap from "../components/Tiptap";
 import NoteNavbar from "../components/NoteNavbar";
-import { Container } from "@nextui-org/react";
+import { Container, Text } from "@nextui-org/react";
 
 const NoteDisplay = ({ note }) => {
   if (note == null) {
@@ -24,10 +24,11 @@ const NoteDisplay = ({ note }) => {
           <meta name="description" content={`By ${note.user.name}`} />
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <Container css={{ padding: "20px" }}>
+        <Container css={{ padding: "0" }}>
           <NoteNavbar />
           <Container>
-            <h2>{note.title}</h2>
+            <Text h1>{note.title}</Text>
+            <hr />
             <Tiptap noteContent={note.body} />
           </Container>
         </Container>
