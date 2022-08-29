@@ -1,5 +1,5 @@
 import NoteList from "./NoteList";
-import { Container, Input, Button,Spacer } from "@nextui-org/react";
+import { Container, Input, Button, Spacer } from "@nextui-org/react";
 import { MagnifyingGlassIcon, PlusIcon } from "@heroicons/react/24/outline";
 
 const NoteSidebar = ({ notes }) => {

@@ -14,9 +14,12 @@ import {
   TrashIcon,
   ShareIcon,
   LockClosedIcon,
-  DocumentArrowUpIcon,
-  ChevronLeftIcon,
+  DocumentArrowUpIcon
 } from "@heroicons/react/24/outline";
+import {
+  SunIcon,
+  MoonIcon
+} from "@heroicons/react/24/solid";
 
 const NoteNavbar = () => {
   const { setTheme } = useNextTheme();
@@ -64,6 +67,8 @@ const NoteNavbar = () => {
         <Navbar.Item>
           <Switch
             checked={isDark}
+            iconOn={<MoonIcon />}
+            iconOff={<SunIcon />}
             onChange={(e) => setTheme(e.target.checked ? "dark" : "light")}
           />
         </Navbar.Item>

@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Tiptap from "../Tiptap";
 import NoteNavbar from "./NoteNavbar";
-import { Container, Text, Spacer } from "@nextui-org/react";
+import { Container, Text, Spacer, Grid } from "@nextui-org/react";
 
 const NoteDisplay = ({ note }) => {
   if (note == null) {
@@ -38,11 +38,18 @@ const NoteDisplay = ({ note }) => {
           }}
         >
           <NoteNavbar />
-          <Container css={{ margin: "0", "max-width": "100vw" }}>
+          <Container css={{ margin: "0", padding: "0 3rem", "max-width": "100vw" }}>
             <Text h1>{note.title}</Text>
+            <Grid.Container>
+              <Grid xs={1.5}><Text weight="bold">Created by</Text></Grid>
+              <Grid xs={10}>John Doe</Grid>
+              <Grid xs={1.5}><Text weight="bold">Last modified</Text></Grid>
+              <Grid xs={10}>Mon 29 Aug 4:12 PM</Grid>
+            </Grid.Container>
+            <Spacer />
             <hr />
             <Spacer />
-            <Tiptap noteContent={note.body} />
+            <Text>{note.body}</Text>
           </Container>
           <Spacer />
         </Container>
