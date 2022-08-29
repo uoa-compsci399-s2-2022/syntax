@@ -1,4 +1,6 @@
 import { useSession, signIn, signOut, getSession } from "next-auth/react"
+import { useState } from "react";
+import ImageEditor from '../components/ImageEditor'
 import Tiptap from '../components/Tiptap'
 import { Button, Input } from '@nextui-org/react';
 import NotesList from "../components/NotesList";
@@ -33,6 +35,7 @@ export default function Component({ notes }) {
 		<div>
 			Signed in as {session.user.email} <br />
 			<Button onClick={() => signOut()}>Sign out</Button>
+			<ImageEditor/>
 			<Tiptap />
 			<NotesList retrieved_notes={notes}/>
         </div>
