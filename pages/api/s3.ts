@@ -6,8 +6,8 @@ const path = `http://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_BUCKET_
 
 const s3Client = new aws.S3({
     region: process.env.AWS_BUCKET_REGION,
-    accessKeyId: process.env.AWS_ACCESS_KEY,
-    secretAccessKey: process.env.AWS_SECRET_KEY,
+    accessKeyId: process.env.S3_ACCESS_KEY,
+    secretAccessKey: process.env.S3_SECRET_KEY,
     signatureVersion: "v4",
 });
 
