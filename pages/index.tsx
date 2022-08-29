@@ -14,7 +14,6 @@ export const getServerSideProps = async ({ req, res }) => {
   }
 
   const notes = await getAllNotesByUserID(session?.user?.id);
-  console.log({ notes });
 
   return {
     props: { notes },

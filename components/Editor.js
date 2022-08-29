@@ -77,7 +77,6 @@ const Editor = () => {
         userId: userID,
       };
 
-      console.log({ note });
 
       try {
         if (noteAction == "edit") {
@@ -93,11 +92,9 @@ const Editor = () => {
 
           // update note
           const updatedNote = await res.json();
-          console.log("Update successful", { updatedNote });
 
           // edit in notes list
           setNotes({ note: updatedNote, type: "edit" });
-          console.log({ note, noteAction, noteID, notes });
         } else {
           // send create request with note data
           let res = await fetch("/api/note", {
@@ -107,7 +104,6 @@ const Editor = () => {
           });
 
           const newNote = await res.json();
-          console.log("Create successful", { newNote });
           // add to notes list
           setNotes({ note: newNote, type: "add" });
         }
@@ -129,7 +125,6 @@ const Editor = () => {
         setNoteID(null);
         setNoteAction("add");
       } catch (error) {
-        console.log(error);
       }
     }
   };

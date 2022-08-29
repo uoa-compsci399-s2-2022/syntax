@@ -43,6 +43,7 @@ export const getAllNotes = async () => {
 
 // get notes by user
 export const getAllNotesByUserID = async (id) => {
+  console.log("called");
   const notes = await prisma.note.findMany({
     where: {
       userId: id,

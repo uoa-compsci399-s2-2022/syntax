@@ -17,6 +17,7 @@ const NoteDisplay = ({ note }) => {
       </>
     );
   } else {
+    // console.log(note);
     return (
       <>
         <Head>
@@ -49,7 +50,7 @@ const NoteDisplay = ({ note }) => {
             <Spacer />
             <hr />
             <Spacer />
-            <Text>{note.body}</Text>
+            <Tiptap noteContent={note.body} key={note.title}/>
           </Container>
           <Spacer />
         </Container>
