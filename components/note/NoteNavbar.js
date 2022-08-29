@@ -1,4 +1,6 @@
-import { Avatar, Dropdown, Button, Modal, Navbar } from "@nextui-org/react";
+import { Avatar, Dropdown, Button, Modal, Navbar, Switch, useTheme } from "@nextui-org/react";
+import { useState, useEffect } from "react";
+import { useTheme as useNextTheme } from 'next-themes'
 import {
   EllipsisHorizontalIcon,
   TrashIcon,
@@ -6,9 +8,11 @@ import {
   LockClosedIcon,
   DocumentArrowUpIcon,
 } from "@heroicons/react/24/outline";
-import { useState, useEffect } from "react";
 
 const NoteNavbar = () => {
+  const { setTheme } = useNextTheme();
+  const { isDark, type } = useTheme();
+
   const [selectedKey, setSelectedKey] = useState();
   const [exportModal, setExportModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -48,6 +52,12 @@ const NoteNavbar = () => {
             size="md"
             src="https://cdn3.emoji.gg/emojis/3568-catkiss.gif"
           />
+        </Navbar.Item>
+        <Navbar.Item>
+        <Switch
+        checked={isDark}
+        onChange={(e) => setTheme(e.target.checked ? 'dark' : 'light')}
+      />
         </Navbar.Item>
         <Navbar.Item>
           <Dropdown placement="bottom-right">

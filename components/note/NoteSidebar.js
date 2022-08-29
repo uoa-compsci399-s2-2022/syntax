@@ -1,6 +1,6 @@
+import NoteList from "./NoteList";
 import { Container, Input, Button } from "@nextui-org/react";
 import { MagnifyingGlassIcon, PlusIcon } from "@heroicons/react/24/outline";
-import NoteList from "./NoteList";
 
 const NoteSidebar = ({ notes }) => {
   return (
@@ -9,10 +9,11 @@ const NoteSidebar = ({ notes }) => {
       wrap="nowrap"
       css={{
         "max-width": "25%",
-        "min-width": "fit-content",
         padding: "0",
-        background: "$bg800",
-        height: "100vh", float: "left", overflow: "scroll"
+        background: "$accents2",
+        height: "100vh",
+        float: "left",
+        "overflow-y": "auto",
       }}
     >
       <Container css={{ padding: "30px" }}>

@@ -1,8 +1,5 @@
-import NoteDisplay from "../../components/note/NoteDisplay";
-import NoteSidebar from "../../components/note/NoteSidebar";
-
-import { useSession, signIn, signOut, getSession } from "next-auth/react";
-import { Button, Container } from "@nextui-org/react";
+import NoteLayout from "../../components/note/NoteLayout"
+import { useSession, getSession } from "next-auth/react";
 
 const getNoteByID = require("../../prisma/Note").getNoteByID;
 
@@ -31,26 +28,8 @@ export const getServerSideProps = async ({ req, res, params }) => {
 
 export default function Note({ notes, note }) {
   const { data: session, status } = useSession();
-  if (!session) {
-    return (
-      <>
-        Not signed in <br />
-        <Button onClick={() => signIn()}>Sign in</Button>
-      </>
-    );
-  }
 
   return (
-    <>
-      <Container
-        fluid
-        display="flex"
-        wrap="nowrap"
-        css={{ "min-width": "100%", "min-height": "100vh", padding: "0", margin: "0" }}
-      >
-        <NoteSidebar notes={notes} />
-        <NoteDisplay note={note} css={{ background: "$background" }} />
-      </Container>
-    </>
+    <NoteLayout allNotes={notes} currentNote={note} />
   );
 }

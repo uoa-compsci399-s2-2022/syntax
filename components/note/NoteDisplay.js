@@ -21,10 +21,12 @@ const NoteDisplay = ({ note }) => {
       <>
         <Head>
           <title>{note.title}</title>
-          <meta name="description" content={`By ${note.user.name}`} />
+          {/*<meta name="description" content={`By ${note.user.name}`} />*/}
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <Container css={{ padding: "0", "max-height": "100vh", overflow: "auto" }}>
+        <Container
+          css={{ padding: "0", "max-height": "100vh", "overflow-y": "auto" }}
+        >
           <NoteNavbar />
           <Container>
             <Text h1>{note.title}</Text>
