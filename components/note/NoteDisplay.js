@@ -1,7 +1,8 @@
 import Head from "next/head";
-import Tiptap from "../Tiptap";
 import NoteNavbar from "./NoteNavbar";
 import { Container, Text, Spacer, Grid } from "@nextui-org/react";
+import ImageEditor from '../ImageEditor'
+import Tiptap from '../Tiptap'
 
 const NoteDisplay = ({ note }) => {
   if (note == null) {
@@ -50,6 +51,8 @@ const NoteDisplay = ({ note }) => {
             <Spacer />
             <hr />
             <Spacer />
+            <ImageEditor/>
+			      <Tiptap />
             <Tiptap noteContent={note.body} key={note.title}/>
           </Container>
           <Spacer />
