@@ -29,7 +29,8 @@ const darkTheme = createTheme({
         warning: "",
         error: "",
         background: "#1D1D1D",
-        backgroundContrast: "#121212"
+        backgroundContrast: "#121212",
+        accents2: "#121212"
       }
     }
   });

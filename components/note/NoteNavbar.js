@@ -1,12 +1,21 @@
-import { Avatar, Dropdown, Button, Modal, Navbar, Switch, useTheme } from "@nextui-org/react";
+import {
+  Avatar,
+  Dropdown,
+  Button,
+  Modal,
+  Navbar,
+  Switch,
+  useTheme,
+} from "@nextui-org/react";
 import { useState, useEffect } from "react";
-import { useTheme as useNextTheme } from 'next-themes'
+import { useTheme as useNextTheme } from "next-themes";
 import {
   EllipsisHorizontalIcon,
   TrashIcon,
   ShareIcon,
   LockClosedIcon,
   DocumentArrowUpIcon,
+  ChevronLeftIcon,
 } from "@heroicons/react/24/outline";
 
 const NoteNavbar = () => {
@@ -40,10 +49,9 @@ const NoteNavbar = () => {
       variant="sticky"
       disableShadow
       disableBlur
-      css={{ background: "transparent" }}
       containerCss={{
-        "justify-content": "flex-end",
-        background: "transparent",
+        "min-width": "100%",
+        "justify-content": "flex-end"
       }}
     >
       <Navbar.Content gap={5}>
@@ -54,10 +62,10 @@ const NoteNavbar = () => {
           />
         </Navbar.Item>
         <Navbar.Item>
-        <Switch
-        checked={isDark}
-        onChange={(e) => setTheme(e.target.checked ? 'dark' : 'light')}
-      />
+          <Switch
+            checked={isDark}
+            onChange={(e) => setTheme(e.target.checked ? "dark" : "light")}
+          />
         </Navbar.Item>
         <Navbar.Item>
           <Dropdown placement="bottom-right">

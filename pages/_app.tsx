@@ -1,6 +1,7 @@
 import Head from "next/head";
 import darkTheme from "../styles/themes/darkTheme";
 import lightTheme from "../styles/themes/lightTheme";
+import "../styles/globals.css";
 import { SessionProvider } from "next-auth/react";
 import { NoteProvider } from "../modules/AppContext";
 import { NextUIProvider } from "@nextui-org/react";

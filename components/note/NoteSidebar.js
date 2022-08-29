@@ -1,5 +1,5 @@
 import NoteList from "./NoteList";
-import { Container, Input, Button } from "@nextui-org/react";
+import { Container, Input, Button,Spacer } from "@nextui-org/react";
 import { MagnifyingGlassIcon, PlusIcon } from "@heroicons/react/24/outline";
 
 const NoteSidebar = ({ notes }) => {
@@ -7,11 +7,14 @@ const NoteSidebar = ({ notes }) => {
     <Container
       display="flex"
       wrap="nowrap"
+      direction="column"
       css={{
         "max-width": "25%",
+        "min-width": "min-content",
         padding: "0",
+        margin: "0",
         background: "$accents2",
-        height: "100vh",
+        "max-height": "100vh",
         float: "left",
         "overflow-y": "auto",
       }}
@@ -34,6 +37,7 @@ const NoteSidebar = ({ notes }) => {
           Add new note
         </Button>
       </Container>
+      <Spacer />
     </Container>
   );
 };

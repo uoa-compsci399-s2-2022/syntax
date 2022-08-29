@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Tiptap from "../Tiptap";
 import NoteNavbar from "./NoteNavbar";
-import { Container, Text } from "@nextui-org/react";
+import { Container, Text, Spacer } from "@nextui-org/react";
 
 const NoteDisplay = ({ note }) => {
   if (note == null) {
@@ -25,14 +25,26 @@ const NoteDisplay = ({ note }) => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <Container
-          css={{ padding: "0", "max-height": "100vh", "overflow-y": "auto" }}
+          fluid
+          display="flex"
+          direction="column"
+          wrap="nowrap"
+          css={{
+            padding: "0",
+            margin: "0",
+            "max-height": "100vh",
+            "max-width": "100vw",
+            "overflow-y": "auto",
+          }}
         >
           <NoteNavbar />
-          <Container>
+          <Container css={{ margin: "0", "max-width": "100vw" }}>
             <Text h1>{note.title}</Text>
             <hr />
+            <Spacer />
             <Tiptap noteContent={note.body} />
           </Container>
+          <Spacer />
         </Container>
       </>
     );
