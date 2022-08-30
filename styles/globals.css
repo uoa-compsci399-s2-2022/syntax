@@ -32,3 +32,19 @@ input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-results-button,
 input[type="search"]::-webkit-search-results-decoration { display: none; }
 
+/* Editor styling */
+.ProseMirror:focus {
+  outline: none;
+}
+
+.is-active {
+  background-color: var(--nextui-colors-accents2) !important;
+}
+
+.menu-divider {
+  background-color: var(--nextui-colors-border);
+  height: 2rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  width: 1px;
+}

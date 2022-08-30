@@ -29,7 +29,7 @@ const NoteList = ({ retrieved_notes }) => {
       {notes.length > 0 ? (
         <ul style={{ margin: "20px 0 20px 0" }}>
           {notes.map((note) => (
-            <li key={note.id} style={{ "margin-bottom": "20px" }}>
+            <li key={note.id}>
               <a
                 onClick={() => {
                   router.push(`/note/${note.id}`);
