@@ -56,7 +56,6 @@ const NoteDisplay = ({ note }) => {
             <Spacer />
             <hr />
             {/*<ImageEditor/>*/}
-            <Spacer />
             <Tiptap noteContent={note.body} key={currentNote.title}/>
           </Container>
           <Spacer />
