@@ -1,8 +1,14 @@
 import NoteDisplay from "../../components/note/NoteDisplay";
 import NoteSidebar from "./NoteSidebar";
 import { Container } from "@nextui-org/react";
-
+import {
+  useNote,
+  useDispatchNote,
+  useNotes,
+  useDispatchNotes,
+} from "../../modules/AppContext";
 const NoteLayout = ({ allNotes, currentNote }) => {
+  const currentNote = useNote();
   return (
     <Container
       fluid
@@ -16,7 +22,7 @@ const NoteLayout = ({ allNotes, currentNote }) => {
       }}
     >
       <NoteSidebar notes={allNotes} />
-      <NoteDisplay note={currentNote} css={{ background: "$background" }} />
+      <NoteDisplay note={currentNote} css={{ background: "$background" }} key={currentNote}/>
     </Container>
   );
 };

@@ -10,12 +10,17 @@ import {
 } from "../modules/AppContext";
 
 export default function () {
-  const editor = useEditor({
-    extensions: [StarterKit],
-    content: "<p>Hello World! 🌎️</p>"
-  });
-
+  const notesc = useNotes();
   const setNotes = useDispatchNotes();
+
+  const currentNote = useNote();
+  const setCurrentNote = useDispatchNote();
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+    ],
+    content: currentNote.body
+  })
 
   const createNote = async (title, text) => {
     let note = {

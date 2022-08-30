@@ -24,16 +24,20 @@ const NoteList = ({ retrieved_notes }) => {
     setNotes({ note: retrieved_notes, type: "replace" });
   }, [retrieved_notes]);
 
+  const openNote = (note) => {
+    note.action = "edit";
+    setCurrentNote(note);
+    router.push(`/note/${note.id}`, undefined, {shallow: true});
+  }
+
   return (
     <div>
       {notes.length > 0 ? (
         <ul style={{ margin: "20px 0 20px 0" }}>
           {notes.map((note) => (
-            <li key={note.id}>
+            <li key={note.id} style={{ "marginBottom": "20px" }}>
               <a
-                onClick={() => {
-                  router.push(`/note/${note.id}`);
-                }}
+                onClick={() => {openNote(note)}}
               >
                 <NoteCard note={note} />
               </a>
