@@ -22,6 +22,7 @@ const NoteSidebar = ({ notes }) => {
       <Container css={{ padding: "30px" }}>
         <Input
           clearable
+          aria-label="Notes search bar"
           placeholder="Search notes"
           type="search"
           contentLeft={<MagnifyingGlassIcon style={{ height: "24px" }} />}

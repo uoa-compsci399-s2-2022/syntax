@@ -1,11 +1,9 @@
 import MenuItem from "./MenuItem";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import {
   Container,
-  Button,
   Dropdown,
   Tooltip,
-  styled,
 } from "@nextui-org/react";
 import {
   BiUndo,
@@ -160,7 +158,7 @@ export default ({ editor }) => {
         <Dropdown>
           <Dropdown.Button light color>{selectedTextLevel}</Dropdown.Button>
           <Dropdown.Menu
-            aria-label="Single selection actions"
+            aria-label="Text style selection"
             disallowEmptySelection
             selectionMode="single"
             selectedKeys={selectedTextLevel}
