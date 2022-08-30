@@ -1,21 +1,21 @@
-import NoteLayout from "../../components/note/NoteLayout"
+import NoteLayout from "../../components/note/NoteLayout";
 import { useSession, getSession } from "next-auth/react";
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import {
   useNote,
   useDispatchNote,
   useNotes,
   useDispatchNotes,
 } from "../../modules/AppContext";
-const getNoteByID = require("../../prisma/Note").getNoteByID;
 
+const getNoteByID = require("../../prisma/Note").getNoteByID;
 const getAllNotesByUserID = require("../../prisma/Note").getAllNotesByUserID;
 
 export const getServerSideProps = async ({ req, res, params }) => {
   res.setHeader(
-    'Cache-Control',
-    'public, s-maxage=10, stale-while-revalidate=59'
-  )
+    "Cache-Control",
+    "public, s-maxage=10, stale-while-revalidate=59"
+  );
   const session = await getSession({ req });
   const { id } = params;
 
@@ -23,21 +23,20 @@ export const getServerSideProps = async ({ req, res, params }) => {
     res.statusCode = 403;
     return { props: { notes: [] } };
   }
-  if (id && id.length>1) {
+  if (id && id.length > 1) {
     return {
       notFound: true,
-    }
+    };
   }
 
   const notes = await getAllNotesByUserID(session?.user?.id);
   var note;
-  if(id && id.length==1){
+  if (id && id.length == 1) {
     note = await getNoteByID(id[0]);
-  }else{
-    note = {title: "default",
-      body: "start typing"};
+  } else {
+    note = { title: "Hello! 👋", body: "Start typing here to get started." };
   }
-  // console.log(note)
+
   return {
     props: { notes, note },
   };
@@ -50,14 +49,12 @@ export default function Note({ notes, note }) {
 
   const currentNote = useNote();
   const setCurrentNote = useDispatchNote();
-  
-  if (Object.keys(currentNote).length == 0){
+
+  if (Object.keys(currentNote).length == 0) {
     note.action = "edit";
-    setCurrentNote(note)
+    setCurrentNote(note);
   }
   console.log(currentNote);
 
-  return (
-    <NoteLayout allNotes={notes} currentNote={note} />
-  );
+  return <NoteLayout allNotes={notes} currentNote={note} />;
 }
