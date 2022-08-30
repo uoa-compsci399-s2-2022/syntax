@@ -1,7 +1,12 @@
 import NoteLayout from "../../components/note/NoteLayout"
 import { useSession, getSession } from "next-auth/react";
 import { useEffect, useState } from 'react';
-
+import {
+  useNote,
+  useDispatchNote,
+  useNotes,
+  useDispatchNotes,
+} from "../../modules/AppContext";
 const getNoteByID = require("../../prisma/Note").getNoteByID;
 
 const getAllNotesByUserID = require("../../prisma/Note").getAllNotesByUserID;
@@ -40,6 +45,17 @@ export const getServerSideProps = async ({ req, res, params }) => {
 
 export default function Note({ notes, note }) {
   const { data: session, status } = useSession();
+  const notesc = useNotes();
+  const setNotes = useDispatchNotes();
+
+  const currentNote = useNote();
+  const setCurrentNote = useDispatchNote();
+  
+  if (Object.keys(currentNote).length == 0){
+    note.action = "edit";
+    setCurrentNote(note)
+  }
+  console.log(currentNote);
 
   return (
     <NoteLayout allNotes={notes} currentNote={note} />
