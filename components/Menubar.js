@@ -10,19 +10,15 @@ import {
   BiRedo,
   BiBold,
   BiItalic,
-  BiUnderline,
   BiStrikethrough,
   BiCode,
-  BiDotsHorizontalRounded,
-  BiParagraph,
   BiListUl,
   BiListOl,
   BiCodeBlock,
   BiPoll,
   BiMinus,
   BiSubdirectoryLeft,
-  BiEditAlt,
-  BiHeading,
+  BiEditAlt
 } from "react-icons/bi";
 
 export default ({ editor }) => {
@@ -151,7 +147,6 @@ export default ({ editor }) => {
       fluid
       display="flex"
       alignItems="center"
-      wrap="nowrap"
       css={{ padding: "0.2rem 0" }}
     >
       <Tooltip content={"Text style"}>

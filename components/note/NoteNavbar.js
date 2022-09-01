@@ -15,10 +15,12 @@ import {
   ShareIcon,
   LockClosedIcon,
   DocumentArrowUpIcon,
+  ChevronDoubleLeftIcon,
+  ChevronDoubleRightIcon,
 } from "@heroicons/react/24/outline";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
 
-const NoteNavbar = () => {
+const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
   const { setTheme } = useNextTheme();
   const { isDark, type } = useTheme();
 
@@ -50,9 +52,21 @@ const NoteNavbar = () => {
       disableBlur
       containerCss={{
         "min-width": "100%",
-        "justify-content": "flex-end",
+        "justify-content": "space-between",
       }}
     >
+      <Navbar.Content>
+        <Navbar.Item>
+          <Button
+            auto
+            light
+            animated={false}
+            onPress={handleSidebarDisplay}
+            icon={<ChevronDoubleRightIcon style={{ height: "24px" }} />}
+            css={{ display: sidebarDisplay ? "flex" : "none" }}
+          />
+        </Navbar.Item>
+      </Navbar.Content>
       <Navbar.Content gap={5}>
         <Navbar.Item>
           <Avatar
