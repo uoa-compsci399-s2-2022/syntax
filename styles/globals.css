@@ -20,9 +20,8 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: darkgrey;
+  background-color: var(--nextui-colors-accents1);
   outline: none;
-  border-radius: 5px;
 }
 
 input[type=search]::-ms-clear {  display: none; width : 0; height: 0; }

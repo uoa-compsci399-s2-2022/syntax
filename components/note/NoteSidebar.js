@@ -40,15 +40,15 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
           padding: "0",
         }}
       >
-        <Navbar.Content>
-          <Navbar.Item>
+        <Navbar.Content css={{ flex: "1" }}>
+          <Navbar.Item css={{ flex: "1" }}>
             <Input
               clearable
               aria-label="Notes search bar"
               placeholder="Search notes"
               type="search"
               contentLeft={<MagnifyingGlassIcon style={{ height: "24px" }} />}
-              css={{ width: "100%" }}
+              css={{ flex: "1" }}
             />
           </Navbar.Item>
         </Navbar.Content>

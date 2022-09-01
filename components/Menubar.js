@@ -147,7 +147,7 @@ export default ({ editor }) => {
       fluid
       display="flex"
       alignItems="center"
-      css={{ padding: "0.2rem 0" }}
+      css={{ padding: "0.2rem 0", margin: "0" }}
     >
       <Tooltip content={"Text style"}>
         <Dropdown>
