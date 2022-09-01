@@ -1,14 +1,6 @@
-import {
-  Avatar,
-  Dropdown,
-  Button,
-  Modal,
-  Navbar,
-  Switch,
-  useTheme,
-} from "@nextui-org/react";
+import UserSettingsModal from "../modal/UserSettingsModal";
+import { Avatar, Dropdown, Button, Modal, Navbar } from "@nextui-org/react";
 import { useState, useEffect } from "react";
-import { useTheme as useNextTheme } from "next-themes";
 import {
   EllipsisHorizontalIcon,
   TrashIcon,
@@ -18,17 +10,15 @@ import {
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
 } from "@heroicons/react/24/outline";
-import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
 
 const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
-  const { setTheme } = useNextTheme();
-  const { isDark, type } = useTheme();
-
   const [selectedKey, setSelectedKey] = useState();
+  const [settingsModal, setSettingsModal] = useState(false);
   const [exportModal, setExportModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
 
   const closeHandler = () => {
+    setSettingsModal(false);
     setExportModal(false);
     setDeleteModal(false);
     setSelectedKey();
@@ -50,6 +40,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
       variant="sticky"
       disableShadow
       disableBlur
+      css={{ "z-index": "998" }}
       containerCss={{
         "min-width": "100%",
         "justify-content": "space-between",
@@ -69,17 +60,17 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
       </Navbar.Content>
       <Navbar.Content gap={5}>
         <Navbar.Item>
-          <Avatar
-            size="md"
-            src="https://cdn3.emoji.gg/emojis/3568-catkiss.gif"
-          />
-        </Navbar.Item>
-        <Navbar.Item>
-          <Switch
-            checked={isDark}
-            iconOn={<MoonIcon />}
-            iconOff={<SunIcon />}
-            onChange={(e) => setTheme(e.target.checked ? "dark" : "light")}
+          <Button
+            auto
+            light
+            animated={false}
+            onPress={setSettingsModal}
+            icon={
+              <Avatar
+                src="https://cdn3.emoji.gg/emojis/3568-catkiss.gif"
+                css={{ cursor: "pointer" }}
+              />
+            }
           />
         </Navbar.Item>
         <Navbar.Item>
@@ -149,6 +140,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
             </Button>
           </Modal.Footer>
         </Modal>
+        <UserSettingsModal open={settingsModal} closeHandler={closeHandler} />
       </Navbar.Content>
     </Navbar>
   );

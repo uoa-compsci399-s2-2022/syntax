@@ -20,7 +20,7 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--nextui-colors-accents1);
+  background-color: darkgrey;
   outline: none;
 }
 
