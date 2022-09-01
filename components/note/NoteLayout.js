@@ -8,7 +8,7 @@ import {
   useDispatchNotes,
 } from "../../modules/AppContext";
 const NoteLayout = ({ allNotes, currentNote }) => {
-  const currentNote = useNote();
+  // const currentNote = useNote();
   return (
     <Container
       fluid

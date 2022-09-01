@@ -24,7 +24,7 @@ const NoteDisplay = ({ note }) => {
       </>
     );
   } else {
-    // console.log(note);
+    console.log(note);
     return (
       <>
         <Head>
@@ -50,7 +50,7 @@ const NoteDisplay = ({ note }) => {
             <Text h1>{currentNote.title}</Text>
             <Grid.Container>
               <Grid xs={1.5}><Text weight="bold">Created by</Text></Grid>
-              <Grid xs={10}>John Doe</Grid>
+              <Grid xs={10}>{note.user.name}</Grid>
               <Grid xs={1.5}><Text weight="bold">Last modified</Text></Grid>
               <Grid xs={10}>Mon 29 Aug 4:12 PM</Grid>
             </Grid.Container>

@@ -27,7 +27,7 @@ const NoteSidebar = ({ notes }) => {
           contentLeft={<MagnifyingGlassIcon style={{ height: "24px" }} />}
           css={{ width: "100%" }}
         />
-        <NoteList retrieved_notes={notes} showEditor={undefined} />
+        <NoteList retrieved_notes={notes} showEditor={undefined} key={notes}/>
         <Button
           bordered
           color="primary"

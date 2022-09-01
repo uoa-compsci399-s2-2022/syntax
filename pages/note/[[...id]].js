@@ -34,8 +34,12 @@ export const getServerSideProps = async ({ req, res, params }) => {
   if(id && id.length==1){
     note = await getNoteByID(id[0]);
   }else{
-    note = {title: "default",
-      body: "start typing"};
+    note = {
+            title: "default",
+            body: "start typing",
+            updatedAt: Date.now(),
+            user: session?.user
+            };
   }
   // console.log(note)
   return {
@@ -55,7 +59,7 @@ export default function Note({ notes, note }) {
     note.action = "edit";
     setCurrentNote(note)
   }
-  console.log(currentNote);
+  console.log(notes);
 
   return (
     <NoteLayout allNotes={notes} currentNote={note} />

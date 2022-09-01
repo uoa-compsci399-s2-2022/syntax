@@ -26,7 +26,8 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "tiptap": "^1.32.2",
-    "tiptap-commands": "^1.17.1"
+    "tiptap-commands": "^1.17.1",
+    "use-debounce": "^8.0.4"
   },
   "devDependencies": {
     "@types/node": "^17.0.4",
