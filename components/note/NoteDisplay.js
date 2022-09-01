@@ -24,7 +24,7 @@ const NoteDisplay = ({ note }) => {
       </>
     );
   } else {
-    console.log(note);
+
     return (
       <>
         <Head>
@@ -56,7 +56,7 @@ const NoteDisplay = ({ note }) => {
             </Grid.Container>
             <Spacer />
             <hr />
-            <Spacer />
+            {/*<ImageEditor/>*/}
             <Tiptap noteContent={note.body} key={currentNote.title}/>
           </Container>
           <Spacer />

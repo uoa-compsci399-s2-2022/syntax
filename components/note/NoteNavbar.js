@@ -14,12 +14,9 @@ import {
   TrashIcon,
   ShareIcon,
   LockClosedIcon,
-  DocumentArrowUpIcon
+  DocumentArrowUpIcon,
 } from "@heroicons/react/24/outline";
-import {
-  SunIcon,
-  MoonIcon
-} from "@heroicons/react/24/solid";
+import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
 
 const NoteNavbar = () => {
   const { setTheme } = useNextTheme();
@@ -48,13 +45,12 @@ const NoteNavbar = () => {
 
   return (
     <Navbar
-      fluid
       variant="sticky"
       disableShadow
       disableBlur
       containerCss={{
         "min-width": "100%",
-        "justify-content": "flex-end"
+        "justify-content": "flex-end",
       }}
     >
       <Navbar.Content gap={5}>
@@ -74,16 +70,14 @@ const NoteNavbar = () => {
         </Navbar.Item>
         <Navbar.Item>
           <Dropdown placement="bottom-right">
-            <Dropdown.Trigger>
-              <Button
-                auto
-                light
-                icon={<EllipsisHorizontalIcon style={{ height: "30px" }} />}
-              />
-            </Dropdown.Trigger>
+            <Dropdown.Button
+              light
+              icon={<EllipsisHorizontalIcon style={{ height: "30px" }} />}
+            />
             <Dropdown.Menu
               disabledKeys={["share", "lock"]}
               onAction={setSelectedKey}
+              aria-label="Note Options"
             >
               <Dropdown.Item
                 key="share"

@@ -1,9 +1,14 @@
-import { EditorContent, useEditor } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import Menubar from './Menubar.js'
-import { Button } from '@nextui-org/react'
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 import { useEffect } from 'react';
-import { useNote, useDispatchNote, useNotes, useDispatchNotes } from "../modules/AppContext";
+import Menubar from "./Menubar.js";
+import { Button, Spacer } from "@nextui-org/react";
+import {
+  useNote,
+  useDispatchNote,
+  useNotes,
+  useDispatchNotes,
+} from "../modules/AppContext";
 import { useDebounce } from 'use-debounce';
 
 export default function () {
@@ -19,9 +24,11 @@ export default function () {
     content: currentNote.body
   })
 
+
   const [debouncedEditor] = useDebounce(editor?.state.doc.content, 2000);
 
   const createNote = async () => {
+
     let note = {
       id: currentNote.id,
       title: currentNote.title,
@@ -32,6 +39,7 @@ export default function () {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(note),
     });
+
     setNotes({ note: note, type: "edit" });
   }
   useEffect(() => {
@@ -42,10 +50,11 @@ export default function () {
 
   return (
     <div>
-      <label htmlFor="title">Title</label><br></br>
       <Menubar editor={editor} />
+      <hr />
+      <Spacer />
       <EditorContent editor={editor} />
-      <Button onClick={() => createNote()}>Save</Button>
+      <Button bordered onClick={() => createNote()}>Save</Button>
     </div>
-  )
+  );
 }

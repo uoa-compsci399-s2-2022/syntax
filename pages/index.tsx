@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
-import { useState } from "react";
-import { Button, Input } from '@nextui-org/react';
+import { Button } from '@nextui-org/react';
 
 const getAllNotesByUserID = require("../prisma/Note").getAllNotesByUserID;
 
