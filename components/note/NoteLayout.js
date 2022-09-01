@@ -1,15 +1,14 @@
-import NoteDisplay from "../../components/note/NoteDisplay";
+import NoteDisplay from ".//NoteDisplay";
 import NoteSidebar from "./NoteSidebar";
 import NoteNavbar from "./NoteNavbar";
 import { Container } from "@nextui-org/react";
 import { useState } from "react";
-
 import {
   useNote,
   useDispatchNote,
   useNotes,
   useDispatchNotes,
-} from "../../modules/AppContext";
+} from "@/modules/AppContext";
 
 const NoteLayout = ({ allNotes, currentNote }) => {
   const [sidebarDisplay, setSidebarDisplay] = useState(false);

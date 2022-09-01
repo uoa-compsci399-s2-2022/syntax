@@ -1,14 +1,13 @@
 import Head from "next/head";
-import { useState } from "react";
 import { Container, Text, Spacer, Grid } from "@nextui-org/react";
-import ImageEditor from "../ImageEditor";
-import Tiptap from "../Tiptap";
+import ImageEditor from "@/components/editor/ImageEditor";
+import Tiptap from "@/components/editor/Tiptap";
 import {
   useNote,
   useDispatchNote,
   useNotes,
   useDispatchNotes,
-} from "../../modules/AppContext";
+} from "@/modules/AppContext";
 
 const NoteDisplay = ({ note, handleSidebarDisplay }) => {
   const notesc = useNotes();

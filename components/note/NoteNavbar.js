@@ -1,6 +1,6 @@
-import SettingsModal from "../modal/SettingsModal";
-import ExportModal from "../modal/ExportModal";
-import DeleteModal from "../modal/DeleteModal";
+import SettingsModal from "@/components/modal/SettingsModal";
+import ExportModal from "@/components/modal/ExportModal";
+import DeleteModal from "@/components/modal/DeleteModal";
 import { Avatar, Dropdown, Button, Navbar } from "@nextui-org/react";
 import { useState, useEffect } from "react";
 import {
@@ -44,7 +44,6 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
       css={{ "z-index": "998" }}
       containerCss={{
         "min-width": "100%",
-        "justify-content": "space-between",
       }}
     >
       <Navbar.Content>
@@ -54,7 +53,9 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
             light
             animated={false}
             onPress={handleSidebarDisplay}
-            icon={<ChevronDoubleRightIcon style={{ height: "24px" }} />}
+            icon={
+              <ChevronDoubleRightIcon style={{ height: "var(--icon-size)" }} />
+            }
             css={{ display: sidebarDisplay ? "flex" : "none" }}
           />
         </Navbar.Item>
@@ -114,7 +115,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
           </Dropdown>
         </Navbar.Item>
         <ExportModal open={exportModal} closeHandler={closeHandler} />
-        <DeleteModal  open={deleteModal} closeHandler={closeHandler} />
+        <DeleteModal open={deleteModal} closeHandler={closeHandler} />
         <SettingsModal open={settingsModal} closeHandler={closeHandler} />
       </Navbar.Content>
     </Navbar>

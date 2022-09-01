@@ -4,7 +4,6 @@ import {
   MagnifyingGlassIcon,
   PlusIcon,
   ChevronDoubleLeftIcon,
-  ChevronDoubleRightIcon,
 } from "@heroicons/react/24/outline";
 
 const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
@@ -47,7 +46,9 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
               aria-label="Notes search bar"
               placeholder="Search notes"
               type="search"
-              contentLeft={<MagnifyingGlassIcon style={{ height: "24px" }} />}
+              contentLeft={
+                <MagnifyingGlassIcon style={{ height: "var(--icon-size)" }} />
+              }
               css={{ flex: "1" }}
             />
           </Navbar.Item>
@@ -59,7 +60,9 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
               light
               animated={false}
               onPress={handleSidebarDisplay}
-              icon={<ChevronDoubleLeftIcon style={{ height: "24px" }} />}
+              icon={
+                <ChevronDoubleLeftIcon style={{ height: "var(--icon-size)" }} />
+              }
             />
           </Navbar.Item>
         </Navbar.Content>
@@ -69,7 +72,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
       <Button
         bordered
         color="primary"
-        icon={<PlusIcon style={{ height: "24px" }} />}
+        icon={<PlusIcon style={{ height: "var(--icon-size)" }} />}
         css={{ width: "100%" }}
       >
         Add new note

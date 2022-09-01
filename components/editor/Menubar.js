@@ -1,10 +1,6 @@
 import MenuItem from "./MenuItem";
 import { useState } from "react";
-import {
-  Container,
-  Dropdown,
-  Tooltip,
-} from "@nextui-org/react";
+import { Container, Dropdown, Tooltip } from "@nextui-org/react";
 import {
   BiUndo,
   BiRedo,
@@ -18,7 +14,7 @@ import {
   BiPoll,
   BiMinus,
   BiSubdirectoryLeft,
-  BiEditAlt
+  BiEditAlt,
 } from "react-icons/bi";
 
 export default ({ editor }) => {
@@ -151,7 +147,9 @@ export default ({ editor }) => {
     >
       <Tooltip content={"Text style"}>
         <Dropdown>
-          <Dropdown.Button light color>{selectedTextLevel}</Dropdown.Button>
+          <Dropdown.Button light color>
+            {selectedTextLevel}
+          </Dropdown.Button>
           <Dropdown.Menu
             aria-label="Text style selection"
             disallowEmptySelection

@@ -7,7 +7,7 @@ import {
   useDispatchNote,
   useNotes,
   useDispatchNotes,
-} from "../modules/AppContext";
+} from "@/modules/AppContext";
 
 export default function () {
   const notesc = useNotes();
