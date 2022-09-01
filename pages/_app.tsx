@@ -3,6 +3,7 @@ import { NoteProvider } from "../modules/AppContext";
 import { NextUIProvider } from "@nextui-org/react";
 import Head from "next/head";
 import { AppProps } from "next/app";
+import '../styles/globals.css'
 
 export default function App({
   Component,
