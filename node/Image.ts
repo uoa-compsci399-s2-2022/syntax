@@ -29,7 +29,7 @@ declare module "@tiptap/core" {
 			/**
 			 * Add an image
 			 */
-			setImage: (options: { src: string, alt?: string, title?: string, width?: string|number, height?: string|number, isDraggable?: boolean }) => ReturnType;
+			setImage: (options: { src: string, alt?: string, title?: string, width?: string|number, height?: string|number, isdraggable?: boolean }) => ReturnType;
 		};
 	}
 }
@@ -75,7 +75,7 @@ export const TipTapCustomImage = (uploadFn: UploadFn) => {
 						};
 					}
 				},
-				isDraggable: {
+				isdraggable: {
 					default: true,
 					renderHTML: (attributes) => {
 						return {};
@@ -96,7 +96,7 @@ export const TipTapCustomImage = (uploadFn: UploadFn) => {
 						alt: element.getAttribute("alt"),
 						width: element.getAttribute("width"),
 						height: element.getAttribute("height"),
-						isDraggable: element.getAttribute("isDraggable"),
+						isdraggable: element.getAttribute("isdraggable"),
 					};
 					return obj;
 				},
@@ -116,18 +116,10 @@ export const TipTapCustomImage = (uploadFn: UploadFn) => {
 						const transaction = state.tr.insert(position, node);
 						return dispatch?.(transaction);
 					},
-				toggleResizable:
-					() =>
-					({ tr }) => {
-						const { node } = tr?.selection;
-
-						if (node?.type?.name === 'ResizableImage') {
-							node.attrs.isDraggable = !node.attrs.isDraggable;
-						}
-					}
 			};
 		},
 		
+		//Component for how the image will be loaded
 		addNodeView() {
 			return ReactNodeViewRenderer(ResizeableImage)
 		},
@@ -138,13 +130,14 @@ export const TipTapCustomImage = (uploadFn: UploadFn) => {
                     find: IMAGE_INPUT_REGEX,
                     type: this.type,
                     getAttributes: match => {
-                      const [,, alt, src, title, height, width, isDraggable] = match
+                      const [,, alt, src, title, height, width, isdraggable] = match
             
-                      return { src, alt, title, height, width, isDraggable }
+                      return { src, alt, title, height, width, isdraggable }
                     },
                 }),
             ];
         },
+		//Plugin to be able to drag and drop images
 		addProseMirrorPlugins() {
 			return [uploadImagePlugin(uploadFn)];
 		},

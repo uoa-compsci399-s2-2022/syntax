@@ -2,22 +2,23 @@ import { TipTapCustomImage } from '../node/Image'
 import { useState } from "react";
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit';
-import { UploadFn } from '../node/upload_image'
 
 
 async function upload(file){
+  //fetch data from endpoint for presigned link and image src
   let res = await fetch("/api/s3/", {
     method: "POST",
     body: file.type,
   });
   const {data, src} = await res.json();
-  const url = data.url;
-  const fields = data.fields;
+  const url = data.url; //url for post
+  const fields = data.fields; //formdata for post
   const formData = new FormData();
   Object.entries({ ...fields}).forEach(([key, value]) => {
     formData.append(key, value)
   })
   formData.append('file', file)
+  //POST to upload file
   const upload = await fetch(url, {
     method: "POST",
     body: formData,
@@ -55,7 +56,7 @@ const ImageEditor = () => {
   return (
     <>
       <div>
-        <form onSubmit={submit} style={{width:650}} className="flex flex-col space-y-5 px-5 py-14">
+        <form onSubmit={submit} style={{width:650}}>
             <input onChange={fileSelected} type="file" accept="image/*"></input>
             <button type="submit">Submit</button>
         </form>
