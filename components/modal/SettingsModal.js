@@ -1,4 +1,4 @@
-import { Modal, Button, Grid, Switch, useTheme } from "@nextui-org/react";
+import { Modal, Grid, Switch, useTheme } from "@nextui-org/react";
 import { useTheme as useNextTheme } from "next-themes";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
 

@@ -1,5 +1,7 @@
-import UserSettingsModal from "../modal/UserSettingsModal";
-import { Avatar, Dropdown, Button, Modal, Navbar } from "@nextui-org/react";
+import SettingsModal from "../modal/SettingsModal";
+import ExportModal from "../modal/ExportModal";
+import DeleteModal from "../modal/DeleteModal";
+import { Avatar, Dropdown, Button, Navbar } from "@nextui-org/react";
 import { useState, useEffect } from "react";
 import {
   EllipsisHorizontalIcon,
@@ -7,7 +9,6 @@ import {
   ShareIcon,
   LockClosedIcon,
   DocumentArrowUpIcon,
-  ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
 } from "@heroicons/react/24/outline";
 
@@ -112,35 +113,9 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
             </Dropdown.Menu>
           </Dropdown>
         </Navbar.Item>
-        <Modal open={exportModal} onClose={closeHandler}>
-          <Modal.Header>Export Note</Modal.Header>
-          <Modal.Body>Export as PDF / MD</Modal.Body>
-          <Modal.Footer>
-            <Button auto bordered onClick={closeHandler}>
-              Export
-            </Button>
-            <Button auto bordered flat color="error" onClick={closeHandler}>
-              Cancel
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        <Modal open={deleteModal} onClose={closeHandler}>
-          <Modal.Header>Delete Note</Modal.Header>
-          <Modal.Body>
-            Are you sure you want to delete this note?
-            <br />
-            This action cannot be undone.
-          </Modal.Body>
-          <Modal.Footer>
-            <Button auto bordered onClick={closeHandler}>
-              Yes
-            </Button>
-            <Button auto bordered flat color="error" onClick={closeHandler}>
-              No
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        <UserSettingsModal open={settingsModal} closeHandler={closeHandler} />
+        <ExportModal open={exportModal} closeHandler={closeHandler} />
+        <DeleteModal  open={deleteModal} closeHandler={closeHandler} />
+        <SettingsModal open={settingsModal} closeHandler={closeHandler} />
       </Navbar.Content>
     </Navbar>
   );
