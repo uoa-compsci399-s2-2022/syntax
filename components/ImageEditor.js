@@ -10,16 +10,22 @@ async function upload(file){
     method: "POST",
     body: file.type,
   });
-  const {url, src} = await res.json();
-    await fetch(url, {
-      method: "PUT",
-      headers: {
-        "Content-type": file.type,
-        "Access-Control-Allow-Origin": "*",
-        },
-      body: file,
+  const {data, src} = await res.json();
+  const url = data.url;
+  const fields = data.fields;
+  const formData = new FormData();
+  Object.entries({ ...fields}).forEach(([key, value]) => {
+    formData.append(key, value)
+  })
+  formData.append('file', file)
+  const upload = await fetch(url, {
+    method: "POST",
+    body: formData,
   });
-  return src;
+  if (upload.ok){
+    return src
+  }
+  return null
 }
 
 const ImageEditor = () => {
@@ -38,10 +44,12 @@ const ImageEditor = () => {
   }
 
   const submit = async event => {
-
     event.preventDefault()
     const src = await upload(file)
-    editor.chain().focus()?.setImage({ src })?.run();
+    if (src !== null){
+      editor.chain().focus()?.setImage({src})?.run();
+    }
+    console.log("File size was too large")
   }
 
   return (
