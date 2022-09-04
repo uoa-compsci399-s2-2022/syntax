@@ -38,23 +38,23 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
         <Container
           css={{
             margin: "0",
-            padding: "0 3rem",
+            padding: "0 2rem",
             "max-width": "100vw",
           }}
         >
           <Text h1>{currentNote.title}</Text>
           <Grid.Container>
             <Grid xs={4} sm={1.5} css={{ "min-width": "fit-content" }}>
-              <Text weight="bold">Created by</Text>
+              <Text weight="semibold">Created by</Text>
             </Grid>
             <Grid xs={8} sm={10.5}>
-              John Doe
+              <Text>John Doe</Text>
             </Grid>
             <Grid xs={4} sm={1.5} css={{ "min-width": "fit-content" }}>
-              <Text weight="bold">Last modified</Text>
+              <Text weight="semibold">Last modified</Text>
             </Grid>
             <Grid xs={8} sm={10.5}>
-              Mon 29 Aug 4:12 PM
+              <Text>Mon 29 Aug 4:12 PM</Text>
             </Grid>
           </Grid.Container>
           <Spacer />

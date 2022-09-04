@@ -14,8 +14,9 @@ import {
   BiPoll,
   BiMinus,
   BiSubdirectoryLeft,
-  BiEditAlt,
+  BiEditAlt
 } from "react-icons/bi";
+import { PlusIcon } from "@heroicons/react/24/outline";
 
 export default ({ editor }) => {
   if (!editor) {
@@ -35,7 +36,7 @@ export default ({ editor }) => {
     { label: "Heading 3", value: "3" },
     { label: "Heading 4", value: "4" },
     { label: "Heading 5", value: "5" },
-    { label: "Heading 6", value: "6" },
+    { label: "Heading 6", value: "6" }
   ];
 
   const selectionChangeHandler = (key) => {
@@ -50,104 +51,109 @@ export default ({ editor }) => {
     }
   };
 
-  const items = [
+  const coreItems = [
     {
-      type: "menu-divider",
+      type: "menu-divider"
     },
     {
       icon: <BiBold size={iconSize} color={iconColor} />,
       title: "Bold",
       action: () => editor.chain().focus().toggleBold().run(),
-      isActive: () => editor.isActive("bold"),
+      isActive: () => editor.isActive("bold")
     },
     {
       icon: <BiItalic size={iconSize} color={iconColor} />,
       title: "Italic",
       action: () => editor.chain().focus().toggleItalic().run(),
-      isActive: () => editor.isActive("italic"),
+      isActive: () => editor.isActive("italic")
     },
     {
       icon: <BiStrikethrough size={iconSize} color={iconColor} />,
       title: "Strike",
       action: () => editor.chain().focus().toggleStrike().run(),
-      isActive: () => editor.isActive("strike"),
+      isActive: () => editor.isActive("strike")
     },
     {
       icon: <BiCode size={iconSize} color={iconColor} />,
       title: "Code",
       action: () => editor.chain().focus().toggleCode().run(),
-      isActive: () => editor.isActive("code"),
+      isActive: () => editor.isActive("code")
     },
     {
-      type: "menu-divider",
-    },
+      type: "menu-divider"
+    }
+  ];
+
+  const extendedItems = [
     {
       icon: <BiListUl size={iconSize} color={iconColor} />,
       title: "Bulleted List",
       action: () => editor.chain().focus().toggleBulletList().run(),
-      isActive: () => editor.isActive("bulletList"),
+      isActive: () => editor.isActive("bulletList")
     },
     {
       icon: <BiListOl size={iconSize} color={iconColor} />,
       title: "Ordered List",
       action: () => editor.chain().focus().toggleOrderedList().run(),
-      isActive: () => editor.isActive("orderedList"),
+      isActive: () => editor.isActive("orderedList")
     },
     {
       icon: <BiCodeBlock size={iconSize} color={iconColor} />,
       title: "Code Block",
       action: () => editor.chain().focus().toggleCodeBlock().run(),
-      isActive: () => editor.isActive("codeBlock"),
+      isActive: () => editor.isActive("codeBlock")
     },
     {
       icon: <BiPoll size={iconSize} color={iconColor} />,
       title: "Blockquote",
       action: () => editor.chain().focus().toggleBlockquote().run(),
-      isActive: () => editor.isActive("blockquote"),
+      isActive: () => editor.isActive("blockquote")
     },
     {
       icon: <BiMinus size={iconSize} color={iconColor} />,
       title: "Divider",
-      action: () => editor.chain().focus().setHorizontalRule().run(),
+      action: () => editor.chain().focus().setHorizontalRule().run()
     },
     {
-      type: "menu-divider",
+      type: "menu-divider"
     },
     {
       icon: <BiSubdirectoryLeft size={iconSize} color={iconColor} />,
       title: "Line break",
-      action: () => editor.chain().focus().setHardBreak().run(),
+      action: () => editor.chain().focus().setHardBreak().run()
     },
     {
       icon: <BiEditAlt size={iconSize} color={iconColor} />,
       title: "Clear formatting",
-      action: () => editor.chain().focus().clearNodes().unsetAllMarks().run(),
+      action: () => editor.chain().focus().clearNodes().unsetAllMarks().run()
     },
     {
-      type: "menu-divider",
+      type: "menu-divider"
     },
     {
       icon: <BiUndo size={iconSize} color={iconColor} />,
       title: "Undo",
-      action: () => editor.chain().focus().undo().run(),
+      action: () => editor.chain().focus().undo().run()
     },
     {
       icon: <BiRedo size={iconSize} color={iconColor} />,
       title: "Redo",
-      action: () => editor.chain().focus().redo().run(),
-    },
+      action: () => editor.chain().focus().redo().run()
+    }
   ];
 
   return (
     <Container
       fluid
       display="flex"
-      alignItems="center"
-      css={{ padding: "0.2rem 0", margin: "0" }}
+      css={{
+        padding: "0.2rem 0",
+        margin: "0"
+      }}
     >
       <Tooltip content={"Text style"}>
         <Dropdown>
-          <Dropdown.Button light css={{ transition: "none" }}>
+          <Dropdown.Button light css={{ padding: "10px", transition: "none" }}>
             {selectedTextLevel}
           </Dropdown.Button>
           <Dropdown.Menu
@@ -166,29 +172,49 @@ export default ({ editor }) => {
         </Dropdown>
       </Tooltip>
 
-      {items.map((item, index) => (
+      {coreItems.map((item, index) => (
         <div key={index}>
           {item.type === "menu-divider" ? (
             <div className="menu-divider" />
           ) : (
-            <MenuItem {...item} />
+            <MenuItem {...item} isCore={true} />
           )}
         </div>
       ))}
 
+      {extendedItems.map((item, index) => (
+        <span key={index}>
+          {item.type === "menu-divider" ? (
+            <div
+              className="menu-divider"
+              style={{ display: "none", "@md": { display: "flex" } }}
+            />
+          ) : (
+            <MenuItem {...item} />
+          )}
+        </span>
+      ))}
+
       <Tooltip content={"More options"}>
         <Dropdown>
-          <Dropdown.Button light css={{ transition: "none" }}>
-            More
-          </Dropdown.Button>
-          <Dropdown.Menu
-            aria-label="More markdown options"
-          >
-            {items.slice(6).filter((item) => !("type" in item)).map((item) => (
-              <Dropdown.Item key={item.title} icon={item.icon}>
-                {item.title}
-              </Dropdown.Item>
-            ))}
+          <Dropdown.Button
+              light
+              icon={<PlusIcon style={{ height: "1.5em" }} />}
+              css={{
+                transition: "none",
+                padding: "10px",
+                display: "flex",
+                "@md": { display: "none" }
+              }}
+            />
+          <Dropdown.Menu aria-label="More markdown options">
+            {extendedItems
+              .filter((item) => !("type" in item))
+              .map((item) => (
+                <Dropdown.Item key={item.title} icon={item.icon}>
+                  {item.title}
+                </Dropdown.Item>
+              ))}
           </Dropdown.Menu>
         </Dropdown>
       </Tooltip>
