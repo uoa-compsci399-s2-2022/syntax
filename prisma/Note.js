@@ -41,10 +41,8 @@ export const getAllNotesByUserID = async (id) => {
     where: {
       userId: id,
     },
-    include: {
-      user: true,
-    },
   });
+  
   
   return JSON.parse(JSON.stringify(notes));
 };

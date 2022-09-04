@@ -1,6 +1,6 @@
 import NoteLayout from "../../components/note/NoteLayout";
 import { useSession, getSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import {
   useNote,
   useDispatchNote,
@@ -59,7 +59,6 @@ export default function Note({ notes, note }) {
     note.action = "edit";
     setCurrentNote(note);
   }
-  console.log(notes);
 
   return <NoteLayout allNotes={notes} currentNote={note} />;
 }
