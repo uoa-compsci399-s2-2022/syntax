@@ -194,7 +194,7 @@ export default ({ editor }) => {
           {item.type === "menu-divider" ? (
             <div
               className="menu-divider"
-              style={{ display: "none", "@md": { display: "flex" } }}
+              style={{ display: "none", "@sm": { display: "flex" } }}
             />
           ) : (
             <MenuItem {...item} />
@@ -211,7 +211,7 @@ export default ({ editor }) => {
               transition: "none",
               padding: "10px",
               display: "flex",
-              "@md": { display: "none" }
+              "@sm": { display: "none" }
             }}
           />
           <Dropdown.Menu aria-label="More markdown options">

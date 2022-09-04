@@ -3,7 +3,7 @@ import { Container, Input, Button, Spacer, Navbar } from "@nextui-org/react";
 import {
   MagnifyingGlassIcon,
   PlusIcon,
-  ChevronDoubleLeftIcon,
+  ChevronDoubleLeftIcon
 } from "@heroicons/react/24/outline";
 
 const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
@@ -27,7 +27,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
           position: sidebarDisplay ? "fixed" : "relative",
           "max-width": "20%",
           "min-width": "200px"
-        },
+        }
       }}
     >
       <Navbar
@@ -36,7 +36,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
         disableBlur
         containerCss={{
           background: "$accents2",
-          padding: "0",
+          padding: "0"
         }}
       >
         <Navbar.Content css={{ flex: "1" }}>
@@ -71,6 +71,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
 
       <NoteList retrieved_notes={notes} showEditor={undefined} />
       <Button
+        auto
         bordered
         color="primary"
         icon={<PlusIcon style={{ height: "var(--icon-size)" }} />}

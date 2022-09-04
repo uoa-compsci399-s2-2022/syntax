@@ -38,6 +38,16 @@ input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-results-button,
 input[type="search"]::-webkit-search-results-decoration { display: none; }
 
+/* note page styling */
+.note-metadata-table td {
+  padding: 0;
+}
+
+.note-metadata-table th {
+  padding: 0;
+  padding-right: 3rem;
+}
+
 /* editor styling */
 .ProseMirror:focus {
   outline: none;

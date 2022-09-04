@@ -6,7 +6,7 @@ import {
   useNote,
   useDispatchNote,
   useNotes,
-  useDispatchNotes,
+  useDispatchNotes
 } from "@/modules/AppContext";
 
 const NoteDisplay = ({ note, handleSidebarDisplay }) => {
@@ -39,24 +39,22 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
           css={{
             margin: "0",
             padding: "0 2rem",
-            "max-width": "100vw",
+            "max-width": "100vw"
           }}
         >
-          <Text h1 style={{ "overflow-wrap": "break-word" }}>{currentNote.title}</Text>
-          <Grid.Container>
-            <Grid xs={4} sm={1.5} css={{ "min-width": "fit-content" }}>
-              <Text weight="semibold">Created by</Text>
-            </Grid>
-            <Grid xs={8} sm={10.5}>
-              <Text>John Doe</Text>
-            </Grid>
-            <Grid xs={4} sm={1.5} css={{ "min-width": "fit-content" }}>
-              <Text weight="semibold">Last modified</Text>
-            </Grid>
-            <Grid xs={8} sm={10.5}>
-              <Text>Mon 29 Aug 4:12 PM</Text>
-            </Grid>
-          </Grid.Container>
+          <Text h1 style={{ "overflow-wrap": "break-word" }}>
+            {currentNote.title}
+          </Text>
+          <table class="note-metadata-table" style={{"text-align": "left"}}>
+            <tr>
+              <th>Created by</th>
+              <td>John Doe</td>
+            </tr>
+            <tr>
+              <th>Last modified</th>
+              <td>Mon 29 Aug 4:12 PM</td>
+            </tr>
+          </table>
           <Spacer />
           <hr />
           {/*<ImageEditor/>*/}
