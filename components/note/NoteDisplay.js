@@ -38,11 +38,11 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
         <Container
           css={{
             margin: "0",
-            padding: "0 2rem",
+            padding: "0 5rem",
             "max-width": "100vw",
           }}
         >
-          <Text h1>{currentNote.title}</Text>
+          <Text h1 style={{ "overflow-wrap": "break-word" }}>{currentNote.title}</Text>
           <Grid.Container>
             <Grid xs={4} sm={1.5} css={{ "min-width": "fit-content" }}>
               <Text weight="semibold">Created by</Text>

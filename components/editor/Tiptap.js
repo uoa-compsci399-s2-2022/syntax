@@ -1,12 +1,12 @@
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Menubar from "./Menubar.js";
-import { Button, Spacer } from "@nextui-org/react";
+import { Container, Button, Spacer } from "@nextui-org/react";
 import {
   useNote,
   useDispatchNote,
   useNotes,
-  useDispatchNotes,
+  useDispatchNotes
 } from "@/modules/AppContext";
 
 export default function () {
@@ -16,31 +16,35 @@ export default function () {
   const currentNote = useNote();
   const setCurrentNote = useDispatchNote();
   const editor = useEditor({
-    extensions: [
-      StarterKit,
-    ],
+    extensions: [StarterKit],
     content: currentNote.body
-  })
+  });
 
   const createNote = async (title, text) => {
     let note = {
       title: title,
-      body: text,
+      body: text
     };
     await fetch("/api/note", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(note),
+      body: JSON.stringify(note)
     });
     setNotes({ note: note, type: "add" });
   };
 
   return (
-    <div>
+    <Container
+      display="flex"
+      direction="column-reverse"
+      css={{ padding: "0", margin: "0", "min-width": "100%", "@xs": { "flex-direction": "column" } }}
+    >
       <Menubar editor={editor} />
       <hr />
       <Spacer />
       <EditorContent editor={editor} />
+      <Spacer />
+      <hr />
       <Spacer />
       <Button
         bordered
@@ -50,6 +54,6 @@ export default function () {
       >
         Save
       </Button>
-    </div>
+    </Container>
   );
 }
