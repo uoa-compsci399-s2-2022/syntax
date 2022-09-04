@@ -46,6 +46,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
               aria-label="Notes search bar"
               placeholder="Search notes"
               type="search"
+              animated={false}
               contentLeft={
                 <MagnifyingGlassIcon style={{ height: "var(--icon-size)" }} />
               }

@@ -147,12 +147,12 @@ export default ({ editor }) => {
     >
       <Tooltip content={"Text style"}>
         <Dropdown>
-          <Dropdown.Button light color>
+          <Dropdown.Button light css={{ transition: "none" }}>
             {selectedTextLevel}
           </Dropdown.Button>
           <Dropdown.Menu
-            aria-label="Text style selection"
             disallowEmptySelection
+            aria-label="Text style selection"
             selectionMode="single"
             selectedKeys={selectedTextLevel}
             onSelectionChange={selectionChangeHandler}
@@ -178,7 +178,7 @@ export default ({ editor }) => {
 
       <Tooltip content={"More options"}>
         <Dropdown>
-          <Dropdown.Button light color>
+          <Dropdown.Button light css={{ transition: "none" }}>
             More
           </Dropdown.Button>
           <Dropdown.Menu
