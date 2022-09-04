@@ -1,4 +1,3 @@
-import SettingsModal from "@/components/modal/SettingsModal";
 import ExportModal from "@/components/modal/ExportModal";
 import DeleteModal from "@/components/modal/DeleteModal";
 import { Avatar, Dropdown, Button, Navbar } from "@nextui-org/react";
@@ -10,16 +9,23 @@ import {
   LockClosedIcon,
   DocumentArrowUpIcon,
   ChevronDoubleRightIcon,
+  ChevronDoubleLeftIcon
 } from "@heroicons/react/24/outline";
 
 const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
   const [selectedKey, setSelectedKey] = useState();
-  const [settingsModal, setSettingsModal] = useState(false);
   const [exportModal, setExportModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
 
+  const sharedUsers = [
+    "https://cdn3.emoji.gg/emojis/6485-catnoo.gif",
+    "https://cdn3.emoji.gg/emojis/3483-catjump.gif",
+    "https://cdn3.emoji.gg/emojis/1135-imgoingcrazy.gif",
+    "https://media.discordapp.net/attachments/364690299898953728/1005721400851574864/zooted.gif",
+    "https://cdn3.emoji.gg/emojis/3568-catkiss.gif"
+  ];
+
   const closeHandler = () => {
-    setSettingsModal(false);
     setExportModal(false);
     setDeleteModal(false);
     setSelectedKey();
@@ -43,7 +49,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
       disableBlur
       css={{ "z-index": "998" }}
       containerCss={{
-        "min-width": "100%",
+        "min-width": "100%"
       }}
     >
       <Navbar.Content>
@@ -54,26 +60,24 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
             animated={false}
             onPress={handleSidebarDisplay}
             icon={
-              <ChevronDoubleRightIcon style={{ height: "var(--icon-size)" }} />
+              sidebarDisplay ? (
+                <ChevronDoubleRightIcon
+                  style={{ height: "var(--icon-size)" }}
+                />
+              ) : (
+                <ChevronDoubleLeftIcon style={{ height: "var(--icon-size)" }} />
+              )
             }
-            css={{ display: sidebarDisplay ? "flex" : "none" }}
           />
         </Navbar.Item>
       </Navbar.Content>
       <Navbar.Content gap={5}>
         <Navbar.Item>
-          <Button
-            auto
-            light
-            animated={false}
-            onPress={setSettingsModal}
-            icon={
-              <Avatar
-                src="https://cdn3.emoji.gg/emojis/3568-catkiss.gif"
-                css={{ cursor: "pointer" }}
-              />
-            }
-          />
+          <Avatar.Group count={12}>
+            {sharedUsers.map((url, index) => (
+              <Avatar key={index} pointer src={url} stacked />
+            ))}
+          </Avatar.Group>
         </Navbar.Item>
         <Navbar.Item>
           <Dropdown placement="bottom-right">
@@ -94,13 +98,19 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
               </Dropdown.Item>
               <Dropdown.Item
                 key="lock"
-                icon={<LockClosedIcon style={{ height: "var(--icon-size-s)" }} />}
+                icon={
+                  <LockClosedIcon style={{ height: "var(--icon-size-s)" }} />
+                }
               >
                 Lock
               </Dropdown.Item>
               <Dropdown.Item
                 key="export"
-                icon={<DocumentArrowUpIcon style={{ height: "var(--icon-size-s)" }} />}
+                icon={
+                  <DocumentArrowUpIcon
+                    style={{ height: "var(--icon-size-s)" }}
+                  />
+                }
               >
                 Export
               </Dropdown.Item>
@@ -116,7 +126,6 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
         </Navbar.Item>
         <ExportModal open={exportModal} closeHandler={closeHandler} />
         <DeleteModal open={deleteModal} closeHandler={closeHandler} />
-        <SettingsModal open={settingsModal} closeHandler={closeHandler} />
       </Navbar.Content>
     </Navbar>
   );

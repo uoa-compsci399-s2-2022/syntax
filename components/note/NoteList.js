@@ -1,14 +1,16 @@
 import NoteCard from "./NoteCard";
+import NoteGroup from "@/components/note/NoteGroup";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { Collapse, Container } from "@nextui-org/react";
 import {
   useNote,
   useDispatchNote,
   useNotes,
-  useDispatchNotes,
+  useDispatchNotes
 } from "@/modules/AppContext";
 
-const NoteList = ({ retrieved_notes }) => {
+const NoteList = ({ retrieved_notes, groupName, groupColor }) => {
   const router = useRouter();
 
   // this is where we assign the context to constants
@@ -31,27 +33,19 @@ const NoteList = ({ retrieved_notes }) => {
   };
 
   return (
-    <div>
+    <>
       {notes.length > 0 ? (
-        <ul style={{ margin: "20px 0 20px 0" }}>
-          {notes.map((note) => (
-            <li key={note.id} style={{ marginBottom: "20px" }}>
-              <a
-                onClick={() => {
-                  openNote(note);
-                }}
-              >
-                <NoteCard note={note} />
-              </a>
-            </li>
-          ))}
-        </ul>
+        <Collapse.Group splitted divider={false} css={{ padding: "10px", "text-overflow": "break" }}>
+          <NoteGroup name={groupName} notes={notes} color={groupColor} openNote={openNote} />
+          <NoteGroup name={groupName} notes={notes} color={groupColor} openNote={openNote} />
+          <NoteGroup name={groupName} notes={notes} color={groupColor} openNote={openNote} />
+        </Collapse.Group>
       ) : (
         <div>
           <p>Oops.. no notes yet</p>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

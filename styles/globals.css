@@ -54,3 +54,22 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
   margin-right: 0.5rem;
   width: 1px;
 }
+
+/* NextUI components */
+.nextui-collapse-view {
+  padding: 0;
+}
+
+.nextui-collapse {
+  margin: 0 0 10px 0 !important;
+  padding: 10px !important;
+  box-shadow: none !important;
+}
+
+.nextui-collapse-content {
+  padding: 0;
+}
+
+.nextui-collapse--open {
+  
+}

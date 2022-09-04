@@ -3,12 +3,6 @@ import NoteSidebar from "./NoteSidebar";
 import NoteNavbar from "./NoteNavbar";
 import { Container } from "@nextui-org/react";
 import { useState } from "react";
-import {
-  useNote,
-  useDispatchNote,
-  useNotes,
-  useDispatchNotes,
-} from "@/modules/AppContext";
 
 const NoteLayout = ({ allNotes, currentNote }) => {
   const [sidebarDisplay, setSidebarDisplay] = useState(false);
@@ -43,7 +37,6 @@ const NoteLayout = ({ allNotes, currentNote }) => {
           padding: "0",
           margin: "0",
           "max-height": "100vh",
-          "max-width": "100vw",
           "overflow-y": "auto",
         }}
       >
