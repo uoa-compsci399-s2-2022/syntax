@@ -26,7 +26,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
         "@xs": {
           position: sidebarDisplay ? "fixed" : "relative",
           "max-width": "20%",
-          "min-width": "min-content",
+          "min-width": "200px"
         },
       }}
     >
