@@ -88,26 +88,26 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
             >
               <Dropdown.Item
                 key="share"
-                icon={<ShareIcon style={{ height: "20px" }} />}
+                icon={<ShareIcon style={{ height: "var(--icon-size-s)" }} />}
               >
                 Share
               </Dropdown.Item>
               <Dropdown.Item
                 key="lock"
-                icon={<LockClosedIcon style={{ height: "20px" }} />}
+                icon={<LockClosedIcon style={{ height: "var(--icon-size-s)" }} />}
               >
                 Lock
               </Dropdown.Item>
               <Dropdown.Item
                 key="export"
-                icon={<DocumentArrowUpIcon style={{ height: "20px" }} />}
+                icon={<DocumentArrowUpIcon style={{ height: "var(--icon-size-s)" }} />}
               >
                 Export
               </Dropdown.Item>
               <Dropdown.Item
                 key="delete"
                 color="error"
-                icon={<TrashIcon style={{ height: "20px" }} />}
+                icon={<TrashIcon style={{ height: "var(--icon-size-s)" }} />}
               >
                 Delete
               </Dropdown.Item>

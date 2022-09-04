@@ -83,7 +83,7 @@ export default ({ editor }) => {
     },
     {
       icon: <BiListUl size={iconSize} color={iconColor} />,
-      title: "Bullet List",
+      title: "Bulleted List",
       action: () => editor.chain().focus().toggleBulletList().run(),
       isActive: () => editor.isActive("bulletList"),
     },
@@ -175,6 +175,23 @@ export default ({ editor }) => {
           )}
         </div>
       ))}
+
+      <Tooltip content={"More options"}>
+        <Dropdown>
+          <Dropdown.Button light color>
+            More
+          </Dropdown.Button>
+          <Dropdown.Menu
+            aria-label="More markdown options"
+          >
+            {items.slice(6).filter((item) => !("type" in item)).map((item) => (
+              <Dropdown.Item key={item.title} icon={item.icon}>
+                {item.title}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+      </Tooltip>
     </Container>
   );
 };

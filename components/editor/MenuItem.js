@@ -6,16 +6,14 @@ const MenuItem = ({ icon, title, action, isActive = null }) => {
   });
 
   return (
-    <>
-      <Tooltip content={title}>
-        <MarkdownButton
-          auto
-          className={`menu-item${isActive && isActive() ? " is-active" : ""}`}
-          onClick={action}
-          icon={icon}
-        />
-      </Tooltip>
-    </>
+    <Tooltip content={title}>
+      <MarkdownButton
+        auto
+        className={`menu-item${isActive && isActive() ? " is-active" : ""}`}
+        onClick={action}
+        icon={icon}
+      />
+    </Tooltip>
   );
 };
 
