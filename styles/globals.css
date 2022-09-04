@@ -64,3 +64,7 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
   margin-right: 0.5rem;
   width: 1px;
 }
+
+.ProseMirror img.ProseMirror-selectednode {
+  outline: 3px solid #68cef8;
+}

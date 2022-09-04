@@ -1,13 +1,8 @@
 import Head from "next/head";
-import { Container, Text, Spacer, Grid } from "@nextui-org/react";
-import ImageEditor from "@/components/editor/ImageEditor";
-import Tiptap from "@/components/editor/Tiptap";
-import {
-  useNote,
-  useDispatchNote,
-  useNotes,
-  useDispatchNotes
-} from "@/modules/AppContext";
+import { Container, Text, Spacer, Grid, Input } from "@nextui-org/react";
+import ImageEditor from '../ImageEditor'
+import Tiptap from '@/components/editor/Tiptap'
+import { useNote, useDispatchNote, useNotes, useDispatchNotes } from "../../modules/AppContext";
 
 const NoteDisplay = ({ note, handleSidebarDisplay }) => {
   const notesc = useNotes();
@@ -28,6 +23,7 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
       </>
     );
   } else {
+
     return (
       <>
         <Head>
@@ -42,23 +38,24 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
             "max-width": "100vw"
           }}
         >
-          <Text h1 style={{ "overflow-wrap": "break-word" }}>
+          <Text h1 css={{ "overflow-wrap": "break-word" }}>
             {currentNote.title}
           </Text>
+          <Input underlined aria-label="Note Title" animated={false} initialValue={currentNote.title}></Input>
           <table class="note-metadata-table" style={{"text-align": "left"}}>
             <tr>
               <th>Created by</th>
-              <td>John Doe</td>
+              <td>{note.user.name}</td>
             </tr>
             <tr>
               <th>Last modified</th>
-              <td>Mon 29 Aug 4:12 PM</td>
+              <td>{currentNote.updatedAt}</td>
             </tr>
           </table>
           <Spacer />
           <hr />
           {/*<ImageEditor/>*/}
-          <Tiptap noteContent={note.body} key={currentNote.title} />
+          <Tiptap noteContent={currentNote.body} />
         </Container>
         <Spacer />
       </>

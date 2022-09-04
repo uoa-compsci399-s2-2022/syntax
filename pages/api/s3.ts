@@ -19,19 +19,20 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
   
     try {
-        let { type } = req.body;
+        let type = req.body;
+        console.log(type)
         const fileName = generateFileName();
 
         const fileParams = {
             Bucket: process.env.AWS_BUCKET_NAME,
             Key: fileName,
-            Expires: 600,
+            Expires: 60,
             ContentType: type,
         };
     
         const url = await s3Client.getSignedUrlPromise("putObject", fileParams);
         const imageUrl = path + fileName;
-        
+        console.log(url)
         res.status(200).json({ 
             url: url,
             src: imageUrl,

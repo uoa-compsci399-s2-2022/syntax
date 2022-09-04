@@ -5,8 +5,10 @@ import {
   PlusIcon,
   ChevronDoubleLeftIcon
 } from "@heroicons/react/24/outline";
+import { useRouter } from "next/router";
 
 const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
+  const router = useRouter();
   return (
     <Container
       wrap="nowrap"
@@ -69,12 +71,13 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
         </Navbar.Content>
       </Navbar>
 
-      <NoteList retrieved_notes={notes} showEditor={undefined} />
+      <NoteList retrieved_notes={notes} showEditor={undefined} key={notes} />
       <Button
         auto
         bordered
         color="primary"
         icon={<PlusIcon style={{ height: "var(--icon-size)" }} />}
+        onPress={() => { router.push(`/note`, undefined, {shallow: true}) }}
         css={{ width: "100%" }}
       >
         Add new note

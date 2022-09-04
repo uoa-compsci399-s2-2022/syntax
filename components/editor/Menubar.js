@@ -171,7 +171,7 @@ export default ({ editor }) => {
             onSelectionChange={selectionChangeHandler}
           >
             {textLevelList.map((textLevel) => (
-              <Dropdown.Item key={textLevel.label}>
+              <Dropdown.Item key={textLevel}>
                 {textLevel.label}
               </Dropdown.Item>
             ))}

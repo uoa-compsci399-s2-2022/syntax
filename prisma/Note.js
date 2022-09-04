@@ -21,8 +21,8 @@ export const getNoteByID = async (id) => {
       user: true,
     },
   });
-
-  return note;
+  
+  return JSON.parse(JSON.stringify(note));
 };
 
 export const getAllNotes = async () => {
@@ -41,12 +41,10 @@ export const getAllNotesByUserID = async (id) => {
     where: {
       userId: id,
     },
-    include: {
-      user: true,
-    },
   });
-
-  return notes;
+  
+  
+  return JSON.parse(JSON.stringify(notes));
 };
 
 export const updateNote = async (id, updatedData, session) => {
