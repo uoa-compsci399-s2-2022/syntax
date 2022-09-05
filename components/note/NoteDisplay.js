@@ -52,6 +52,7 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
             initialValue={currentNote.title}
           ></Input>
           <table className="note-metadata-table" style={{ "text-align": "left" }}>
+          <tbody>
             <tr>
               <th>Created by</th>
               <td>{note.user.name}</td>
@@ -60,6 +61,7 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
               <th>Last modified</th>
               <td>{new Date(currentNote.updatedAt).toString()}</td>
             </tr>
+            </tbody>
           </table>
           <Spacer />
           <hr />
