@@ -13,7 +13,7 @@ const MenuItem = ({ icon, title, action, isActive = null, isCore = false }) => {
         className={`menu-item${isActive && isActive() ? " is-active" : ""}`}
         onClick={action}
         icon={icon}
-        css={isCore ? {} : {display: "none", "@md": { display: "flex" }}}
+        css={isCore ? {} : {display: "none", "@sm": { display: "flex" }}}
       />
     </Tooltip>
   );

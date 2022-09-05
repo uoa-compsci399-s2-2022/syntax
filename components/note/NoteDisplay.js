@@ -1,13 +1,13 @@
 import Head from "next/head";
-import { Container, Text, Spacer, Grid } from "@nextui-org/react";
-import ImageEditor from "@/components/editor/ImageEditor";
+import { Container, Text, Spacer, Grid, Input } from "@nextui-org/react";
+import ImageEditor from "../ImageEditor";
 import Tiptap from "@/components/editor/Tiptap";
 import {
   useNote,
   useDispatchNote,
   useNotes,
-  useDispatchNotes,
-} from "@/modules/AppContext";
+  useDispatchNotes
+} from "../../modules/AppContext";
 
 const NoteDisplay = ({ note, handleSidebarDisplay }) => {
   const notesc = useNotes();
@@ -39,28 +39,34 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
           css={{
             margin: "0",
             padding: "0 2rem",
-            "max-width": "100vw",
+            "max-width": "100vw"
           }}
         >
-          <Text h1>{currentNote.title}</Text>
-          <Grid.Container>
-            <Grid xs={4} sm={1.5} css={{ "min-width": "fit-content" }}>
-              <Text weight="semibold">Created by</Text>
-            </Grid>
-            <Grid xs={8} sm={10.5}>
-              <Text>John Doe</Text>
-            </Grid>
-            <Grid xs={4} sm={1.5} css={{ "min-width": "fit-content" }}>
-              <Text weight="semibold">Last modified</Text>
-            </Grid>
-            <Grid xs={8} sm={10.5}>
-              <Text>Mon 29 Aug 4:12 PM</Text>
-            </Grid>
-          </Grid.Container>
+          <Text h1 css={{ "overflow-wrap": "break-word" }}>
+            {currentNote.title}
+          </Text>
+          <Input
+            underlined
+            aria-label="Note Title"
+            animated={false}
+            initialValue={currentNote.title}
+          ></Input>
+          <table className="note-metadata-table" style={{ "text-align": "left" }}>
+          <tbody>
+            <tr>
+              <th>Created by</th>
+              <td>{note.user.name}</td>
+            </tr>
+            <tr>
+              <th>Last modified</th>
+              <td>{new Date(currentNote.updatedAt).toString()}</td>
+            </tr>
+            </tbody>
+          </table>
           <Spacer />
           <hr />
           {/*<ImageEditor/>*/}
-          <Tiptap noteContent={note.body} key={currentNote.title} />
+          <Tiptap noteContent={currentNote.body} />
         </Container>
         <Spacer />
       </>

@@ -146,9 +146,16 @@ export default ({ editor }) => {
     <Container
       fluid
       display="flex"
+      justify="center"
       css={{
+        "z-index": "998",
+        position: "fixed",
+        left: "0",
+        bottom: "0",
+        background: "$background",
         padding: "0.2rem 0",
-        margin: "0"
+        margin: "0",
+        "@xs": { "justify-content": "flex-start", position: "relative" }
       }}
     >
       <Tooltip content={"Text style"}>
@@ -164,7 +171,7 @@ export default ({ editor }) => {
             onSelectionChange={selectionChangeHandler}
           >
             {textLevelList.map((textLevel) => (
-              <Dropdown.Item key={textLevel.label}>
+              <Dropdown.Item key={textLevel}>
                 {textLevel.label}
               </Dropdown.Item>
             ))}
@@ -187,7 +194,7 @@ export default ({ editor }) => {
           {item.type === "menu-divider" ? (
             <div
               className="menu-divider"
-              style={{ display: "none", "@md": { display: "flex" } }}
+              style={{ display: "none", "@sm": { display: "flex" } }}
             />
           ) : (
             <MenuItem {...item} />
@@ -198,15 +205,15 @@ export default ({ editor }) => {
       <Tooltip content={"More options"}>
         <Dropdown>
           <Dropdown.Button
-              light
-              icon={<PlusIcon style={{ height: "1.5em" }} />}
-              css={{
-                transition: "none",
-                padding: "10px",
-                display: "flex",
-                "@md": { display: "none" }
-              }}
-            />
+            light
+            icon={<PlusIcon style={{ height: "1.5em" }} />}
+            css={{
+              transition: "none",
+              padding: "10px",
+              display: "flex",
+              "@sm": { display: "none" }
+            }}
+          />
           <Dropdown.Menu aria-label="More markdown options">
             {extendedItems
               .filter((item) => !("type" in item))

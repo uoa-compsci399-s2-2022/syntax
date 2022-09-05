@@ -14,9 +14,30 @@ import {
   PlusIcon,
   ChevronDoubleLeftIcon
 } from "@heroicons/react/24/outline";
+import { useRouter } from "next/router";
+import { useNote, useDispatchNote, useNotes, useDispatchNotes } from "../../modules/AppContext";
 
 const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
   const [settingsModal, setSettingsModal] = useState(false);
+	const router = useRouter();
+	const currentNote = useNote();
+	const setCurrentNote = useDispatchNote();
+	const noteslist = useNotes();
+	const setNotes = useDispatchNotes();
+
+  const createNote = async () => {
+		let res = await fetch("/api/note", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({title: "untitled", body: []}),
+		 });
+
+		 const newNote = await res.json();
+		 console.log("Create successful", { newNote });
+		 setCurrentNote(newNote);
+		 setNotes({ note: newNote, type: "add" });
+		 router.push(`/note/${newNote.id}`, undefined, { shallow: true }) 
+	}
 
   const closeHandler = () => {
     setSettingsModal(false);
@@ -98,6 +119,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
       >
         <NoteList
           retrieved_notes={notes}
+          showEditor={undefined} key={notes}
           groupName={"Test Group 1"}
           groupColor={"pink"}
         />
@@ -109,6 +131,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
           auto
           color="primary"
           icon={<PlusIcon style={{ height: "var(--icon-size)" }} />}
+          onPress={() => createNote()}
           css={{ width: "100%" }}
         >
           Add new note

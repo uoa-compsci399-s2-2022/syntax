@@ -11,11 +11,20 @@ import {
   ChevronDoubleRightIcon,
   ChevronDoubleLeftIcon
 } from "@heroicons/react/24/outline";
+import {
+	useNote,
+	useDispatchNote,
+	useNotes,
+	useDispatchNotes
+} from "../../modules/AppContext";
+
 
 const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
   const [selectedKey, setSelectedKey] = useState();
   const [exportModal, setExportModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  const currentNote = useNote();
+  const setNotes = useDispatchNotes();
 
   const sharedUsers = [
     "https://cdn3.emoji.gg/emojis/6485-catnoo.gif",
@@ -31,16 +40,33 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
     setSelectedKey();
   };
 
-  useEffect(() => {
-    switch (selectedKey) {
-      case "export":
-        setExportModal(true);
-        break;
-      case "delete":
-        setDeleteModal(true);
-        break;
-    }
-  }, [selectedKey]);
+  const deleteNoteHandler = async () => {
+	try {
+		console.log(currentNote);
+		let res = await fetch(`/api/note`, {
+			method: "DELETE",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(currentNote.id),
+		});
+		const deletedNote = await res.json();
+		setNotes({ note: deletedNote, type: "remove" });
+		setDeleteModal(false);
+	} catch (error) {
+		console.log(error);
+	}
+	};
+
+	useEffect(() => {
+		switch (selectedKey) {
+			case "export":
+				setExportModal(true);
+				break;
+			case "delete":
+				setDeleteModal(true);
+				break;
+		}
+	}, [selectedKey]);
+
 
   return (
     <Navbar
@@ -125,7 +151,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
           </Dropdown>
         </Navbar.Item>
         <ExportModal open={exportModal} closeHandler={closeHandler} />
-        <DeleteModal open={deleteModal} closeHandler={closeHandler} />
+        <DeleteModal open={deleteModal} onclosehandler={closeHandler} closeHandler={deleteNoteHandler} />
       </Navbar.Content>
     </Navbar>
   );

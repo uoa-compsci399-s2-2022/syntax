@@ -15,6 +15,7 @@ export default async function handle(req, res) {
 
   else if (req.method == "PUT") {
     const { id, title, body } = req.body;
+    console.log(req.body);
 
     // const updatedData = {title, body}
     // Update current note
@@ -27,7 +28,7 @@ export default async function handle(req, res) {
   }
 
   else if (req.method == "DELETE") {
-    const { id } = req.body;
+    const id = req.body;
     const note = await deleteNote(id, session);
     return res.json(note);
   }
