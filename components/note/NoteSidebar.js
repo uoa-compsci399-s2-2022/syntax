@@ -1,5 +1,6 @@
 import NoteList from "./NoteList";
-import { Container, Input, Button, Spacer, Navbar } from "@nextui-org/react";
+import { useState, useEffect } from "react";
+import { Container, Input, Button, Text, Navbar } from "@nextui-org/react";
 import {
   MagnifyingGlassIcon,
   PlusIcon,
@@ -41,7 +42,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
       direction="column"
       css={{
         position: "absolute",
-        "z-index": "999",
+        "z-index": 3,
         width: "100vw",
         transition: "transform 0.2s ease-in-out",
         transform: sidebarDisplay ? "translateX(-101%)" : "translateX(0%)",
@@ -67,6 +68,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
         }}
       >
         <Navbar.Content css={{ flex: "1" }}>
+        
           <Navbar.Item css={{ flex: "1" }}>
             <Input
               clearable

@@ -148,7 +148,7 @@ export default ({ editor }) => {
       display="flex"
       justify="center"
       css={{
-        "z-index": "997",
+        "z-index": 1,
         position: "fixed",
         left: "0",
         bottom: "0",
