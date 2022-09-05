@@ -59,7 +59,7 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
             </tr>
             <tr>
               <th>Last modified</th>
-              <td>{new Date(currentNote.updatedAt).toString()}</td>
+              <td>{new Date(currentNote.updatedAt).toLocaleString('en-us', { year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric"}) }</td>
             </tr>
             </tbody>
           </table>

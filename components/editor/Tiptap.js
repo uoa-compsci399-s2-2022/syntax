@@ -94,8 +94,6 @@ export default function () {
       <Spacer />
       <EditorContent editor={editor} key={currentNote} style={{ "max-width": "100%" }} />
       <Spacer />
-      <hr />
-      <Spacer />
     </Container>
   );
 }
