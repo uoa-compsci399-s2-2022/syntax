@@ -45,12 +45,12 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
           <Text h1 css={{ "overflow-wrap": "break-word" }}>
             {currentNote.title}
           </Text>
-          <Input
+          {/*<Input
             underlined
             aria-label="Note Title"
             animated={false}
             initialValue={currentNote.title}
-          ></Input>
+        ></Input>*/}
           <table className="note-metadata-table" style={{ "text-align": "left" }}>
           <tbody>
             <tr>
