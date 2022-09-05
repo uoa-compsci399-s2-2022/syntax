@@ -51,7 +51,7 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
             animated={false}
             initialValue={currentNote.title}
           ></Input>
-          <table class="note-metadata-table" style={{ "text-align": "left" }}>
+          <table className="note-metadata-table" style={{ "text-align": "left" }}>
             <tr>
               <th>Created by</th>
               <td>{note.user.name}</td>
