@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit';
 
-
 async function upload(file){
   //fetch data from endpoint for presigned link and image src
   let res = await fetch("/api/s3/", {
@@ -29,9 +28,45 @@ async function upload(file){
   return null
 }
 
+async function tag(difference, key, value){
+  for (var num in difference){
+    const body = {
+      name: difference[num].split("/").pop(),
+      tag: {
+        key: key,
+        value: value
+      }
+    }
+    let res = await fetch("/api/s3", {
+      method: "PUT",
+      body: JSON.stringify(body)
+    });
+  }
+}
+
 const ImageEditor = () => {
   const [file, setFile] = useState()
+  const [images, setImages] = useState()
+
   const editor = useEditor({
+    editorProps: {
+      handleDOMEvents: {
+        async keyup(view, event) {
+          const currentImages = view.state.doc.toJSON().content.filter(node => node.type === 'image').map(element => element.attrs.src);
+          if (images != null){
+            if (images.length > currentImages.length){
+              let difference = images.filter(image => !currentImages.includes(image))
+              await tag(difference, "USED", "False")
+            }
+            else {
+              let difference = currentImages.filter(image => !images.includes(image));
+              await tag(difference, "USED", "True")
+            }
+          }
+          images = currentImages
+        }
+      }
+    },
     extensions: [
         StarterKit,
         TipTapCustomImage(upload),
@@ -39,6 +74,11 @@ const ImageEditor = () => {
     content: '<p>Hello World! 🌎️</p>',
   })
 
+  editor?.on('create', ({ editor }) => {
+    setImages(editor.getJSON().content.filter(node => node.type === 'image'))
+  })
+
+  
   const fileSelected = event => {
     const file = event.target.files[0]
     setFile(file)
@@ -50,7 +90,9 @@ const ImageEditor = () => {
     if (src !== null){
       editor.chain().focus()?.setImage({src})?.run();
     }
-    console.log("File size was too large")
+    else{
+      console.log("File size was too large")
+    }
   }
 
   return (
