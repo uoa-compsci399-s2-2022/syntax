@@ -1,5 +1,6 @@
 import ExportModal from "@/components/modal/ExportModal";
 import DeleteModal from "@/components/modal/DeleteModal";
+import SettingsModal from "@/components/modal/SettingsModal";
 import { Avatar, Dropdown, Button, Navbar } from "@nextui-org/react";
 import { useState, useEffect } from "react";
 import {
@@ -12,61 +13,53 @@ import {
   ChevronDoubleLeftIcon
 } from "@heroicons/react/24/outline";
 import {
-	useNote,
-	useDispatchNote,
-	useNotes,
-	useDispatchNotes
+  useNote,
+  useDispatchNote,
+  useNotes,
+  useDispatchNotes
 } from "../../modules/AppContext";
-
 
 const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
   const [selectedKey, setSelectedKey] = useState();
   const [exportModal, setExportModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [settingsModal, setSettingsModal] = useState(false);
   const currentNote = useNote();
   const setNotes = useDispatchNotes();
 
-  const sharedUsers = [
-    "https://cdn3.emoji.gg/emojis/6485-catnoo.gif",
-    "https://cdn3.emoji.gg/emojis/3483-catjump.gif",
-    "https://cdn3.emoji.gg/emojis/1135-imgoingcrazy.gif",
-    "https://media.discordapp.net/attachments/364690299898953728/1005721400851574864/zooted.gif",
-    "https://cdn3.emoji.gg/emojis/3568-catkiss.gif"
-  ];
-
   const closeHandler = () => {
+    setSettingsModal(false);
     setExportModal(false);
     setDeleteModal(false);
     setSelectedKey();
   };
 
   const deleteNoteHandler = async () => {
-	try {
-		console.log(currentNote);
-		let res = await fetch(`/api/note`, {
-			method: "DELETE",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify(currentNote.id),
-		});
-		const deletedNote = await res.json();
-		setNotes({ note: deletedNote, type: "remove" });
-		setDeleteModal(false);
-	} catch (error) {
-		console.log(error);
-	}
-	};
+    try {
+      console.log(currentNote);
+      let res = await fetch(`/api/note`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(currentNote.id)
+      });
+      const deletedNote = await res.json();
+      setNotes({ note: deletedNote, type: "remove" });
+      setDeleteModal(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-	useEffect(() => {
-		switch (selectedKey) {
-			case "export":
-				setExportModal(true);
-				break;
-			case "delete":
-				setDeleteModal(true);
-				break;
-		}
-	}, [selectedKey]);
-
+  useEffect(() => {
+    switch (selectedKey) {
+      case "export":
+        setExportModal(true);
+        break;
+      case "delete":
+        setDeleteModal(true);
+        break;
+    }
+  }, [selectedKey]);
 
   return (
     <Navbar
@@ -79,7 +72,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
       }}
     >
       <Navbar.Content>
-        <Navbar.Item>
+        <Navbar.Item css={{ display: "none", "@xs": { display: "flex" } }}>
           <Button
             auto
             light
@@ -96,14 +89,34 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
             }
           />
         </Navbar.Item>
+        <Navbar.Item css={{ display: "flex", "@xs": { display: "none" } }}>
+          <Button
+            auto
+            light
+            animated={false}
+            onPress={handleSidebarDisplay}
+            icon={
+              <ChevronDoubleLeftIcon style={{ height: "var(--icon-size)" }} />
+            }
+          >
+            All Notes
+          </Button>
+        </Navbar.Item>
       </Navbar.Content>
       <Navbar.Content gap={5}>
         <Navbar.Item>
-          <Avatar.Group count={12}>
-            {sharedUsers.map((url, index) => (
-              <Avatar key={index} pointer src={url} stacked />
-            ))}
-          </Avatar.Group>
+          <Button
+            auto
+            light
+            animated={false}
+            onPress={setSettingsModal}
+            icon={
+              <Avatar
+                src="https://cdn3.emoji.gg/emojis/3568-catkiss.gif"
+                css={{ cursor: "pointer" }}
+              />
+            }
+          />
         </Navbar.Item>
         <Navbar.Item>
           <Dropdown placement="bottom-right">
@@ -150,8 +163,13 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
             </Dropdown.Menu>
           </Dropdown>
         </Navbar.Item>
+        <SettingsModal open={settingsModal} closeHandler={closeHandler} />
         <ExportModal open={exportModal} closeHandler={closeHandler} />
-        <DeleteModal open={deleteModal} onclosehandler={closeHandler} closeHandler={deleteNoteHandler} />
+        <DeleteModal
+          open={deleteModal}
+          onclosehandler={closeHandler}
+          closeHandler={deleteNoteHandler}
+        />
       </Navbar.Content>
     </Navbar>
   );

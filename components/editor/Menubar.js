@@ -158,6 +158,7 @@ export default ({ editor }) => {
       css={{
         "z-index": 1,
         "align-items": "center",
+        "min-width": "100%",
         position: "fixed",
         left: "0",
         bottom: "0",

@@ -12,7 +12,7 @@ import {
 import {
   MagnifyingGlassIcon,
   PlusIcon,
-  ChevronDoubleLeftIcon
+  ChevronDoubleRightIcon
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import {
@@ -24,18 +24,18 @@ import {
 
 const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
   const [settingsModal, setSettingsModal] = useState(false);
-	const router = useRouter();
-	const currentNote = useNote();
-	const setCurrentNote = useDispatchNote();
-	const noteslist = useNotes();
-	const setNotes = useDispatchNotes();
+  const router = useRouter();
+  const currentNote = useNote();
+  const setCurrentNote = useDispatchNote();
+  const noteslist = useNotes();
+  const setNotes = useDispatchNotes();
 
   const createNote = async () => {
-		let res = await fetch("/api/note", {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({title: "untitled", body: []}),
-		 });
+    let res = await fetch("/api/note", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title: "untitled", body: [] })
+    });
 
     const newNote = await res.json();
     console.log("Create successful", { newNote });
@@ -95,22 +95,20 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
             />
           </Navbar.Item>
         </Navbar.Content>
-        <Navbar.Content>
+        <Navbar.Content css={{ display: "flex", "@xs": { display: "none" } }}>
           <Navbar.Item>
             <Button
               auto
               light
               animated={false}
-              onPress={setSettingsModal}
+              onPress={handleSidebarDisplay}
               icon={
-                <Avatar
-                  src="https://cdn3.emoji.gg/emojis/3568-catkiss.gif"
-                  css={{ cursor: "pointer" }}
+                <ChevronDoubleRightIcon
+                  style={{ height: "var(--icon-size)" }}
                 />
               }
             />
           </Navbar.Item>
-          <SettingsModal open={settingsModal} closeHandler={closeHandler} />
         </Navbar.Content>
       </Navbar>
 
