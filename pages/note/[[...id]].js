@@ -1,6 +1,6 @@
 import NoteLayout from "../../components/note/NoteLayout";
 import { useSession, getSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import {
   useNote,
   useDispatchNote,
@@ -34,7 +34,12 @@ export const getServerSideProps = async ({ req, res, params }) => {
   if (id && id.length == 1) {
     note = await getNoteByID(id[0]);
   } else {
-    note = { title: "Hello! 👋", body: "Start typing here to get started." };
+    note = {
+      title: "default",
+      body: "start typing",
+      updatedAt: Date.now(),
+      user: session?.user,
+    };
   }
 
   return {
@@ -54,7 +59,6 @@ export default function Note({ notes, note }) {
     note.action = "edit";
     setCurrentNote(note);
   }
-  console.log(currentNote);
 
   return <NoteLayout allNotes={notes} currentNote={note} />;
 }

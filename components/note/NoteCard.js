@@ -6,9 +6,9 @@ const NoteCard = ({ note }) => {
       <Card.Header css={{ "padding-bottom": "0" }}>
         <Text h4>{note.title}</Text>
       </Card.Header>
-      <Card.Body css={{ "padding-top": "0" }}>
+      {/* <Card.Body css={{ "padding-top": "0" }}>
         {(note.body.length > 50) ? (note.body.slice(0, 50) + "...") : note.body}
-      </Card.Body>
+      </Card.Body> */}
     </Card>
   );
 };
