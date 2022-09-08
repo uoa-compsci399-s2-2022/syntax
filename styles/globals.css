@@ -70,3 +70,24 @@ input[type="search"]::-webkit-search-decoration,
 input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-results-button,
 input[type="search"]::-webkit-search-results-decoration { display: none; }
+
+/* image resizer styling */
+.image-resizer {
+  display: inline-flex;
+  position: relative;
+  flex-grow: 0;
+}
+
+.image-resizer .resize-trigger {
+position: absolute;
+right: -6px;
+bottom: -9px;
+opacity: 0;
+transition: opacity .3s ease;
+color: #3259a5;
+}
+
+.image-resizer:hover .resize-trigger {
+opacity: 1;
+}
+
