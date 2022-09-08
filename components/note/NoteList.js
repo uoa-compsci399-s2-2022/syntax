@@ -10,7 +10,7 @@ import {
   useDispatchNotes
 } from "@/modules/AppContext";
 
-const NoteList = ({ retrieved_notes, groupName, groupColor }) => {
+const NoteList = ({ retrieved_notes, groupName, groupColor, handleSidebarDisplay }) => {
   const router = useRouter();
 
   // this is where we assign the context to constants
@@ -30,6 +30,10 @@ const NoteList = ({ retrieved_notes, groupName, groupColor }) => {
     note.action = "edit";
     setCurrentNote(note);
     router.push(`/note/${note.id}`, undefined, { shallow: true });
+    // if width is below the 650px breakpoint, close the sidebar upon clicking a note
+    if (window.innerWidth < 650) {
+      handleSidebarDisplay();
+    }
   };
 
   return (

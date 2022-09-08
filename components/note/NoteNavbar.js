@@ -73,7 +73,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
       variant="sticky"
       disableShadow
       disableBlur
-      css={{ "z-index": "998" }}
+      css={{ "z-index": 2 }}
       containerCss={{
         "min-width": "100%"
       }}

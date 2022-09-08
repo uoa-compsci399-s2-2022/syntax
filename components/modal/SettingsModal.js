@@ -7,7 +7,7 @@ const UserSettingsModal = ({ open, closeHandler }) => {
   const { isDark, type } = useTheme();
 
   return (
-    <Modal closeButton open={open} onClose={closeHandler}>
+    <Modal closeButton open={open} onClose={closeHandler} css={{ margin: "10px" }}>
       <Modal.Header>Settings</Modal.Header>
       <Modal.Body>
         <Grid.Container>

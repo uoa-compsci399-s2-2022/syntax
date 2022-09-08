@@ -45,12 +45,12 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
           <Text h1 css={{ "overflow-wrap": "break-word" }}>
             {currentNote.title}
           </Text>
-          <Input
+          {/*<Input
             underlined
             aria-label="Note Title"
             animated={false}
             initialValue={currentNote.title}
-          ></Input>
+        ></Input>*/}
           <table className="note-metadata-table" style={{ "text-align": "left" }}>
           <tbody>
             <tr>
@@ -59,7 +59,7 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
             </tr>
             <tr>
               <th>Last modified</th>
-              <td>{new Date(currentNote.updatedAt).toString()}</td>
+              <td>{new Date(currentNote.updatedAt).toLocaleString('en-us', { year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric"}) }</td>
             </tr>
             </tbody>
           </table>

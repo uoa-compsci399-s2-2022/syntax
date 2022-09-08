@@ -1,6 +1,6 @@
 import NoteList from "./NoteList";
 import SettingsModal from "@/components/modal/SettingsModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Container,
   Input,
@@ -15,7 +15,12 @@ import {
   ChevronDoubleLeftIcon
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
-import { useNote, useDispatchNote, useNotes, useDispatchNotes } from "../../modules/AppContext";
+import {
+  useNote,
+  useDispatchNote,
+  useNotes,
+  useDispatchNotes
+} from "../../modules/AppContext";
 
 const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
   const [settingsModal, setSettingsModal] = useState(false);
@@ -32,12 +37,12 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
 			body: JSON.stringify({title: "untitled", body: []}),
 		 });
 
-		 const newNote = await res.json();
-		 console.log("Create successful", { newNote });
-		 setCurrentNote(newNote);
-		 setNotes({ note: newNote, type: "add" });
-		 router.push(`/note/${newNote.id}`, undefined, { shallow: true }) 
-	}
+    const newNote = await res.json();
+    console.log("Create successful", { newNote });
+    setCurrentNote(newNote);
+    setNotes({ note: newNote, type: "add" });
+    router.push(`/note/${newNote.id}`, undefined, { shallow: true });
+  };
 
   const closeHandler = () => {
     setSettingsModal(false);
@@ -50,7 +55,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
       direction="column"
       css={{
         position: "absolute",
-        "z-index": "999",
+        "z-index": 3,
         width: "100vw",
         transition: "transform 0.2s ease-in-out",
         transform: sidebarDisplay ? "translateX(-101%)" : "translateX(0%)",
@@ -62,7 +67,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
         "@xs": {
           position: sidebarDisplay ? "fixed" : "relative",
           "max-width": "15%",
-          "min-width": "200px"
+          "min-width": "250px"
         }
       }}
     >
@@ -119,7 +124,9 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
       >
         <NoteList
           retrieved_notes={notes}
-          showEditor={undefined} key={notes}
+          showEditor={undefined}
+          key={notes}
+          handleSidebarDisplay={handleSidebarDisplay}
           groupName={"Test Group 1"}
           groupColor={"pink"}
         />

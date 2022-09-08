@@ -3,6 +3,12 @@ import NoteSidebar from "./NoteSidebar";
 import NoteNavbar from "./NoteNavbar";
 import { Container } from "@nextui-org/react";
 import { useState } from "react";
+import {
+  useNote,
+  useDispatchNote,
+  useNotes,
+  useDispatchNotes
+} from "@/modules/AppContext";
 
 const NoteLayout = ({ allNotes, currentNote }) => {
   const [sidebarDisplay, setSidebarDisplay] = useState(false);
@@ -20,7 +26,7 @@ const NoteLayout = ({ allNotes, currentNote }) => {
         "min-width": "100vw",
         "min-height": "100vh",
         padding: "0",
-        margin: "0",
+        margin: "0"
       }}
     >
       <NoteSidebar
@@ -29,7 +35,6 @@ const NoteLayout = ({ allNotes, currentNote }) => {
         handleSidebarDisplay={handleSidebarDisplay}
       />
       <Container
-        fluid
         display="flex"
         direction="column"
         wrap="nowrap"
@@ -37,18 +42,24 @@ const NoteLayout = ({ allNotes, currentNote }) => {
           padding: "0",
           margin: "0",
           "max-height": "100vh",
-          "overflow-y": "auto",
+          "max-width": "100vw",
+          "overflow-y": "auto"
         }}
       >
         <NoteNavbar
           sidebarDisplay={sidebarDisplay}
           handleSidebarDisplay={handleSidebarDisplay}
         />
-        <NoteDisplay
-          note={currentNote}
-          css={{ background: "$background" }}
-          key={currentNote}
-        />
+        <Container
+          css={{
+            padding: "0",
+            "min-width": "100%",
+            "overflow-y": "scroll",
+            "overflow-x": "hidden"
+          }}
+        >
+          <NoteDisplay note={currentNote} key={currentNote} />
+        </Container>
       </Container>
     </Container>
   );
