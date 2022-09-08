@@ -1,11 +1,15 @@
 import Head from "next/head";
-import NoteNavbar from "./NoteNavbar";
 import { Container, Text, Spacer, Grid, Input } from "@nextui-org/react";
-import ImageEditor from '../ImageEditor'
-import Tiptap from '../Tiptap'
-import { useNote, useDispatchNote, useNotes, useDispatchNotes } from "../../modules/AppContext";
+import ImageEditor from "../ImageEditor";
+import Tiptap from "@/components/editor/Tiptap";
+import {
+  useNote,
+  useDispatchNote,
+  useNotes,
+  useDispatchNotes
+} from "../../modules/AppContext";
 
-const NoteDisplay = ({ note }) => {
+const NoteDisplay = ({ note, handleSidebarDisplay }) => {
   const notesc = useNotes();
   const setNotes = useDispatchNotes();
 
@@ -24,7 +28,6 @@ const NoteDisplay = ({ note }) => {
       </>
     );
   } else {
-
     return (
       <>
         <Head>
@@ -33,34 +36,39 @@ const NoteDisplay = ({ note }) => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <Container
-          fluid
-          display="flex"
-          direction="column"
-          wrap="nowrap"
           css={{
-            padding: "0",
             margin: "0",
-            "max-height": "100vh",
-            "max-width": "100vw",
-            "overflow-y": "auto",
+            padding: "0 2rem",
+            "max-width": "100vw"
           }}
         >
-          <NoteNavbar />
-          <Container css={{ margin: "0", padding: "0 3rem", "max-width": "100vw" }}>
-            <Input aria-label="Note Title" animated={false} initialValue={currentNote.title}></Input>
-            <Grid.Container>
-              <Grid xs={1.5}><Text weight="bold">Created by</Text></Grid>
-              <Grid xs={10}>{note.user.name}</Grid>
-              <Grid xs={1.5}><Text weight="bold">Last modified</Text></Grid>
-              <Grid xs={10} >{currentNote.updatedAt}</Grid>
-            </Grid.Container>
-            <Spacer />
-            <hr />
-            {/*<ImageEditor/>*/}
-            <Tiptap noteContent={currentNote.body}/>
-          </Container>
+          <Text h1 css={{ "overflow-wrap": "break-word" }}>
+            {currentNote.title}
+          </Text>
+          {/*<Input
+            underlined
+            aria-label="Note Title"
+            animated={false}
+            initialValue={currentNote.title}
+        ></Input>*/}
+          <table className="note-metadata-table" style={{ "text-align": "left" }}>
+          <tbody>
+            <tr>
+              <th>Created by</th>
+              <td>{note.user.name}</td>
+            </tr>
+            <tr>
+              <th>Last modified</th>
+              <td>{new Date(currentNote.updatedAt).toLocaleString('en-us', { year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric"}) }</td>
+            </tr>
+            </tbody>
+          </table>
           <Spacer />
+          <hr />
+          {/*<ImageEditor/>*/}
+          <Tiptap noteContent={currentNote.body} />
         </Container>
+        <Spacer />
       </>
     );
   }
