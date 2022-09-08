@@ -1,6 +1,7 @@
 import { Node, nodeInputRule } from "@tiptap/core";
-import { mergeAttributes } from "@tiptap/react";
-
+import { mergeAttributes, ReactNodeViewRenderer } from "@tiptap/react";
+import {Component, FC, ReactElement} from "react";
+import ResizeableImage from "../components/ResizeableImage"
 import { uploadImagePlugin, UploadFn } from "./upload_image";
 
 /**
@@ -19,6 +20,7 @@ import { uploadImagePlugin, UploadFn } from "./upload_image";
 interface ImageOptions {
 	inline: boolean;
 	HTMLAttributes: Record<string, any>;
+	useFigure: boolean
 }
 
 declare module "@tiptap/core" {
@@ -27,7 +29,7 @@ declare module "@tiptap/core" {
 			/**
 			 * Add an image
 			 */
-			setImage: (options: { src: string; alt?: string; title?: string }) => ReturnType;
+			setImage: (options: { src: string, alt?: string, title?: string, width?: string|number, height?: string|number, isdraggable?: boolean }) => ReturnType;
 		};
 	}
 }
@@ -37,16 +39,14 @@ const IMAGE_INPUT_REGEX = /!\[(.+|:?)\]\((\S+)(?:(?:\s+)["'](\S+)["'])?\)/;
 export const TipTapCustomImage = (uploadFn: UploadFn) => {
 	return Node.create<ImageOptions>({
 		name: "image",
-
 		inline() {
 			return this.options.inline;
 		},
-
 		group() {
 			return this.options.inline ? "inline" : "block";
 		},
-
 		draggable: true,
+		useFigure: false,
 
 		addAttributes() {
 			return {
@@ -58,6 +58,28 @@ export const TipTapCustomImage = (uploadFn: UploadFn) => {
 				},
 				title: {
 					default: null,
+				},
+				width: {
+					default: 'auto',
+					renderHTML: (attributes) => {
+						return{
+							width: attributes.width
+						};
+					}
+				},
+				height: {
+					default: 'auto',
+					renderHTML: (attributes) => {
+						return {
+							height: attributes.height
+						};
+					}
+				},
+				isdraggable: {
+					default: true,
+					renderHTML: (attributes) => {
+						return {};
+					},
 				},
 			};
 		},
@@ -72,6 +94,9 @@ export const TipTapCustomImage = (uploadFn: UploadFn) => {
 						src: element.getAttribute("src"),
 						title: element.getAttribute("title"),
 						alt: element.getAttribute("alt"),
+						width: element.getAttribute("width"),
+						height: element.getAttribute("height"),
+						isdraggable: element.getAttribute("isdraggable"),
 					};
 					return obj;
 				},
@@ -93,19 +118,26 @@ export const TipTapCustomImage = (uploadFn: UploadFn) => {
 					},
 			};
 		},
+		
+		//Component for how the image will be loaded
+		addNodeView() {
+			return ReactNodeViewRenderer(ResizeableImage)
+		},
+
         addInputRules() {
             return [
                 nodeInputRule({
                     find: IMAGE_INPUT_REGEX,
                     type: this.type,
                     getAttributes: match => {
-                      const [,, alt, src, title] = match
+                      const [,, alt, src, title, height, width, isdraggable] = match
             
-                      return { src, alt, title }
+                      return { src, alt, title, height, width, isdraggable }
                     },
                 }),
             ];
         },
+		//Plugin to be able to drag and drop images
 		addProseMirrorPlugins() {
 			return [uploadImagePlugin(uploadFn)];
 		},
