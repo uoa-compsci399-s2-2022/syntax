@@ -90,7 +90,6 @@ export default function () {
       }}
     >
       <Menubar editor={editor} />
-      <hr />
       <Spacer />
       <EditorContent editor={editor} key={currentNote} style={{ "max-width": "100%" }} />
       <Spacer />

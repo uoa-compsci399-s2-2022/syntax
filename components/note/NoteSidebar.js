@@ -54,7 +54,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
         "@xs": {
           position: sidebarDisplay ? "fixed" : "relative",
           "max-width": "20%",
-          "min-width": "200px"
+          "min-width": "250px"
         }
       }}
     >
@@ -106,7 +106,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
           "overflow-x": "hidden"
         }}
       >
-        <NoteList retrieved_notes={notes} showEditor={undefined} key={notes} />
+        <NoteList retrieved_notes={notes} showEditor={undefined} key={notes} handleSidebarDisplay={handleSidebarDisplay} />
       </Container>
       <Container
         css={{

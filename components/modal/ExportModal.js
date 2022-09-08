@@ -2,7 +2,7 @@ import { Button, Modal } from "@nextui-org/react";
 
 const ExportModal = ({ open, closeHandler }) => {
   return (
-    <Modal open={open} onClose={closeHandler}>
+    <Modal open={open} onClose={closeHandler} css={{ margin: "10px" }}>
       <Modal.Header>Export Note</Modal.Header>
       <Modal.Body>Export as PDF / MD</Modal.Body>
       <Modal.Footer>

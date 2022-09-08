@@ -25,9 +25,7 @@ export default ({ editor }) => {
 
   const iconSize = "1.5em";
   const iconColor = "var(--nextui-colors-text)";
-  const [selectedTextLevel, setSelectedTextLevel] = useState(
-    new Set(["Normal text"])
-  );
+  const [selectedTextLevel, setSelectedTextLevel] = useState(["Normal text"]);
 
   const textLevelList = [
     { label: "Normal text", value: "0" },
@@ -50,6 +48,16 @@ export default ({ editor }) => {
       editor.isActive("heading", { level: textLevel });
     }
   };
+
+  editor.on("selectionUpdate", ({ editor }) => {
+    if (Object.keys(editor.getAttributes("heading")).length === 0) {
+      setSelectedTextLevel(textLevelList[0].label);
+    } else {
+      setSelectedTextLevel(
+        textLevelList[editor.getAttributes("heading").level].label
+      );
+    }
+  });
 
   const coreItems = [
     {
@@ -149,13 +157,18 @@ export default ({ editor }) => {
       justify="center"
       css={{
         "z-index": 1,
+        "align-items": "center",
         position: "fixed",
         left: "0",
         bottom: "0",
         background: "$background",
-        padding: "0.2rem 0",
+        padding: "0.3rem 0",
         margin: "0",
-        "@xs": { "justify-content": "flex-start", position: "relative" }
+        "@xs": {
+          "justify-content": "flex-start",
+          "border-bottom": "1px solid $border",
+          position: "relative"
+        }
       }}
     >
       <Tooltip content={"Text style"}>
@@ -171,7 +184,7 @@ export default ({ editor }) => {
             onSelectionChange={selectionChangeHandler}
           >
             {textLevelList.map((textLevel) => (
-              <Dropdown.Item key={textLevel}>
+              <Dropdown.Item key={textLevel.label}>
                 {textLevel.label}
               </Dropdown.Item>
             ))}
