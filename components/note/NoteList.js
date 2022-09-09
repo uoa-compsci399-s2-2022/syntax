@@ -39,11 +39,11 @@ const NoteList = ({ retrieved_notes, groupName, groupColor, handleSidebarDisplay
   return (
     <>
       {notes.length > 0 ? (
-        <Collapse.Group splitted divider={false} css={{ padding: "10px", "text-overflow": "break" }}>
+        <Container css={{ padding: "0", textOverflow: "break" }}>
           <NoteGroup name={groupName} notes={notes} color={groupColor} openNote={openNote} />
           <NoteGroup name={groupName} notes={notes} color={groupColor} openNote={openNote} />
           <NoteGroup name={groupName} notes={notes} color={groupColor} openNote={openNote} />
-        </Collapse.Group>
+        </Container>
       ) : (
         <div>
           <p>Oops.. no notes yet</p>

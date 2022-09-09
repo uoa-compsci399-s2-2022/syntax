@@ -38,7 +38,7 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
         <Container
           css={{
             margin: "0",
-            padding: "0 2rem",
+            padding: "0 10%",
             "max-width": "100vw"
           }}
         >

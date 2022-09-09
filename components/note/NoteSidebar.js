@@ -114,7 +114,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
 
       <Container
         css={{
-          "overflow-y": "scroll",
+          "overflow-y": "auto",
           "overflow-x": "hidden",
           padding: "0",
           height: "100%"
