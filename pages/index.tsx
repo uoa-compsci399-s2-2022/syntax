@@ -1,13 +1,11 @@
 import { useRouter } from "next/router";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
-import { Button, Text, Grid, Spacer, 
-  Switch, useTheme, Image } from '@nextui-org/react';
+import { Button, Text, Grid, Spacer, Switch, useTheme, Image } from '@nextui-org/react';
 import Head from "next/head";
 
-import darkTheme from "../styles/themes/darkTheme";
-import lightTheme from "../styles/themes/lightTheme";
 import { useTheme as useNextTheme } from 'next-themes'
 import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
+import { useMediaQuery } from './useMediaQuery.js';
 
 const getAllNotesByUserID = require("../prisma/Note").getAllNotesByUserID;
 
@@ -33,6 +31,8 @@ export default function Component() {
   const { setTheme } = useNextTheme();
   const { isDark, type } = useTheme();
 
+  const isMd = useMediaQuery(960);
+
   if (!session) {
     return (
       <>
@@ -54,32 +54,32 @@ export default function Component() {
         <meta name="theme-color" content="#317EFB" />
 
       </Head>
-        <Grid.Container gap={2} responsive auto d='flex' flexWrap='nowrap'>
-          <Grid xs={1} justify='flex-start'>
+        <Grid.Container gap={2} justify='flex-start' >
+          <Grid xs={isMd ? 2.5 : 1}>
             <Image
             width={50}
             height={50}
             src='/favicon.ico'
             alt='syntax logo'
-            objectFit='scale-down'/>
+            objectFit="initial"/>
           </Grid>
-          <Grid xs={9.5} responsive justify='space-evenly'></Grid>
-          <Grid xs={1} alignContent='flex-end'>
-          <Switch
+          <Grid xs={isMd ? 4.2 : 9.7}></Grid>
+          <Grid xs={1}>
+          <Switch 
             checked={isDark}
             iconOn={<MoonIcon />}
             iconOff={<SunIcon />}
             onChange={(e) => setTheme(e.target.checked ? "dark" : "light")}
           />
-          <Spacer x={1}/>
+          <Spacer x={ isMd ? 0.5 : 1}/>
           <Button bordered ghost onClick={() => signIn()} responsive auto>Sign in</Button>
           </Grid>
         </Grid.Container>
 
 			<Spacer y={1}/>
 			
-			<Text h1 size={60} align="center">syntax</Text>
-			<Text h2 align="center" weight="normal">Code. Learn. Collaborate.</Text>
+			<Text size={60} weight={'bold'} align="center">syntax</Text>
+			<Text h2 align="center" weight="normal" size={ isMd ? 30 :35} >Code. Learn. Collaborate.</Text>
       </>
     );
   }
