@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
-import { Button, Text, Container, Row, Col, Spacer, Switch, useTheme } from '@nextui-org/react';
+import { Button, Text, Grid, Spacer, 
+  Switch, useTheme, Image } from '@nextui-org/react';
 import Head from "next/head";
 
 import darkTheme from "../styles/themes/darkTheme";
@@ -36,6 +37,7 @@ export default function Component() {
     return (
       <>
       <Head>
+        
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta
@@ -47,45 +49,32 @@ export default function Component() {
         <title>syntax</title>
 
         <link rel="manifest" href="/manifest.json" />
-        <link
-          href="/icons/favicon-16x16.png"
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-        />
-        <link
-          href="/icons/favicon-32x32.png"
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-        />
-        <link rel="apple-touch-icon" href="/apple-icon.png"></link>
+        
+        <link rel="icon" href="/favicon.ico"/>
         <meta name="theme-color" content="#317EFB" />
 
       </Head>
-        <Container gap={0} fluid responsive auto css={{m: 10, d:'flex', flexWrap: 'nowrap'}}>
-				<Row gap={1}>
-					<Col>
-						<Text h6 size={15} color="black" css={{ m: 0, float:'left' }}>
-							insert logo here
-						</Text>
-					</Col>
-					<Col>
-					<Button bordered ghost onClick={() => signIn()} css={{float: 'right'}} responsive auto>Sign in</Button>
-          
+        <Grid.Container gap={2} responsive auto d='flex' flexWrap='nowrap'>
+          <Grid xs={1} justify='flex-start'>
+            <Image
+            width={50}
+            height={50}
+            src='/favicon.ico'
+            alt='syntax logo'
+            objectFit='scale-down'/>
+          </Grid>
+          <Grid xs={9.5} responsive justify='space-evenly'></Grid>
+          <Grid xs={1} alignContent='flex-end'>
           <Switch
             checked={isDark}
             iconOn={<MoonIcon />}
             iconOff={<SunIcon />}
             onChange={(e) => setTheme(e.target.checked ? "dark" : "light")}
-            css={{float: 'right'}}
           />
-    
-					
-					</Col>
-				</Row>
-				<Spacer y={1} />
-			</Container>
+          <Spacer x={1}/>
+          <Button bordered ghost onClick={() => signIn()} responsive auto>Sign in</Button>
+          </Grid>
+        </Grid.Container>
 
 			<Spacer y={1}/>
 			
