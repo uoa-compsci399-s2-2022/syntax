@@ -39,10 +39,10 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
           css={{
             margin: "0",
             padding: "0 10%",
-            "max-width": "100vw"
+            maxWidth: "100vw"
           }}
         >
-          <Text h1 css={{ "overflow-wrap": "break-word" }}>
+          <Text h1 css={{ overflowWrap: "break-word" }}>
             {currentNote.title}
           </Text>
           {/*<Input
@@ -51,7 +51,7 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
             animated={false}
             initialValue={currentNote.title}
         ></Input>*/}
-          <table className="note-metadata-table" style={{ "text-align": "left" }}>
+          <table className="note-metadata-table" style={{ textAlign: "left" }}>
           <tbody>
             <tr>
               <th>Created by</th>

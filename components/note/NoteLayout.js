@@ -41,9 +41,9 @@ const NoteLayout = ({ allNotes, currentNote }) => {
         css={{
           padding: "0",
           margin: "0",
-          "max-height": "100vh",
-          "max-width": "100vw",
-          "overflow-y": "auto"
+          maxHeight: "100vh",
+          maxWidth: "100vw",
+          overflowY: "auto"
         }}
       >
         <NoteNavbar

@@ -5,7 +5,8 @@ import {
   Container,
   Row,
   Col,
-  Button
+  Button,
+  useTheme
 } from "@nextui-org/react";
 import { useState } from "react";
 import {
@@ -18,6 +19,7 @@ import { useNote } from "../../modules/AppContext";
 
 const NoteGroup = ({ name, color = "white", notes, openNote }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { checked, type } = useTheme();
   const currentNote = useNote();
 
   const handleOpen = () => {
@@ -36,7 +38,7 @@ const NoteGroup = ({ name, color = "white", notes, openNote }) => {
           border: "none",
           textAlign: "left",
           outline: "none",
-          backgroundColor: "$accents3"
+          backgroundColor: "$accents4"
         }}
       >
         <Container
@@ -87,7 +89,7 @@ const NoteGroup = ({ name, color = "white", notes, openNote }) => {
         <ul
           style={{
             margin: 0,
-            backgroundColor: "var(--nextui-colors-accents3)"
+            backgroundColor: "var(--nextui-colors-accents4)"
           }}
         >
           {notes.map((note) => (
@@ -98,7 +100,7 @@ const NoteGroup = ({ name, color = "white", notes, openNote }) => {
                 padding: "0.5rem 0 0.5rem calc(1rem + 0.5rem + 14px)",
                 backgroundColor:
                   note.id === currentNote.id
-                    ? "var(--nextui-colors-accents4)"
+                    ? "var(--nextui-colors-accents5)"
                     : "transparent"
               }}
             >
@@ -107,7 +109,12 @@ const NoteGroup = ({ name, color = "white", notes, openNote }) => {
                   openNote(note);
                 }}
               >
-                <DocumentTextIcon style={{ height: "var(--icon-size-xs)", marginRight: "0.5rem" }} />
+                <DocumentTextIcon
+                  style={{
+                    height: "var(--icon-size-xs)",
+                    marginRight: "0.5rem"
+                  }}
+                />
                 {note.title}
               </a>
             </li>

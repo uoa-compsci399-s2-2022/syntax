@@ -1,5 +1,4 @@
 import NoteList from "./NoteList";
-import SettingsModal from "@/components/modal/SettingsModal";
 import { useState, useEffect } from "react";
 import {
   Container,
@@ -7,7 +6,8 @@ import {
   Button,
   Avatar,
   Navbar,
-  Spacer
+  Spacer,
+  useTheme
 } from "@nextui-org/react";
 import {
   MagnifyingGlassIcon,
@@ -23,7 +23,7 @@ import {
 } from "../../modules/AppContext";
 
 const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
-  const [settingsModal, setSettingsModal] = useState(false);
+  const { checked, type } = useTheme();
   const router = useRouter();
   const currentNote = useNote();
   const setCurrentNote = useDispatchNote();
@@ -44,10 +44,6 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
     router.push(`/note/${newNote.id}`, undefined, { shallow: true });
   };
 
-  const closeHandler = () => {
-    setSettingsModal(false);
-  };
-
   return (
     <Container
       display="flex"
@@ -61,13 +57,13 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
         transform: sidebarDisplay ? "translateX(-101%)" : "translateX(0%)",
         padding: "0",
         margin: "0",
-        background: "$accents2",
+        background: "$accents0",
         height: "100vh",
         float: "left",
         "@xs": {
           position: sidebarDisplay ? "fixed" : "relative",
-          "max-width": "15%",
-          "min-width": "250px"
+          maxWidth: "15%",
+          minWidth: "250px"
         }
       }}
     >
@@ -75,7 +71,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
         disableShadow
         disableBlur
         containerCss={{
-          background: "$accents2",
+          background: "$accents0",
           padding: "0 10px",
           gap: "10px"
         }}
@@ -91,7 +87,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
               contentLeft={
                 <MagnifyingGlassIcon style={{ height: "var(--icon-size)" }} />
               }
-              css={{ flex: "1" }}
+              css={{ flex: "1", $$inputColor: type === "light"? "white" : "#161616" }}
             />
           </Navbar.Item>
         </Navbar.Content>
@@ -140,6 +136,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
           css={{ width: "100%" }}
         >
           Add new note
+          {console.log(type)}
         </Button>
       </Container>
     </Container>
