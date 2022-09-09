@@ -17,7 +17,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useNote } from "../../modules/AppContext";
 
-const NoteGroup = ({ name, color = "white", notes, openNote }) => {
+const NoteGroup = ({ name, color = "white", notes, openNote, createNote }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { checked, type } = useTheme();
   const currentNote = useNote();
@@ -31,6 +31,7 @@ const NoteGroup = ({ name, color = "white", notes, openNote }) => {
       <Container
         display="flex"
         justify="space-between"
+        alignItems="center"
         wrap="nowrap"
         css={{
           padding: "0 0.5rem",
@@ -43,13 +44,12 @@ const NoteGroup = ({ name, color = "white", notes, openNote }) => {
       >
         <Container
           display="flex"
-          wrap="nowrap"
           alignItems="center"
-          css={{ padding: "0" }}
+          wrap="nowrap"
+          css={{ padding: "0.5rem 0" }}
         >
           <Button
             light
-            animated={false}
             onPress={handleOpen}
             icon={
               isOpen ? (
@@ -61,7 +61,9 @@ const NoteGroup = ({ name, color = "white", notes, openNote }) => {
             css={{
               cursor: "pointer",
               minWidth: "0",
-              maxWidth: "min-content",
+              maxWidth: "var(--icon-size-xs)",
+              height: "var(--icon-size-xs)",
+              padding: "0.8rem",
               marginRight: "1rem"
             }}
           ></Button>
@@ -74,16 +76,23 @@ const NoteGroup = ({ name, color = "white", notes, openNote }) => {
         </Container>
         <Button
           light
-          animated={false}
+          onPress={() => createNote()}
           icon={<PlusIcon style={{ height: "var(--icon-size-xs)" }} />}
-          css={{ cursor: "pointer", minWidth: "0", maxWidth: "min-content" }}
+          css={{
+            cursor: "pointer",
+            minWidth: "0",
+            maxWidth: "var(--icon-size-xs)",
+            height: "var(--icon-size-xs)",
+            padding: "0.8rem"
+          }}
         ></Button>
       </Container>
       <Container
         css={{
           padding: "0",
           overflow: "hidden",
-          display: isOpen ? "block" : "none"
+          transition: "max-height 0.3s ease",
+          maxHeight: isOpen ? 320 * notes.length + "px" : "0"
         }}
       >
         <ul
@@ -93,31 +102,28 @@ const NoteGroup = ({ name, color = "white", notes, openNote }) => {
           }}
         >
           {notes.map((note) => (
-            <li
-              key={note.id}
-              style={{
-                margin: "0",
-                padding: "0.5rem 0 0.5rem calc(1rem + 0.5rem + 14px)",
-                backgroundColor:
-                  note.id === currentNote.id
-                    ? "var(--nextui-colors-accents5)"
-                    : "transparent"
+            <a
+              onClick={() => {
+                openNote(note);
               }}
             >
-              <a
-                onClick={() => {
-                  openNote(note);
+              <li
+                key={note.id}
+                style={{
+                  margin: "0",
+                  padding: "0.3rem calc(1rem + 0.5rem + 25px)",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  maxWidth: "100%",
+                  backgroundColor:
+                    note.id === currentNote.id
+                      ? "var(--nextui-colors-accents5)"
+                      : "transparent"
                 }}
               >
-                <DocumentTextIcon
-                  style={{
-                    height: "var(--icon-size-xs)",
-                    marginRight: "0.5rem"
-                  }}
-                />
                 {note.title}
-              </a>
-            </li>
+              </li>
+            </a>
           ))}
         </ul>
       </Container>

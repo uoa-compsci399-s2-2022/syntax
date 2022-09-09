@@ -51,7 +51,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
       direction="column"
       css={{
         position: "absolute",
-        "z-index": 3,
+        zIndex: 3,
         width: "100vw",
         transition: "transform 0.2s ease-in-out",
         transform: sidebarDisplay ? "translateX(-101%)" : "translateX(0%)",
@@ -87,7 +87,10 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
               contentLeft={
                 <MagnifyingGlassIcon style={{ height: "var(--icon-size)" }} />
               }
-              css={{ flex: "1", $$inputColor: type === "light"? "white" : "#161616" }}
+              css={{
+                flex: "1",
+                $$inputColor: type === "light" ? "white" : "#161616"
+              }}
             />
           </Navbar.Item>
         </Navbar.Content>
@@ -110,8 +113,8 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
 
       <Container
         css={{
-          "overflow-y": "auto",
-          "overflow-x": "hidden",
+          overflowY: "auto",
+          overflowX: "hidden",
           padding: "0",
           height: "100%"
         }}
@@ -121,8 +124,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
           showEditor={undefined}
           key={notes}
           handleSidebarDisplay={handleSidebarDisplay}
-          groupName={"Test Group 1"}
-          groupColor={"pink"}
+          createNote={createNote}
         />
       </Container>
 
@@ -136,7 +138,6 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
           css={{ width: "100%" }}
         >
           Add new note
-          {console.log(type)}
         </Button>
       </Container>
     </Container>

@@ -10,7 +10,7 @@ import {
   useDispatchNotes
 } from "@/modules/AppContext";
 
-const NoteList = ({ retrieved_notes, groupName, groupColor, handleSidebarDisplay }) => {
+const NoteList = ({ retrieved_notes, handleSidebarDisplay, createNote }) => {
   const router = useRouter();
 
   // this is where we assign the context to constants
@@ -40,9 +40,27 @@ const NoteList = ({ retrieved_notes, groupName, groupColor, handleSidebarDisplay
     <>
       {notes.length > 0 ? (
         <Container css={{ padding: "0", textOverflow: "break" }}>
-          <NoteGroup name={groupName} notes={notes} color={groupColor} openNote={openNote} />
-          <NoteGroup name={groupName} notes={notes} color={groupColor} openNote={openNote} />
-          <NoteGroup name={groupName} notes={notes} color={groupColor} openNote={openNote} />
+          <NoteGroup
+            name={"Group 1"}
+            color={"#ffa080"}
+            notes={notes}
+            openNote={openNote}
+            createNote={createNote}
+          />
+          <NoteGroup
+            name={"Group 2"}
+            color={"#ffc080"}
+            notes={notes}
+            openNote={openNote}
+            createNote={createNote}
+          />
+          <NoteGroup
+            name={"Group 3"}
+            color={"#a5d46a"}
+            notes={notes}
+            openNote={openNote}
+            createNote={createNote}
+          />
         </Container>
       ) : (
         <div>
