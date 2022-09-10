@@ -6,6 +6,8 @@ import Head from "next/head";
 import { useTheme as useNextTheme } from 'next-themes'
 import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
 import { useMediaQuery } from './useMediaQuery.js';
+import { Textarea, Container, Col, Row } from '@nextui-org/react';
+import TableRow from "@nextui-org/react/types/table/base/table-row.js";
 
 const getAllNotesByUserID = require("../prisma/Note").getAllNotesByUserID;
 
@@ -80,6 +82,21 @@ export default function Component() {
 			
 			<Text size={60} weight={'bold'} align="center">syntax</Text>
 			<Text h2 align="center" weight="normal" size={ isMd ? 30 :35} >Code. Learn. Collaborate.</Text>
+
+      <br></br><br></br>
+      <Container sm>
+        <Row justify='center' align='center'>
+        <Textarea 
+        disabled
+        placeholder='insert Editable Note here'
+        align='center'
+        rows={ isMd ? 20 : 30}
+        fullWidth
+        />
+        </Row>
+      </Container>
+      
+
       </>
     );
   }
