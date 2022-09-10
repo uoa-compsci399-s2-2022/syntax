@@ -25,7 +25,7 @@ const notesReducer = (state, action) => {
   // remove the note object in the previous state
   // that matches the title of the current note object
   if (type === "remove") {
-    const noteIndex = state.findIndex((x) => x.title === note.title);
+    const noteIndex = state.findIndex((x) => x.id === note.id);
 
     // if no match, return the previous state
     if (noteIndex < 0) return state;

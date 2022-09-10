@@ -2,7 +2,11 @@ import { Card, Text } from "@nextui-org/react";
 
 const NoteCard = ({ note }) => {
   return (
-    <Card isPressable variant="flat" css={{ background: "$background", "line-height": "1"}}>
+    <Card
+      isPressable
+      variant="flat"
+      css={{ background: "$background", "line-height": "1" }}
+    >
       <Card.Header css={{ "padding-bottom": "0" }}>
         <Text h4>{note.title}</Text>
       </Card.Header>

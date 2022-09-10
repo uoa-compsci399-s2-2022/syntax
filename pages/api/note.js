@@ -28,7 +28,7 @@ export default async function handle(req, res) {
   }
 
   else if (req.method == "DELETE") {
-    const { id } = req.body;
+    const id = req.body;
     const note = await deleteNote(id, session);
     return res.json(note);
   }
