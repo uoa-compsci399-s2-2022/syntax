@@ -6,7 +6,12 @@ import Head from "next/head";
 import { useTheme as useNextTheme } from 'next-themes'
 import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
 import { useMediaQuery } from './useMediaQuery.js';
-import { Textarea, Container, Row } from '@nextui-org/react';
+import { Container, Row, Card } from '@nextui-org/react';
+
+import Menubar from "@/components/editor/Menubar";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+
 
 const getAllNotesByUserID = require("../prisma/Note").getAllNotesByUserID;
 
@@ -34,6 +39,20 @@ export default function Component() {
 
   const isMd = useMediaQuery(960);
 
+  const editor = useEditor({ extensions: [StarterKit], content: `
+  <h1>Welcome to syntax</h1>
+  <p>This is a <b>note-taking app specially made for programmers</b>, where making notes and running code is all in one application.
+  <br> You can take effective notes without breaking your concentration when switching between apps.</p>
+
+  <blockquote>"Any fool can write code that a computer can understand. Good programmers write code that humans can understand."<br> - Martin Fowler</blockquote>
+  
+  <h3>Write, compile, and execute your code in your notes and receive live outputs.</h3>
+  <p>Syntax supports selected languages such as Python, Java, C, and C++.</p>
+  
+  <br><br>
+  <h5>Feel free to try me out! :D</h5>
+  `,});
+
   if (!session) {
     return (
       <>
@@ -56,7 +75,7 @@ export default function Component() {
 
       </Head>
         <Grid.Container gap={2} justify='flex-start' >
-          <Grid xs={isMd ? 2.5 : 1}>
+          <Grid>
             <Image
             width={50}
             height={50}
@@ -64,7 +83,7 @@ export default function Component() {
             alt='syntax logo'
             objectFit="initial"/>
           </Grid>
-          <Grid xs={isMd ? 4.2 : 9.7}></Grid>
+          <Grid ></Grid>
           <Grid xs={1}>
           <Switch 
             checked={isDark}
@@ -84,16 +103,17 @@ export default function Component() {
 
       <Spacer y={ isMd ? 1 : 2}/>
 
-      <Container sm>
-        <Row justify='center' align='center'>
-        <Textarea 
-        disabled
-        placeholder='insert Editable Note here'
-        align='center'
-        rows={ isMd ? 20 : 30}
-        fullWidth
-        />
-        </Row>
+      <Container sm display='flex' direction='column'>
+        <Card>
+          <Card.Body>
+              <Menubar editor={editor}/>
+              <Spacer/>
+              <EditorContent
+              editor={editor}
+              style={{ minWidth:'100%' }}/>
+          </Card.Body>
+        </Card>
+        
       </Container>
       
 
