@@ -8,7 +8,7 @@ import Menubar from "./Menubar.js";
 import { TipTapCustomImage } from "@/node/Image";
 import { UploadFn } from "@/node/upload_image";
 import { debounce } from "lodash";
-import { Container, Button, Spacer } from "@nextui-org/react";
+import { Container, Button, Spacer, useTheme } from "@nextui-org/react";
 import {
   useNote,
   useDispatchNote,
@@ -102,6 +102,7 @@ const Extension = ({
 	const [input, setInput] = useState([]);
 	const [code, setCode] = useState();
 	const [output, setOutput] = useState(result);
+	const { checked, type } = useTheme();
 
 	const run = async (event) => {
 		// event.preventDefault();
@@ -130,6 +131,7 @@ const Extension = ({
 	// });
 
 	useEffect(() => {
+		let isDark =  type === "dark" ? true : false;
 		const view = new EditorView({
 			doc,
 			extensions: [
@@ -141,13 +143,14 @@ const Extension = ({
 						updateAttributes({ code_content: v.state.doc.toString() });
 					}
 				}),
+				EditorView.theme({}, { dark: isDark })
 			],
 			parent: refEditor.current,
 		});
 		return () => {
 			view.destroy();
 		};
-	}, []);
+	}, [type]);
 
 	return (
 		<NodeViewWrapper>
