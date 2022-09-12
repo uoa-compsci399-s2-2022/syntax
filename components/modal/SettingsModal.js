@@ -7,12 +7,17 @@ const UserSettingsModal = ({ open, closeHandler }) => {
   const { isDark, type } = useTheme();
 
   return (
-    <Modal closeButton open={open} onClose={closeHandler} css={{ margin: "10px" }}>
+    <Modal
+      closeButton
+      open={open}
+      onClose={closeHandler}
+      css={{ margin: "10px" }}
+    >
       <Modal.Header>Settings</Modal.Header>
       <Modal.Body>
         <Grid.Container>
           <Grid xs={6}>Colour theme</Grid>
-          <Grid xs={6}>
+          <Grid xs={6} css={{ display: "flex", justifyContent: "flex-end" }}>
             <Switch
               checked={isDark}
               iconOn={<MoonIcon />}

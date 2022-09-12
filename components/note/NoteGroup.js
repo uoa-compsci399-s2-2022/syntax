@@ -95,9 +95,9 @@ const NoteGroup = ({ name, color = "white", notes, openNote, createNote }) => {
           maxHeight: isOpen ? 320 * notes.length + "px" : "0"
         }}
       >
-        <ul
-          style={{
-            margin: 0,
+        <Container
+          css={{
+            padding: 0,
             backgroundColor: "var(--nextui-colors-accents4)"
           }}
         >
@@ -107,25 +107,25 @@ const NoteGroup = ({ name, color = "white", notes, openNote, createNote }) => {
                 openNote(note);
               }}
             >
-              <li
+              <Row
                 key={note.id}
-                style={{
-                  margin: "0",
+                css={{
+                  display: "block",
                   padding: "0.3rem calc(1rem + 0.5rem + 25px)",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
-                  maxWidth: "100%",
                   backgroundColor:
-                    note.id === currentNote.id
-                      ? "var(--nextui-colors-accents5)"
-                      : "transparent"
+                    note.id === currentNote.id ? "$accents5" : "transparent",
+                  "&:hover": {
+                    background: "$accents5"
+                  }
                 }}
               >
                 {note.title}
-              </li>
+              </Row>
             </a>
           ))}
-        </ul>
+        </Container>
       </Container>
     </Container>
   );
