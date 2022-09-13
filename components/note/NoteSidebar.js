@@ -13,6 +13,7 @@ import {
   useNotes,
   useDispatchNotes
 } from "../../modules/AppContext";
+import { NoteTemplate } from './NewNote'
 
 const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
   const router = useRouter();
@@ -25,7 +26,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
     let res = await fetch("/api/note", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: "untitled", body: [] })
+      body: JSON.stringify(NoteTemplate)
     });
 
     const newNote = await res.json();
