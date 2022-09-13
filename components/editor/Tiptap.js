@@ -13,21 +13,30 @@ import {
   useDispatchNotes
 } from "@/modules/AppContext";
 
-async function upload(file) {
+async function upload(file){
+  //fetch data from endpoint for presigned link and image src
   let res = await fetch("/api/s3/", {
     method: "POST",
-    body: file.type
+    body: file.type,
   });
-  const { url, src } = await res.json();
-  await fetch(url, {
-    method: "PUT",
-    headers: {
-      "Content-type": file.type,
-      "Access-Control-Allow-Origin": "*"
-    },
-    body: file
+  const {data, src} = await res.json();
+  const url = data.url; //url for post
+  const fields = data.fields; //formdata for post
+  const formData = new FormData();
+  Object.entries({ ...fields}).forEach(([key, value]) => {
+    formData.append(key, value)
+  })
+  formData.append('file', file)
+  console.log(form)
+  //POST to upload file
+  const upload = await fetch(url, {
+    method: "POST",
+    body: formData,
   });
-  return src;
+  if (upload.ok){
+    return src
+  }
+  return null
 }
 
 export default function () {
