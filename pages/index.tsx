@@ -40,17 +40,17 @@ export default function Component() {
   const isMd = useMediaQuery(960);
 
   const editor = useEditor({ extensions: [StarterKit], content: `
-  <h1>Welcome to syntax</h1>
-  <p>This is a <b>note-taking app specially made for programmers</b>, where making notes and running code are all in one application.
+  <h1>Welcome to syntax !</h1>
+  <p>This is a <b>note-taking app especially made for programmers</b>, where writing notes and running code are all in one application.
   <br> You can take effective notes without breaking your concentration when switching between apps.</p>
 
   <blockquote>"Any fool can write code that a computer can understand. Good programmers write code that humans can understand."<br> - Martin Fowler</blockquote>
   
-  <h3>Write, compile, and execute your code in your notes and receive live outputs.</h3>
+  <h3>Write, compile, and execute your code in your notes and receive live outputs!</h3>
   <p>Syntax supports selected languages such as Python, Java, C, and C++.</p>
   
   <br><br>
-  <h5>Feel free to try me out! :D</h5>
+  <h5>Psst! Feel free to try me out! ;)</h5>
   `,});
 
   if (!session) {
