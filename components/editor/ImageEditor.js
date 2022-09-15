@@ -1,4 +1,4 @@
-import { TipTapCustomImage } from '../node/Image'
+import { TipTapCustomImage } from '../../node/Image'
 import { useState } from "react";
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit';
