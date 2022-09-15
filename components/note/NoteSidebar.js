@@ -21,6 +21,7 @@ import {
   useNotes,
   useDispatchNotes
 } from "../../modules/AppContext";
+import { createGroup } from "../../prisma/Note";
 
 const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
   const { checked, type } = useTheme();
@@ -42,6 +43,17 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
     setCurrentNote(newNote);
     setNotes({ note: newNote, type: "add" });
     router.push(`/note/${newNote.id}`, undefined, { shallow: true });
+  };
+
+  const createGroup = async () => {
+    let res = await fetch("/api/note", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: "defGroup" })
+    });
+
+    const newGroup = await res.json();
+    console.log("Create successful", { newGroup });
   };
 
   return (
@@ -138,6 +150,16 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
           css={{ width: "100%" }}
         >
           Add new note
+        </Button>
+        <Button
+          bordered
+          auto
+          color="primary"
+          icon={<PlusIcon style={{ height: "var(--icon-size)" }} />}
+          onPress={() => createGroup()}
+          css={{ width: "100%" }}
+        >
+          Add new group
         </Button>
       </Container>
     </Container>

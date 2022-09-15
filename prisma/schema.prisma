@@ -38,12 +38,26 @@ model Session {
 }
 
 model Note {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  title String
-  body  Json
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  body        Json
   createdAt   DateTime? @default(now())
   updatedAt   DateTime? @updatedAt()
-  userId String?
+  userId      String?
+  groupId     String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([id, userId])
+  group Group?   @relation(fields: [groupId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  @@unique([id, groupId])
+}
+
+
+model Group {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  color         String?
+  notes         Note[]
+  userId        String?
   user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@unique([id, userId])
 }
@@ -57,6 +71,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   notes         Note[]
+  groups        Group[]
 }
 
 model VerificationToken {

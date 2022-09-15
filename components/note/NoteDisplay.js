@@ -52,15 +52,31 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
             initialValue={currentNote.title}
         ></Input>*/}
           <table className="note-metadata-table" style={{ textAlign: "left" }}>
-          <tbody>
-            <tr>
-              <th>Created by</th>
-              <td>{note.user.name}</td>
-            </tr>
-            <tr>
-              <th>Last modified</th>
-              <td>{new Date(currentNote.updatedAt).toLocaleString('en-us', { year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric"}) }</td>
-            </tr>
+            <tbody>
+              <tr>
+                <th>Created by</th>
+                <td>{note.user.name}</td>
+              </tr>
+              <tr>
+                <th>Last modified</th>
+                <td>
+                  {new Date(currentNote.updatedAt).toLocaleString("en-us", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric"
+                  })}
+                </td>
+              </tr>
+              {currentNote.group ? (
+                <tr>
+                  <th>Folder</th>
+                  <td>{currentNote.group.name}</td>
+                </tr>
+              ) : (
+                ""
+              )}
             </tbody>
           </table>
           <Spacer />
