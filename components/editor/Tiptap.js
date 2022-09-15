@@ -12,12 +12,18 @@ import {
   useNotes,
   useDispatchNotes
 } from "@/modules/AppContext";
+import dynamic from 'next/dynamic'
 
-async function upload(file){
+const DrawingModal = dynamic(() => import('../editor/Tldraw'), {
+  ssr: false,
+})
+
+
+async function upload(file, type=null){
   //fetch data from endpoint for presigned link and image src
   let res = await fetch("/api/s3/", {
     method: "POST",
-    body: file.type,
+    body: type === null ? file.type : type,
   });
   const {data, src} = await res.json();
   const url = data.url; //url for post
@@ -27,7 +33,6 @@ async function upload(file){
     formData.append(key, value)
   })
   formData.append('file', file)
-  console.log(form)
   //POST to upload file
   const upload = await fetch(url, {
     method: "POST",
@@ -40,11 +45,15 @@ async function upload(file){
 }
 
 export default function () {
+  if (typeof window === 'undefined'){
+    return null;
+  }
   const notesc = useNotes();
   const setNotes = useDispatchNotes();
   const currentNote = useNote();
   const setCurrentNote = useDispatchNote();
-  const [file, setFile] = useState();
+  const [drawModal, setDrawModal] = useState(false);
+  const [drawResponse, setDrawResponse] = useState();
   const debounceSave = useRef(
     debounce(async (criteria) => {
       saveContent(criteria);
@@ -87,6 +96,23 @@ export default function () {
     editor?.commands?.setContent(currentNote.body);
   }, [editor, currentNote.body]);
 
+  const closeHandler = (result) => {
+    console.log(result)
+    if (typeof result !== "undefined"){
+      if (result !== null){
+        editor.chain().focus().setImage({result}).run();
+      }
+      else{
+        console.log("File size was too large")
+      }
+    }
+		setDrawModal(false)
+	};
+
+  const openHandler = () => {
+    setDrawModal(true)
+  }
+
   return (
     <Container
       display="flex"
@@ -97,11 +123,12 @@ export default function () {
         "min-width": "100%",
         "@xs": { "flex-direction": "column" }
       }}
-    >
-      <Menubar editor={editor} />
+    > 
+      <Menubar editor={editor} openHandler={openHandler} />
       <Spacer />
       <EditorContent editor={editor} key={currentNote} style={{ "max-width": "100%" }} />
       <Spacer />
+      {typeof window !== "undefined" ? <DrawingModal open={drawModal} closeHandler={closeHandler} upload={upload}/> : null}
     </Container>
   );
 }

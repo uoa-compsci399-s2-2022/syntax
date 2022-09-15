@@ -11,6 +11,7 @@ import {
   BiListUl,
   BiListOl,
   BiCodeBlock,
+  BiPalette,
   BiPoll,
   BiMinus,
   BiSubdirectoryLeft,
@@ -18,7 +19,7 @@ import {
 } from "react-icons/bi";
 import { PlusIcon } from "@heroicons/react/24/outline";
 
-export default ({ editor }) => {
+export default ({ editor, openHandler }) => {
   if (!editor) {
     return null;
   }
@@ -110,6 +111,11 @@ export default ({ editor }) => {
       title: "Code Block",
       action: () => editor.chain().focus().toggleCodeBlock().run(),
       isActive: () => editor.isActive("codeBlock")
+    },
+    {
+      icon: <BiPalette size={iconSize} color={iconColor} />,
+      title: "Drawing",
+      action: () => openHandler(),
     },
     {
       icon: <BiPoll size={iconSize} color={iconColor} />,
