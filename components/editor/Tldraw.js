@@ -1,11 +1,11 @@
-import { TDShapeType, TDToolType, TDExport, TDExportType, Tldraw, TldrawApp } from '@tldraw/tldraw'
-import * as React from 'react'
+import { Tldraw } from '@tldraw/tldraw'
+import { useState, useCallback } from 'react'
 import { Modal, Button } from "@nextui-org/react"
 
 const DrawingModal = ({ open, closeHandler, upload }) =>{
-    const [app, setApp] = React.useState()
+    const [app, setApp] = useState()
 
-        const handleMount = React.useCallback((app) => {
+        const handleMount = useCallback((app) => {
             setApp(app)
         }, [])
 
@@ -41,7 +41,7 @@ const DrawingModal = ({ open, closeHandler, upload }) =>{
             </Modal.Body>
         
         <Modal.Footer>
-            <Button onClick={saveAndClose}>Save and Close</Button>
+            <Button onPress={() => saveAndClose()}>Save and Close</Button>
         </Modal.Footer>
         </Modal>
     )
