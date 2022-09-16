@@ -2,7 +2,7 @@ import { Tldraw } from '@tldraw/tldraw'
 import { useState, useCallback } from 'react'
 import { Modal, Button } from "@nextui-org/react"
 
-const DrawingModal = ({ open, closeHandler, upload }) =>{
+const DrawingModal = ({ open, closeHandler }) =>{
     const [app, setApp] = useState()
 
         const handleMount = useCallback((app) => {
@@ -11,20 +11,27 @@ const DrawingModal = ({ open, closeHandler, upload }) =>{
 
     async function saveAndClose(){
         let svg = await app?.getSvg();
+        let blob = svg
         if (typeof svg !== "undefined"){
             svg.setAttribute('xmls', 'http://www.w3.org/2000/svg')
             svg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
             const svgBlob = new XMLSerializer().serializeToString(svg)
-            const blob = new Blob([svgBlob], {type: "image/svg+xml;charset=utf-8"});
-            svg = await upload(blob)
+            blob = new Blob([svgBlob], {type: "image/svg+xml;charset=utf-8"});
         }
 
-        closeHandler(svg)
+        closeHandler(blob)
     }
     return (
-        <Modal open={open} onClose={closeHandler} css={{ margin: "10px" }}>
+        <Modal width open={open} onClose={closeHandler} css={{ 
+            margin: "auto", 
+            '@xs': "width: 100%", 
+            '@sm': "width: 75%", 
+            '@md': "width: 50%",
+            '@lg': "width: 50%",
+            display: 'flex'
+            }}>
             <Modal.Header>
-                Drawing
+                <h3>Drawing</h3>
             </Modal.Header>
             <Modal.Body>
                 <div
@@ -33,7 +40,6 @@ const DrawingModal = ({ open, closeHandler, upload }) =>{
                     width: '100%',
                     height: '500px',
                     overflow: 'hidden',
-                    marginBottom: '32px',
                     }}
                     >
                         <Tldraw onMount={handleMount} showMenu={false} showPages={false} showMultiplayerMenu={false}/> 

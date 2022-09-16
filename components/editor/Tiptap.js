@@ -96,11 +96,12 @@ export default function () {
     editor?.commands?.setContent(currentNote.body);
   }, [editor, currentNote.body]);
 
-  const closeHandler = (result) => {
+  const closeHandler = async (result) => {
     console.log(result)
     if (typeof result !== "undefined"){
-      if (result !== null){
-        editor.chain().focus().setImage({result}).run();
+      const src = await upload(result);
+      if (src !== null){
+        editor.chain().focus()?.setImage({src})?.run();
       }
       else{
         console.log("File size was too large")
@@ -128,7 +129,7 @@ export default function () {
       <Spacer />
       <EditorContent editor={editor} key={currentNote} style={{ "max-width": "100%" }} />
       <Spacer />
-      {typeof window !== "undefined" ? <DrawingModal open={drawModal} closeHandler={closeHandler} upload={upload}/> : null}
+      <DrawingModal open={drawModal} closeHandler={closeHandler} />
     </Container>
   );
 }
