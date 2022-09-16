@@ -5,7 +5,7 @@ import Head from "next/head";
 
 import { useTheme as useNextTheme } from 'next-themes'
 import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
-import { useMediaQuery } from './useMediaQuery.js';
+//import { useMediaQuery } from './useMediaQuery.js';
 import { Container, Row, Card, Col, Link } from '@nextui-org/react';
 
 import Menubar from "@/components/editor/Menubar";
@@ -37,7 +37,7 @@ export default function Component() {
   const { setTheme } = useNextTheme();
   const { isDark, type } = useTheme();
 
-  const isMd = useMediaQuery(960);
+  //const isMd = useMediaQuery(960);
 
   const editor = useEditor({ extensions: [StarterKit], content: `
   <h1>Welcome to syntax !</h1>
@@ -74,7 +74,7 @@ export default function Component() {
         <meta name="theme-color" content="#317EFB" />
 
       </Head>
-        <Grid.Container gap={2} justify='flex-start' >
+        <Grid.Container gap={2} justify='flex-start' fluid >
           <Grid>
             <Image
             width={50}
@@ -83,7 +83,7 @@ export default function Component() {
             alt='syntax logo'
             objectFit="initial"/>
           </Grid>
-          <Grid ></Grid>
+          <Grid xs={4.3} sm={9} lg={10} xl={10.5}></Grid>
           <Grid xs={1}>
           <Switch 
             checked={isDark}
@@ -91,7 +91,7 @@ export default function Component() {
             iconOff={<SunIcon />}
             onChange={(e) => setTheme(e.target.checked ? "dark" : "light")}
           />
-          <Spacer x={ isMd ? 0.5 : 1}/>
+          <Spacer x={0.5}/>
           <Button bordered ghost onClick={() => signIn()} responsive auto>Sign in</Button>
           </Grid>
         </Grid.Container>
@@ -99,9 +99,9 @@ export default function Component() {
 			<Spacer y={1}/>
 			
 			<Text size={60} weight={'bold'} align="center">syntax</Text>
-			<Text h2 align="center" weight="normal" size={ isMd ? 30 :35} >Code. Learn. Collaborate.</Text>
+			<Text h2 align="center" weight="normal" size={32} >Code. Learn. Collaborate.</Text>
 
-      <Spacer y={ isMd ? 1 : 2}/>
+      <Spacer y={1.5}/>
 
       <Container sm display='flex' direction='column'>
         <Card>
@@ -115,79 +115,111 @@ export default function Component() {
         </Card>
       </Container>
 
-      <Spacer y={6}/>
+      <Spacer y={3}/>
 
-      <Container display='flex' responsive auto>
-        <Row gap={10} justify='center'>
-          <Col span={5}>
-          <Card css={{ $$cardColor: '$colors$primary'}}>
+      <Grid.Container gap={5} justify='center'>
+        <Grid xl={4} lg={4} sm={5} xs={0}>
+        <Card css={{ $$cardColor: '$colors$primary'}}>
             <Card.Body>
               <Text h6 size={15} color='white' css={{m:0}}>
-                insert image here
+                insert image here 1
               </Text>
               <Spacer y={7}/>
             </Card.Body>
           </Card>
-          </Col>
-          <Col span={5}>
-            <Spacer y={1}/>
+        </Grid>
+
+        <Spacer x={3}/>
+
+        <Grid xl={4} lg={4} sm={6} xs={15} direction='column' justify='center'>
+        <Spacer y={1}/>
+        <Grid xl={0} lg={0} sm={0} xs>
+        <Card css={{ $$cardColor: '$colors$primary'}}>
+            <Card.Body>
+              <Text h6 size={15} color='white' css={{m:0}}>
+                insert image here hidden 1
+              </Text>
+              <Spacer y={7}/>
+            </Card.Body>
+          </Card>
+        </Grid>
               <Text h2 css={{m:0}} color={isDark ? '#BD93F9' : '#7D27F8'}>
-                Everything you need, in one app
+                Everything you need, all in one app
               </Text>
               <Text>
                 Get into that study flow and simultaneously execute your code and write your notes beside them on one page, in one app.
               </Text>
-          </Col>
-        </Row>
+        </Grid>
 
-        <Spacer y={5}/>
-        <Row gap={10} justify='center'>
-          <Col span={6}>
-            <Spacer y={2}/>
+        <Grid xl={4} lg={4} sm={6} xs={15} direction='column'>
+          
+        <Grid xl={0} lg={0} sm={0} xs>
+        <Card css={{ $$cardColor: '$colors$primary'}}>
+            <Card.Body>
+              <Text h6 size={15} color='white' css={{m:0}}>
+                insert image here hidden 2
+              </Text>
+              <Spacer y={7}/>
+            </Card.Body>
+          </Card>
+        </Grid>
           <Text h2 css={{m:0}} color={isDark ? '#50FA7B' : '#149935'}>
                 Supports various programming languages
               </Text>
               <Text>
                 Our code blocks supports C, C++, Java, JavaScript, and Python! The essential languages for a programming student.
               </Text>
-          </Col>
-          <Col span={5}>
-          <Card css={{ $$cardColor: '$colors$primary'}}>
-            <Card.Body>
-              <Text h6 size={15} color='white' css={{m:0}}>
-                insert image here
-              </Text>
-              <Spacer y={7}/>
-            </Card.Body>
-          </Card>
-          </Col>
-        </Row>
+        </Grid>
 
-        <Spacer y={5}/>
-        <Row gap={10} justify='center'>
-          <Col span={5}>
-          <Card css={{ $$cardColor: '$colors$primary'}}>
+        <Spacer x={3}/>
+
+        <Grid xl={4} lg={4} sm={5} xs={0}>
+        <Card css={{ $$cardColor: '$colors$primary'}}>
             <Card.Body>
               <Text h6 size={15} color='white' css={{m:0}}>
-                insert image here
+                insert image here 2 
               </Text>
               <Spacer y={7}/>
             </Card.Body>
           </Card>
-          </Col>
-          <Col span={5}>
-            <Spacer y={2}/>
+        </Grid>
+
+        <Grid xl={4} lg={4} sm={5} xs={0}>
+        <Card css={{ $$cardColor: '$colors$primary'}}>
+            <Card.Body>
+              <Text h6 size={15} color='white' css={{m:0}}>
+                insert image here 3
+              </Text>
+              <Spacer y={7}/>
+            </Card.Body>
+          </Card>
+        </Grid>
+
+        <Spacer x={3}/>
+
+        <Grid xl={4} lg={4} sm={6} xs={15} direction='column'>
+        <Spacer y={1}/>
+        <Grid xl={0} lg={0} sm={0} xs>
+        <Card css={{ $$cardColor: '$colors$primary'}}>
+            <Card.Body>
+              <Text h6 size={15} color='white' css={{m:0}}>
+                insert image here hidden 3
+              </Text>
+              <Spacer y={7}/>
+            </Card.Body>
+          </Card>
+        </Grid>
               <Text h2 css={{m:0}} color={ isDark ? '#FFB86C' : '#E57700'}>
                 Share and Collaborate
               </Text>
               <Text>
-                Invite and collaborate with your peers on the same note for effective discussions and group work.
+                Invite and collaborate with your peers on the same note for effective discussions and productive group work.
               </Text>
-          </Col>
-        </Row> 
-      </Container>      
+        </Grid>
+      </Grid.Container>
+        
 
-      <Spacer y={6}/>
+      <Spacer y={4}/>
 
       <Container fluid justify='center' display='flex' direction='column'>
         <Row justify='center'>
