@@ -6,6 +6,7 @@ import {
   BiRedo,
   BiBold,
   BiItalic,
+  BiUnderline,
   BiStrikethrough,
   BiCode,
   BiListUl,
@@ -13,10 +14,28 @@ import {
   BiCodeBlock,
   BiPoll,
   BiMinus,
-  BiSubdirectoryLeft,
-  BiEditAlt
+  BiEditAlt,
+  BiDotsHorizontalRounded,
+  BiPalette,
+  BiLink,
+  BiImage,
+  BiFilm
 } from "react-icons/bi";
 import { PlusIcon } from "@heroicons/react/24/outline";
+import {
+  MdFormatBold,
+  MdFormatItalic,
+  MdCode,
+  MdFormatUnderlined,
+  MdStrikethroughS,
+  MdSubscript,
+  MdSuperscript,
+  MdMoreHoriz,
+  MdFormatClear,
+  MdFormatListBulleted,
+  MdFormatListNumbered,
+  MdOutlineDraw
+} from "react-icons/md";
 
 export default ({ editor }) => {
   if (!editor) {
@@ -37,7 +56,7 @@ export default ({ editor }) => {
     { label: "Heading 6", value: "6" }
   ];
 
-  const selectionChangeHandler = (key) => {
+  const textStyleHandler = (key) => {
     setSelectedTextLevel(key);
     let textLevel = +key["currentKey"].charAt(key["currentKey"].length - 1);
     if (isNaN(textLevel)) {
@@ -46,6 +65,30 @@ export default ({ editor }) => {
     } else {
       editor.chain().focus().toggleHeading({ level: textLevel }).run();
       editor.isActive("heading", { level: textLevel });
+    }
+  };
+
+  const moreFormattingHandler = (key) => {
+    switch (key) {
+      case "underline":
+        editor.chain().focus().toggleUnderline().run();
+        editor.isActive("underline");
+        break;
+      case "strikethrough":
+        editor.chain().focus().toggleStrike().run();
+        editor.isActive("strike");
+        break;
+      case "subscript":
+        editor.chain().focus().toggleSubscript().run();
+        editor.isActive("subscript");
+        break;
+      case "superscript":
+        editor.chain().focus().toggleSuperscript().run();
+        editor.isActive("superscript");
+        break;
+      case "clear-formatting":
+        editor.chain().focus().clearNodes().unsetAllMarks().run();
+        break;
     }
   };
 
@@ -59,57 +102,60 @@ export default ({ editor }) => {
     }
   });
 
+  {
+    /* Markdown buttons which should be displayed at all resolutions */
+  }
   const coreItems = [
     {
-      type: "menu-divider"
-    },
-    {
-      icon: <BiBold size={iconSize} color={iconColor} />,
+      icon: <MdFormatBold size={iconSize} color={iconColor} />,
       title: "Bold",
       action: () => editor.chain().focus().toggleBold().run(),
       isActive: () => editor.isActive("bold")
     },
     {
-      icon: <BiItalic size={iconSize} color={iconColor} />,
+      icon: <MdFormatItalic size={iconSize} color={iconColor} />,
       title: "Italic",
       action: () => editor.chain().focus().toggleItalic().run(),
       isActive: () => editor.isActive("italic")
     },
     {
-      icon: <BiStrikethrough size={iconSize} color={iconColor} />,
-      title: "Strike",
-      action: () => editor.chain().focus().toggleStrike().run(),
-      isActive: () => editor.isActive("strike")
-    },
-    {
-      icon: <BiCode size={iconSize} color={iconColor} />,
+      icon: <MdCode size={iconSize} color={iconColor} />,
       title: "Code",
       action: () => editor.chain().focus().toggleCode().run(),
       isActive: () => editor.isActive("code")
-    },
-    {
-      type: "menu-divider"
     }
   ];
 
+  {
+    /* Markdown buttons which should be condensed into a dropdown at smaller resolutions */
+  }
   const extendedItems = [
     {
-      icon: <BiListUl size={iconSize} color={iconColor} />,
-      title: "Bulleted List",
-      action: () => editor.chain().focus().toggleBulletList().run(),
-      isActive: () => editor.isActive("bulletList")
-    },
-    {
-      icon: <BiListOl size={iconSize} color={iconColor} />,
-      title: "Ordered List",
-      action: () => editor.chain().focus().toggleOrderedList().run(),
-      isActive: () => editor.isActive("orderedList")
+      icon: <BiLink size={iconSize} color={iconColor} />,
+      title: "Link",
+      action: () => editor.chain().focus().toggleCodeBlock().run(),
+      isActive: () => editor.isActive("codeBlock")
     },
     {
       icon: <BiCodeBlock size={iconSize} color={iconColor} />,
       title: "Code Block",
       action: () => editor.chain().focus().toggleCodeBlock().run(),
       isActive: () => editor.isActive("codeBlock")
+    },
+    {
+      icon: <MdOutlineDraw size={iconSize} color={iconColor} />,
+      title: "Drawing",
+      action: () => openHandler()
+    },
+    {
+      icon: <BiImage size={iconSize} color={iconColor} />,
+      title: "Image",
+      action: () => console.log("TBA")
+    },
+    {
+      icon: <BiFilm size={iconSize} color={iconColor} />,
+      title: "Video",
+      action: () => console.log("TBA")
     },
     {
       icon: <BiPoll size={iconSize} color={iconColor} />,
@@ -121,32 +167,6 @@ export default ({ editor }) => {
       icon: <BiMinus size={iconSize} color={iconColor} />,
       title: "Divider",
       action: () => editor.chain().focus().setHorizontalRule().run()
-    },
-    {
-      type: "menu-divider"
-    },
-    {
-      icon: <BiSubdirectoryLeft size={iconSize} color={iconColor} />,
-      title: "Line break",
-      action: () => editor.chain().focus().setHardBreak().run()
-    },
-    {
-      icon: <BiEditAlt size={iconSize} color={iconColor} />,
-      title: "Clear formatting",
-      action: () => editor.chain().focus().clearNodes().unsetAllMarks().run()
-    },
-    {
-      type: "menu-divider"
-    },
-    {
-      icon: <BiUndo size={iconSize} color={iconColor} />,
-      title: "Undo",
-      action: () => editor.chain().focus().undo().run()
-    },
-    {
-      icon: <BiRedo size={iconSize} color={iconColor} />,
-      title: "Redo",
-      action: () => editor.chain().focus().redo().run()
     }
   ];
 
@@ -171,6 +191,7 @@ export default ({ editor }) => {
         }
       }}
     >
+      {/* Text style (normal text, headings) dropdown */}
       <Tooltip content={"Text style"}>
         <Dropdown>
           <Dropdown.Button light css={{ padding: "10px", transition: "none" }}>
@@ -181,7 +202,7 @@ export default ({ editor }) => {
             aria-label="Text style selection"
             selectionMode="single"
             selectedKeys={selectedTextLevel}
-            onSelectionChange={selectionChangeHandler}
+            onSelectionChange={textStyleHandler}
           >
             {textLevelList.map((textLevel) => (
               <Dropdown.Item key={textLevel.label}>
@@ -192,16 +213,96 @@ export default ({ editor }) => {
         </Dropdown>
       </Tooltip>
 
+      <div className="menu-divider" />
+
+      {/* Core formatting options (bold, italic, inline code) */}
       {coreItems.map((item, index) => (
-        <div key={index}>
-          {item.type === "menu-divider" ? (
-            <div className="menu-divider" />
-          ) : (
-            <MenuItem {...item} isCore={true} />
-          )}
-        </div>
+        <MenuItem {...item} isCore={true} />
       ))}
 
+      {/* Extended formatting options + clear formatting */}
+      <Tooltip content={"More formatting"}>
+        <Dropdown>
+          <Dropdown.Button light icon={<MdMoreHoriz />} />
+          <Dropdown.Menu
+            disallowEmptySelection
+            aria-label="Text style selection"
+            selectionMode="single"
+            selectedKeys={selectedTextLevel}
+            onAction={moreFormattingHandler}
+          >
+            <Dropdown.Section aria-label="Extended Formatting Options">
+              <Dropdown.Item
+                icon={<MdFormatUnderlined />}
+                key="underline"
+                css={{
+                  background: editor.isActive("underline")
+                    ? "$neutralLight"
+                    : ""
+                }}
+              >
+                Underline
+              </Dropdown.Item>
+              <Dropdown.Item
+                icon={<MdStrikethroughS />}
+                key="strikethrough"
+                css={{
+                  background: editor.isActive("strike") ? "$neutralLight" : ""
+                }}
+              >
+                Strikethrough
+              </Dropdown.Item>
+              <Dropdown.Item
+                icon={<MdSubscript />}
+                key="subscript"
+                css={{
+                  background: editor.isActive("subscript")
+                    ? "$neutralLight"
+                    : ""
+                }}
+              >
+                Subscript
+              </Dropdown.Item>
+              <Dropdown.Item
+                icon={<MdSuperscript />}
+                key="superscript"
+                css={{
+                  background: editor.isActive("superscript")
+                    ? "$neutralLight"
+                    : ""
+                }}
+              >
+                Superscript
+              </Dropdown.Item>
+            </Dropdown.Section>
+            <Dropdown.Section aria-label="Clear Formatting">
+              <Dropdown.Item icon={<MdFormatClear />} key="clear-formatting">
+                Clear formatting
+              </Dropdown.Item>
+            </Dropdown.Section>
+          </Dropdown.Menu>
+        </Dropdown>
+      </Tooltip>
+
+      <div className="menu-divider" />
+
+      {/* List-related options*/}
+      <MenuItem
+        title="Bulleted List"
+        icon={<MdFormatListBulleted size={iconSize} color={iconColor} />}
+        action={() => editor.chain().focus().toggleBulletList().run()}
+        isActive={() => editor.isActive("bulletList")}
+      />
+      <MenuItem
+        title="Ordered List"
+        icon={<MdFormatListNumbered size={iconSize} color={iconColor} />}
+        action={() => editor.chain().focus().toggleOrderedList().run()}
+        isActive={() => editor.isActive("orderedList")}
+      />
+
+      <div className="menu-divider" />
+
+      {/* Extended node options (image, drawing, code block, video, etc.) */}
       {extendedItems.map((item, index) => (
         <span key={index}>
           {item.type === "menu-divider" ? (
@@ -238,6 +339,20 @@ export default ({ editor }) => {
           </Dropdown.Menu>
         </Dropdown>
       </Tooltip>
+
+      <div className="menu-divider" />
+
+      {/* Undo/redo buttons */}
+      <MenuItem
+        title="Undo"
+        icon={<BiUndo size={iconSize} color={iconColor} />}
+        action={() => editor.chain().focus().undo().run()}
+      />
+      <MenuItem
+        title="Redo"
+        icon={<BiRedo size={iconSize} color={iconColor} />}
+        action={() => editor.chain().focus().redo().run()}
+      />
     </Container>
   );
 };

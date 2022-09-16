@@ -1,5 +1,8 @@
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
+import Superscript from "@tiptap/extension-superscript";
+import Subscript from "@tiptap/extension-subscript";
 import { useEffect, useState, useRef } from "react";
 import Menubar from "./Menubar.js";
 import { TipTapCustomImage } from "@/node/Image";
@@ -13,30 +16,30 @@ import {
   useDispatchNotes
 } from "@/modules/AppContext";
 
-async function upload(file){
+async function upload(file) {
   //fetch data from endpoint for presigned link and image src
   let res = await fetch("/api/s3/", {
     method: "POST",
-    body: file.type,
+    body: file.type
   });
-  const {data, src} = await res.json();
+  const { data, src } = await res.json();
   const url = data.url; //url for post
   const fields = data.fields; //formdata for post
   const formData = new FormData();
-  Object.entries({ ...fields}).forEach(([key, value]) => {
-    formData.append(key, value)
-  })
-  formData.append('file', file)
-  console.log(form)
+  Object.entries({ ...fields }).forEach(([key, value]) => {
+    formData.append(key, value);
+  });
+  formData.append("file", file);
+  console.log(form);
   //POST to upload file
   const upload = await fetch(url, {
     method: "POST",
-    body: formData,
+    body: formData
   });
-  if (upload.ok){
-    return src
+  if (upload.ok) {
+    return src;
   }
-  return null
+  return null;
 }
 
 export default function () {
@@ -69,7 +72,13 @@ export default function () {
   };
 
   const editor = useEditor({
-    extensions: [StarterKit, TipTapCustomImage(upload)],
+    extensions: [
+      StarterKit,
+      Underline,
+      Superscript,
+      Subscript,
+      TipTapCustomImage(upload)
+    ],
     content: currentNote.body
   });
   editor?.on("update", ({ editor }) => {
@@ -100,7 +109,11 @@ export default function () {
     >
       <Menubar editor={editor} />
       <Spacer />
-      <EditorContent editor={editor} key={currentNote} style={{ "max-width": "100%" }} />
+      <EditorContent
+        editor={editor}
+        key={currentNote}
+        style={{ "max-width": "100%" }}
+      />
       <Spacer />
     </Container>
   );
