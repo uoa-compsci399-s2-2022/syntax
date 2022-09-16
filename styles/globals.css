@@ -63,6 +63,10 @@ a {
   outline: 3px solid #68cef8;
 }
 
+li {
+  list-style-type: disc;
+}
+
 /* remove default x symbol in search input */
 input[type=search]::-ms-clear {  display: none; width : 0; height: 0; }
 input[type=search]::-ms-reveal {  display: none; width : 0; height: 0; }

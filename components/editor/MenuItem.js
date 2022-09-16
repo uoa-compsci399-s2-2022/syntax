@@ -1,19 +1,18 @@
 import { Tooltip, Button, styled } from "@nextui-org/react";
 
 const MenuItem = ({ icon, title, action, isActive = null, isCore = false }) => {
-  const MarkdownButton = styled(Button, {
-    "background-color": "transparent !important",
-  });
-
-
   return (
     <Tooltip content={title}>
-      <MarkdownButton
+      <Button
         auto
         className={`menu-item${isActive && isActive() ? " is-active" : ""}`}
         onClick={action}
         icon={icon}
-        css={isCore ? {} : {display: "none", "@md": { display: "flex" }}}
+        css={{
+          backgroundColor: "transparent",
+          display: isCore ? "flex" : "none",
+          "@md": { display: "flex" }
+        }}
       />
     </Tooltip>
   );
