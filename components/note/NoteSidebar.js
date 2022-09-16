@@ -1,10 +1,12 @@
 import NoteList from "./NoteList";
+import SearchModal from "@/components/modal/SearchModal";
 import { useState, useEffect } from "react";
-import { Container, Input, Button, Text, Navbar } from "@nextui-org/react";
+import { Container, Input, Button, Dropdown, Navbar } from "@nextui-org/react";
 import {
   MagnifyingGlassIcon,
   PlusIcon,
-  ChevronDoubleLeftIcon
+  ChevronDoubleRightIcon,
+  AdjustmentsHorizontalIcon
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import {
@@ -15,11 +17,25 @@ import {
 } from "../../modules/AppContext";
 
 const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
+  const [searchModal, setSearchModal] = useState(false);
   const router = useRouter();
   const currentNote = useNote();
   const setCurrentNote = useDispatchNote();
   const noteslist = useNotes();
   const setNotes = useDispatchNotes();
+
+  const [selectedSort, setSelectedSort] = useState();
+
+
+  const sortOptions = {
+    "title-asc": "Title (ascending)",
+    "title-desc": "Title (descending)",
+    "edited-asc": "Edited (ascending)",
+    "edited-desc": "Edited (descending)",
+    "created-asc": "Created (ascending)",
+    "created-desc": "Created (descending)"
+  };
+  const defaultSort = "title-asc";
 
   const createNote = async () => {
     let res = await fetch("/api/note", {
@@ -35,6 +51,10 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
     router.push(`/note/${newNote.id}`, undefined, { shallow: true });
   };
 
+  const closeModalHandler = () => {
+    setSearchModal(false);
+  };
+
   return (
     <Container
       display="flex"
@@ -42,7 +62,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
       direction="column"
       css={{
         position: "absolute",
-        "z-index": 3,
+        zIndex: 3,
         width: "100vw",
         transition: "transform 0.2s ease-in-out",
         transform: sidebarDisplay ? "translateX(-101%)" : "translateX(0%)",
@@ -68,7 +88,6 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
         }}
       >
         <Navbar.Content css={{ flex: "1" }}>
-        
           <Navbar.Item css={{ flex: "1" }}>
             <Input
               clearable
@@ -85,13 +104,43 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
         </Navbar.Content>
         <Navbar.Content>
           <Navbar.Item>
+            {/*             <Button
+              auto
+              bordered
+              animated={false}
+              onPress={setSearchModal}
+              icon={
+                <AdjustmentsHorizontalIcon
+                  style={{ height: "var(--icon-size)" }}
+                />
+              }
+            /> */}
+            <Dropdown>
+              <Dropdown.Button bordered css={{ flex: "1" }}>
+                Sort
+              </Dropdown.Button>
+              <Dropdown.Menu
+                aria-label="Sort Options"
+                onAction={setSelectedSort}
+              >
+                {Object.keys(sortOptions).map((option) => (
+                  <Dropdown.Item key={option}>
+                    {sortOptions[option]}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          </Navbar.Item>
+          <Navbar.Item css={{ display: "flex", "@xs": { display: "none" } }}>
             <Button
               auto
               light
               animated={false}
               onPress={handleSidebarDisplay}
               icon={
-                <ChevronDoubleLeftIcon style={{ height: "var(--icon-size)" }} />
+                <ChevronDoubleRightIcon
+                  style={{ height: "var(--icon-size)" }}
+                />
               }
             />
           </Navbar.Item>
@@ -106,7 +155,12 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
           "overflow-x": "hidden"
         }}
       >
-        <NoteList retrieved_notes={notes} showEditor={undefined} key={notes} handleSidebarDisplay={handleSidebarDisplay} />
+        <NoteList
+          retrieved_notes={notes}
+          showEditor={undefined}
+          key={notes}
+          handleSidebarDisplay={handleSidebarDisplay}
+        />
       </Container>
       <Container
         css={{
@@ -124,6 +178,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
           Add new note
         </Button>
       </Container>
+      <SearchModal open={searchModal} closeHandler={closeModalHandler} />
     </Container>
   );
 };
