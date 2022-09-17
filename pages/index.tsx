@@ -104,7 +104,7 @@ export default function Component() {
       <Spacer y={1.5}/>
 
       <Container sm display='flex' direction='column'>
-        <Card>
+        <Card variant='bordered' isHoverable css={{$$cardColor: isDark ? '#1D1D1D' : 'white'}}>
           <Card.Body>
               <Menubar editor={editor}/>
               <Spacer/>
@@ -237,7 +237,6 @@ export default function Component() {
       </Container>
 
       <Spacer y={3}/>
-
       </>
     );
   }
