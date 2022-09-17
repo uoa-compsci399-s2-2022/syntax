@@ -21,8 +21,8 @@ export const getNoteByID = async (id) => {
       user: true,
     },
   });
-
-  return note;
+  
+  return JSON.parse(JSON.stringify(note));
 };
 
 export const getAllNotes = async () => {
@@ -36,16 +36,15 @@ export const getAllNotes = async () => {
 };
 
 export const getAllNotesByUserID = async (id) => {
+  console.log("called");
   const notes = await prisma.note.findMany({
     where: {
       userId: id,
     },
-    include: {
-      user: true,
-    },
   });
-
-  return notes;
+  
+  
+  return JSON.parse(JSON.stringify(notes));
 };
 
 export const updateNote = async (id, updatedData, session) => {

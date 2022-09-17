@@ -1,13 +1,17 @@
+import Head from "next/head";
+import darkTheme from "../styles/themes/darkTheme";
+import lightTheme from "../styles/themes/lightTheme";
+import "../styles/globals.css";
 import { SessionProvider } from "next-auth/react";
 import { NoteProvider } from "../modules/AppContext";
 import { NextUIProvider } from "@nextui-org/react";
-import Head from "next/head";
 import { AppProps } from "next/app";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
 import '../styles/globals.css'
 
 export default function App({
   Component,
-  pageProps: { session, ...pageProps }
+  pageProps: { session, ...pageProps },
 }: AppProps) {
   return (
     <>
@@ -20,7 +24,7 @@ export default function App({
         />
         <meta name="description" content="Description" />
         <meta name="keywords" content="Keywords" />
-        <title>co:note</title>
+        <title>syntax</title>
 
         <link rel="manifest" href="/manifest.json" />
         <link
@@ -39,11 +43,20 @@ export default function App({
         <meta name="theme-color" content="#317EFB" />
       </Head>
       <SessionProvider session={session}>
-        <NextUIProvider>
-          <NoteProvider>
-            <Component {...pageProps} />
-          </NoteProvider>
-        </NextUIProvider>
+        <NextThemesProvider
+          defaultTheme="system"
+          attribute="class"
+          value={{
+            light: lightTheme.className,
+            dark: darkTheme.className,
+          }}
+        >
+          <NextUIProvider>
+            <NoteProvider>
+              <Component {...pageProps} />
+            </NoteProvider>
+          </NextUIProvider>
+        </NextThemesProvider>
       </SessionProvider>
     </>
   );
