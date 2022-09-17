@@ -87,7 +87,6 @@ export default function () {
         }
       }),
       Link.configure({
-
         HTMLAttributes: {
           class: "editor-link"
         }

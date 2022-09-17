@@ -1,6 +1,6 @@
 import { Tooltip, Button, styled } from "@nextui-org/react";
 
-const MenuItem = ({ icon, title, action, isActive = null, isCore = false }) => {
+const MenuItem = ({ icon, title, action, isActive = null, css }) => {
   return (
     <Tooltip content={title}>
       <Button
@@ -8,11 +8,7 @@ const MenuItem = ({ icon, title, action, isActive = null, isCore = false }) => {
         className={`menu-item${isActive && isActive() ? " is-active" : ""}`}
         onClick={action}
         icon={icon}
-        css={{
-          backgroundColor: "transparent",
-          display: isCore ? "flex" : "none",
-          "@md": { display: "flex" }
-        }}
+        css={{ ...css, backgroundColor: "transparent" }}
       />
     </Tooltip>
   );

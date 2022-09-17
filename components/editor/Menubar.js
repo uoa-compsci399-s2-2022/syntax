@@ -1,22 +1,10 @@
 import MenuItem from "./MenuItem";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Container, Dropdown, Tooltip } from "@nextui-org/react";
 import {
   BiUndo,
   BiRedo,
-  BiBold,
-  BiItalic,
-  BiUnderline,
-  BiStrikethrough,
-  BiCode,
-  BiListUl,
-  BiListOl,
   BiCodeBlock,
-  BiPoll,
-  BiMinus,
-  BiEditAlt,
-  BiDotsHorizontalRounded,
-  BiPalette,
   BiLink,
   BiImage,
   BiFilm
@@ -36,7 +24,8 @@ import {
   MdFormatListNumbered,
   MdOutlineDraw,
   MdFormatQuote,
-  MdHorizontalRule
+  MdHorizontalRule,
+  MdFormatSize
 } from "react-icons/md";
 
 export default ({ editor }) => {
@@ -47,6 +36,21 @@ export default ({ editor }) => {
   const iconSize = "1.5em";
   const iconColor = "var(--nextui-colors-text)";
   const [selectedTextLevel, setSelectedTextLevel] = useState(["Normal text"]);
+  const [windowWidth, setWindowWidth] = useState(undefined);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      function handleResize() {
+        setWindowWidth(window.innerWidth);
+      }
+
+      window.addEventListener("resize", handleResize);
+
+      handleResize();
+
+      return () => window.removeEventListener("resize", handleResize);
+    }
+  }, []);
 
   const textLevelList = [
     { label: "Normal text", value: "0" },
@@ -63,10 +67,8 @@ export default ({ editor }) => {
     let textLevel = +key["currentKey"].charAt(key["currentKey"].length - 1);
     if (isNaN(textLevel)) {
       editor.chain().focus().setParagraph().run();
-      editor.isActive("paragraph");
     } else {
       editor.chain().focus().toggleHeading({ level: textLevel }).run();
-      editor.isActive("heading", { level: textLevel });
     }
   };
 
@@ -74,22 +76,53 @@ export default ({ editor }) => {
     switch (key) {
       case "underline":
         editor.chain().focus().toggleUnderline().run();
-        editor.isActive("underline");
         break;
-      case "strikethrough":
+      case "strike":
         editor.chain().focus().toggleStrike().run();
-        editor.isActive("strike");
         break;
       case "subscript":
         editor.chain().focus().toggleSubscript().run();
-        editor.isActive("subscript");
         break;
       case "superscript":
         editor.chain().focus().toggleSuperscript().run();
-        editor.isActive("superscript");
         break;
       case "clear-formatting":
         editor.chain().focus().clearNodes().unsetAllMarks().run();
+        break;
+    }
+  };
+
+  const listHandler = (key) => {
+    switch (key) {
+      case "bulletList":
+        editor.chain().focus().toggleBulletList().run();
+        break;
+      case "orderedList":
+        editor.chain().focus().toggleOrderedList().run();
+        break;
+    }
+  };
+
+  const insertOptionHandler = (key) => {
+    switch (key) {
+      case "link":
+        addLink();
+        break;
+      case "codeBlock":
+        editor.chain().focus().toggleCodeBlock().run();
+        break;
+      case "drawing":
+        break;
+      case "image":
+        break;
+      case "video":
+        addYoutubeVideo();
+        break;
+      case "blockquote":
+        editor.chain().focus().toggleBlockquote().run();
+        break;
+      case "horizontalRule":
+        editor.chain().focus().setHorizontalRule().run();
         break;
     }
   };
@@ -108,10 +141,10 @@ export default ({ editor }) => {
       editor.chain().focus().unsetLink().run();
     } else {
       const url = prompt("Enter URL");
-      if (!(url.match(/https:\/\/*/) || url.match(/http:\/\/*/))) {
-        url = 'https://' + url
-      }
       if (url) {
+        if (!(url.match(/https:\/\/*/) || url.match(/http:\/\/*/))) {
+          url = "https://" + url;
+        }
         editor
           .chain()
           .focus()
@@ -152,7 +185,8 @@ export default ({ editor }) => {
       icon: <MdCode size={iconSize} color={iconColor} />,
       title: "Code",
       action: () => editor.chain().focus().toggleCode().run(),
-      isActive: () => editor.isActive("code")
+      isActive: () => editor.isActive("code"),
+      css: { display: "none", "@sm": { display: "flex" } }
     }
   ];
 
@@ -163,40 +197,54 @@ export default ({ editor }) => {
     {
       icon: <BiLink size={iconSize} color={iconColor} />,
       title: "Link",
-      action: addLink,
-      isActive: () => editor.isActive("link")
+      key: "link",
+      action: () => insertOptionHandler("link"),
+      isActive: () => editor.isActive("link"),
+      css: { display: "none", "@sm": { display: "flex" } }
     },
     {
       icon: <BiCodeBlock size={iconSize} color={iconColor} />,
       title: "Code Block",
-      action: () => editor.chain().focus().toggleCodeBlock().run(),
-      isActive: () => editor.isActive("codeBlock")
+      key: "codeBlock",
+      action: () => insertOptionHandler("codeBlock"),
+      isActive: () => editor.isActive("codeBlock"),
+      css: { display: "none", "@sm": { display: "flex" } }
     },
     {
       icon: <MdOutlineDraw size={iconSize} color={iconColor} />,
       title: "Drawing",
-      action: () => console.log("TBA")
+      key: "drawing",
+      action: () => insertOptionHandler("drawing"),
+      css: { display: "none", "@sm": { display: "flex" } }
     },
     {
       icon: <BiImage size={iconSize} color={iconColor} />,
       title: "Image",
-      action: () => console.log("TBA")
+      key: "image",
+      action: () => insertOptionHandler("image"),
+      css: { display: "none", "@md": { display: "flex" } }
     },
     {
       icon: <BiFilm size={iconSize} color={iconColor} />,
       title: "Video",
-      action: addYoutubeVideo
+      key: "video",
+      action: () => insertOptionHandler("video"),
+      css: { display: "none", "@md": { display: "flex" } }
     },
     {
       icon: <MdFormatQuote size={iconSize} color={iconColor} />,
       title: "Blockquote",
-      action: () => editor.chain().focus().toggleBlockquote().run(),
-      isActive: () => editor.isActive("blockquote")
+      key: "blockquote",
+      action: () => insertOptionHandler("blockquote"),
+      isActive: () => editor.isActive("blockquote"),
+      css: { display: "none", "@md": { display: "flex" } }
     },
     {
       icon: <MdHorizontalRule size={iconSize} color={iconColor} />,
       title: "Divider",
-      action: () => editor.chain().focus().setHorizontalRule().run()
+      key: "horizontalRule",
+      action: () => insertOptionHandler("horizontalRule"),
+      css: { display: "none", "@md": { display: "flex" } }
     }
   ];
 
@@ -225,7 +273,7 @@ export default ({ editor }) => {
       <Tooltip content={"Text style"}>
         <Dropdown>
           <Dropdown.Button light css={{ padding: "10px", transition: "none" }}>
-            {selectedTextLevel}
+            {windowWidth > 960 ? selectedTextLevel : <MdFormatSize size={iconSize} />}
           </Dropdown.Button>
           <Dropdown.Menu
             disallowEmptySelection
@@ -247,21 +295,32 @@ export default ({ editor }) => {
 
       {/* Core formatting options (bold, italic, inline code) */}
       {coreItems.map((item, index) => (
-        <MenuItem {...item} isCore={true} />
+        <MenuItem {...item} />
       ))}
 
       {/* Extended formatting options + clear formatting */}
       <Tooltip content={"More formatting"}>
         <Dropdown>
-          <Dropdown.Button light icon={<MdMoreHoriz />} />
+          <Dropdown.Button light icon={<MdMoreHoriz size={iconSize} />} />
           <Dropdown.Menu
             disallowEmptySelection
             aria-label="Text style selection"
             selectionMode="single"
-            selectedKeys={selectedTextLevel}
             onAction={moreFormattingHandler}
           >
             <Dropdown.Section aria-label="Extended Formatting Options">
+            <Dropdown.Item
+                icon={<MdCode />}
+                key="code"
+                css={{
+                  background: editor.isActive("code")
+                    ? "$neutralLight"
+                    : "",
+                  "@sm": {display: "none"}
+                }}
+              >
+                Code
+              </Dropdown.Item>
               <Dropdown.Item
                 icon={<MdFormatUnderlined />}
                 key="underline"
@@ -275,7 +334,7 @@ export default ({ editor }) => {
               </Dropdown.Item>
               <Dropdown.Item
                 icon={<MdStrikethroughS />}
-                key="strikethrough"
+                key="strike"
                 css={{
                   background: editor.isActive("strike") ? "$neutralLight" : ""
                 }}
@@ -320,59 +379,93 @@ export default ({ editor }) => {
       <MenuItem
         title="Bulleted List"
         icon={<MdFormatListBulleted size={iconSize} color={iconColor} />}
-        action={() => editor.chain().focus().toggleBulletList().run()}
+        action={() => listHandler("bulletList")}
         isActive={() => editor.isActive("bulletList")}
+        css={{ display: "none", "@md": { display: "flex" } }}
       />
       <MenuItem
         title="Ordered List"
         icon={<MdFormatListNumbered size={iconSize} color={iconColor} />}
-        action={() => editor.chain().focus().toggleOrderedList().run()}
+        action={() => listHandler("orderedList")}
         isActive={() => editor.isActive("orderedList")}
+        css={{ display: "none", "@md": { display: "flex" } }}
       />
 
-      <div className="menu-divider" />
-
-      {/* Extended node options (image, drawing, code block, video, etc.) */}
-      {extendedItems.map((item, index) => (
-        <span key={index}>
-          {item.type === "menu-divider" ? (
-            <div
-              className="menu-divider"
-              style={{ display: "none", "@md": { display: "flex" } }}
-            />
-          ) : (
-            <MenuItem {...item} />
-          )}
-        </span>
-      ))}
-
-      <Tooltip content={"More options"}>
+      <Tooltip content={"Lists"}>
         <Dropdown>
           <Dropdown.Button
             light
-            icon={<PlusIcon style={{ height: "1.5em" }} />}
-            css={{
-              transition: "none",
-              padding: "10px",
-              display: "flex",
-              "@md": { display: "none" }
-            }}
-          />
-          <Dropdown.Menu aria-label="More markdown options">
-            {extendedItems
-              .filter((item) => !("type" in item))
-              .map((item) => (
-                <Dropdown.Item key={item.title} icon={item.icon}>
-                  {item.title}
-                </Dropdown.Item>
-              ))}
+            css={{ padding: "0", "@md": { display: "none" } }}
+          >
+            <MdFormatListBulleted size={iconSize} />
+          </Dropdown.Button>
+          <Dropdown.Menu aria-label="List selection" onAction={listHandler}>
+            <Dropdown.Item
+              icon={<MdFormatListBulleted />}
+              key="bulletList"
+              css={{
+                background: editor.isActive("bulletList") ? "$neutralLight" : ""
+              }}
+            >
+              Bulleted List
+            </Dropdown.Item>
+            <Dropdown.Item
+              icon={<MdFormatListNumbered />}
+              key="orderedList"
+              css={{
+                background: editor.isActive("orderedList")
+                  ? "$neutralLight"
+                  : ""
+              }}
+            >
+              Ordered List
+            </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       </Tooltip>
 
       <div className="menu-divider" />
 
-      {/* Undo/redo buttons */}
+      {/* Extended node options (image, drawing, code block, video, etc.) */}
+      {extendedItems.map((item) => (
+        <MenuItem {...item} />
+      ))}
+
+      <Tooltip content={"Insert"}>
+        <Dropdown>
+          <Dropdown.Button
+            light
+            css={{
+              transition: "none",
+              padding: "10px",
+              display: "flex",
+              "@md": { display: "none" }
+            }}
+          >
+            <PlusIcon style={{ height: "1.5em" }} />
+          </Dropdown.Button>
+          <Dropdown.Menu
+            aria-label="Insert Options"
+            onAction={insertOptionHandler}
+          >
+            {extendedItems.map((item) => (
+              <Dropdown.Item
+                icon={item.icon}
+                key={item.key}
+                css={{
+                  background: editor.isActive(item.key) ? "$neutralLight" : ""
+                }}
+              >
+                {item.title}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+      </Tooltip>
+
+      {/*<div className="menu-divider" />
+
+       Undo/redo buttons 
       <MenuItem
         title="Undo"
         icon={<BiUndo size={iconSize} color={iconColor} />}
@@ -382,7 +475,7 @@ export default ({ editor }) => {
         title="Redo"
         icon={<BiRedo size={iconSize} color={iconColor} />}
         action={() => editor.chain().focus().redo().run()}
-      />
+      />*/}
     </Container>
   );
 };
