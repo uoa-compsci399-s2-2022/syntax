@@ -41,13 +41,13 @@ export default function Component() {
 
   const editor = useEditor({ extensions: [StarterKit], content: `
   <h1>Welcome to syntax !</h1>
-  <p>This is a <b>note-taking app especially made for programmers</b>, where writing notes and running code are all in one application.
+  <p>This is a <b>note-taking app <i>especially</i> made for programmers</b>, where writing notes and running code are all in one application.
   <br> You can take effective notes without breaking your concentration when switching between apps.</p>
 
   <blockquote>"Any fool can write code that a computer can understand. Good programmers write code that humans can understand."<br> - Martin Fowler</blockquote>
   
   <h3>Write, compile, and execute your code in your notes and receive live outputs!</h3>
-  <p>Syntax supports selected languages such as Python, Java, C, and C++.</p>
+  <p>Syntax supports selected languages such as <b>Python, Java, C, and C++</b>.</p>
   
   <br><br>
   <h5>Psst! Feel free to try me out! ;)</h5>
@@ -110,7 +110,7 @@ export default function Component() {
               <Spacer/>
               <EditorContent
               editor={editor}
-              style={{ minWidth:'100%' }}/>
+              style={{ minWidth:'100%'}}/>
           </Card.Body>
         </Card>
       </Container>
@@ -131,7 +131,7 @@ export default function Component() {
 
         <Spacer x={3}/>
 
-        <Grid xl={4} lg={4} sm={6} xs={15} direction='column' justify='center'>
+        <Grid xl={4} lg={4} sm={5} xs={15} direction='column' justify='center'>
         <Spacer y={1}/>
         <Grid xl={0} lg={0} sm={0} xs>
         <Card css={{ $$cardColor: '$colors$primary'}}>
@@ -151,7 +151,7 @@ export default function Component() {
               </Text>
         </Grid>
 
-        <Grid xl={4} lg={4} sm={6} xs={15} direction='column'>
+        <Grid xl={4} lg={4} sm={5} xs={15} direction='column'>
           
         <Grid xl={0} lg={0} sm={0} xs>
         <Card css={{ $$cardColor: '$colors$primary'}}>
@@ -197,7 +197,7 @@ export default function Component() {
 
         <Spacer x={3}/>
 
-        <Grid xl={4} lg={4} sm={6} xs={15} direction='column'>
+        <Grid xl={4} lg={4} sm={5} xs={15} direction='column'>
         <Spacer y={1}/>
         <Grid xl={0} lg={0} sm={0} xs>
         <Card css={{ $$cardColor: '$colors$primary'}}>
