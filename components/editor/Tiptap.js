@@ -3,6 +3,8 @@ import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import Superscript from "@tiptap/extension-superscript";
 import Subscript from "@tiptap/extension-subscript";
+import Youtube from "@tiptap/extension-youtube";
+import Link from "@tiptap/extension-link";
 import { useEffect, useState, useRef } from "react";
 import Menubar from "./Menubar.js";
 import { TipTapCustomImage } from "@/node/Image";
@@ -77,6 +79,8 @@ export default function () {
       Underline,
       Superscript,
       Subscript,
+      Youtube,
+      Link,
       TipTapCustomImage(upload)
     ],
     content: currentNote.body

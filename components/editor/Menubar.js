@@ -34,7 +34,9 @@ import {
   MdFormatClear,
   MdFormatListBulleted,
   MdFormatListNumbered,
-  MdOutlineDraw
+  MdOutlineDraw,
+  MdFormatQuote,
+  MdHorizontalRule
 } from "react-icons/md";
 
 export default ({ editor }) => {
@@ -92,6 +94,15 @@ export default ({ editor }) => {
     }
   };
 
+  const addYoutubeVideo = () => {
+    const url = prompt("Enter YouTube URL");
+    if (url) {
+      editor.commands.setYoutubeVideo({
+        src: url
+      });
+    }
+  };
+
   editor.on("selectionUpdate", ({ editor }) => {
     if (Object.keys(editor.getAttributes("heading")).length === 0) {
       setSelectedTextLevel(textLevelList[0].label);
@@ -134,7 +145,7 @@ export default ({ editor }) => {
       icon: <BiLink size={iconSize} color={iconColor} />,
       title: "Link",
       action: () => editor.chain().focus().toggleCodeBlock().run(),
-      isActive: () => editor.isActive("codeBlock")
+      isActive: () => console.log("TBA")
     },
     {
       icon: <BiCodeBlock size={iconSize} color={iconColor} />,
@@ -145,7 +156,7 @@ export default ({ editor }) => {
     {
       icon: <MdOutlineDraw size={iconSize} color={iconColor} />,
       title: "Drawing",
-      action: () => openHandler()
+      action: () => console.log("TBA")
     },
     {
       icon: <BiImage size={iconSize} color={iconColor} />,
@@ -155,16 +166,16 @@ export default ({ editor }) => {
     {
       icon: <BiFilm size={iconSize} color={iconColor} />,
       title: "Video",
-      action: () => console.log("TBA")
+      action: addYoutubeVideo
     },
     {
-      icon: <BiPoll size={iconSize} color={iconColor} />,
+      icon: <MdFormatQuote size={iconSize} color={iconColor} />,
       title: "Blockquote",
       action: () => editor.chain().focus().toggleBlockquote().run(),
       isActive: () => editor.isActive("blockquote")
     },
     {
-      icon: <BiMinus size={iconSize} color={iconColor} />,
+      icon: <MdHorizontalRule size={iconSize} color={iconColor} />,
       title: "Divider",
       action: () => editor.chain().focus().setHorizontalRule().run()
     }
