@@ -1,5 +1,6 @@
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import BulletList from "@tiptap/extension-bullet-list";
 import Underline from "@tiptap/extension-underline";
 import Superscript from "@tiptap/extension-superscript";
 import Subscript from "@tiptap/extension-subscript";
@@ -80,9 +81,21 @@ export default function () {
       Superscript,
       Subscript,
       Youtube,
-      Link,
+      BulletList.configure({
+        HTMLAttributes: {
+          class: "editor-ul"
+        }
+      }),
+      Link.configure({
+        HTMLAttributes: {
+          class: "editor-link"
+        }
+      }),
       TipTapCustomImage(upload)
     ],
+    HTMLAttributes: {
+      class: "my-custom-heading"
+    },
     content: currentNote.body
   });
   editor?.on("update", ({ editor }) => {

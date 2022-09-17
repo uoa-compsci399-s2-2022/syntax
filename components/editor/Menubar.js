@@ -103,6 +103,22 @@ export default ({ editor }) => {
     }
   };
 
+  const addLink = () => {
+    if (editor.isActive("link")) {
+      editor.chain().focus().unsetLink().run();
+    } else {
+      const url = prompt("Enter URL");
+      if (url) {
+        editor
+          .chain()
+          .focus()
+          .extendMarkRange("link")
+          .setLink({ href: url })
+          .run();
+      }
+    }
+  };
+
   editor.on("selectionUpdate", ({ editor }) => {
     if (Object.keys(editor.getAttributes("heading")).length === 0) {
       setSelectedTextLevel(textLevelList[0].label);
@@ -144,8 +160,8 @@ export default ({ editor }) => {
     {
       icon: <BiLink size={iconSize} color={iconColor} />,
       title: "Link",
-      action: () => editor.chain().focus().toggleCodeBlock().run(),
-      isActive: () => console.log("TBA")
+      action: addLink,
+      isActive: () => editor.isActive("link")
     },
     {
       icon: <BiCodeBlock size={iconSize} color={iconColor} />,
