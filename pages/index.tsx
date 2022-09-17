@@ -5,8 +5,7 @@ import Head from "next/head";
 
 import { useTheme as useNextTheme } from 'next-themes'
 import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
-//import { useMediaQuery } from './useMediaQuery.js';
-import { Container, Row, Card, Col, Link } from '@nextui-org/react';
+import { Container, Row, Card, Link } from '@nextui-org/react';
 
 import Menubar from "@/components/editor/Menubar";
 import { EditorContent, useEditor } from "@tiptap/react";
@@ -36,8 +35,6 @@ export default function Component() {
 
   const { setTheme } = useNextTheme();
   const { isDark, type } = useTheme();
-
-  //const isMd = useMediaQuery(960);
 
   const editor = useEditor({ extensions: [StarterKit], content: `
   <h1>Welcome to syntax !</h1>
