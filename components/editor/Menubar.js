@@ -108,6 +108,9 @@ export default ({ editor }) => {
       editor.chain().focus().unsetLink().run();
     } else {
       const url = prompt("Enter URL");
+      if (!(url.match(/https:\/\/*/) || url.match(/http:\/\/*/))) {
+        url = 'https://' + url
+      }
       if (url) {
         editor
           .chain()
