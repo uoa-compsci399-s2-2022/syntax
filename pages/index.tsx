@@ -11,6 +11,8 @@ import Menubar from "@/components/editor/Menubar";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 
+import{ Navbar, Radio } from '@nextui-org/react';
+
 
 const getAllNotesByUserID = require("../prisma/Note").getAllNotesByUserID;
 
@@ -71,27 +73,30 @@ export default function Component() {
         <meta name="theme-color" content="#317EFB" />
 
       </Head>
-        <Grid.Container gap={2} justify='flex-start' fluid >
-          <Grid>
-            <Image
+        
+
+      <Navbar disableShadow variant={'sticky'} maxWidth={'fluid'} css={{backgroundColor: isDark ? '#494949' : '#FFFFFF'}}>
+        <Navbar.Brand>
+        <Image
             width={50}
             height={50}
             src='/favicon.ico'
             alt='syntax logo'
             objectFit="initial"/>
-          </Grid>
-          <Grid xs={4.3} sm={9} lg={10} xl={10.5}></Grid>
-          <Grid xs={1}>
-          <Switch 
+        </Navbar.Brand>
+        <Navbar.Content hideIn='xs'></Navbar.Content>
+        <Navbar.Content>
+        <Switch 
             checked={isDark}
             iconOn={<MoonIcon />}
             iconOff={<SunIcon />}
             onChange={(e) => setTheme(e.target.checked ? "dark" : "light")}
           />
-          <Spacer x={0.5}/>
-          <Button bordered ghost onClick={() => signIn()} responsive auto>Sign in</Button>
-          </Grid>
-        </Grid.Container>
+        <Navbar.Item>
+        <Button bordered ghost onClick={() => signIn()} responsive auto>Sign in</Button>
+        </Navbar.Item>
+        </Navbar.Content>
+      </Navbar>
 
 			<Spacer y={1}/>
 			
