@@ -43,11 +43,8 @@ export default ({ editor }) => {
       function handleResize() {
         setWindowWidth(window.innerWidth);
       }
-
       window.addEventListener("resize", handleResize);
-
       handleResize();
-
       return () => window.removeEventListener("resize", handleResize);
     }
   }, []);
@@ -254,8 +251,8 @@ export default ({ editor }) => {
       display="flex"
       justify="center"
       css={{
-        "z-index": 1,
-        "align-items": "center",
+        zIndex: 1,
+        alignItems: "center",
         position: "fixed",
         left: "0",
         bottom: "0",
@@ -263,9 +260,12 @@ export default ({ editor }) => {
         padding: "0.3rem 0",
         margin: "0",
         "@xs": {
-          "justify-content": "flex-start",
-          "border-bottom": "1px solid $border",
-          position: "relative"
+          justifyContent: "flex-start",
+          borderBottom: "1px solid $border",
+          borderTop: "1px solid $border",
+          position: "sticky",
+          top: "0",
+          right: "0"
         }
       }}
     >
@@ -273,7 +273,11 @@ export default ({ editor }) => {
       <Tooltip content={"Text style"}>
         <Dropdown>
           <Dropdown.Button light css={{ padding: "10px", transition: "none" }}>
-            {windowWidth > 960 ? selectedTextLevel : <MdFormatSize size={iconSize} />}
+            {windowWidth > 960 ? (
+              selectedTextLevel
+            ) : (
+              <MdFormatSize size={iconSize} />
+            )}
           </Dropdown.Button>
           <Dropdown.Menu
             disallowEmptySelection
@@ -309,14 +313,12 @@ export default ({ editor }) => {
             onAction={moreFormattingHandler}
           >
             <Dropdown.Section aria-label="Extended Formatting Options">
-            <Dropdown.Item
+              <Dropdown.Item
                 icon={<MdCode />}
                 key="code"
                 css={{
-                  background: editor.isActive("code")
-                    ? "$neutralLight"
-                    : "",
-                  "@sm": {display: "none"}
+                  background: editor.isActive("code") ? "$neutralLight" : "",
+                  "@sm": { display: "none" }
                 }}
               >
                 Code
