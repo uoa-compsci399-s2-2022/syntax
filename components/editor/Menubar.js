@@ -65,8 +65,11 @@ export default ({ editor }) => {
     }
   };
 
-  const moreFormattingHandler = (key) => {
+  const formattingHandler = (key) => {
     switch (key) {
+      case "code":
+        editor.chain().focus().toggleCode().run();
+        break;
       case "underline":
         editor.chain().focus().toggleUnderline().run();
         break;
@@ -158,10 +161,7 @@ export default ({ editor }) => {
     }
   });
 
-  {
-    /* Markdown buttons which should be displayed at all resolutions */
-  }
-  const coreItems = [
+  const coreOptions = [
     {
       icon: <MdFormatBold size={iconSize} color={iconColor} />,
       title: "Bold",
@@ -183,10 +183,46 @@ export default ({ editor }) => {
     }
   ];
 
-  {
-    /* Markdown buttons which should be condensed into a dropdown at smaller resolutions */
-  }
-  const extendedItems = [
+  const formattingOptions = [
+    {
+      icon: <MdCode size={iconSize} color={iconColor} />,
+      title: "Code",
+      mark: "code",
+      action: () => editor.chain().focus().toggleCode().run(),
+      isActive: () => editor.isActive("code"),
+      breakpoint: "sm"
+    },
+    {
+      icon: <MdFormatUnderlined size={iconSize} color={iconColor} />,
+      title: "Underline",
+      mark: "underline",
+      action: () => editor.chain().focus().toggleUnderline().run(),
+      isActive: () => editor.isActive("underline")
+    },
+    {
+      icon: <MdStrikethroughS size={iconSize} color={iconColor} />,
+      title: "Strikethrough",
+      mark: "strike",
+      action: () => editor.chain().focus().toggleSubscript().run(),
+      isActive: () => editor.isActive("strike")
+    },
+    {
+      icon: <MdSubscript size={iconSize} color={iconColor} />,
+      title: "Subscript",
+      mark: "subscript",
+      action: () => editor.chain().focus().toggleSuperscript().run(),
+      isActive: () => editor.isActive("subscript")
+    },
+    {
+      icon: <MdSuperscript size={iconSize} color={iconColor} />,
+      title: "Superscript",
+      mark: "superscript",
+      action: () => editor.chain().focus().clearNodes().unsetAllMarks().run(),
+      isActive: () => editor.isActive("superscript")
+    }
+  ];
+
+  const insertOptions = [
     {
       icon: <MdInsertLink size={iconSize} color={iconColor} />,
       title: "Link",
@@ -294,7 +330,7 @@ export default ({ editor }) => {
       <div className="menu-divider" />
 
       {/* Core formatting options (bold, italic, inline code) */}
-      {coreItems.map((item, index) => (
+      {coreOptions.map((item, index) => (
         <MenuItem {...item} />
       ))}
 
@@ -304,70 +340,42 @@ export default ({ editor }) => {
           <Dropdown.Button
             light
             animated="false"
-            icon={<MdMoreHoriz size={iconSize} />}
+            className={`menu-item${
+              (editor.isActive("code") && windowWidth < 960) ||
+              editor.isActive("underline") ||
+              editor.isActive("strike") ||
+              editor.isActive("subscript") ||
+              editor.isActive("superscript")
+                ? " is-active"
+                : ""
+            }`}
+            icon={<MdMoreHoriz size={iconSize} color={iconColor} />}
           />
           <Dropdown.Menu
-            disallowEmptySelection
-            aria-label="Text style selection"
-            selectionMode="single"
-            onAction={moreFormattingHandler}
+            aria-label="More Formatting"
+            onAction={formattingHandler}
           >
             <Dropdown.Section aria-label="Extended Formatting Options">
-              <Dropdown.Item
-                icon={<MdCode />}
-                key="code"
-                css={{
-                  background: editor.isActive("code") ? "$neutralLight" : "",
-                  "@sm": { display: "none" }
-                }}
-              >
-                Code
-              </Dropdown.Item>
-              <Dropdown.Item
-                icon={<MdFormatUnderlined />}
-                key="underline"
-                css={{
-                  background: editor.isActive("underline")
-                    ? "$neutralLight"
-                    : ""
-                }}
-              >
-                Underline
-              </Dropdown.Item>
-              <Dropdown.Item
-                icon={<MdStrikethroughS />}
-                key="strike"
-                css={{
-                  background: editor.isActive("strike") ? "$neutralLight" : ""
-                }}
-              >
-                Strikethrough
-              </Dropdown.Item>
-              <Dropdown.Item
-                icon={<MdSubscript />}
-                key="subscript"
-                css={{
-                  background: editor.isActive("subscript")
-                    ? "$neutralLight"
-                    : ""
-                }}
-              >
-                Subscript
-              </Dropdown.Item>
-              <Dropdown.Item
-                icon={<MdSuperscript />}
-                key="superscript"
-                css={{
-                  background: editor.isActive("superscript")
-                    ? "$neutralLight"
-                    : ""
-                }}
-              >
-                Superscript
-              </Dropdown.Item>
+              {formattingOptions.map((item) => (
+                <Dropdown.Item
+                  icon={item.icon}
+                  key={item.mark}
+                  css={{
+                    background: editor.isActive(item.mark)
+                      ? "$neutralLight"
+                      : "",
+                    "@sm": { display: item.breakpoint === "sm" ? "none" : "" }
+                  }}
+                >
+                  {item.title}
+                </Dropdown.Item>
+              ))}
             </Dropdown.Section>
             <Dropdown.Section aria-label="Clear Formatting">
-              <Dropdown.Item icon={<MdFormatClear />} key="clear-formatting">
+              <Dropdown.Item
+                icon={<MdFormatClear size={iconSize} color={iconColor} />}
+                key="clear-formatting"
+              >
                 Clear formatting
               </Dropdown.Item>
             </Dropdown.Section>
@@ -398,7 +406,12 @@ export default ({ editor }) => {
           <Dropdown.Button
             light
             animated="false"
-            css={{ padding: "0", "@md": { display: "none" } }}
+            className={`menu-item${
+              editor.isActive("bulletList") || editor.isActive("orderedList")
+                ? " is-active"
+                : ""
+            }`}
+            css={{ padding: "10px", "@md": { display: "none" } }}
           >
             <MdFormatListBulleted size={iconSize} />
           </Dropdown.Button>
@@ -430,7 +443,7 @@ export default ({ editor }) => {
       <div className="menu-divider" />
 
       {/* Extended node options (image, drawing, code block, video, etc.) */}
-      {extendedItems.map((item) => (
+      {insertOptions.map((item) => (
         <MenuItem {...item} />
       ))}
 
@@ -451,14 +464,14 @@ export default ({ editor }) => {
             aria-label="Insert Options"
             onAction={insertOptionHandler}
           >
-            {extendedItems.map((item) => (
+            {insertOptions.map((item) => (
               <Dropdown.Item
                 icon={item.icon}
                 key={item.key}
                 css={{
                   background: editor.isActive(item.key) ? "$neutralLight" : "",
-                  "@sm": {display: item.breakpoint === "sm" ? "none": ""},
-                  "@md": {display: item.breakpoint === "md" ? "none": ""},
+                  "@sm": { display: item.breakpoint === "sm" ? "none" : "" },
+                  "@md": { display: item.breakpoint === "md" ? "none" : "" }
                 }}
               >
                 {item.title}
