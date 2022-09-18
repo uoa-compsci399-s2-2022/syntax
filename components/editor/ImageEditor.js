@@ -29,16 +29,16 @@ async function upload(file){
 }
 
 async function tag(difference, key, value){
-  for (var num in difference){
+  for (let num in difference){
+    const name = difference[num].split("/").pop()
     const body = {
-      name: difference[num].split("/").pop(),
       tag: {
         key: key,
         value: value
       }
     }
-    let res = await fetch("/api/s3", {
-      method: "PUT",
+    let res = await fetch(`/api/s3/${name}`, {
+      method: "PATCH",
       body: JSON.stringify(body)
     });
   }
@@ -52,7 +52,7 @@ const ImageEditor = () => {
     editorProps: {
       handleDOMEvents: {
         async keyup(view, event) {
-          const currentImages = view.state.doc.toJSON().content.filter(node => node.type === 'image').map(element => element.attrs.src);
+          const currentImages = view.state.doc.toJSON().content.filter(node => (node.type === 'image'|| node.type === 'drawing')).map(element => element.attrs.src);
           if (images != null){
             if (images.length > currentImages.length){
               let difference = images.filter(image => !currentImages.includes(image))
