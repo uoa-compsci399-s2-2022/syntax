@@ -72,22 +72,22 @@ input[type="search"]::-webkit-search-results-button,
 input[type="search"]::-webkit-search-results-decoration { display: none; }
 
 /* image resizer styling */
-.image-small {
+.image-small, .drawing-small {
   max-width: 200px;
 }
-.image-medium {
+.image-medium, .drawing-medium {
   max-width: 500px;
 }
-.image-large {
+.image-large, .drawing-large {
   max-width: 100%;
 }
-.image-float-none {
+.image-float-none, .drawing-float-none {
   float: none;
 }
-.image-float-left {
+.image-float-left, .drawing-float-left {
   float: left;
 }
-.image-float-right {
+.image-float-right, .drawing-float-right {
   float: right;
 }
 

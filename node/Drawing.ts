@@ -23,7 +23,7 @@ declare module "@tiptap/core" {
 	interface Commands<ReturnType> {
 		drawing: {
 			/**
-			 * Add an image
+			 * Add a drawing
 			 */
 			setDrawing: (options: { src: string, alt?: string, title?: string }) => ReturnType;
 		};
@@ -104,9 +104,6 @@ export const Drawing = () => {
 						if (selection?.node?.type?.name == 'drawing'){
 							return commands?.updateAttributes('drawing', attrs)
 						}
-						const position = selection.$head ? selection.$head.pos : selection.$to.pos;
-
-						const node = this.type.create(attrs);
 
 						return commands?.insertContent({
 							type: this.name,

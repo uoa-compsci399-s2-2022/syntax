@@ -2,35 +2,42 @@ import { Tldraw, TDExportType } from '@tldraw/tldraw'
 import { useState, useCallback } from 'react'
 import { Modal, Button } from "@nextui-org/react"
 
-const DrawingModal = ({ open, closeHandler }) =>{
+const DrawingModal = ({ open, closeHandler, content }) =>{
     const [app, setApp] = useState()
     const [width, setWidth] = useState("1%")
+    const [key, setKey] = useState()
 
     const handleMount = useCallback((app) => {
         setApp(app)
-        resetCursor()
+        openTldraw()
     }, [])
 
-    const resetCursor = () => {
+    const openTldraw = async () => {
+        if (content){
+            setKey(content[1])
+        }
         setWidth("1%")
         setTimeout(function() { //Start the timer
-            setWidth("100%") //After 0.1 second
+            setWidth("100%") //After 0.15 second
         }, 100)
+        await app?.zoomToFit();
     }
 
     async function saveAndClose(){
         app?.selectNone()
         const png = await app?.getImage(TDExportType.PNG);
-        let content = await app?.getContent();
+        let content = await app?.document;
+        await app?.resetDocument()
         if (typeof png !== "undefined"){
             closeHandler(png)
         } 
+        await app?.loadDocument(content)
         const contentjson = JSON.stringify(content)
-        const files = [png, contentjson]
+        const files = [png, contentjson, key]
         closeHandler(files)
     }
     return (
-        <Modal noPadding width={width} open={open} onClose={closeHandler} onOpen={()=>resetCursor()}>
+        <Modal noPadding width={width} open={open} onClose={closeHandler} onOpen={()=>openTldraw()}>
             <Modal.Body>
                 <div
                     style={{
@@ -39,8 +46,8 @@ const DrawingModal = ({ open, closeHandler }) =>{
                         height: '500px',
                         overflow: 'hidden',
                     }}
-                    >
-                        <Tldraw onMount={handleMount} showMenu={false} showPages={false} showMultiplayerMenu={false}/> 
+                    >   {content && <Tldraw onMount={handleMount} showMenu={false} showPages={false} showMultiplayerMenu={false} document={content[0]}/>}
+                        {(content === null) && <Tldraw onMount={handleMount} showMenu={false} showPages={false} showMultiplayerMenu={false}/>}
                 </div>
             </Modal.Body>
         
