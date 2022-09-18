@@ -193,7 +193,7 @@ export default ({ editor }) => {
       key: "link",
       action: () => insertOptionHandler("link"),
       isActive: () => editor.isActive("link"),
-      css: { display: "none", "@sm": { display: "flex" } }
+      breakpoint: "sm"
     },
     {
       icon: <BiCodeBlock size={iconSize} color={iconColor} />,
@@ -201,28 +201,28 @@ export default ({ editor }) => {
       key: "codeBlock",
       action: () => insertOptionHandler("codeBlock"),
       isActive: () => editor.isActive("codeBlock"),
-      css: { display: "none", "@sm": { display: "flex" } }
+      breakpoint: "sm"
     },
     {
       icon: <MdOutlineDraw size={iconSize} color={iconColor} />,
       title: "Drawing",
       key: "drawing",
       action: () => insertOptionHandler("drawing"),
-      css: { display: "none", "@sm": { display: "flex" } }
+      breakpoint: "sm"
     },
     {
       icon: <MdOutlineImage size={iconSize} color={iconColor} />,
       title: "Image",
       key: "image",
       action: () => insertOptionHandler("image"),
-      css: { display: "none", "@md": { display: "flex" } }
+      breakpoint: "md"
     },
     {
       icon: <MdVideocam size={iconSize} color={iconColor} />,
       title: "Video",
       key: "video",
       action: () => insertOptionHandler("video"),
-      css: { display: "none", "@md": { display: "flex" } }
+      breakpoint: "md"
     },
     {
       icon: <MdFormatQuote size={iconSize} color={iconColor} />,
@@ -230,14 +230,14 @@ export default ({ editor }) => {
       key: "blockquote",
       action: () => insertOptionHandler("blockquote"),
       isActive: () => editor.isActive("blockquote"),
-      css: { display: "none", "@md": { display: "flex" } }
+      breakpoint: "md"
     },
     {
       icon: <MdHorizontalRule size={iconSize} color={iconColor} />,
       title: "Divider",
       key: "horizontalRule",
       action: () => insertOptionHandler("horizontalRule"),
-      css: { display: "none", "@md": { display: "flex" } }
+      breakpoint: "md"
     }
   ];
 
@@ -301,7 +301,11 @@ export default ({ editor }) => {
       {/* Extended formatting options + clear formatting */}
       <Tooltip content={"More formatting"}>
         <Dropdown>
-          <Dropdown.Button light icon={<MdMoreHoriz size={iconSize} />} />
+          <Dropdown.Button
+            light
+            animated="false"
+            icon={<MdMoreHoriz size={iconSize} />}
+          />
           <Dropdown.Menu
             disallowEmptySelection
             aria-label="Text style selection"
@@ -393,6 +397,7 @@ export default ({ editor }) => {
         <Dropdown>
           <Dropdown.Button
             light
+            animated="false"
             css={{ padding: "0", "@md": { display: "none" } }}
           >
             <MdFormatListBulleted size={iconSize} />
@@ -451,7 +456,9 @@ export default ({ editor }) => {
                 icon={item.icon}
                 key={item.key}
                 css={{
-                  background: editor.isActive(item.key) ? "$neutralLight" : ""
+                  background: editor.isActive(item.key) ? "$neutralLight" : "",
+                  "@sm": {display: item.breakpoint === "sm" ? "none": ""},
+                  "@md": {display: item.breakpoint === "md" ? "none": ""},
                 }}
               >
                 {item.title}
