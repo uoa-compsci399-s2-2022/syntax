@@ -1,4 +1,5 @@
 import { EditorContent, useEditor, BubbleMenu } from "@tiptap/react";
+
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect, useState, useRef } from "react";
 import Menubar from "./Menubar.js";
@@ -93,21 +94,22 @@ export default function () {
     editor?.commands?.setContent(currentNote.body);
   }, [editor, currentNote.body]);
 
-  const fileSelected = event => {
-    const file = event.target.files[0]
-    setFile(file)
-  }
-
-  const submit = async event => {
-    event.preventDefault()
-    const src = await upload(file)
-    if (src !== null){
-      editor.chain().focus()?.setImage({src})?.run();
-    }
-    else{
-      console.log("File size was too large")
-    }
-  }
+  const imageMenu = (
+    <>
+      <Button onPress={() => editor.chain().focus().setImage({size: 'small'}).run()}
+          className={editor?.isActive('image') ? 'is-active' : {size: 'small'}}>Small</Button>
+      <Button onPress={() => editor.chain().focus().setImage({size: 'medium'}).run()}
+          className={editor?.isActive('image') ? 'is-active' : {size: 'medium'}}>Medium</Button>
+      <Button onPress={() => editor.chain().focus().setImage({size: 'large'}).run()}
+          className={editor?.isActive('image') ? 'is-active' : {size: 'large'}}>Large</Button>
+      <Button onPress={() => editor.chain().focus().setImage({float: 'left'}).run()}
+          className={editor?.isActive('image') ? 'is-active' : {float: 'left'}}>Left</Button>
+      <Button onPress={() => editor.chain().focus().setImage({float: 'none'}).run()}
+          className={editor?.isActive('image') ? 'is-active' : {float: 'none'}}>No float</Button>
+      <Button onPress={() => editor.chain().focus().setImage({float: 'right'}).run()}
+          className={editor?.isActive('image') ? 'is-active' : {float: 'right'}}>Right</Button>
+    </>
+  )
 
   return (
     <Container
@@ -122,22 +124,10 @@ export default function () {
     >
       <Menubar editor={editor} />
       <Spacer />
-      { editor && <BubbleMenu className="button-menu" editor={editor} tippyOptions={{duration: 100}}>
-      <Button.Group color="primary" light>
-          <Button onPress={() => editor.chain().focus().setImage({size: 'small'}).run()}
-                  className={editor.isActive('image') ? 'is-active' : {size: 'small'}}>Small</Button>
-          <Button onPress={() => editor.chain().focus().setImage({size: 'medium'}).run()}
-                  className={editor.isActive('image') ? 'is-active' : {size: 'medium'}}>Medium</Button>
-          <Button onPress={() => editor.chain().focus().setImage({size: 'large'}).run()}
-                  className={editor.isActive('image') ? 'is-active' : {size: 'large'}}>Large</Button>
-          <Button className="is-active">|</Button>
-          <Button onPress={() => editor.chain().focus().setImage({float: 'left'}).run()}
-                  className={editor.isActive('image') ? 'is-active' : {float: 'left'}}>Left</Button>
-          <Button onPress={() => editor.chain().focus().setImage({float: 'none'}).run()}
-                  className={editor.isActive('image') ? 'is-active' : {float: 'none'}}>No float</Button>
-          <Button onPress={() => editor.chain().focus().setImage({float: 'right'}).run()}
-                  className={editor.isActive('image') ? 'is-active' : {float: 'right'}}>Right</Button>
-        </Button.Group>
+      { editor && <BubbleMenu className="button-menu" editor={editor} tippyOptions={{duration: 100}} shouldShow={editor.isActive("image")}>
+      <Button.Group className="is-active" color="primary" light>
+        {imageMenu}
+      </Button.Group>
       </BubbleMenu> }
       <EditorContent editor={editor} key={currentNote} style={{ "max-width": "100%" }} />
       <Spacer />
