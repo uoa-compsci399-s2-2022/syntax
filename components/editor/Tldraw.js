@@ -1,4 +1,4 @@
-import { Tldraw } from '@tldraw/tldraw'
+import { Tldraw, TDExportType } from '@tldraw/tldraw'
 import { useState, useCallback } from 'react'
 import { Modal, Button } from "@nextui-org/react"
 
@@ -10,16 +10,15 @@ const DrawingModal = ({ open, closeHandler }) =>{
         }, [])
 
     async function saveAndClose(){
-        let svg = await app?.getSvg();
-        let blob = svg
-        if (typeof svg !== "undefined"){
-            svg.setAttribute('xmls', 'http://www.w3.org/2000/svg')
-            svg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
-            const svgBlob = new XMLSerializer().serializeToString(svg)
-            blob = new Blob([svgBlob], {type: "image/svg+xml;charset=utf-8"});
-        }
-
-        closeHandler(blob)
+        app?.selectNone()
+        const png = await app?.getImage(TDExportType.PNG);
+        let content = await app?.getContent();
+        if (typeof png !== "undefined"){
+            closeHandler(png)
+        } 
+        const contentjson = JSON.stringify(content)
+        const files = [png, contentjson]
+        closeHandler(files)
     }
     return (
         <Modal width open={open} onClose={closeHandler} css={{ 

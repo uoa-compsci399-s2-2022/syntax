@@ -20,13 +20,13 @@ const DrawingModal = dynamic(() => import('../editor/Tldraw'), {
 })
 
 
-async function upload(file, type=null){
+async function upload(file){
   //fetch data from endpoint for presigned link and image src
   let res = await fetch("/api/s3/", {
     method: "POST",
-    body: type === null ? file.type : type,
+    body: file.type,
   });
-  const {data, src} = await res.json();
+  const {data, src, key} = await res.json();
   const url = data.url; //url for post
   const fields = data.fields; //formdata for post
   const formData = new FormData();
@@ -41,6 +41,37 @@ async function upload(file, type=null){
   });
   if (upload.ok){
     return src
+  }
+  return null
+}
+
+async function uploadDrawing(files){
+  let res = await fetch("/api/s3/", {
+    method: "POST",
+    body: "drawing",
+  });
+  const {data, src, key} = await res.json();
+  const url = data.url; //url for post
+  const fields = data.fields; //formdata for post
+  const formData = new FormData();
+  formData.append("key", `${key}.png`)
+  Object.entries({ ...fields}).forEach(([key, value]) => {
+    formData.append(key, value)
+  })
+  formData.append('file', files[0])
+  //POST to upload file
+  const png = await fetch(url, {
+    method: "POST",
+    body: formData,
+  });
+  if (png.ok){
+    formData.set("key", `${key}.json`)
+    formData.set("file", files[1])
+    const content = await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
+    return src+'.png'
   }
   return null
 }
@@ -104,14 +135,13 @@ export default function () {
     editor?.commands?.setContent(currentNote.body);
   }, [editor, currentNote.body]);
 
-  const closeHandler = async (result) => {
-    console.log(result)
-    if (typeof result !== "undefined"){
-      const src = await upload(result);
+  const closeHandler = async (files) => {
+    console.log(files)
+    if (typeof files !== "undefined"){
+      const src = await uploadDrawing(files)
       if (src !== null){
         editor.chain().focus()?.setImage({src})?.run();
-      }
-      else{
+      } else{
         console.log("File size was too large")
       }
     }

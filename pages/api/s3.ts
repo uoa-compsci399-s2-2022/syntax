@@ -27,8 +27,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       try {
         let type = req.body;
         const fileName = generateFileName();
-
-        const fileParams = {
+        let fileParams: object
+        if (type === "drawing"){
+          fileParams = {
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Expires: 90, 
+            Conditions: [
+              ['starts-with', '$key', fileName],
+              ['content-length-range', 0, sizeLimit], //file limitation
+            ],
+          }
+        } else {
+          fileParams = {
             Bucket: process.env.AWS_BUCKET_NAME,
             Fields: {
               key: fileName, //filename
@@ -38,14 +48,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             Conditions: [
               ['content-length-range', 0, sizeLimit], //file limitation
             ],
-        };
-    
+          };
+        }
+
         const data = await s3Client.createPresignedPost(fileParams);
         const imageUrl = path + fileName;
         //return data for presigned post url and image location url
         res.status(200).json({ 
             data: data,
             src: imageUrl,
+            key: fileName
       });
       } catch (err) {
         console.log(err);
@@ -68,9 +80,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         };
         const request = await s3Client.putObjectTagging(params);
         const response = await request.send();
-        res.status(204).json({
-          status: 'success'
-        });
+        res.status(204).json({});
       } catch (err) {
         console.log(err);
         res.status(400).json({ message: err });
