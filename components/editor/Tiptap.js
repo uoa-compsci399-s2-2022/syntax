@@ -4,7 +4,6 @@ import StarterKit from "@tiptap/starter-kit";
 import { useEffect, useState, useRef } from "react";
 import Menubar from "./Menubar.js";
 import { TipTapCustomImage } from "@/node/Image";
-import { UploadFn } from "@/node/upload_image";
 import { debounce } from "lodash";
 import { Container, Button, Spacer } from "@nextui-org/react";
 import {
@@ -151,6 +150,7 @@ export default function () {
   const openHandler = () => {
     setDrawModal(true)
   }
+  console.log(editor?.isActive("image"))
 
   const imageMenu = (
     <>
@@ -182,11 +182,22 @@ export default function () {
     > 
       <Menubar editor={editor} openHandler={openHandler} />
       <Spacer />
-      { editor && <BubbleMenu className="button-menu" editor={editor} tippyOptions={{duration: 100}} shouldShow={editor.isActive("image")}>
+      <BubbleMenu className="button-menu" editor={editor} tippyOptions={{duration: 100}} shouldShow={editor?.isActive("image")}>
         <Button.Group className="is-active" color="primary" light>
-          {imageMenu}
+          <Button onPress={() => editor.chain().focus().setImage({size: 'small'}).run()}
+              className={editor?.isActive('image') ? 'is-active' : {size: 'small'}}>Small</Button>
+          <Button onPress={() => editor.chain().focus().setImage({size: 'medium'}).run()}
+              className={editor?.isActive('image') ? 'is-active' : {size: 'medium'}}>Medium</Button>
+          <Button onPress={() => editor.chain().focus().setImage({size: 'large'}).run()}
+              className={editor?.isActive('image') ? 'is-active' : {size: 'large'}}>Large</Button>
+          <Button onPress={() => editor.chain().focus().setImage({float: 'left'}).run()}
+              className={editor?.isActive('image') ? 'is-active' : {float: 'left'}}>Left</Button>
+          <Button onPress={() => editor.chain().focus().setImage({float: 'none'}).run()}
+              className={editor?.isActive('image') ? 'is-active' : {float: 'none'}}>No float</Button>
+          <Button onPress={() => editor.chain().focus().setImage({float: 'right'}).run()}
+              className={editor?.isActive('image') ? 'is-active' : {float: 'right'}}>Right</Button>
         </Button.Group>
-      </BubbleMenu> }
+      </BubbleMenu>
       <EditorContent editor={editor} key={currentNote} style={{ "max-width": "100%" }} />
       <Spacer />
       <DrawingModal open={drawModal} closeHandler={closeHandler} />
