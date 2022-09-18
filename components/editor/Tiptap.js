@@ -1,4 +1,5 @@
-import { EditorContent, useEditor } from "@tiptap/react";
+import { EditorContent, useEditor, BubbleMenu } from "@tiptap/react";
+
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect, useState, useRef } from "react";
 import Menubar from "./Menubar.js";
@@ -78,7 +79,14 @@ export default function () {
   };
 
   const editor = useEditor({
-    extensions: [StarterKit, TipTapCustomImage(upload)],
+    extensions: [
+      StarterKit, 
+      TipTapCustomImage(upload).configure({
+        HTMLAttributes: {
+          class: 'image'
+        }
+      }),
+  ],
     content: currentNote.body
   });
   editor?.on("update", ({ editor }) => {
@@ -114,6 +122,23 @@ export default function () {
     setDrawModal(true)
   }
 
+  const imageMenu = (
+    <>
+      <Button onPress={() => editor.chain().focus().setImage({size: 'small'}).run()}
+          className={editor?.isActive('image') ? 'is-active' : {size: 'small'}}>Small</Button>
+      <Button onPress={() => editor.chain().focus().setImage({size: 'medium'}).run()}
+          className={editor?.isActive('image') ? 'is-active' : {size: 'medium'}}>Medium</Button>
+      <Button onPress={() => editor.chain().focus().setImage({size: 'large'}).run()}
+          className={editor?.isActive('image') ? 'is-active' : {size: 'large'}}>Large</Button>
+      <Button onPress={() => editor.chain().focus().setImage({float: 'left'}).run()}
+          className={editor?.isActive('image') ? 'is-active' : {float: 'left'}}>Left</Button>
+      <Button onPress={() => editor.chain().focus().setImage({float: 'none'}).run()}
+          className={editor?.isActive('image') ? 'is-active' : {float: 'none'}}>No float</Button>
+      <Button onPress={() => editor.chain().focus().setImage({float: 'right'}).run()}
+          className={editor?.isActive('image') ? 'is-active' : {float: 'right'}}>Right</Button>
+    </>
+  )
+
   return (
     <Container
       display="flex"
@@ -127,6 +152,11 @@ export default function () {
     > 
       <Menubar editor={editor} openHandler={openHandler} />
       <Spacer />
+      { editor && <BubbleMenu className="button-menu" editor={editor} tippyOptions={{duration: 100}} shouldShow={editor.isActive("image")}>
+        <Button.Group className="is-active" color="primary" light>
+          {imageMenu}
+        </Button.Group>
+      </BubbleMenu> }
       <EditorContent editor={editor} key={currentNote} style={{ "max-width": "100%" }} />
       <Spacer />
       <DrawingModal open={drawModal} closeHandler={closeHandler} />

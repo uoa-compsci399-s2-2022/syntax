@@ -72,22 +72,29 @@ input[type="search"]::-webkit-search-results-button,
 input[type="search"]::-webkit-search-results-decoration { display: none; }
 
 /* image resizer styling */
-.image-resizer {
-  display: inline-flex;
-  position: relative;
-  flex-grow: 0;
+.image-small {
+  max-width: 200px;
+}
+.image-medium {
+  max-width: 500px;
+}
+.image-large {
+  max-width: 100%;
+}
+.image-float-none {
+  float: none;
+}
+.image-float-left {
+  float: left;
+}
+.image-float-right {
+  float: right;
 }
 
-.image-resizer .resize-trigger {
-position: absolute;
-right: -6px;
-bottom: -9px;
-opacity: 0;
-transition: opacity .3s ease;
-color: #3259a5;
-}
-
-.image-resizer:hover .resize-trigger {
-opacity: 1;
+.bubble-menu {
+  display: flex;
+  background-color: #0d0d0d;
+  padding: 0.2rem;
+  border-radius: 0.5rem;
 }
 
