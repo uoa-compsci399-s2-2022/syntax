@@ -1,15 +1,7 @@
 import MenuItem from "./MenuItem";
 import { useState, useEffect } from "react";
 import { Container, Dropdown, Tooltip } from "@nextui-org/react";
-import {
-  BiUndo,
-  BiRedo,
-  BiCodeBlock,
-  BiLink,
-  BiImage,
-  BiFilm
-} from "react-icons/bi";
-import { PlusIcon } from "@heroicons/react/24/outline";
+import { BiCodeBlock } from "react-icons/bi";
 import {
   MdFormatBold,
   MdFormatItalic,
@@ -25,7 +17,11 @@ import {
   MdOutlineDraw,
   MdFormatQuote,
   MdHorizontalRule,
-  MdFormatSize
+  MdFormatSize,
+  MdVideocam,
+  MdOutlineImage,
+  MdInsertLink,
+  MdAdd
 } from "react-icons/md";
 
 export default ({ editor }) => {
@@ -192,7 +188,7 @@ export default ({ editor }) => {
   }
   const extendedItems = [
     {
-      icon: <BiLink size={iconSize} color={iconColor} />,
+      icon: <MdInsertLink size={iconSize} color={iconColor} />,
       title: "Link",
       key: "link",
       action: () => insertOptionHandler("link"),
@@ -215,14 +211,14 @@ export default ({ editor }) => {
       css: { display: "none", "@sm": { display: "flex" } }
     },
     {
-      icon: <BiImage size={iconSize} color={iconColor} />,
+      icon: <MdOutlineImage size={iconSize} color={iconColor} />,
       title: "Image",
       key: "image",
       action: () => insertOptionHandler("image"),
       css: { display: "none", "@md": { display: "flex" } }
     },
     {
-      icon: <BiFilm size={iconSize} color={iconColor} />,
+      icon: <MdVideocam size={iconSize} color={iconColor} />,
       title: "Video",
       key: "video",
       action: () => insertOptionHandler("video"),
@@ -444,7 +440,7 @@ export default ({ editor }) => {
               "@md": { display: "none" }
             }}
           >
-            <PlusIcon style={{ height: "1.5em" }} />
+            <MdAdd size={iconSize} color={iconColor} />
           </Dropdown.Button>
           <Dropdown.Menu
             aria-label="Insert Options"

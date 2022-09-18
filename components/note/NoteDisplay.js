@@ -77,6 +77,7 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
           <Spacer
             css={{
               marginLeft: "0",
+              width: "100%",
               borderBottom: "1px solid $border",
               "@xs": { border: "none" }
             }}

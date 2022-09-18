@@ -76,7 +76,9 @@ export default function () {
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        bulletList: false 
+      }),
       Underline,
       Superscript,
       Subscript,
@@ -99,7 +101,7 @@ export default function () {
     content: currentNote.body
   });
   editor?.on("update", ({ editor }) => {
-    console.log("editor updated");
+    // console.log("editor updated");
     debounceSave({
       id: currentNote.id,
       title: currentNote.title,
@@ -107,7 +109,7 @@ export default function () {
     });
   });
 
-  console.log("Editor Rendered", currentNote.id);
+  // console.log("Editor Rendered", currentNote.id);
 
   useEffect(() => {
     editor?.commands?.setContent(currentNote.body);
