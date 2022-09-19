@@ -1,7 +1,14 @@
 import NoteList from "./NoteList";
 import SearchModal from "@/components/modal/SearchModal";
 import { useState, useEffect } from "react";
-import { Container, Input, Button, Dropdown, Navbar } from "@nextui-org/react";
+import {
+  Container,
+  Input,
+  Button,
+  Dropdown,
+  Navbar,
+  Tooltip
+} from "@nextui-org/react";
 import {
   MagnifyingGlassIcon,
   PlusIcon,
@@ -23,19 +30,6 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
   const setCurrentNote = useDispatchNote();
   const noteslist = useNotes();
   const setNotes = useDispatchNotes();
-
-  const [selectedSort, setSelectedSort] = useState();
-
-
-  const sortOptions = {
-    "title-asc": "Title (ascending)",
-    "title-desc": "Title (descending)",
-    "edited-asc": "Edited (ascending)",
-    "edited-desc": "Edited (descending)",
-    "created-asc": "Created (ascending)",
-    "created-desc": "Created (descending)"
-  };
-  const defaultSort = "title-asc";
 
   const createNote = async () => {
     let res = await fetch("/api/note", {
@@ -103,34 +97,21 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
           </Navbar.Item>
         </Navbar.Content>
         <Navbar.Content>
-          <Navbar.Item>
-            {/*             <Button
-              auto
-              bordered
-              animated={false}
-              onPress={setSearchModal}
-              icon={
-                <AdjustmentsHorizontalIcon
-                  style={{ height: "var(--icon-size)" }}
-                />
-              }
-            /> */}
-            <Dropdown>
-              <Dropdown.Button bordered css={{ flex: "1" }}>
-                Sort
-              </Dropdown.Button>
-              <Dropdown.Menu
-                aria-label="Sort Options"
-                onAction={setSelectedSort}
-              >
-                {Object.keys(sortOptions).map((option) => (
-                  <Dropdown.Item key={option}>
-                    {sortOptions[option]}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
-          </Navbar.Item>
+          <Tooltip content="Advanced search" placement="bottom">
+            <Navbar.Item>
+              <Button
+                auto
+                bordered
+                animated={false}
+                onPress={setSearchModal}
+                icon={
+                  <AdjustmentsHorizontalIcon
+                    style={{ height: "var(--icon-size)" }}
+                  />
+                }
+              />
+            </Navbar.Item>
+          </Tooltip>
           <Navbar.Item css={{ display: "flex", "@xs": { display: "none" } }}>
             <Button
               auto

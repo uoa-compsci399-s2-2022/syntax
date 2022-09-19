@@ -8,8 +8,8 @@ const SearchModal = ({ open, closeHandler }) => {
   const sortOptions = {
     "title-asc": "Title (ascending)",
     "title-desc": "Title (descending)",
-    "edited-asc": "Edited (ascending)",
-    "edited-desc": "Edited (descending)",
+    "modified-asc": "Modified (ascending)",
+    "modified-desc": "Modified (descending)",
     "created-asc": "Created (ascending)",
     "created-desc": "Created (descending)"
   };
