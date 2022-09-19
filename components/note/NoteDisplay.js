@@ -39,10 +39,10 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
           css={{
             margin: "0",
             padding: "0 10%",
-            "max-width": "100vw"
+            maxWidth: "100vw"
           }}
         >
-          <Text h1 css={{ "overflow-wrap": "break-word" }}>
+          <Text h1 css={{ overflowWrap: "break-word" }}>
             {currentNote.title}
           </Text>
           {/*<Input
@@ -72,6 +72,14 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
                   })}
                 </td>
               </tr>
+              {currentNote.group ? (
+                <tr>
+                  <th>Folder</th>
+                  <td>{currentNote.group.name}</td>
+                </tr>
+              ) : (
+                ""
+              )}
             </tbody>
           </table>
           <Spacer

@@ -2,6 +2,7 @@
 :root {
   --icon-size: 24px;
   --icon-size-s: 20px;
+  --icon-size-xs: 14px;
 }
 
 /* general css */
@@ -61,6 +62,24 @@ a {
   outline: none;
 }
 
+/* NextUI components */
+.nextui-collapse-view {
+  padding: 0;
+}
+
+.nextui-collapse {
+  margin: 0 0 10px 0 !important;
+  padding: 10px !important;
+  box-shadow: none !important;
+}
+
+.nextui-collapse-content {
+  padding: 0;
+}
+
+.nextui-collapse--open {
+  
+}
 .ProseMirror img.ProseMirror-selectednode {
   outline: 3px solid #68cef8;
 }

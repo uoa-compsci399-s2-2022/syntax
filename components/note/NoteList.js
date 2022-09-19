@@ -1,14 +1,16 @@
 import NoteCard from "./NoteCard";
+import NoteGroup from "@/components/note/NoteGroup";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { Collapse, Container } from "@nextui-org/react";
 import {
   useNote,
   useDispatchNote,
   useNotes,
-  useDispatchNotes,
+  useDispatchNotes
 } from "@/modules/AppContext";
 
-const NoteList = ({ retrieved_notes, handleSidebarDisplay }) => {
+const NoteList = ({ retrieved_notes, handleSidebarDisplay, createNote }) => {
   const router = useRouter();
 
   // this is where we assign the context to constants
@@ -35,27 +37,37 @@ const NoteList = ({ retrieved_notes, handleSidebarDisplay }) => {
   };
 
   return (
-    <div>
+    <>
       {notes.length > 0 ? (
-        <ul style={{ margin: "20px 0 20px 0"}}>
-          {notes.map((note) => (
-            <li key={note.id} style={{ marginBottom: "20px" }}>
-              <a
-                onClick={() => {
-                  openNote(note);
-                }}
-              >
-                <NoteCard note={note} />
-              </a>
-            </li>
-          ))}
-        </ul>
+        <Container css={{ padding: "0", textOverflow: "break" }}>
+          <NoteGroup
+            name={"Group 1"}
+            color={"#ffa080"}
+            notes={notes}
+            openNote={openNote}
+            createNote={createNote}
+          />
+          <NoteGroup
+            name={"Group 2"}
+            color={"#ffc080"}
+            notes={notes}
+            openNote={openNote}
+            createNote={createNote}
+          />
+          <NoteGroup
+            name={"Group 3"}
+            color={"#a5d46a"}
+            notes={notes}
+            openNote={openNote}
+            createNote={createNote}
+          />
+        </Container>
       ) : (
         <div>
           <p>Oops.. no notes yet</p>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

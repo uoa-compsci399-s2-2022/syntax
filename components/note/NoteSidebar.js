@@ -1,10 +1,18 @@
 import NoteList from "./NoteList";
 import { useState, useEffect } from "react";
-import { Container, Input, Button, Text, Navbar } from "@nextui-org/react";
+import {
+  Container,
+  Input,
+  Button,
+  Avatar,
+  Navbar,
+  Spacer,
+  useTheme
+} from "@nextui-org/react";
 import {
   MagnifyingGlassIcon,
   PlusIcon,
-  ChevronDoubleLeftIcon
+  ChevronDoubleRightIcon
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import {
@@ -15,7 +23,9 @@ import {
 } from "../../modules/AppContext";
 import { NoteTemplate } from './NewNote'
 
+
 const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
+  const { checked, type } = useTheme();
   const router = useRouter();
   const currentNote = useNote();
   const setCurrentNote = useDispatchNote();
@@ -36,6 +46,17 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
     router.push(`/note/${newNote.id}`, undefined, { shallow: true });
   };
 
+  const createGroup = async () => {
+    let res = await fetch("/api/group", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: "defGroup", color: "#ffffff" })
+    });
+
+    const newGroup = await res.json();
+    console.log("Create successful", { newGroup });
+  };
+
   return (
     <Container
       display="flex"
@@ -43,33 +64,32 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
       direction="column"
       css={{
         position: "absolute",
-        "z-index": 3,
+        zIndex: 3,
         width: "100vw",
         transition: "transform 0.2s ease-in-out",
         transform: sidebarDisplay ? "translateX(-101%)" : "translateX(0%)",
         padding: "0",
         margin: "0",
-        background: "$accents2",
+        background: "$accents0",
         height: "100vh",
         float: "left",
         "@xs": {
           position: sidebarDisplay ? "fixed" : "relative",
-          "max-width": "20%",
-          "min-width": "250px"
+          maxWidth: "15%",
+          minWidth: "250px"
         }
       }}
     >
       <Navbar
-        variant="sticky"
         disableShadow
         disableBlur
         containerCss={{
-          background: "$accents2",
-          padding: "0 20px"
+          background: "$accents0",
+          padding: "0 10px",
+          gap: "10px"
         }}
       >
         <Navbar.Content css={{ flex: "1" }}>
-        
           <Navbar.Item css={{ flex: "1" }}>
             <Input
               clearable
@@ -80,11 +100,14 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
               contentLeft={
                 <MagnifyingGlassIcon style={{ height: "var(--icon-size)" }} />
               }
-              css={{ flex: "1" }}
+              css={{
+                flex: "1",
+                $$inputColor: type === "light" ? "white" : "#161616"
+              }}
             />
           </Navbar.Item>
         </Navbar.Content>
-        <Navbar.Content>
+        <Navbar.Content css={{ display: "flex", "@xs": { display: "none" } }}>
           <Navbar.Item>
             <Button
               auto
@@ -92,7 +115,9 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
               animated={false}
               onPress={handleSidebarDisplay}
               icon={
-                <ChevronDoubleLeftIcon style={{ height: "var(--icon-size)" }} />
+                <ChevronDoubleRightIcon
+                  style={{ height: "var(--icon-size)" }}
+                />
               }
             />
           </Navbar.Item>
@@ -101,28 +126,41 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
 
       <Container
         css={{
-          padding: "0 20px",
-          height: "100%",
-          "overflow-y": "scroll",
-          "overflow-x": "hidden"
+          overflowY: "auto",
+          overflowX: "hidden",
+          padding: "0",
+          height: "100%"
         }}
       >
-        <NoteList retrieved_notes={notes} showEditor={undefined} key={notes} handleSidebarDisplay={handleSidebarDisplay} />
+        <NoteList
+          retrieved_notes={notes}
+          showEditor={undefined}
+          key={notes}
+          handleSidebarDisplay={handleSidebarDisplay}
+          createNote={createNote}
+        />
       </Container>
-      <Container
-        css={{
-          padding: "20px"
-        }}
-      >
+
+      <Container css={{ padding: "20px 10px" }}>
         <Button
-          auto
           bordered
+          auto
           color="primary"
           icon={<PlusIcon style={{ height: "var(--icon-size)" }} />}
           onPress={() => createNote()}
           css={{ width: "100%" }}
         >
           Add new note
+        </Button>
+        <Button
+          bordered
+          auto
+          color="primary"
+          icon={<PlusIcon style={{ height: "var(--icon-size)" }} />}
+          onPress={() => createGroup()}
+          css={{ width: "100%" }}
+        >
+          Add new group
         </Button>
       </Container>
     </Container>
