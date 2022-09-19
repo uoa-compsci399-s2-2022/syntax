@@ -83,7 +83,7 @@ async function updateDrawing(files){
     let res = await fetch(`/api/s3/${key}`, {
       method: "PUT",
     });
-    const {data} = await res.json();
+    const {data, src} = await res.json();
     console.log(data)
     const url = data.url; //url for post
     const fields = data.fields; //formdata for post
@@ -105,7 +105,8 @@ async function updateDrawing(files){
         method: "POST",
         body: formData,
       });
-      return content.ok
+      await fetch(src + ".png", {cache: 'reload', mode: 'no-cors'})
+      return src + ".png"
     }
     return null
   }
@@ -188,9 +189,8 @@ export default function () {
       }
       if (src === null) {
         console.log("File size was too large")
-      } else if (drawContent === null) {
-        editor.chain().focus()?.setDrawing({src})?.run();
       }
+      editor.chain().focus()?.setDrawing({src})?.run();
     }
 		setDrawModal(false)
     setDrawContent(null)

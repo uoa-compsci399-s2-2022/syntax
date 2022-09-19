@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import aws from 'aws-sdk'
 import { resolve } from "path";
 
+const path = `http://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_BUCKET_REGION}.amazonaws.com/`
 //Set up S3 client with configurations
 const s3Client = new aws.S3({
     region: process.env.AWS_BUCKET_REGION,
@@ -79,6 +80,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         //return data for presigned post url and image location url
         res.status(200).json({ 
             data: data,
+            src: path+drawingKey
         });
         resolve()
       } catch (err) {
