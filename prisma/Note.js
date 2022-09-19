@@ -18,8 +18,7 @@ export const getNoteByID = async (id) => {
       id
     },
     include: {
-      user: true,
-      group: true
+      user: true
     }
   });
 
@@ -29,8 +28,7 @@ export const getNoteByID = async (id) => {
 export const getAllNotes = async () => {
   const notes = await prisma.note.findMany({
     include: {
-      user: true,
-      group: true
+      user: true
     }
   });
 
@@ -78,27 +76,3 @@ export const deleteNote = async (id, session) => {
   return deletedNote;
 };
 
-export const createGroup = async (name, color = "#ffffff", session) => {
-  const newGroup = await prisma.group.create({
-    data: {
-      name,
-      color,
-      user: { connect: { email: session?.user?.email } }
-    }
-  });
-  const group = await getGroupByID(newGroup.id);
-  return group;
-};
-
-export const getGroupByID = async (id) => {
-  const group = await prisma.group.findUnique({
-    where: {
-      id
-    },
-    include: {
-      user: true
-    }
-  });
-
-  return JSON.parse(JSON.stringify(group));
-};
