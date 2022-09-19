@@ -7,74 +7,84 @@ import { python } from "@codemirror/lang-python";
 import { StreamLanguage } from "@codemirror/language"
 import { clike } from "@codemirror/legacy-modes/mode/clike"
 import { useEffect, useState, useRef } from "react";
-import { useTheme } from "@nextui-org/react";
+import { useTheme, Button, Spacer } from "@nextui-org/react";
 import {
-	NodeViewWrapper
+    NodeViewWrapper
 } from "@tiptap/react";
 import { TIO, LANGUAGES as TioLanguages } from '@/node/tio';
 
 export const Extension = ({
-	node: {
-		attrs: { language: lang, code_content: doc, code_output: result },
-	},
-	updateAttributes,
-	extension,
+    node: {
+        attrs: { language: lang, code_content: doc, code_output: result },
+    },
+    updateAttributes,
+    extension,
 }) => {
-	const refEditor = useRef(null);
-	const [language, setLanguage] = useState();
-	const [input, setInput] = useState([]);
-	const [code, setCode] = useState();
-	const [output, setOutput] = useState(result);
-	const { checked, type } = useTheme();
-	
-	const run = async (event) => {
-		const compiled = await TIO.run(doc, input, lang);
-		updateAttributes({ code_output: compiled[0] })
-		console.log(compiled);
-	};
+    const refEditor = useRef(null);
+    const [language, setLanguage] = useState();
+    const [input, setInput] = useState([]);
+    const [code, setCode] = useState();
+    const [output, setOutput] = useState(result);
+    const { checked, type } = useTheme();
 
-	useEffect(() => {
-		let isDark = type === "dark" ? true : false;
-		const view = new EditorView({
-			doc,
-			extensions: [
-				basicSetup,
-				keymap.of([indentWithTab]),
-				javascript(),
-				EditorView.updateListener.of((v) => {
-					if (v.docChanged) {
-						updateAttributes({ code_content: v.state.doc.toString() });
-					}
-				}),
-				EditorView.theme({}, { dark: isDark })
-			],
-			parent: refEditor.current,
-		});
-		return () => {
-			view.destroy();
-		};
-	}, [type]);
+    const run = async(event) => {
+        const compiled = await TIO.run(doc, input, lang);
+        updateAttributes({ code_output: compiled[0] })
+        console.log(compiled);
+    };
 
-	return (
-		<NodeViewWrapper>
-			<div className="maindiv">
-				<select
-					contentEditable={false}
-					defaultValue={lang}
-					onChange={(event) => updateAttributes({ language: event.target.value })}
-				>
-					{TioLanguages.map((lang, index) => (
-						<option key={index} value={lang}>
-							{lang}
-						</option>
-					))}
-				</select>
-				<refEditor ref={refEditor} />
-				<button onClick={() => run()}>run</button>
-				<div className="output">
-					<span>{result}</span>
-				</div>
-			</div>
-		</NodeViewWrapper>
-	);
+    useEffect(() => {
+        let isDark = type === "dark" ? true : false;
+        const view = new EditorView({
+            doc,
+            extensions: [
+                basicSetup,
+                keymap.of([indentWithTab]),
+                javascript(),
+                EditorView.updateListener.of((v) => {
+                    if (v.docChanged) {
+                        updateAttributes({ code_content: v.state.doc.toString() });
+                    }
+                }),
+                EditorView.theme({}, { dark: isDark })
+            ],
+            parent: refEditor.current,
+        });
+        return () => {
+            view.destroy();
+        };
+    }, [type]);
+
+    return ( <
+        NodeViewWrapper >
+        <
+        div className = "maindiv" >
+        <
+        select contentEditable = { false }
+        defaultValue = { lang }
+        onChange = {
+            (event) => updateAttributes({ language: event.target.value })
+        } > {
+            TioLanguages.map((lang, index) => ( <
+                option key = { index }
+                value = { lang } > { lang } <
+                /option>
+            ))
+        } <
+        /select> <
+        refEditor ref = { refEditor }
+        />  <
+        Spacer y = { 0.5 }
+        /> <
+        Button bordered responsive auto ghost size = 'xs'
+        onClick = {
+            () => run()
+        } > Run Code < /Button> <
+        div className = "output" >
+        <
+        span > { result } < /span> < /
+        div > <
+        /div> < /
+        NodeViewWrapper >
+    );
 };
