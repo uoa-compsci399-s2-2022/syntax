@@ -14,9 +14,11 @@ import Link from "@tiptap/extension-link";
 import { useEffect, useState, useRef } from "react";
 import Menubar from "./Menubar.js";
 import { TipTapCustomImage } from "@/node/Image";
+import { Extension } from '@tiptap/core'
 import { UploadFn } from "@/node/upload_image";
 import { debounce } from "lodash";
 import { Container, Button, Spacer } from "@nextui-org/react";
+import { EditorView } from 'prosemirror-view'
 import {
 	useNote,
 	useDispatchNote,
@@ -25,6 +27,10 @@ import {
 } from "@/modules/AppContext";
 import { CodeBlockNode } from './CodeMirrorNode';
 
+EditorView.prototype.updateState = function updateState(state) {
+	if (!this.docView) return // This prevents the matchesNode error on hot reloads
+	this.updateStateInner(state, this.state.plugins != state.plugins)
+ }
 async function upload(file) {
   //fetch data from endpoint for presigned link and image src
   let res = await fetch("/api/s3/", {
@@ -84,6 +90,7 @@ export default function () {
     extensions: [
       StarterKit.configure({
         codeBlock: false,
+		  code: false,
         bulletList: false 
       }),
       Underline,
@@ -103,9 +110,6 @@ export default function () {
       CodeBlockNode,
       TipTapCustomImage(upload)
     ],
-    HTMLAttributes: {
-      class: "my-custom-heading"
-    },
     content: currentNote.body
   });
   editor?.on("update", ({ editor }) => {
@@ -121,13 +125,6 @@ export default function () {
 		editor?.commands?.setContent(currentNote.body);
 	}, [currentNote.body]);
 
-  // console.log("Editor Rendered", currentNote.id);
-
-	// useEffect(() => {
-	// 	return () =>{
-	// 		debounceSave.current.cancel()
-	// 	}
-	// }, []);
 
   return (
     <Container

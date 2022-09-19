@@ -104,7 +104,7 @@ export default ({ editor }) => {
         addLink();
         break;
       case "codeBlock":
-        editor.chain().focus().toggleCodeBlock().run();
+        editor.chain().focus().insertcodeBlock().run();
         break;
       case "drawing":
         break;

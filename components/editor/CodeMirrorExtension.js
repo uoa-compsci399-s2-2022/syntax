@@ -32,7 +32,7 @@ export const Extension = ({
 		updateAttributes({ code_output: compiled[0] })
 		console.log(compiled);
 	};
-
+  
 	useEffect(() => {
 		let isDark = type === "dark" ? true : false;
 		const view = new EditorView({
@@ -57,7 +57,7 @@ export const Extension = ({
 
 	return (
 		<NodeViewWrapper>
-			<div className="maindiv">
+			<div className="maindiv" contentEditable={false}>
 				<select
 					contentEditable={false}
 					defaultValue={lang}
@@ -69,7 +69,7 @@ export const Extension = ({
 						</option>
 					))}
 				</select>
-				<refEditor ref={refEditor} />
+				<div ref={refEditor} />
 				<button onClick={() => run()}>run</button>
 				<div className="output">
 					<span>{result}</span>
