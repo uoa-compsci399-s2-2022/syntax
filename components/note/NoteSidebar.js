@@ -21,7 +21,7 @@ import {
   useNotes,
   useDispatchNotes
 } from "../../modules/AppContext";
-import { createGroup } from "../../prisma/Note";
+
 
 const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
   const { checked, type } = useTheme();
@@ -46,10 +46,10 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
   };
 
   const createGroup = async () => {
-    let res = await fetch("/api/note", {
+    let res = await fetch("/api/group", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: "defGroup" })
+      body: JSON.stringify({ name: "defGroup", color: "#ffffff" })
     });
 
     const newGroup = await res.json();

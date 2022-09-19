@@ -5,15 +5,7 @@ export const createNote = async (title, body, session) => {
     data: {
       title,
       body,
-      user: { connect: { email: session?.user?.email } },
-      group: {
-        connectOrCreate: {
-          where: {
-            userId: session?.user?.id,
-          },
-          create: { userId: session?.user?.id, name: "Ungrouped" }
-        }
-      }
+      user: { connect: { email: session?.user?.email } }
     }
   });
   const note = await getNoteByID(newNote.id);
