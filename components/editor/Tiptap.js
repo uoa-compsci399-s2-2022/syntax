@@ -1,4 +1,9 @@
-import { EditorContent, useEditor } from "@tiptap/react";
+import {
+	EditorContent, useEditor,
+	ReactNodeViewRenderer,
+	NodeViewWrapper,
+	NodeViewContent,
+} from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import BulletList from "@tiptap/extension-bullet-list";
 import Underline from "@tiptap/extension-underline";
@@ -13,11 +18,12 @@ import { UploadFn } from "@/node/upload_image";
 import { debounce } from "lodash";
 import { Container, Button, Spacer } from "@nextui-org/react";
 import {
-  useNote,
-  useDispatchNote,
-  useNotes,
-  useDispatchNotes
+	useNote,
+	useDispatchNote,
+	useNotes,
+	useDispatchNotes
 } from "@/modules/AppContext";
+import { CodeBlockNode } from './CodeMirrorNode';
 
 async function upload(file) {
   //fetch data from endpoint for presigned link and image src
@@ -46,37 +52,38 @@ async function upload(file) {
 }
 
 export default function () {
-  const notesc = useNotes();
-  const setNotes = useDispatchNotes();
-  const currentNote = useNote();
-  const setCurrentNote = useDispatchNote();
-  const [file, setFile] = useState();
-  const debounceSave = useRef(
-    debounce(async (criteria) => {
-      saveContent(criteria);
-    }, 1000)
-  ).current;
+	const notesc = useNotes();
+	const setNotes = useDispatchNotes();
+	const currentNote = useNote();
+	const setCurrentNote = useDispatchNote();
+	const [file, setFile] = useState();
+	const debounceSave = useRef(
+		debounce(async (criteria) => {
+			saveContent(criteria);
+		}, 1000)
+	).current;
 
-  const saveContent = async (content) => {
-    console.log("editor debounce", content);
-    let note = {
-      id: content.id,
-      title: content.title,
-      body: content.json
-    };
-    let res = await fetch("/api/note", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(note)
-    });
+	const saveContent = async (content) => {
+		console.log("editor debounce", content);
+		let note = {
+			id: content.id,
+			title: content.title,
+			body: content.json
+		};
+		let res = await fetch("/api/note", {
+			method: "PUT",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(note)
+		});
 
-    const updatedNote = await res.json();
-    setNotes({ note: updatedNote, type: "edit" });
-  };
+		const updatedNote = await res.json();
+		setNotes({ note: updatedNote, type: "edit" });
+	};
 
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
+        codeBlock: false,
         bulletList: false 
       }),
       Underline,
@@ -93,6 +100,7 @@ export default function () {
           class: "editor-link"
         }
       }),
+      CodeBlockNode,
       TipTapCustomImage(upload)
     ],
     HTMLAttributes: {
@@ -109,11 +117,17 @@ export default function () {
     });
   });
 
+  useEffect(() => {
+		editor?.commands?.setContent(currentNote.body);
+	}, [currentNote.body]);
+
   // console.log("Editor Rendered", currentNote.id);
 
-  useEffect(() => {
-    editor?.commands?.setContent(currentNote.body);
-  }, [editor, currentNote.body]);
+	// useEffect(() => {
+	// 	return () =>{
+	// 		debounceSave.current.cancel()
+	// 	}
+	// }, []);
 
   return (
     <Container

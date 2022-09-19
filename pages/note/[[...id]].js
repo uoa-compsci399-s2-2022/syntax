@@ -33,10 +33,11 @@ export const getServerSideProps = async ({ req, res, params }) => {
   var note;
   if (id && id.length == 1) {
     note = await getNoteByID(id[0]);
+	 console.log(note);
   } else {
     note = {
-      title: "default",
-      body: "start typing",
+      title: "Hello 👋",
+      body: "Select a note or start typing here to get started…",
       updatedAt: Date.now(),
       user: session?.user,
     };

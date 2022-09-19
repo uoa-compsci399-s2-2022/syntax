@@ -28,7 +28,6 @@ export default ({ editor }) => {
   if (!editor) {
     return null;
   }
-
   const iconSize = "1.5em";
   const iconColor = "var(--nextui-colors-text)";
   const [selectedTextLevel, setSelectedTextLevel] = useState(["Normal text"]);
