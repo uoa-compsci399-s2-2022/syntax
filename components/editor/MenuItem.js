@@ -1,6 +1,6 @@
 import { Tooltip, Button, styled } from "@nextui-org/react";
 
-const MenuItem = ({ icon, title, action, isActive = null, css, breakpoint }) => {
+const MenuItem = ({ icon, label, action, isActive = null, css, breakpoint }) => {
   const breakpointStyle = {}
   if (breakpoint) {
     if (breakpoint === "sm") {
@@ -11,7 +11,7 @@ const MenuItem = ({ icon, title, action, isActive = null, css, breakpoint }) => 
   }
 
   return (
-    <Tooltip content={title}>
+    <Tooltip content={label}>
       <Button
         auto
         className={`menu-item${isActive && isActive() ? " is-active" : ""}`}
