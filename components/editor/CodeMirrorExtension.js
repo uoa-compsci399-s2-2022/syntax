@@ -7,7 +7,7 @@ import { python } from "@codemirror/lang-python";
 import { StreamLanguage } from "@codemirror/language"
 import { clike } from "@codemirror/legacy-modes/mode/clike"
 import { useEffect, useState, useRef } from "react";
-import { useTheme, Button, Spacer } from "@nextui-org/react";
+import { useTheme, Button, Spacer, Dropdown } from "@nextui-org/react";
 import {
     NodeViewWrapper
 } from "@tiptap/react";
@@ -59,19 +59,29 @@ export const Extension = ({
         NodeViewWrapper >
         <
         div className = "maindiv" >
+
         <
-        select contentEditable = { false }
-        defaultValue = { lang }
-        onChange = {
-            (event) => updateAttributes({ language: event.target.value })
+        Dropdown >
+        <
+        Dropdown.Button light css = {
+            { tt: 'capitalize' }
+        } > { lang } < /Dropdown.Button> <
+        Dropdown.Menu items = { TioLanguages }
+        onAction = {
+            (key) => {
+                updateAttributes({ language: TioLanguages[key] });
+            }
         } > {
             TioLanguages.map((lang, index) => ( <
-                option key = { index }
+                Dropdown.Item key = { index }
                 value = { lang } > { lang } <
-                /option>
+                /Dropdown.Item>
             ))
         } <
-        /select> <
+        /Dropdown.Menu> < /
+        Dropdown >
+
+        <
         refEditor ref = { refEditor }
         />  <
         Spacer y = { 0.5 }
@@ -84,7 +94,11 @@ export const Extension = ({
         <
         span > { result } < /span> < /
         div > <
-        /div> < /
+        /div> 
+
+
+        <
+        /
         NodeViewWrapper >
     );
 };
