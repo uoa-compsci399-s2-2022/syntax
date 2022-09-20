@@ -55,50 +55,37 @@ export const Extension = ({
         };
     }, [type]);
 
-    return ( <
-        NodeViewWrapper >
-        <
-        div className = "maindiv" >
+    return ( <NodeViewWrapper>
+        <div className = "maindiv" >
 
-        <
-        Dropdown >
-        <
-        Dropdown.Button light css = {
+        <Dropdown>
+        <Dropdown.Button light css = {
             { tt: 'capitalize' }
-        } > { lang } < /Dropdown.Button> <
-        Dropdown.Menu items = { TioLanguages }
+        } > { lang } </Dropdown.Button>  
+        <Dropdown.Menu items = { TioLanguages }
         onAction = {
             (key) => {
                 updateAttributes({ language: TioLanguages[key] });
             }
         } > {
-            TioLanguages.map((lang, index) => ( <
-                Dropdown.Item key = { index }
-                value = { lang } > { lang } <
-                /Dropdown.Item>
+            TioLanguages.map((lang, index) => ( 
+                <Dropdown.Item key = { index }
+                value = { lang } > { lang } </Dropdown.Item>
             ))
-        } <
-        /Dropdown.Menu> < /
-        Dropdown >
+        } </Dropdown.Menu> 
+        </Dropdown >
 
-        <
-        refEditor ref = { refEditor }
-        />  <
-        Spacer y = { 0.5 }
-        /> <
-        Button bordered responsive auto ghost size = 'xs'
+        <refEditor ref = { refEditor } />   
+        <Spacer y = { 0.5 }/>  
+        <Button bordered responsive auto ghost size = 'xs'
         onClick = {
             () => run()
-        } > Run Code < /Button> <
-        div className = "output" >
-        <
-        span > { result } < /span> < /
-        div > <
-        /div> 
+        } > Run Code </Button>  
+        <div className = "output" >
+        <span> { result } </span>  
+        </div> 
+        </div> 
 
-
-        <
-        /
-        NodeViewWrapper >
+        </NodeViewWrapper >
     );
 };
