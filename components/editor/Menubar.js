@@ -21,7 +21,9 @@ import {
   MdVideocam,
   MdOutlineImage,
   MdInsertLink,
-  MdAdd
+  MdAdd,
+  MdOutlineUndo,
+  MdOutlineRedo
 } from "react-icons/md";
 
 export default ({ editor }) => {
@@ -84,6 +86,12 @@ export default ({ editor }) => {
         break;
       case "clear-formatting":
         editor.chain().focus().clearNodes().unsetAllMarks().run();
+        break;
+      case "undo":
+        editor.chain().focus().undo().run();
+        break;
+      case "redo":
+        editor.chain().focus().redo().run();
         break;
     }
   };
@@ -378,6 +386,18 @@ export default ({ editor }) => {
               >
                 Clear formatting
               </Dropdown.Item>
+              <Dropdown.Item
+                icon={<MdOutlineUndo size={iconSize} color={iconColor} />}
+                key="undo"
+              >
+                Undo
+              </Dropdown.Item>
+              <Dropdown.Item
+                icon={<MdOutlineRedo size={iconSize} color={iconColor} />}
+                key="redo"
+              >
+                Redo
+              </Dropdown.Item>
             </Dropdown.Section>
           </Dropdown.Menu>
         </Dropdown>
@@ -480,20 +500,6 @@ export default ({ editor }) => {
           </Dropdown.Menu>
         </Dropdown>
       </Tooltip>
-
-      {/*<div className="menu-divider" />
-
-       Undo/redo buttons 
-      <MenuItem
-        title="Undo"
-        icon={<BiUndo size={iconSize} color={iconColor} />}
-        action={() => editor.chain().focus().undo().run()}
-      />
-      <MenuItem
-        title="Redo"
-        icon={<BiRedo size={iconSize} color={iconColor} />}
-        action={() => editor.chain().focus().redo().run()}
-      />*/}
     </Container>
   );
 };
