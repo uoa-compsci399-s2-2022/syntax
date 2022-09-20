@@ -3,6 +3,7 @@ import ExportModal from "@/components/modal/ExportModal";
 import DeleteModal from "@/components/modal/DeleteModal";
 import { Avatar, Dropdown, Button, Navbar } from "@nextui-org/react";
 import { useState, useEffect } from "react";
+import dynamic from 'next/dynamic'
 import {
 	EllipsisHorizontalIcon,
 	TrashIcon,
@@ -18,6 +19,8 @@ import {
 	useDispatchNotes
 } from "../../modules/AppContext";
 
+
+  
 
 const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 	const [selectedKey, setSelectedKey] = useState();
@@ -49,6 +52,48 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 			console.log(error);
 		}
 	};
+	const exportType = {
+		"Markdown": 'md',
+		"HTML": 'html',
+		"PDF": 'html'
+	}
+	const exportNoteHandler = async (fileType) => {
+		try{
+			console.log(fileType)
+			if (fileType ==="HTML"){
+				let res = await fetch(`/api/note/${currentNote.id}/export/html`, {
+					method: "GET",
+				});
+				let { text } = await res.json()
+				console.log(text)
+				const blob = new Blob([text], {type: "text/html"})
+				const link = document.createElement('a');
+				link.href = URL.createObjectURL(blob);
+				link.setAttribute('download', `${currentNote.title}.html`);
+				link.click();
+			} else if (fileType ==="Markdown") {
+				const res = await fetch(`/api/note/${currentNote.id}/export/md`, {
+					method: "GET",
+				});
+				let { text } = await res.json()
+				const blob = new Blob([text], {type: "text/markdown"})
+				const link = document.createElement('a');
+				link.href = URL.createObjectURL(blob);
+				link.setAttribute('download', `${currentNote.title}.md`);
+				link.click();
+			}
+			else if (fileType === "PDF"){
+				const res = await fetch(`/api/note/${currentNote.id}/export/html`, {
+					method: "GET",
+				});
+				let {text} = await res.json()
+				const html2pdf = (await import("html-to-pdf-js")).default
+				html2pdf().from(text).save(`${currentNote.title}`)
+			}
+		} catch (error) {
+			console.log(error)
+		}
+	}
 
 	useEffect(() => {
 		switch (selectedKey) {
@@ -141,7 +186,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 						</Dropdown.Menu>
 					</Dropdown>
 				</Navbar.Item>
-				<ExportModal open={exportModal} closeHandler={closeHandler} />
+				<ExportModal open={exportModal} oncloseHandler={closeHandler} closeHandler={exportNoteHandler} />
 				<DeleteModal open={deleteModal} onclosehandler={closeHandler} closeHandler={deleteNoteHandler} />
 				<SettingsModal open={settingsModal} closeHandler={closeHandler} />
 			</Navbar.Content>
