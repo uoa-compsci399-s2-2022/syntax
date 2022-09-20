@@ -7,7 +7,7 @@ import Subscript from "@tiptap/extension-subscript";
 import Youtube from "@tiptap/extension-youtube";
 import Link from "@tiptap/extension-link";
 import { useEffect, useState, useRef } from "react";
-import Menubar from "./Menubar.js";
+import Toolbar from "./Toolbar.js";
 import { TipTapCustomImage } from "@/node/Image";
 import { UploadFn } from "@/node/upload_image";
 import { debounce } from "lodash";
@@ -126,7 +126,7 @@ export default function () {
         "@xs": { "flex-direction": "column" }
       }}
     >
-      <Menubar editor={editor} />
+      <Toolbar editor={editor} />
       <Spacer />
       <EditorContent
         editor={editor}
