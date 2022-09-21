@@ -141,7 +141,7 @@ const SearchModal = ({ open, closeHandler }) => {
               <Container css={{ padding: "0" }}>
                 {exampleNotes.map((note, index) => (
                   <Container
-                    key={index}
+                    key={note.title + index}
                     css={{
                       padding: "10px",
                       borderRadius: "12px",

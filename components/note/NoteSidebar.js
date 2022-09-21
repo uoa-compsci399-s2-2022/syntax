@@ -83,35 +83,20 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
       >
         <Navbar.Content css={{ flex: "1" }}>
           <Navbar.Item css={{ flex: "1" }}>
-            <Input
-              clearable
-              aria-label="Notes search bar"
-              placeholder="Search notes"
-              type="search"
-              animated={false}
-              contentLeft={
+            <Button
+              auto
+              bordered
+              onPress={setSearchModal}
+              icon={
                 <MagnifyingGlassIcon style={{ height: "var(--icon-size)" }} />
               }
               css={{ flex: "1" }}
-            />
+            >
+              Search notes
+            </Button>
           </Navbar.Item>
         </Navbar.Content>
         <Navbar.Content>
-          <Tooltip content="Advanced search" placement="bottom">
-            <Navbar.Item>
-              <Button
-                auto
-                bordered
-                animated={false}
-                onPress={setSearchModal}
-                icon={
-                  <AdjustmentsHorizontalIcon
-                    style={{ height: "var(--icon-size)" }}
-                  />
-                }
-              />
-            </Navbar.Item>
-          </Tooltip>
           <Navbar.Item css={{ display: "flex", "@xs": { display: "none" } }}>
             <Button
               auto
