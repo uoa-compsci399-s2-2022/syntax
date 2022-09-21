@@ -4,10 +4,9 @@ import {
   Button,
   Dropdown,
   Container,
-  Row,
-  Text
+  Row
 } from "@nextui-org/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 const SearchModal = ({ open, closeHandler }) => {
