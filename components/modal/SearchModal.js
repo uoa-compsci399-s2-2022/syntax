@@ -25,32 +25,59 @@ const SearchModal = ({ open, closeHandler }) => {
     "created-desc": "Created (descending)"
   };
 
+  {
+    /* Filler content to preview the modal with scrollbar */
+  }
   const exampleNotes = [
-    { title: "Test 1", updatedAt: "Date" },
-    { title: "Test 2", updatedAt: "Date" },
-    { title: "Test 3", updatedAt: "Date" }
+    { title: "Note Title 1", updatedAt: "Date" },
+    { title: "Note Title 2", updatedAt: "Date" },
+    { title: "Note Title 3", updatedAt: "Date" },
+    { title: "Note Title 4", updatedAt: "Date" },
+    { title: "Note Title 5", updatedAt: "Date" },
+    { title: "Note Title 6", updatedAt: "Date" },
+    { title: "Note Title 7", updatedAt: "Date" },
+    { title: "Note Title 8", updatedAt: "Date" },
+    { title: "Note Title 9", updatedAt: "Date" },
+    { title: "Note Title 10", updatedAt: "Date" },
+    { title: "Note Title 11", updatedAt: "Date" },
+    { title: "Note Title 12", updatedAt: "Date" },
+    { title: "Note Title 13", updatedAt: "Date" },
+    { title: "Note Title 14", updatedAt: "Date" },
+    { title: "Note Title 15", updatedAt: "Date" },
+    { title: "Note Title 16", updatedAt: "Date" },
+    { title: "Note Title 17", updatedAt: "Date" },
+    { title: "Note Title 18", updatedAt: "Date" }
   ];
 
   return (
     <Modal
       blur
+      scroll
       closeButton
       open={open}
       onClose={closeHandler}
       width="600px"
       css={{ margin: "10px" }}
     >
-      <Modal.Header>Advanced Search</Modal.Header>
-      <Modal.Body>
+      <Modal.Header
+        css={{
+          flexDirection: "column",
+          alignItems: "flex-start",
+          gap: "16px",
+          borderBottom: "1px solid $border",
+          marginTop: "16px"
+        }}
+      >
         <Input
           clearable
           aria-label="Advanced Search Bar"
-          placeholder="Search content..."
+          placeholder="Search notes..."
           type="search"
           animated={false}
           contentLeft={
             <MagnifyingGlassIcon style={{ height: "var(--icon-size)" }} />
           }
+          css={{ width: "100%" }}
         />
         <Container
           display="flex"
@@ -61,6 +88,7 @@ const SearchModal = ({ open, closeHandler }) => {
             auto
             bordered={titleChecked ? false : true}
             onPress={() => setTitleChecked(!titleChecked)}
+            css={{ border: "2px solid $primary" }}
           >
             Title
           </Button>
@@ -68,6 +96,7 @@ const SearchModal = ({ open, closeHandler }) => {
             auto
             bordered={contentChecked ? false : true}
             onPress={() => setContentChecked(!contentChecked)}
+            css={{ border: "2px solid $primary" }}
           >
             Content
           </Button>
@@ -75,33 +104,64 @@ const SearchModal = ({ open, closeHandler }) => {
             auto
             bordered={codeChecked ? false : true}
             onPress={() => setCodeChecked(!codeChecked)}
+            css={{ border: "2px solid $primary" }}
           >
             Code
           </Button>
         </Container>
-        <hr style={{ marginBottom: "0" }} />
-        <Dropdown>
-          <Dropdown.Button
-            light
-            animated="false"
-            css={{ width: "min-content", padding: "0" }}
-          >
-            {sortOptions[selectedSort]}
-          </Dropdown.Button>
-          <Dropdown.Menu aria-label="Sort Options" onAction={setSelectedSort}>
-            {Object.keys(sortOptions).map((option) => (
-              <Dropdown.Item key={option}>{sortOptions[option]}</Dropdown.Item>
-            ))}
-          </Dropdown.Menu>
-        </Dropdown>
-        <Container css={{ padding: "0" }}>
-          {exampleNotes.map((note, index) => (
-            <Row>
-              <Text h4>{note.title}</Text>
-              <Text>{note.updatedAt}</Text>
-            </Row>
-          ))}
-        </Container>
+      </Modal.Header>
+      <Modal.Body>
+        {exampleNotes.length > 0 ? (
+          <>
+            <Dropdown>
+              <Dropdown.Button
+                light
+                animated="false"
+                css={{
+                  paddingLeft: "10px",
+                  margin: "0",
+                  width: "min-content",
+                  minHeight: "36px"
+                }}
+              >
+                {sortOptions[selectedSort]}
+              </Dropdown.Button>
+              <Dropdown.Menu
+                aria-label="Sort Options"
+                onAction={setSelectedSort}
+              >
+                {Object.keys(sortOptions).map((option) => (
+                  <Dropdown.Item key={option}>
+                    {sortOptions[option]}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+            <a>
+              <Container css={{ padding: "0" }}>
+                {exampleNotes.map((note, index) => (
+                  <Container
+                    key={index}
+                    css={{
+                      padding: "10px",
+                      borderRadius: "12px",
+                      "&:hover": {
+                        background: "$background"
+                      }
+                    }}
+                  >
+                    <Row>{note.title}</Row>
+                    <Row css={{ color: "$accents6" }}>{note.updatedAt}</Row>
+                  </Container>
+                ))}
+              </Container>
+            </a>
+          </>
+        ) : (
+          <Container display="flex" justify="center">
+            No results
+          </Container>
+        )}
       </Modal.Body>
       <Modal.Footer></Modal.Footer>
     </Modal>
