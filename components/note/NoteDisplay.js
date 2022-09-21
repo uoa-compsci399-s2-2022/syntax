@@ -51,21 +51,37 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
             animated={false}
             initialValue={currentNote.title}
         ></Input>*/}
-          <table className="note-metadata-table" style={{ "text-align": "left" }}>
-          <tbody>
-            <tr>
-              <th>Created by</th>
-              <td>{note.user.name}</td>
-            </tr>
-            <tr>
-              <th>Last modified</th>
-              <td>{new Date(currentNote.updatedAt).toLocaleString('en-us', { year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric"}) }</td>
-            </tr>
+          <table
+            className="note-metadata-table"
+            style={{ "text-align": "left" }}
+          >
+            <tbody>
+              <tr>
+                <th>Created by</th>
+                <td>{note.user.name}</td>
+              </tr>
+              <tr>
+                <th>Last modified</th>
+                <td>
+                  {new Date(currentNote.updatedAt).toLocaleString("en-us", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric"
+                  })}
+                </td>
+              </tr>
             </tbody>
           </table>
-          <Spacer />
-          <hr />
-          {/*<ImageEditor/>*/}
+          <Spacer
+            css={{
+              marginLeft: "0",
+              width: "100%",
+              borderBottom: "1px solid $border",
+              "@xs": { border: "none" }
+            }}
+          />
           <Tiptap noteContent={currentNote.body} />
         </Container>
         <Spacer />

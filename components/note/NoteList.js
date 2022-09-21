@@ -37,7 +37,7 @@ const NoteList = ({ retrieved_notes, handleSidebarDisplay }) => {
   return (
     <div>
       {notes.length > 0 ? (
-        <ul style={{ margin: "20px 0 20px 0" }}>
+        <ul style={{ margin: "20px 0 20px 0"}}>
           {notes.map((note) => (
             <li key={note.id} style={{ marginBottom: "20px" }}>
               <a
