@@ -1,31 +1,37 @@
-import { Button, Modal, Dropdown } from "@nextui-org/react";
+import { Button, Modal, Dropdown, Grid } from "@nextui-org/react";
 import { useState } from "react";
-
-
 
 const ExportModal = ({ open, oncloseHandler, closeHandler }) => {
   const [selected, setSelected] = useState(["HTML"]);
   return (
     <Modal open={open} onClose={oncloseHandler} css={{ margin: "10px" }}>
       <Modal.Header>Export Note</Modal.Header>
-      <Modal.Body>Export as 
-        <Dropdown>
-          <Dropdown.Button flat color="secondary">
-            {selected}
-          </Dropdown.Button>
-          <Dropdown.Menu
-            aria-label="Single selection actions"
-            color="secondary"
-            disallowEmptySelection
-            selectionMode="single"
-            selectedKeys={selected}
-            onAction={setSelected}
+      <Modal.Body>
+        <Grid.Container>
+          <Grid xs={6} alignItems="center">
+            Export as
+          </Grid>
+          <Grid
+            xs={6}
+            alignItems="center"
+            css={{ display: "flex", justifyContent: "flex-end" }}
           >
-            <Dropdown.Item key="HTML">HTML</Dropdown.Item>
-            <Dropdown.Item key="Markdown">Markdown</Dropdown.Item>
-            <Dropdown.Item key="PDF">PDF</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
+            <Dropdown>
+              <Dropdown.Button light>{selected}</Dropdown.Button>
+              <Dropdown.Menu
+                aria-label="Single selection actions"
+                disallowEmptySelection
+                selectionMode="single"
+                selectedKeys={selected}
+                onAction={setSelected}
+              >
+                <Dropdown.Item key="HTML">HTML</Dropdown.Item>
+                <Dropdown.Item key="Markdown">Markdown</Dropdown.Item>
+                <Dropdown.Item key="PDF">PDF</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </Grid>
+        </Grid.Container>
       </Modal.Body>
       <Modal.Footer>
         <Button auto bordered onClick={() => closeHandler(selected)}>
