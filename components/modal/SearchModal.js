@@ -64,7 +64,8 @@ const SearchModal = ({ open, closeHandler }) => {
           alignItems: "flex-start",
           gap: "16px",
           borderBottom: "1px solid $border",
-          marginTop: "16px"
+          marginTop: "16px",
+          paddingBottom: "16px"
         }}
       >
         <Input
