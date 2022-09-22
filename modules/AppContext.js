@@ -15,8 +15,11 @@ const notesReducer = (state, action) => {
 
 	// if "add"
 	// return an array of the previous state and the note object
-	state[note.groupId] = note;
-	if (type === "add") return state;
+	if (type === "add"){
+		let noteGroupIndex = state.groups.findIndex((x) => x.id === note.groupId);
+		state.groups[noteGroupIndex].notes.push(note);
+		return state;
+	} 
 
 	// if "replace"
 	// replace entire array with new value
@@ -40,13 +43,19 @@ const notesReducer = (state, action) => {
 	}
 
 	if (type === "edit") {
-		let noteIndex = state.findIndex((x) => x.id === note.id);
+		console.log(note);
+		console.log(state);
+		let noteGroupIndex = state.groups.findIndex((x) => x.id === note.groupId);
+
+		// if no match, return the previous state
+		if (noteGroupIndex < 0) return state;
+
+		let noteIndex = state.groups[noteGroupIndex].notes.findIndex((x) => x.id === note.id);
 
 		// if no match, return the previous state
 		if (noteIndex < 0) return state;
-
 		// update note at the defined index
-		state[noteIndex] = note;
+		state.groups[noteGroupIndex].notes[noteIndex] = note;
 	}
 	return state;
 };

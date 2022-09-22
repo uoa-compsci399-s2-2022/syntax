@@ -47,7 +47,7 @@ model Note {
   groupId     String?
   user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@unique([id, userId])
-  group Group?   @relation(fields: [groupId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  group Group?   @relation(fields: [groupId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   @@unique([id, groupId])
 }
 
@@ -58,7 +58,8 @@ model Group {
   color         String?
   notes         Note[]
   userId        String?
-  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  default       String? @unique
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade) 
   @@unique([id, userId])
 }
 

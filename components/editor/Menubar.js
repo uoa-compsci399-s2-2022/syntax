@@ -331,7 +331,7 @@ export default ({ editor }) => {
 
       {/* Core formatting options (bold, italic, inline code) */}
       {coreOptions.map((item, index) => (
-        <MenuItem {...item} />
+        <MenuItem {...item} key={index}/>
       ))}
 
       {/* Extended formatting options + clear formatting */}

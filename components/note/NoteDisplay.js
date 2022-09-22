@@ -53,8 +53,7 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
         ></Input>*/}
           <table
             className="note-metadata-table"
-            style={{ "text-align": "left" }}
-          >
+            style={{ "text-align": "left" }}>
             <tbody>
               <tr>
                 <th>Created by</th>
@@ -78,7 +77,7 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
                   <td>{currentNote.group.name}</td>
                 </tr>
               ) : (
-                ""
+                null
               )}
             </tbody>
           </table>

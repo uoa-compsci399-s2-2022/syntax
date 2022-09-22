@@ -9,9 +9,27 @@ export const createNote = async (title, body, session) => {
 				connect: {
 					email: session?.user?.email
 				}
-			}
-		}
+			},
+			group: {
+				connectOrCreate: {
+					where: {
+						default: session?.user?.id,
+					},
+					create: {
+						name: 'Notes',
+						color: '#FFFFFF',
+						default: session?.user?.id,
+						user: {
+							connect: {
+								email: session?.user?.email
+							}
+						},
+					},
+				},
+			},
+		},
 	});
+
 	const note = await getNoteByID(newNote.id);
 	return note;
 };
@@ -41,12 +59,16 @@ export const getNoteByID = async (id) => {
 
 export const getAllNotesByUserID = async (id) => {
 	console.log("called");
-	const notes = await prisma.note.findMany({
+	const notes = await prisma.user.findMany({
 		where: {
-			userId: id
+			id: id
 		},
-		include: {
-			group: true
+		select: {
+			groups: {
+				include: {
+					notes: true
+				}
+			}
 		}
 	});
 	return JSON.parse(JSON.stringify(notes));

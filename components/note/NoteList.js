@@ -20,12 +20,11 @@ const NoteList = ({ retrieved_notes, handleSidebarDisplay, createNote }) => {
 
   const currentNote = useNote();
   const setCurrentNote = useDispatchNote();
-	console.log(notes);
+	
   useEffect(() => {
     // replace notes in notes context state
     setNotes({ note: retrieved_notes, type: "replace" });
   }, [retrieved_notes]);
-
   const openNote = (note) => {
     note.action = "edit";
     setCurrentNote(note);
@@ -39,36 +38,22 @@ const NoteList = ({ retrieved_notes, handleSidebarDisplay, createNote }) => {
   return (
     <>
         <Container css={{ padding: "0", textOverflow: "break" }}>
-			{Object.values(notes).map((key) => (
+		  {("groups" in notes) ? (
+			notes.groups.map((key) => (
               <NoteGroup
-				  name={"Group 1"}
-				  color={"#ffa080"}
-				  notes={key}
+				  name={key.name}
+          		key={key.id}
+				  color={key.color}
+				  notes={key.notes}
 				  openNote={openNote}
 				  createNote={createNote}
 				/>
-            ))}
-          {/* <NoteGroup
-            name={"Group 1"}
-            color={"#ffa080"}
-            notes={notes}
-            openNote={openNote}
-            createNote={createNote}
-          />
-          <NoteGroup
-            name={"Group 2"}
-            color={"#ffc080"}
-            notes={notes}
-            openNote={openNote}
-            createNote={createNote}
-          />
-          <NoteGroup
-            name={"Group 3"}
-            color={"#a5d46a"}
-            notes={notes}
-            openNote={openNote}
-            createNote={createNote}
-          /> */}
+            ))
+				) : (
+					<div>
+					  <p>Oops.. no notes yet</p>
+					</div>
+				 )}
         </Container>
     </>
   );

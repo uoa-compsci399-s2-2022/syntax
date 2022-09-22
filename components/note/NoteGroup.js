@@ -21,7 +21,6 @@ const NoteGroup = ({ name, color = "white", notes, openNote, createNote }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { checked, type } = useTheme();
   const currentNote = useNote();
-
   const handleOpen = () => {
     setIsOpen((current) => !current);
   };
@@ -91,7 +90,8 @@ const NoteGroup = ({ name, color = "white", notes, openNote, createNote }) => {
         css={{
           padding: "0",
           overflow: "hidden",
-          transition: "max-height 0.3s ease",
+          transition: "max-height 0.3s",
+			 transitionTimingFunction: "cubic-bezier(0.46,0.03,0.52,0.96)",
           maxHeight: isOpen ? 320 * notes.length + "px" : "0"
         }}
       >
@@ -103,12 +103,12 @@ const NoteGroup = ({ name, color = "white", notes, openNote, createNote }) => {
         >
           {notes.map((note) => (
             <a
+            key={note.id}
               onClick={() => {
                 openNote(note);
               }}
             >
               <Row
-                key={note.id}
                 css={{
                   display: "block",
                   padding: "0.3rem calc(1rem + 0.5rem + 25px)",

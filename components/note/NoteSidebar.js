@@ -135,7 +135,6 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
         <NoteList
           retrieved_notes={notes}
           showEditor={undefined}
-          key={notes}
           handleSidebarDisplay={handleSidebarDisplay}
           createNote={createNote}
         />

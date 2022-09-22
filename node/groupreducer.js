@@ -1,7 +1,7 @@
-// 
-// 
-//  just testing the group reducer function to turn our notes into grouped objects
-// 
+// // 
+// // 
+// //  just testing the group reducer function to turn our notes into grouped objects
+// // 
 var notes = [{
 	"id": "63105bab77781cdfbe40a3ec",
 	"title": "Serial Test",
@@ -119,14 +119,22 @@ var notes = [{
 	"createdAt": "2022-09-20T11:54:20.806Z",
 	"updatedAt": "2022-09-20T11:54:20.807Z",
 	"userId": "62fcac1dfcffb8a6fac487e9",
-	"groupId": "Notes",
-	"group": {}
+	"groupId": null,
+	"group": null
 }
 ];
 
-function groupBy(arr) {
+const groupByReducer = (arr)  => {
 	return arr.reduce(function (memo, x) {
+		(x.groupId == null) && (x.groupId = "Notes");
+		(x.group == null) && (x.group = {
+			"id": "Notes",
+			"name": "Test note",
+			"color": null,
+			"userId": null
+		});
 		!(x.groupId in memo) && (memo[x.groupId] = x.group);
+		// console.log();
 		!(memo[x.groupId].notes) && (memo[x.groupId].notes = []);
 		delete x.group;
 		memo[x.groupId].notes.push(x);
@@ -134,4 +142,4 @@ function groupBy(arr) {
 	}, {});
 };
 
-console.log(groupBy(notes));
+export { groupByReducer };
