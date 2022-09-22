@@ -26,6 +26,14 @@ export const Extension = ({
     const [code, setCode] = useState();
     const [output, setOutput] = useState(result);
     const { checked, type } = useTheme();
+    
+    const langDict = {
+        'c-clang': 'C',
+        'cpp-clang': 'C++',
+        'java-jdk': 'Java',
+        'javascript-node': 'JavaScript',
+        'python3': 'Python'
+    }
 
     const run = async(event) => {
         const compiled = await TIO.run(doc, input, lang);
@@ -61,7 +69,7 @@ export const Extension = ({
         <Dropdown>
         <Dropdown.Button light css = {
             { tt: 'capitalize' }
-        } > { lang } </Dropdown.Button>  
+        } > { langDict[lang] } </Dropdown.Button>  
         <Dropdown.Menu items = { TioLanguages }
         onAction = {
             (key) => {
@@ -70,9 +78,9 @@ export const Extension = ({
         } > {
             TioLanguages.map((lang, index) => ( 
                 <Dropdown.Item key = { index }
-                value = { lang } > { lang } </Dropdown.Item>
+                value = { lang } > { langDict[lang] } </Dropdown.Item>
             ))
-        } </Dropdown.Menu> 
+            }</Dropdown.Menu> 
         </Dropdown >
 
         <refEditor ref = { refEditor } />   
