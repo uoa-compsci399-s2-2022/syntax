@@ -12,6 +12,8 @@ export const uploadImagePlugin = (upload: UploadFn) => {
 			handlePaste(view, event) {
 				console.log("----onhandlePaste image---");
 
+				event.preventDefault()
+
 				const items = Array.from(event.clipboardData?.items || []);
 				const { schema } = view.state;
 
@@ -35,18 +37,7 @@ export const uploadImagePlugin = (upload: UploadFn) => {
 								view.dispatch(transaction);
 							});
 						}
-					} else {
-						const reader = new FileReader();
-						reader.onload = readerEvent => {
-							const node = schema.nodes.image.create({
-								src: readerEvent.target?.result,
-							});
-							const transaction = view.state.tr.replaceSelectionWith(node);
-							view.dispatch(transaction);
-						};
-						if (!image) return;
-						reader.readAsDataURL(image);
-					}
+					} 
 				});
 
 				return false;

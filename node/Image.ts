@@ -34,6 +34,20 @@ declare module "@tiptap/core" {
 
 const IMAGE_INPUT_REGEX = /!\[(.+|:?)\]\((\S+)(?:(?:\s+)["'](\S+)["'])?\)/;
 
+async function tag(image, Key, Value){
+	const name = image.split(".com/").pop()
+	const body = {
+		tag: {
+			key: Key,
+			value: Value
+		}
+	}
+	let res = await fetch(`/api/s3/${name}`, {
+	method: "PATCH",
+	body: JSON.stringify(body)
+	});	
+}
+
 export const TipTapCustomImage = (uploadFn: UploadFn) => {
 	return Node.create<ImageOptions>({
 		name: "image",
@@ -116,7 +130,26 @@ export const TipTapCustomImage = (uploadFn: UploadFn) => {
 			};
 		},
 		
-
+		onTransaction(props){
+			const before = props.transaction.before.toJSON().content.filter(node => (node.type === 'image')).map(element => element.attrs.src);
+			const now = props.transaction.doc.content.toJSON().filter(node => (node.type === 'image')).map(element => element.attrs.src);
+			if (before !== now){
+				if (before.length > now.length){
+					const difference = before.filter(image => !now.includes(image))
+					difference.forEach(async image => {
+						console.log("image",image)
+						await tag(image, "USED", "False")
+					})
+				}
+				else if (now.length >= before.length){
+					const difference = now.filter(image => !before.includes(image));
+             		difference.forEach(async image => {
+						console.log("image",image)
+						await tag(image, "USED", "True")
+					})
+				}
+			}
+		},
 
         addInputRules() {
             return [

@@ -32,7 +32,24 @@ declare module "@tiptap/core" {
 
 const IMAGE_INPUT_REGEX = /!\[(.+|:?)\]\((\S+)(?:(?:\s+)["'](\S+)["'])?\)/;
 
-
+async function tag(drawing, Key, Value){
+	const name = drawing.split(".com/").pop()
+	const prefix = name.split(".")[0]
+	const body = {
+		tag: {
+			key: Key,
+			value: Value
+		}
+	}
+	let resDraw = await fetch(`/api/s3/${prefix}.png`, {
+		method: "PATCH",
+		body: JSON.stringify(body)
+	});	
+	let resContent = await fetch(`/api/s3/${prefix}.json`, {
+		method: "PATCH",
+		body: JSON.stringify(body)
+	});	
+}
 
 export const Drawing = () => {
 	return Node.create<ImageOptions>({
@@ -112,6 +129,25 @@ export const Drawing = () => {
 					},
 			};
 		},
+
+		onTransaction(props){
+			const before = props.transaction.before.toJSON().content.filter(node => (node.type === 'drawing')).map(element => element.attrs.src);
+			const now = props.transaction.doc.content.toJSON().filter(node => (node.type === 'drawing')).map(element => element.attrs.src);
+			if (before !== now){
+				if (before.length > now.length){
+					const difference = before.filter(drawing => !now.includes(drawing))
+					difference.forEach(async drawing => {
+						await tag(drawing, "USED", "False")
+					})
+				}
+				else if (now.length >= before.length){
+					const difference = now.filter(drawing => !before.includes(drawing));
+             		difference.forEach(async drawing => {
+						await tag(drawing, "USED", "True")
+					})
+				}
+			}
+		},
 		
         addInputRules() {
             return [
@@ -126,6 +162,5 @@ export const Drawing = () => {
                 }),
             ];
         },
-		//Plugin to be able to drag and drop images
 	});
 };
