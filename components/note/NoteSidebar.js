@@ -1,18 +1,18 @@
 import NoteList from "./NoteList";
+import SearchModal from "@/components/modal/SearchModal";
 import { useState, useEffect } from "react";
 import {
   Container,
-  Input,
   Button,
-  Avatar,
   Navbar,
-  Spacer,
-  useTheme
+  useTheme,
+  Dropdown,
 } from "@nextui-org/react";
 import {
   MagnifyingGlassIcon,
   PlusIcon,
-  ChevronDoubleRightIcon
+  ChevronDoubleRightIcon,
+  AdjustmentsHorizontalIcon
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import {
@@ -26,6 +26,7 @@ import { NoteTemplate } from './NewNote'
 
 const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
   const { checked, type } = useTheme();
+  const [searchModal, setSearchModal] = useState(false);
   const router = useRouter();
   const currentNote = useNote();
   const setCurrentNote = useDispatchNote();
@@ -55,6 +56,9 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
 
     const newGroup = await res.json();
     console.log("Create successful", { newGroup });
+  };
+  const closeModalHandler = () => {
+    setSearchModal(false);
   };
 
   return (
@@ -91,13 +95,11 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
       >
         <Navbar.Content css={{ flex: "1" }}>
           <Navbar.Item css={{ flex: "1" }}>
-            <Input
-              clearable
-              aria-label="Notes search bar"
-              placeholder="Search notes"
-              type="search"
-              animated={false}
-              contentLeft={
+            <Button
+              auto
+              bordered
+              onPress={setSearchModal}
+              icon={
                 <MagnifyingGlassIcon style={{ height: "var(--icon-size)" }} />
               }
               css={{
@@ -137,6 +139,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
           showEditor={undefined}
           handleSidebarDisplay={handleSidebarDisplay}
           createNote={createNote}
+          key={notes}
         />
       </Container>
 
@@ -152,6 +155,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
           Add new note
         </Button>
       </Container>
+      <SearchModal open={searchModal} closeHandler={closeModalHandler} />
     </Container>
   );
 };

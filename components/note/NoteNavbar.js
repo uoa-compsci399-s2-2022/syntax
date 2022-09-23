@@ -163,13 +163,13 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
             </Dropdown.Menu>
           </Dropdown>
         </Navbar.Item>
-        <SettingsModal open={settingsModal} closeHandler={closeHandler} />
         <ExportModal open={exportModal} closeHandler={closeHandler} />
         <DeleteModal
           open={deleteModal}
           onclosehandler={closeHandler}
           closeHandler={deleteNoteHandler}
         />
+        <SettingsModal open={settingsModal} closeHandler={closeHandler} />
       </Navbar.Content>
     </Navbar>
   );
