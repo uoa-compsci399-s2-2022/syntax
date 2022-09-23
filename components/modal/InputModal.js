@@ -24,7 +24,7 @@ const InputModal = ({ open, closeHandler, inputType }) => {
 					helperText={helperText}
 					helperColor="error"
 					placeholder={
-						inputType === "video" ? "Paste in Youtube URL" : "Paste in link"
+						`Paste ${inputType === "video" ? "Youtube URL" : "link"}`
 					}
 				/>
 			</Modal.Body>
