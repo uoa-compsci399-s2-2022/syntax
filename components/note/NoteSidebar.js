@@ -151,16 +151,6 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
         >
           Add new note
         </Button>
-        <Button
-          bordered
-          auto
-          color="primary"
-          icon={<PlusIcon style={{ height: "var(--icon-size)" }} />}
-          onPress={() => createGroup()}
-          css={{ width: "100%" }}
-        >
-          Add new group
-        </Button>
       </Container>
     </Container>
   );

@@ -9,7 +9,7 @@ import {
   useDispatchNotes
 } from "../../modules/AppContext";
 
-const NoteDisplay = ({ note, handleSidebarDisplay }) => {
+const NoteDisplay = ({ note }) => {
   const notesc = useNotes();
   const setNotes = useDispatchNotes();
 
@@ -32,7 +32,7 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
       <>
         <Head>
           <title>{currentNote.title}</title>
-          {/*<meta name="description" content={`By ${note.user.name}`} />*/}
+          <meta name="description" content={`By ${note.user.name}`} />
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <Container
@@ -45,12 +45,6 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
           <Text h1 css={{ overflowWrap: "break-word" }}>
             {currentNote.title}
           </Text>
-          {/*<Input
-            underlined
-            aria-label="Note Title"
-            animated={false}
-            initialValue={currentNote.title}
-        ></Input>*/}
           <table
             className="note-metadata-table"
             style={{ "text-align": "left" }}>
@@ -73,7 +67,7 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
               </tr>
               {currentNote.group ? (
                 <tr>
-                  <th>Folder</th>
+                  <th>Group</th>
                   <td>{currentNote.group.name}</td>
                 </tr>
               ) : (
