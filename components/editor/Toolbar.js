@@ -21,7 +21,9 @@ import {
   MdVideocam,
   MdOutlineImage,
   MdInsertLink,
-  MdAdd
+  MdAdd,
+  MdOutlineUndo,
+  MdOutlineRedo
 } from "react-icons/md";
 
 export default ({ editor }) => {
@@ -30,8 +32,17 @@ export default ({ editor }) => {
   }
   const iconSize = "1.5em";
   const iconColor = "var(--nextui-colors-text)";
-  const [selectedTextLevel, setSelectedTextLevel] = useState(["Normal text"]);
+  const [selectedTextStyle, setSelectedTextStyle] = useState(["Normal text"]);
   const [windowWidth, setWindowWidth] = useState(undefined);
+  const textStyleList = [
+    "Normal text",
+    "Heading 1",
+    "Heading 2",
+    "Heading 3",
+    "Heading 4",
+    "Heading 5",
+    "Heading 6"
+  ];
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -44,82 +55,36 @@ export default ({ editor }) => {
     }
   }, []);
 
-  const textLevelList = [
-    { label: "Normal text", value: "0" },
-    { label: "Heading 1", value: "1" },
-    { label: "Heading 2", value: "2" },
-    { label: "Heading 3", value: "3" },
-    { label: "Heading 4", value: "4" },
-    { label: "Heading 5", value: "5" },
-    { label: "Heading 6", value: "6" }
-  ];
+  editor.on("selectionUpdate", ({ editor }) => {
+    if (Object.keys(editor.getAttributes("heading")).length === 0) {
+      setSelectedTextStyle(textStyleList[0]);
+    } else {
+      setSelectedTextStyle(
+        textStyleList[editor.getAttributes("heading").level]
+      );
+    }
+  });
 
   const textStyleHandler = (key) => {
-    setSelectedTextLevel(key);
-    let textLevel = +key["currentKey"].charAt(key["currentKey"].length - 1);
-    if (isNaN(textLevel)) {
+    setSelectedTextStyle(key);
+    let textStyle = +key["currentKey"].charAt(key["currentKey"].length - 1);
+    if (isNaN(textStyle)) {
       editor.chain().focus().setParagraph().run();
     } else {
-      editor.chain().focus().toggleHeading({ level: textLevel }).run();
+      editor.chain().focus().toggleHeading({ level: textStyle }).run();
     }
   };
 
   const formattingHandler = (key) => {
-    switch (key) {
-      case "code":
-        editor.chain().focus().toggleCode().run();
-        break;
-      case "underline":
-        editor.chain().focus().toggleUnderline().run();
-        break;
-      case "strike":
-        editor.chain().focus().toggleStrike().run();
-        break;
-      case "subscript":
-        editor.chain().focus().toggleSubscript().run();
-        break;
-      case "superscript":
-        editor.chain().focus().toggleSuperscript().run();
-        break;
-      case "clear-formatting":
-        editor.chain().focus().clearNodes().unsetAllMarks().run();
-        break;
-    }
+    formattingOptions[key].action();
   };
 
   const listHandler = (key) => {
-    switch (key) {
-      case "bulletList":
-        editor.chain().focus().toggleBulletList().run();
-        break;
-      case "orderedList":
-        editor.chain().focus().toggleOrderedList().run();
-        break;
-    }
+    listOptions[key].action();
   };
 
   const insertOptionHandler = (key) => {
-    switch (key) {
-      case "link":
-        addLink();
-        break;
-      case "codeBlock":
-        editor.chain().focus().insertcodeBlock().run();
-        break;
-      case "drawing":
-        break;
-      case "image":
-        break;
-      case "video":
-        addYoutubeVideo();
-        break;
-      case "blockquote":
-        editor.chain().focus().toggleBlockquote().run();
-        break;
-      case "horizontalRule":
-        editor.chain().focus().setHorizontalRule().run();
-        break;
-    }
+    insertOptions[key].action();
   };
 
   const addYoutubeVideo = () => {
@@ -150,131 +115,148 @@ export default ({ editor }) => {
     }
   };
 
-  editor.on("selectionUpdate", ({ editor }) => {
-    if (Object.keys(editor.getAttributes("heading")).length === 0) {
-      setSelectedTextLevel(textLevelList[0].label);
-    } else {
-      setSelectedTextLevel(
-        textLevelList[editor.getAttributes("heading").level].label
-      );
-    }
-  });
-
   const coreOptions = [
     {
       icon: <MdFormatBold size={iconSize} color={iconColor} />,
-      title: "Bold",
+      label: "Bold",
       action: () => editor.chain().focus().toggleBold().run(),
       isActive: () => editor.isActive("bold")
     },
     {
       icon: <MdFormatItalic size={iconSize} color={iconColor} />,
-      title: "Italic",
+      label: "Italic",
       action: () => editor.chain().focus().toggleItalic().run(),
       isActive: () => editor.isActive("italic")
     },
     {
       icon: <MdCode size={iconSize} color={iconColor} />,
-      title: "Code",
+      label: "Code",
       action: () => editor.chain().focus().toggleCode().run(),
       isActive: () => editor.isActive("code"),
       css: { display: "none", "@sm": { display: "flex" } }
     }
   ];
 
-  const formattingOptions = [
-    {
+  const formattingOptions = {
+    code: {
       icon: <MdCode size={iconSize} color={iconColor} />,
-      title: "Code",
-      mark: "code",
+      label: "Code",
       action: () => editor.chain().focus().toggleCode().run(),
       isActive: () => editor.isActive("code"),
       breakpoint: "sm"
     },
-    {
+    underline: {
       icon: <MdFormatUnderlined size={iconSize} color={iconColor} />,
-      title: "Underline",
-      mark: "underline",
+      label: "Underline",
       action: () => editor.chain().focus().toggleUnderline().run(),
       isActive: () => editor.isActive("underline")
     },
-    {
+    strike: {
       icon: <MdStrikethroughS size={iconSize} color={iconColor} />,
-      title: "Strikethrough",
-      mark: "strike",
-      action: () => editor.chain().focus().toggleSubscript().run(),
+      label: "Strikethrough",
+      action: () => editor.chain().focus().toggleStrike().run(),
       isActive: () => editor.isActive("strike")
     },
-    {
+    subscript: {
       icon: <MdSubscript size={iconSize} color={iconColor} />,
-      title: "Subscript",
-      mark: "subscript",
-      action: () => editor.chain().focus().toggleSuperscript().run(),
+      label: "Subscript",
+      action: () => editor.chain().focus().toggleSubscript().run(),
       isActive: () => editor.isActive("subscript")
     },
-    {
+    superscript: {
       icon: <MdSuperscript size={iconSize} color={iconColor} />,
-      title: "Superscript",
-      mark: "superscript",
-      action: () => editor.chain().focus().clearNodes().unsetAllMarks().run(),
+      label: "Superscript",
+      action: () => editor.chain().focus().toggleSuperscript().run(),
       isActive: () => editor.isActive("superscript")
+    },
+    clearFormatting: {
+      icon: <MdFormatClear size={iconSize} color={iconColor} />,
+      label: "Clear formatting",
+      action: () => editor.chain().focus().clearNodes().unsetAllMarks().run()
+    },
+    undo: {
+      icon: <MdOutlineUndo size={iconSize} color={iconColor} />,
+      label: "Undo",
+      action: () => editor.chain().focus().undo().run()
+    },
+    redo: {
+      icon: <MdOutlineRedo size={iconSize} color={iconColor} />,
+      label: "Redo",
+      action: () => editor.chain().focus().redo().run()
     }
-  ];
+  };
 
-  const insertOptions = [
-    {
+  const listOptions = {
+    bulletList: {
+      icon: <MdFormatListBulleted size={iconSize} color={iconColor} />,
+      label: "Bulleted List",
+      action: () => editor.chain().focus().toggleBulletList().run(),
+      isActive: () => editor.isActive("bulletList"),
+      breakpoint: "md"
+    },
+    orderedList: {
+      icon: <MdFormatListNumbered size={iconSize} color={iconColor} />,
+      label: "Ordered List",
+      action: () => editor.chain().focus().toggleOrderedList().run(),
+      isActive: () => editor.isActive("orderedList"),
+      breakpoint: "md"
+    }
+  };
+
+  const insertOptions = {
+    link: {
       icon: <MdInsertLink size={iconSize} color={iconColor} />,
-      title: "Link",
+      label: "Link",
       key: "link",
-      action: () => insertOptionHandler("link"),
+      action: () => addLink(),
       isActive: () => editor.isActive("link"),
       breakpoint: "sm"
     },
-    {
+    codeBlock: {
       icon: <BiCodeBlock size={iconSize} color={iconColor} />,
-      title: "Code Block",
+      label: "Code Block",
       key: "codeBlock",
-      action: () => insertOptionHandler("codeBlock"),
+      action: () => editor.chain().focus().toggleCodeBlock().run(),
       isActive: () => editor.isActive("codeBlock"),
       breakpoint: "sm"
     },
-    {
+    drawing: {
       icon: <MdOutlineDraw size={iconSize} color={iconColor} />,
-      title: "Drawing",
+      label: "Drawing",
       key: "drawing",
-      action: () => insertOptionHandler("drawing"),
+      action: () => console.log("TO-DO"),
       breakpoint: "sm"
     },
-    {
+    image: {
       icon: <MdOutlineImage size={iconSize} color={iconColor} />,
-      title: "Image",
+      label: "Image",
       key: "image",
-      action: () => insertOptionHandler("image"),
+      action: () => console.log("TO-DO"),
       breakpoint: "md"
     },
-    {
+    video: {
       icon: <MdVideocam size={iconSize} color={iconColor} />,
-      title: "Video",
+      label: "Video",
       key: "video",
-      action: () => insertOptionHandler("video"),
+      action: () => addYoutubeVideo(),
       breakpoint: "md"
     },
-    {
+    blockquote: {
       icon: <MdFormatQuote size={iconSize} color={iconColor} />,
-      title: "Blockquote",
+      label: "Blockquote",
       key: "blockquote",
-      action: () => insertOptionHandler("blockquote"),
+      action: () => editor.chain().focus().toggleBlockquote().run(),
       isActive: () => editor.isActive("blockquote"),
       breakpoint: "md"
     },
-    {
+    horizontalRule: {
       icon: <MdHorizontalRule size={iconSize} color={iconColor} />,
-      title: "Divider",
+      label: "Divider",
       key: "horizontalRule",
-      action: () => insertOptionHandler("horizontalRule"),
+      action: () => editor.chain().focus().setHorizontalRule().run(),
       breakpoint: "md"
     }
-  ];
+  };
 
   return (
     <Container
@@ -306,7 +288,7 @@ export default ({ editor }) => {
         <Dropdown>
           <Dropdown.Button light css={{ padding: "10px", transition: "none" }}>
             {windowWidth > 960 ? (
-              selectedTextLevel
+              selectedTextStyle
             ) : (
               <MdFormatSize size={iconSize} />
             )}
@@ -315,13 +297,11 @@ export default ({ editor }) => {
             disallowEmptySelection
             aria-label="Text style selection"
             selectionMode="single"
-            selectedKeys={selectedTextLevel}
+            selectedKeys={selectedTextStyle}
             onSelectionChange={textStyleHandler}
           >
-            {textLevelList.map((textLevel) => (
-              <Dropdown.Item key={textLevel.label}>
-                {textLevel.label}
-              </Dropdown.Item>
+            {textStyleList.map((textStyle) => (
+              <Dropdown.Item key={textStyle}>{textStyle}</Dropdown.Item>
             ))}
           </Dropdown.Menu>
         </Dropdown>
@@ -356,28 +336,29 @@ export default ({ editor }) => {
             onAction={formattingHandler}
           >
             <Dropdown.Section aria-label="Extended Formatting Options">
-              {formattingOptions.map((item) => (
-                <Dropdown.Item
-                  icon={item.icon}
-                  key={item.mark}
-                  css={{
-                    background: editor.isActive(item.mark)
-                      ? "$neutralLight"
-                      : "",
-                    "@sm": { display: item.breakpoint === "sm" ? "none" : "" }
-                  }}
-                >
-                  {item.title}
-                </Dropdown.Item>
-              ))}
+              {Object.entries(formattingOptions)
+                .slice(0, -3)
+                .map(([key, item]) => (
+                  <Dropdown.Item
+                    icon={item.icon}
+                    key={key}
+                    css={{
+                      background: editor.isActive(key) ? "$neutralLight" : "",
+                      "@sm": { display: item.breakpoint === "sm" ? "none" : "" }
+                    }}
+                  >
+                    {item.label}
+                  </Dropdown.Item>
+                ))}
             </Dropdown.Section>
             <Dropdown.Section aria-label="Clear Formatting">
-              <Dropdown.Item
-                icon={<MdFormatClear size={iconSize} color={iconColor} />}
-                key="clear-formatting"
-              >
-                Clear formatting
-              </Dropdown.Item>
+              {Object.entries(formattingOptions)
+                .slice(-3)
+                .map(([key, item]) => (
+                  <Dropdown.Item icon={item.icon} key={key}>
+                    {item.label}
+                  </Dropdown.Item>
+                ))}
             </Dropdown.Section>
           </Dropdown.Menu>
         </Dropdown>
@@ -386,20 +367,9 @@ export default ({ editor }) => {
       <div className="menu-divider" />
 
       {/* List-related options*/}
-      <MenuItem
-        title="Bulleted List"
-        icon={<MdFormatListBulleted size={iconSize} color={iconColor} />}
-        action={() => listHandler("bulletList")}
-        isActive={() => editor.isActive("bulletList")}
-        css={{ display: "none", "@md": { display: "flex" } }}
-      />
-      <MenuItem
-        title="Ordered List"
-        icon={<MdFormatListNumbered size={iconSize} color={iconColor} />}
-        action={() => listHandler("orderedList")}
-        isActive={() => editor.isActive("orderedList")}
-        css={{ display: "none", "@md": { display: "flex" } }}
-      />
+      {Object.entries(listOptions).map(([key, item]) => (
+        <MenuItem {...item} />
+      ))}
 
       <Tooltip content={"Lists"}>
         <Dropdown>
@@ -416,26 +386,17 @@ export default ({ editor }) => {
             <MdFormatListBulleted size={iconSize} />
           </Dropdown.Button>
           <Dropdown.Menu aria-label="List selection" onAction={listHandler}>
-            <Dropdown.Item
-              icon={<MdFormatListBulleted />}
-              key="bulletList"
-              css={{
-                background: editor.isActive("bulletList") ? "$neutralLight" : ""
-              }}
-            >
-              Bulleted List
-            </Dropdown.Item>
-            <Dropdown.Item
-              icon={<MdFormatListNumbered />}
-              key="orderedList"
-              css={{
-                background: editor.isActive("orderedList")
-                  ? "$neutralLight"
-                  : ""
-              }}
-            >
-              Ordered List
-            </Dropdown.Item>
+            {Object.entries(listOptions).map(([key, item]) => (
+              <Dropdown.Item
+                icon={item.icon}
+                key={key}
+                css={{
+                  background: editor.isActive(key) ? "$neutralLight" : ""
+                }}
+              >
+                {item.label}
+              </Dropdown.Item>
+            ))}
           </Dropdown.Menu>
         </Dropdown>
       </Tooltip>
@@ -443,7 +404,7 @@ export default ({ editor }) => {
       <div className="menu-divider" />
 
       {/* Extended node options (image, drawing, code block, video, etc.) */}
-      {insertOptions.map((item) => (
+      {Object.entries(insertOptions).map(([key, item]) => (
         <MenuItem {...item} />
       ))}
 
@@ -464,36 +425,22 @@ export default ({ editor }) => {
             aria-label="Insert Options"
             onAction={insertOptionHandler}
           >
-            {insertOptions.map((item) => (
+            {Object.entries(insertOptions).map(([key, item]) => (
               <Dropdown.Item
                 icon={item.icon}
-                key={item.key}
+                key={key}
                 css={{
-                  background: editor.isActive(item.key) ? "$neutralLight" : "",
+                  background: editor.isActive(key) ? "$neutralLight" : "",
                   "@sm": { display: item.breakpoint === "sm" ? "none" : "" },
                   "@md": { display: item.breakpoint === "md" ? "none" : "" }
                 }}
               >
-                {item.title}
+                {item.label}
               </Dropdown.Item>
             ))}
           </Dropdown.Menu>
         </Dropdown>
       </Tooltip>
-
-      {/*<div className="menu-divider" />
-
-       Undo/redo buttons 
-      <MenuItem
-        title="Undo"
-        icon={<BiUndo size={iconSize} color={iconColor} />}
-        action={() => editor.chain().focus().undo().run()}
-      />
-      <MenuItem
-        title="Redo"
-        icon={<BiRedo size={iconSize} color={iconColor} />}
-        action={() => editor.chain().focus().redo().run()}
-      />*/}
     </Container>
   );
 };
