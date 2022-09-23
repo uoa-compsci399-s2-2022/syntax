@@ -133,7 +133,7 @@ export default function () {
       css={{
         padding: "0",
         margin: "0",
-        "min-width": "100%",
+        minWidth: "100%",
         "@xs": { "flex-direction": "column" }
       }}
     >
@@ -142,7 +142,7 @@ export default function () {
       <EditorContent
         editor={editor}
         key={currentNote}
-        style={{ "max-width": "100%" }}
+        style={{ maxWidth: "100%" }}
       />
       <Spacer />
     </Container>

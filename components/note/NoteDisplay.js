@@ -47,7 +47,7 @@ const NoteDisplay = ({ note }) => {
           </Text>
           <table
             className="note-metadata-table"
-            style={{ "text-align": "left" }}>
+            style={{ textAlign: "left" }}>
             <tbody>
               <tr>
                 <th>Created by</th>
