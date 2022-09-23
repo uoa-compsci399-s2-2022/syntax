@@ -43,8 +43,6 @@ const notesReducer = (state, action) => {
 	}
 
 	if (type === "edit") {
-		console.log(note);
-		console.log(state);
 		let noteGroupIndex = state.groups.findIndex((x) => x.id === note.groupId);
 
 		// if no match, return the previous state
