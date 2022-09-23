@@ -13,13 +13,13 @@ import {
 } from "@tiptap/react";
 import { TIO, LANGUAGES as TioLanguages } from '@/node/tio';
 
-import { EditorState } from '@codemirror/state';
-import { githubLight, githubDark } from '@uiw/codemirror-theme-github';
-import { oneDarkTheme, oneDarkHighlightStyle } from "@codemirror/theme-one-dark";
+import { oneDark } from "@codemirror/theme-one-dark";
+import { tomorrow } from 'thememirror';
+
 
 const themeExtensions = {
-    light: [githubLight],
-    dark: [ githubDark /**oneDarkTheme, oneDarkHighlightStyle (are supposed to be here)*/]
+    light: [tomorrow],
+    dark: [oneDark]
 }
 
 export const Extension = ({
@@ -36,10 +36,6 @@ export const Extension = ({
     const [output, setOutput] = useState(result);
     const { checked, type } = useTheme();
     
-
-    let isDark = type === "dark" ? true : false;
-    const [theme, setTheme] = useState('dark');
-
     const langDict = {
         'c-clang': 'C',
         'cpp-clang': 'C++',
@@ -55,7 +51,8 @@ export const Extension = ({
     };
 
     useEffect(() => {
-        const state = EditorState.create({
+        let isDark = type === "dark" ? true : false;
+        const view = new EditorView({
             doc,
             extensions: [
                 basicSetup,
@@ -69,20 +66,16 @@ export const Extension = ({
                 EditorView.theme({}, { dark: isDark }),
                 ...themeExtensions[isDark ? 'dark' : 'light'],
             ],
-        })
-        const view = new EditorView({
-            state,
-            
             parent: refEditor.current,
         });
         return () => {
             view.destroy();
         };
-    }, [type, theme]);
+    }, [type]);
 
     return ( <NodeViewWrapper>
 
-        <Card variant='bordered' css={{$$cardColor: 'rgba(255,255,255,0.0)'}}>
+        <Card variant='bordered' css={{$$cardColor: 'rgba(255,255,255,0.0)', resize: 'both'}}>
         <Card.Body>
         <div className = "maindiv" >
         <Dropdown>
