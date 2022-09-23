@@ -13,6 +13,15 @@ import {
 } from "@tiptap/react";
 import { TIO, LANGUAGES as TioLanguages } from '@/node/tio';
 
+import { EditorState } from '@codemirror/state';
+import { githubLight, githubDark } from '@uiw/codemirror-theme-github';
+import { oneDarkTheme, oneDarkHighlightStyle } from "@codemirror/theme-one-dark";
+
+const themeExtensions = {
+    light: [githubLight],
+    dark: [ githubDark /**oneDarkTheme, oneDarkHighlightStyle (are supposed to be here)*/]
+}
+
 export const Extension = ({
     node: {
         attrs: { language: lang, code_content: doc, code_output: result },
@@ -27,6 +36,10 @@ export const Extension = ({
     const [output, setOutput] = useState(result);
     const { checked, type } = useTheme();
     
+
+    let isDark = type === "dark" ? true : false;
+    const [theme, setTheme] = useState('dark');
+
     const langDict = {
         'c-clang': 'C',
         'cpp-clang': 'C++',
@@ -42,8 +55,7 @@ export const Extension = ({
     };
 
     useEffect(() => {
-        let isDark = type === "dark" ? true : false;
-        const view = new EditorView({
+        const state = EditorState.create({
             doc,
             extensions: [
                 basicSetup,
@@ -54,14 +66,19 @@ export const Extension = ({
                         updateAttributes({ code_content: v.state.doc.toString() });
                     }
                 }),
-                EditorView.theme({}, { dark: isDark })
+                EditorView.theme({}, { dark: isDark }),
+                ...themeExtensions[isDark ? 'dark' : 'light'],
             ],
+        })
+        const view = new EditorView({
+            state,
+            
             parent: refEditor.current,
         });
         return () => {
             view.destroy();
         };
-    }, [type]);
+    }, [type, theme]);
 
     return ( <NodeViewWrapper>
 
