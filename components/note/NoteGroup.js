@@ -13,7 +13,7 @@ import {
 	PlusIcon,
 	ChevronDownIcon,
 	ChevronRightIcon,
-	DocumentTextIcon
+	EllipsisHorizontalIcon
 } from "@heroicons/react/24/outline";
 import { useNote } from "../../modules/AppContext";
 
@@ -69,6 +69,24 @@ const NoteGroup = ({ name, color = "white", notes, openNote, createNote }) => {
 					{name}
 				</Col>
 				<Col css={{ flex: "0", marginLeft: "1rem" }}>
+					<Button
+						light
+						ripple={false}
+						icon={<EllipsisHorizontalIcon style={{ height: "var(--icon-size-xs)" }} />}
+						css={{
+							cursor: "pointer",
+							minWidth: "0",
+							maxWidth: "var(--icon-size-xs)",
+							height: "var(--icon-size-xs)",
+							padding: "0.8rem",
+							borderRadius: "var(--nextui-radii-sm)",
+							"&:hover": {
+								background: "$accents5"
+							}
+						}}
+					/>
+				</Col>
+				<Col css={{ flex: "0" }}>
 					<Button
 						light
 						ripple={false}

@@ -4,15 +4,20 @@ const lightTheme = createTheme({
     type: "light",
     theme: {
       colors: {
-        layer1: "#E0E0E0",
-        layer2: "#000000",
-        cyan: "#8BE9FD",
-        green: "#50FA7B",
-        orange: "#FFB86C",
-        pink: "#FF79C6",
-        purple: "#BD93F9",
-        red: "#FF5555",
-        yellow: "#F1FA8C",
+        primary: "#567b9f",
+        text: "#37352F",
+        "text-secondary": "#6D6C68",
+        primary: "#567b9f",
+        accents0: "#FBFBFA",
+        accents1: "#F7F7F6",
+        accents2: "#F3F3F2",
+        accents3: "#EFEFEE",
+        accents4: "#EBEBEA",
+        accents5: "#DCDCDA",
+        accents6: "#C4C4C2",
+        accents7: "#ABABAA",
+        accents8: "#939392",
+        accents9: "#939392",
       }
     }
   })

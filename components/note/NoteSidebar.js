@@ -1,163 +1,140 @@
 import NoteList from "./NoteList";
 import SearchModal from "@/components/modal/SearchModal";
 import { useState, useEffect } from "react";
+import { Container, Button, Row, useTheme, Dropdown } from "@nextui-org/react";
 import {
-  Container,
-  Button,
-  Navbar,
-  useTheme,
-  Dropdown,
-} from "@nextui-org/react";
-import {
-  MagnifyingGlassIcon,
-  PlusIcon,
-  ChevronDoubleRightIcon,
-  AdjustmentsHorizontalIcon
+	MagnifyingGlassIcon,
+	PlusIcon,
+	ChevronDoubleRightIcon,
+	AdjustmentsHorizontalIcon
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import {
-  useNote,
-  useDispatchNote,
-  useNotes,
-  useDispatchNotes
+	useNote,
+	useDispatchNote,
+	useNotes,
+	useDispatchNotes
 } from "../../modules/AppContext";
-import { NoteTemplate } from './NewNote'
-
+import { NoteTemplate } from "./NewNote";
 
 const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
-  const { checked, type } = useTheme();
-  const [searchModal, setSearchModal] = useState(false);
-  const router = useRouter();
-  const currentNote = useNote();
-  const setCurrentNote = useDispatchNote();
-  const noteslist = useNotes();
-  const setNotes = useDispatchNotes();
+	const { checked, type } = useTheme();
+	const [searchModal, setSearchModal] = useState(false);
+	const router = useRouter();
+	const currentNote = useNote();
+	const setCurrentNote = useDispatchNote();
+	const noteslist = useNotes();
+	const setNotes = useDispatchNotes();
 
-  const createNote = async () => {
-    let res = await fetch("/api/note", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(NoteTemplate)
-    });
+	const createNote = async () => {
+		let res = await fetch("/api/note", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(NoteTemplate)
+		});
 
-    const newNote = await res.json();
-    console.log("Create successful", { newNote });
-    setCurrentNote(newNote);
-    setNotes({ note: newNote, type: "add" });
-    router.push(`/note/${newNote.id}`, undefined, { shallow: true });
-  };
+		const newNote = await res.json();
+		console.log("Create successful", { newNote });
+		setCurrentNote(newNote);
+		setNotes({ note: newNote, type: "add" });
+		router.push(`/note/${newNote.id}`, undefined, { shallow: true });
+	};
 
-  const createGroup = async () => {
-    let res = await fetch("/api/group", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: "defGroup", color: "#ffffff" })
-    });
+	const createGroup = async () => {
+		let res = await fetch("/api/group", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ name: "defGroup", color: "#ffffff" })
+		});
 
-    const newGroup = await res.json();
-    console.log("Create successful", { newGroup });
-  };
-  const closeModalHandler = () => {
-    setSearchModal(false);
-  };
+		const newGroup = await res.json();
+		console.log("Create successful", { newGroup });
+	};
 
-  return (
-    <Container
-      display="flex"
-      wrap="nowrap"
-      direction="column"
-      css={{
-        position: "absolute",
-        zIndex: 3,
-        width: "100vw",
-        transition: "transform 0.2s ease-in-out",
-        transform: sidebarDisplay ? "translateX(-101%)" : "translateX(0%)",
-        padding: "0",
-        margin: "0",
-        background: "$accents0",
-        height: "100vh",
-        float: "left",
-        "@xs": {
-          position: sidebarDisplay ? "fixed" : "relative",
-          maxWidth: "15%",
-          minWidth: "250px"
-        }
-      }}
-    >
-      <Navbar
-        disableShadow
-        disableBlur
-        containerCss={{
-          background: "$accents0",
-          padding: "0 10px",
-          gap: "10px"
-        }}
-      >
-        <Navbar.Content css={{ flex: "1" }}>
-          <Navbar.Item css={{ flex: "1" }}>
-            <Button
-              auto
-              bordered
-              onPress={setSearchModal}
-              icon={
-                <MagnifyingGlassIcon style={{ height: "var(--icon-size)" }} />
-              }
-              css={{
-                flex: "1",
-                $$inputColor: type === "light" ? "white" : "#161616"
-              }}
-            />
-          </Navbar.Item>
-        </Navbar.Content>
-        <Navbar.Content css={{ display: "flex", "@xs": { display: "none" } }}>
-          <Navbar.Item>
-            <Button
-              auto
-              light
-              animated={false}
-              onPress={handleSidebarDisplay}
-              icon={
-                <ChevronDoubleRightIcon
-                  style={{ height: "var(--icon-size)" }}
-                />
-              }
-            />
-          </Navbar.Item>
-        </Navbar.Content>
-      </Navbar>
+	const closeModalHandler = () => {
+		setSearchModal(false);
+	};
 
-      <Container
-        css={{
-          overflowY: "auto",
-          overflowX: "hidden",
-          padding: "0",
-          height: "100%"
-        }}
-      >
-        <NoteList
-          retrieved_notes={notes}
-          showEditor={undefined}
-          handleSidebarDisplay={handleSidebarDisplay}
-          createNote={createNote}
-          key={notes}
-        />
-      </Container>
-
-      <Container css={{ padding: "20px 10px" }}>
-        <Button
-          bordered
-          auto
+	return (
+		<Container
+			display="flex"
+			wrap="nowrap"
+			direction="column"
+			css={{
+				position: "absolute",
+				zIndex: 3,
+				width: "100vw",
+				transition: "transform 0.2s ease-in-out",
+				transform: sidebarDisplay ? "translateX(-101%)" : "translateX(0%)",
+				padding: "0",
+				margin: "0",
+				background: "$accents0",
+				height: "100vh",
+				float: "left",
+				color: type === "light" ? "$text-secondary" : "$text",
+				"@xs": {
+					position: sidebarDisplay ? "fixed" : "relative",
+					maxWidth: "15%",
+					minWidth: "250px"
+				}
+			}}
+		>
+			<Row css={{ padding: "20px 10px" }}>
+				<Button
+					auto
           color="primary"
-          icon={<PlusIcon style={{ height: "var(--icon-size)" }} />}
-          onPress={() => createNote()}
-          css={{ width: "100%" }}
-        >
-          Add new note
-        </Button>
-      </Container>
-      <SearchModal open={searchModal} closeHandler={closeModalHandler} />
-    </Container>
-  );
+					icon={<MagnifyingGlassIcon style={{ height: "var(--icon-size-s)" }} />}
+					onPress={setSearchModal}
+          css={{
+            width: "100%"
+					}}
+				>
+					Search notes
+				</Button>
+
+				<Button
+					auto
+					light
+					animated={false}
+					onPress={handleSidebarDisplay}
+					icon={
+						<ChevronDoubleRightIcon style={{ height: "var(--icon-size)" }} />
+					}
+					css={{ display: "flex", "@xs": { display: "none" } }}
+				/>
+			</Row>
+
+			<Container
+				css={{
+					overflowY: "auto",
+					overflowX: "hidden",
+					padding: "0",
+					height: "100%"
+				}}
+			>
+				<NoteList
+					retrieved_notes={notes}
+					showEditor={undefined}
+					handleSidebarDisplay={handleSidebarDisplay}
+					createNote={createNote}
+					key={notes}
+				/>
+			</Container>
+
+			<Container css={{ padding: "20px 10px" }}>
+				<Button
+					auto
+					color="primary"
+					icon={<PlusIcon style={{ height: "var(--icon-size-s)" }} />}
+					onPress={() => createNote()}
+					css={{ width: "100%" }}
+				>
+					Add new note
+				</Button>
+			</Container>
+			<SearchModal open={searchModal} closeHandler={closeModalHandler} />
+		</Container>
+	);
 };
 
 export default NoteSidebar;
