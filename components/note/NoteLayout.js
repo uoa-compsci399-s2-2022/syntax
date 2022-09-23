@@ -53,9 +53,10 @@ const NoteLayout = ({ allNotes, currentNote }) => {
         <Container
           css={{
             padding: "0",
-            "min-width": "100%",
-            "overflow-y": "scroll",
-            "overflow-x": "hidden"
+            minHeight: "100%",
+            minWidth: "100%",
+            overflowY: "scroll",
+            overflowX: "hidden"
           }}
         >
           <NoteDisplay note={currentNote} key={currentNote} />
