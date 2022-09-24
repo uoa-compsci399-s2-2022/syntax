@@ -1,10 +1,19 @@
 import NoteList from "./NoteList";
+import SearchModal from "@/components/modal/SearchModal";
 import { useState, useEffect } from "react";
-import { Container, Input, Button, Text, Navbar } from "@nextui-org/react";
+import {
+  Container,
+  Input,
+  Button,
+  Dropdown,
+  Navbar,
+  Tooltip
+} from "@nextui-org/react";
 import {
   MagnifyingGlassIcon,
   PlusIcon,
-  ChevronDoubleLeftIcon
+  ChevronDoubleRightIcon,
+  AdjustmentsHorizontalIcon
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import {
@@ -15,6 +24,7 @@ import {
 } from "../../modules/AppContext";
 
 const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
+  const [searchModal, setSearchModal] = useState(false);
   const router = useRouter();
   const currentNote = useNote();
   const setCurrentNote = useDispatchNote();
@@ -35,6 +45,10 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
     router.push(`/note/${newNote.id}`, undefined, { shallow: true });
   };
 
+  const closeModalHandler = () => {
+    setSearchModal(false);
+  };
+
   return (
     <Container
       display="flex"
@@ -42,7 +56,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
       direction="column"
       css={{
         position: "absolute",
-        "z-index": 3,
+        zIndex: 3,
         width: "100vw",
         transition: "transform 0.2s ease-in-out",
         transform: sidebarDisplay ? "translateX(-101%)" : "translateX(0%)",
@@ -68,30 +82,31 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
         }}
       >
         <Navbar.Content css={{ flex: "1" }}>
-        
           <Navbar.Item css={{ flex: "1" }}>
-            <Input
-              clearable
-              aria-label="Notes search bar"
-              placeholder="Search notes"
-              type="search"
-              animated={false}
-              contentLeft={
+            <Button
+              auto
+              bordered
+              onPress={setSearchModal}
+              icon={
                 <MagnifyingGlassIcon style={{ height: "var(--icon-size)" }} />
               }
               css={{ flex: "1" }}
-            />
+            >
+              Search notes
+            </Button>
           </Navbar.Item>
         </Navbar.Content>
         <Navbar.Content>
-          <Navbar.Item>
+          <Navbar.Item css={{ display: "flex", "@xs": { display: "none" } }}>
             <Button
               auto
               light
               animated={false}
               onPress={handleSidebarDisplay}
               icon={
-                <ChevronDoubleLeftIcon style={{ height: "var(--icon-size)" }} />
+                <ChevronDoubleRightIcon
+                  style={{ height: "var(--icon-size)" }}
+                />
               }
             />
           </Navbar.Item>
@@ -106,7 +121,12 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
           "overflow-x": "hidden"
         }}
       >
-        <NoteList retrieved_notes={notes} showEditor={undefined} key={notes} handleSidebarDisplay={handleSidebarDisplay} />
+        <NoteList
+          retrieved_notes={notes}
+          showEditor={undefined}
+          key={notes}
+          handleSidebarDisplay={handleSidebarDisplay}
+        />
       </Container>
       <Container
         css={{
@@ -124,6 +144,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
           Add new note
         </Button>
       </Container>
+      <SearchModal open={searchModal} closeHandler={closeModalHandler} />
     </Container>
   );
 };
