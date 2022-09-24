@@ -59,10 +59,10 @@ async function tag(drawing, Key, Value){
 async function deleteDrawing(url){
 	const name = url.split(".com/").pop()
 	const prefix = name.split(".")[0]
-	let resDraw = await fetch(`api/s3/${prefix}.png`, {
+	let resDraw = await fetch(`/api/s3/${prefix}.png`, {
 	  method: "DELETE"
 	})
-	let resJson = await fetch(`api/s3/${prefix}.json`, {
+	let resJson = await fetch(`/api/s3/${prefix}.json`, {
 	  method: "DELETE"
 	})
   }

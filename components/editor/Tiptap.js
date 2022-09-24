@@ -115,21 +115,22 @@ export default function () {
     editor?.commands?.setContent(currentNote.body);
   }, [editor, currentNote.body]);
 
-  const closeHandler = async (files) => {
+  async function closeHandler(files) {
     if (typeof files !== "undefined"){
-      const src = await uploadDrawing(files)
-      if (src === null) {
-        console.log("File size was too large")
-      } else if (drawContent === null) {
-        editor.chain().focus()?.setDrawing({src})?.run();
+      if (typeof files[0] !== "undefined"){
+        const src = await uploadDrawing(files)
+        if (src === null) {
+          console.log("File size was too large")
+        } else if (drawContent === null) {
+          editor.chain().focus()?.setDrawing({src})?.run();
+        }
+        else {
+          editor.chain().focus()?.editDrawing({src})?.run();
+        }
       }
-      else {
-        editor.chain().focus()?.editDrawing({src})?.run();
-      }
+      setDrawModal(false)
+      setDrawContent(null)
     }
-    
-		setDrawModal(false)
-    setDrawContent(null)
 	};
 
   const editHandler = async (key) => {

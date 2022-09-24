@@ -23,27 +23,27 @@ const DrawingModal = ({ open, closeHandler, content }) =>{
     async function saveAndClose(){
         app?.selectNone()
         const png = await app?.getImage(TDExportType.PNG);
-        let content = await app?.document;
-        await app?.resetDocument()
-        if (typeof png !== "undefined"){
-            closeHandler(png)
-        } 
-        await app?.loadDocument(content)
-        const contentjson = JSON.stringify(content)
-        const files = [png, contentjson]
-        closeHandler(files)
+        let currentContent = await app?.document;
+        if (content === currentContent){
+            closeHandler(undefined)
+        }else{
+            const contentjson = JSON.stringify(currentContent)
+            const files = [png, contentjson]
+            closeHandler(files)
+        }
+        
     }
     return (
         <Modal noPadding width={width} open={open} onClose={closeHandler} onOpen={()=>openTldraw()}>
             <Modal.Body>
-                <div
+                <div className='tldraw'
                     style={{
                         position: 'relative',
                         width: '100%',
                         height: '500px',
                         overflow: 'hidden',
                     }}
-                    >   {content && <Tldraw onMount={handleMount} showMenu={false} showPages={false} showMultiplayerMenu={false} document={content}/>}
+                    >   {(content !== null)&& <Tldraw onMount={handleMount} showMenu={false} showPages={false} showMultiplayerMenu={false} document={content}/>}
                         {(content === null) && <Tldraw onMount={handleMount} showMenu={false} showPages={false} showMultiplayerMenu={false}/>}
                 </div>
             </Modal.Body>

@@ -65,6 +65,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         }
     }
     else if (req.method === "DELETE") {
+      console.log(objectKey)
       const params = {
         Bucket: process.env.AWS_BUCKET_NAME, 
         Key: (typeof objectKey === "string") ? objectKey : objectKey[0]
@@ -75,12 +76,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             message: err,
             errorStack: err.stack
           })
-          resolve()
         }else {
           res.status(200).json({
             file: data
           });
-          resolve()
         }});
     } else{
         return res.status(405).json({ message: "Method not allowed" });
