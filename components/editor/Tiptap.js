@@ -162,17 +162,17 @@ export default function () {
       {editor && <BubbleMenu className="button-menu" pluginKey={"imageMenu"} editor={editor} tippyOptions={{duration: 100}} shouldShow={({ editor, view, state, oldState, from, to }) => {
         return editor?.isActive("image")}}>
         <Button.Group className="is-active" color="primary" light>
-          <Button onPress={() => editor.chain().focus().updateImage({size: 'small'}).run()}
+          <Button onPress={() => editor.chain().focus().setImage({size: 'small'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {size: 'small'}}>Small</Button>
-          <Button onPress={() => editor.chain().focus().updateImage({size: 'medium'}).run()}
+          <Button onPress={() => editor.chain().focus().setImage({size: 'medium'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {size: 'medium'}}>Medium</Button>
-          <Button onPress={() => editor.chain().focus().updateImage({size: 'large'}).run()}
+          <Button onPress={() => editor.chain().focus().setImage({size: 'large'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {size: 'large'}}>Large</Button>
-          <Button onPress={() => editor.chain().focus().updateImage({float: 'left'}).run()}
+          <Button onPress={() => editor.chain().focus().setImage({float: 'left'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {float: 'left'}}>Left</Button>
-          <Button onPress={() => editor.chain().focus().updateImage({float: 'none'}).run()}
+          <Button onPress={() => editor.chain().focus().setImage({float: 'none'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {float: 'none'}}>No float</Button>
-          <Button onPress={() => editor.chain().focus().updateImage({float: 'right'}).run()}
+          <Button onPress={() => editor.chain().focus().setImage({float: 'right'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {float: 'right'}}>Right</Button>
         </Button.Group>
       </BubbleMenu>}
