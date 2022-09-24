@@ -1,5 +1,5 @@
 export const NoteTemplate = {
-	title: "Untitled Note",
+	title: "Hello 👋",
 	body: {
 		"type": "doc",
 		"content": [
@@ -8,7 +8,7 @@ export const NoteTemplate = {
 			 "content": [
 				{
 				  "type": "text",
-				  "text": "Start typing here..."
+				  "text": "Select a note or start typing here to get started…"
 				}
 			 ]
 		  }

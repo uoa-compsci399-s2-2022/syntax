@@ -3,17 +3,17 @@ import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import { Button } from '@nextui-org/react';
 
 
-export const getServerSideProps = async ({ req, res }) => {
-  const session = await getSession({ req });
+// export const getServerSideProps = async ({ req, res }) => {
+//   const session = await getSession({ req });
 
-//   if (!session) {
-//     res.statusCode = 403;
-//     return { props: { notes: [] } };
-//   }
+// //   if (!session) {
+// //     res.statusCode = 403;
+// //     return { props: { notes: [] } };
+// //   }
 
 
-  return { props: { notes: [] } };
-};
+//   return { props: { notes: [] } };
+// };
 
 export default function Component() {
   const router = useRouter();

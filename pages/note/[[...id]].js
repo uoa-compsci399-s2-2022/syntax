@@ -7,7 +7,7 @@ import {
 	useNotes,
 	useDispatchNotes,
 } from "../../modules/AppContext";
-import { groupByReducer } from "../../node/groupreducer.js";
+import { NoteTemplate } from '../../components/note/NewNote'
 
 const getNoteByID = require("../../prisma/Note").getNoteByID;
 const getAllNotesByUserID = require("../../prisma/Note").getAllNotesByUserID;
@@ -22,26 +22,37 @@ export const getServerSideProps = async ({ req, res, params }) => {
 
 	if (!session) {
 		res.statusCode = 403;
-		return { props: { notes: [] } };
+		return {
+			redirect: {
+				destination: '/',
+				permanent: false,
+			},
+		}
 	}
 	if (id && id.length > 1) {
 		return {
 			notFound: true,
 		};
 	}
-
-	const [notes] = await getAllNotesByUserID(session?.user?.id);
 	var note;
 	if (id && id.length == 1) {
 		note = await getNoteByID(id[0]);
+		if (!note) {
+			return {
+				redirect: {
+					destination: '/note',
+					permanent: false,
+				},
+			}
+		}
 	} else {
 		note = {
-			title: "Hello 👋",
-			body: "Select a note or start typing here to get started…",
+			...NoteTemplate,
 			updatedAt: Date.now(),
 			user: session?.user,
 		};
 	}
+	const [notes] = await getAllNotesByUserID(session?.user?.id);
 
 	return {
 		props: { notes, note },
@@ -56,11 +67,11 @@ export default function Note({ notes, note }) {
 	const setCurrentNote = useDispatchNote();
 	useEffect(() => {
 		if (Object.keys(currentNote).length == 0) {
-				note.action = "edit";
-				setCurrentNote(note);
-			}
+			note.action = "edit";
+			setCurrentNote(note);
+		}
 	}, [])
-	
+
 
 	return <NoteLayout allNotes={notes} currentNote={note} />;
 }

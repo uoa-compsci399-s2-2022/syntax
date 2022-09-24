@@ -45,11 +45,14 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
 		let res = await fetch("/api/group", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ name: "defGroup", color: "#ffffff" })
+			body: JSON.stringify({ name: "new group", color: "grey" })
 		});
 
 		const newGroup = await res.json();
 		console.log("Create successful", { newGroup });
+		newGroup.notes = [];
+		setNotes({ note: newGroup, type: "addgroup" });
+		router.push(`/note/${currentNote.id || ""}`, undefined, { shallow: true });
 	};
 
 	const closeModalHandler = () => {
@@ -107,7 +110,6 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
 					css={{ display: "flex", "@xs": { display: "none" } }}
 				/>
 			</Row>
-
 			<Container
 				css={{
 					overflowY: "auto",
@@ -134,7 +136,12 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
 					auto
 					icon={<DocumentPlusIcon style={{ height: "var(--icon-size-s)" }} />}
 					onPress={() => createNote()}
-					css={{ minWidth: "0", flex: "1", background: "$accents4", color: "$textSecondary" }}
+					css={{
+						minWidth: "0",
+						flex: "1",
+						background: "$accents4",
+						color: "$textSecondary"
+					}}
 				>
 					Note
 				</Button>
@@ -143,7 +150,12 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
 					auto
 					icon={<FolderPlusIcon style={{ height: "var(--icon-size-s)" }} />}
 					onPress={() => createNote()}
-					css={{ minWidth: "0", flex: "1", background: "$accents4", color: "$textSecondary" }}
+					css={{
+						minWidth: "0",
+						flex: "1",
+						background: "$accents4",
+						color: "$textSecondary"
+					}}
 				>
 					Group
 				</Button>
