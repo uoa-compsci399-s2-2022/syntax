@@ -1,6 +1,5 @@
 import Head from "next/head";
-import { Container, Text, Spacer, Grid, Input } from "@nextui-org/react";
-import ImageEditor from "../editor/ImageEditor";
+import { Container, Spacer, Dropdown } from "@nextui-org/react";
 import Tiptap from "@/components/editor/Tiptap";
 import { debounce } from "lodash";
 import { useRef } from "react";
@@ -14,14 +13,15 @@ import {
 const NoteDisplay = ({ note, handleSidebarDisplay }) => {
 	const notesc = useNotes();
 	const setNotes = useDispatchNotes();
-
 	const currentNote = useNote();
 	const setCurrentNote = useDispatchNote();
+
 	const debounceSave = useRef(
 		debounce(async (criteria) => {
 			saveContent(criteria);
 		}, 500)
 	).current;
+
 	const saveContent = async (content) => {
 		console.log("editor debounce", content);
 		let note = {
@@ -63,26 +63,32 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
 				<Container
 					css={{
 						margin: "0",
-						padding: "0 10%",
+						padding: "0 10% 10% 10%",
 						maxWidth: "100vw"
 					}}
 				>
-					{/* <Text h1 css={{ overflowWrap: "break-word" }}>
-						{currentNote.title}
-					</Text> */}
-					<Input
-						underlined
-						aria-label="Note Title"
-						animated={false}
-						initialValue={currentNote.title}
-						onChange={(e) => {
+					<div
+						contentEditable="true"
+						suppressContentEditableWarning="true"
+						onInput={(e) => {
 							debounceSave({
 								id: currentNote.id,
-								title: e.target.value,
+								title: e.currentTarget.textContent,
 								body: currentNote.body
 							});
 						}}
-					></Input>
+						style={{
+							width: "100%",
+							fontSize: "var(--nextui-fontSizes-5xl)",
+							letterSpacing: "var(--nextui-letterSpacings-tighter)",
+							lineHeight: "var(--nextui-lineHeights-md)",
+							fontWeight: "var(--nextui-fontWeights-bold)",
+							background: "none",
+							border: "none"
+						}}
+					>
+						{currentNote.title}
+					</div>
 					<table className="note-metadata-table" style={{ textAlign: "left" }}>
 						<tbody>
 							<tr>
@@ -103,25 +109,44 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
 							</tr>
 							{currentNote.group ? (
 								<tr>
-									<th>Folder</th>
+									<th>Group</th>
 									<td>
-										{currentNote.group.name}
-										<select
-											contentEditable={false}
-											defaultValue={currentNote.group.name}
-											onChange={(e) =>
-												debounceSave({
-													id: currentNote.id,
-													groupId: e.target.value
-												})
-											}
-										>
-											{notesc.groups.map((group, index) => (
-												<option key={group.id} value={group.id}>
-													{group.name}
-												</option>
-											))}
-										</select>
+										<Dropdown>
+											<Dropdown.Button
+												light
+												ripple={false}
+												css={{
+													padding: "0",
+													height: "min-content",
+													lineHeight: "0",
+													borderRadius: "0"
+												}}
+											>
+												{currentNote.group.name}
+											</Dropdown.Button>
+											<Dropdown.Menu
+												disallowEmptySelection
+												aria-label="Group Selection"
+												selectionMode="single"
+												selectedKeys={currentNote.group.name}
+												onAction={(key) =>
+													debounceSave({
+														id: currentNote.id,
+														groupId: e.target.value
+													})
+												}
+											>
+												{notesc.groups.map((group, index) => (
+													<Dropdown.Item
+														key={group.id}
+														value={group.id}
+														css={{ overflow: "hidden", whiteSpace: "nowrap" }}
+													>
+														{group.name}
+													</Dropdown.Item>
+												))}
+											</Dropdown.Menu>
+										</Dropdown>
 									</td>
 								</tr>
 							) : null}

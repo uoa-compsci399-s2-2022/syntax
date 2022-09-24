@@ -58,6 +58,11 @@ a {
 
 
 /* editor styling */
+div[contenteditable] {
+  outline: 0px solid transparent;
+}
+
+
 .ProseMirror:focus {
   outline: none;
 }
