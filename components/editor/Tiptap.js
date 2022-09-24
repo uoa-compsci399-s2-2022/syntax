@@ -1,7 +1,6 @@
 import { EditorContent, useEditor, BubbleMenu } from "@tiptap/react";
-
 import StarterKit from "@tiptap/starter-kit";
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
 import Menubar from "./Menubar.js";
 import { TipTapCustomImage } from "@/node/Image";
 import { Drawing } from "@/node/Drawing";
@@ -138,7 +137,7 @@ export default function () {
       method: "GET",
     })
     const body = await res.json()
-    setDrawContent([body.file, key])
+    setDrawContent([body.file])
     setDrawModal(true)
   }
 
@@ -162,17 +161,17 @@ export default function () {
       {editor && <BubbleMenu className="button-menu" pluginKey={"imageMenu"} editor={editor} tippyOptions={{duration: 100}} shouldShow={({ editor, view, state, oldState, from, to }) => {
         return editor?.isActive("image")}}>
         <Button.Group className="is-active" color="primary" light>
-          <Button onPress={() => editor.chain().focus().setImage({size: 'small'}).run()}
+          <Button onPress={() => editor.chain().focus().updateImage({size: 'small'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {size: 'small'}}>Small</Button>
-          <Button onPress={() => editor.chain().focus().setImage({size: 'medium'}).run()}
+          <Button onPress={() => editor.chain().focus().updateImage({size: 'medium'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {size: 'medium'}}>Medium</Button>
-          <Button onPress={() => editor.chain().focus().setImage({size: 'large'}).run()}
+          <Button onPress={() => editor.chain().focus().updateImage({size: 'large'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {size: 'large'}}>Large</Button>
-          <Button onPress={() => editor.chain().focus().setImage({float: 'left'}).run()}
+          <Button onPress={() => editor.chain().focus().updateImage({float: 'left'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {float: 'left'}}>Left</Button>
-          <Button onPress={() => editor.chain().focus().setImage({float: 'none'}).run()}
+          <Button onPress={() => editor.chain().focus().updateImage({float: 'none'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {float: 'none'}}>No float</Button>
-          <Button onPress={() => editor.chain().focus().setImage({float: 'right'}).run()}
+          <Button onPress={() => editor.chain().focus().updateImage({float: 'right'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {float: 'right'}}>Right</Button>
         </Button.Group>
       </BubbleMenu>}
@@ -192,7 +191,7 @@ export default function () {
           <Button onPress={() => editor.chain().focus().setDrawing({float: 'right'}).run()}
               className={editor?.isActive('drawing') ? 'is-active' : {float: 'right'}}>Right</Button>
           <Button onPress={() => editHandler(editor.state.selection.node.attrs.src.split(".com/")[1].split("png")[0]+"json")}
-              className={editor?.isActive('drawing') ? 'is-active' : "getJson" }>Edit</Button>
+              className={editor?.isActive('drawing') ? 'is-active' : "editDrawing" }>Edit</Button>
         </Button.Group>
       </BubbleMenu>}
       <EditorContent editor={editor} key={currentNote} style={{ "max-width": "100%" }} />
