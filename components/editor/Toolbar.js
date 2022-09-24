@@ -51,7 +51,7 @@ export default ({ editor }) => {
 		if (selectedInputType === "link" && editor.isActive("link")) {
 			editor.chain().focus().unsetLink().run();
 		} else {
-      setInputType(selectedInputType);
+			setInputType(selectedInputType);
 			setInputModal(true);
 		}
 	};
@@ -144,7 +144,7 @@ export default ({ editor }) => {
 			label: "Code",
 			action: () => editor.chain().focus().toggleCode().run(),
 			isActive: () => editor.isActive("code"),
-			css: { display: "none", "@sm": { display: "flex" } }
+			breakpoint: "md"
 		}
 	];
 
@@ -154,7 +154,7 @@ export default ({ editor }) => {
 			label: "Code",
 			action: () => editor.chain().focus().toggleCode().run(),
 			isActive: () => editor.isActive("code"),
-			breakpoint: "sm"
+			breakpoint: "md"
 		},
 		underline: {
 			icon: <MdFormatUnderlined size={iconSize} color={iconColor} />,
@@ -297,7 +297,15 @@ export default ({ editor }) => {
 			{/* Text style (normal text, headings) dropdown */}
 			<Tooltip content={"Text style"}>
 				<Dropdown>
-					<Dropdown.Button light css={{ padding: "10px", transition: "none" }}>
+					<Dropdown.Button
+						light
+						ripple={false}
+						css={{
+							transition: "none",
+							padding: "0",
+							"@sm": { padding: "10px" }
+						}}
+					>
 						{windowWidth > 960 ? (
 							selectedTextStyle
 						) : (
@@ -322,7 +330,7 @@ export default ({ editor }) => {
 
 			{/* Core formatting options (bold, italic, inline code) */}
 			{coreOptions.map((item, index) => (
-				<MenuItem {...item} key={index} />
+				<MenuItem {...item} key={index} css={{ marginRight: "0.3rem" }} />
 			))}
 
 			{/* Extended formatting options + clear formatting */}
@@ -330,7 +338,7 @@ export default ({ editor }) => {
 				<Dropdown>
 					<Dropdown.Button
 						light
-						animated="false"
+						ripple={false}
 						className={`menu-item${
 							(editor.isActive("code") && windowWidth < 960) ||
 							editor.isActive("underline") ||
@@ -386,13 +394,17 @@ export default ({ editor }) => {
 				<Dropdown>
 					<Dropdown.Button
 						light
-						animated="false"
+						ripple={false}
 						className={`menu-item${
 							editor.isActive("bulletList") || editor.isActive("orderedList")
 								? " is-active"
 								: ""
 						}`}
-						css={{ padding: "10px", "@md": { display: "none" } }}
+						css={{
+							padding: "5px",
+							"@sm": { padding: "10px" },
+							"@md": { display: "none" }
+						}}
 					>
 						<MdFormatListBulleted size={iconSize} />
 					</Dropdown.Button>
@@ -423,10 +435,12 @@ export default ({ editor }) => {
 				<Dropdown>
 					<Dropdown.Button
 						light
+						ripple={false}
 						css={{
 							transition: "none",
-							padding: "10px",
+							padding: "0",
 							display: "flex",
+							"@sm": { padding: "10px" },
 							"@md": { display: "none" }
 						}}
 					>

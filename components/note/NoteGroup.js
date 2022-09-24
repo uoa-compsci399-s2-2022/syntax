@@ -38,16 +38,16 @@ const NoteGroup = ({ name, color = "white", notes, openNote, createNote }) => {
 				justify="space-between"
 				alignItems="center"
 				wrap="nowrap"
-				onClick={handleOpen}
+				onClick={notes.length > 0 ? handleOpen : null}
 				css={{
 					padding: "0.5rem",
 					width: "100%",
 					border: "none",
 					textAlign: "left",
 					outline: "none",
-					cursor: "pointer",
+					cursor: notes.length > 0 ? "pointer" : "auto",
 					borderRadius: "var(--nextui-radii-md)",
-					backgroundColor: "$accents4"
+					backgroundColor: notes.length > 0 ? "$accents4" : "$accents2"
 				}}
 			>
 				<Col
@@ -60,7 +60,7 @@ const NoteGroup = ({ name, color = "white", notes, openNote, createNote }) => {
 					{isOpen ? (
 						<ChevronDownIcon style={{ height: "var(--icon-size-xs)" }} />
 					) : (
-						<ChevronRightIcon style={{ height: "var(--icon-size-xs)" }} />
+						<ChevronRightIcon style={{ height: "var(--icon-size-xs)", color: notes.length > 0 ? "$text" : "grey" }} />
 					)}
 				</Col>
 				<Col
@@ -86,7 +86,6 @@ const NoteGroup = ({ name, color = "white", notes, openNote, createNote }) => {
 							/>
 						}
 						css={{
-							cursor: "pointer",
 							minWidth: "0",
 							maxWidth: "var(--icon-size-xs)",
 							height: "var(--icon-size-xs)",
@@ -105,7 +104,6 @@ const NoteGroup = ({ name, color = "white", notes, openNote, createNote }) => {
 						onPress={() => createNote()}
 						icon={<PlusIcon style={{ height: "var(--icon-size-xs)" }} />}
 						css={{
-							cursor: "pointer",
 							minWidth: "0",
 							maxWidth: "var(--icon-size-xs)",
 							height: "var(--icon-size-xs)",

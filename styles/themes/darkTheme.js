@@ -4,6 +4,7 @@ const darkTheme = createTheme({
   type: "dark",
   theme: {
     colors: {
+      neutralLight: "#272727",
       accents0: "#1D1D1D",
       accents1: "#202020",
       accents2: "#222222",
@@ -19,14 +20,14 @@ const darkTheme = createTheme({
       textSecondary: "#A4A4A4"
     },
     radii: {
-      xs: "1px",
-      sm: "3px",
-      md: "7px",
-      base: "8px",
-      lg: "8px",
-      xl: "12px",
-      "2xl": "18px",
-      "3xl": "26px"
+      xs: "3px",
+      sm: "5px",
+      md: "9px",
+      base: "10px",
+      lg: "10px",
+      xl: "14px",
+      "2xl": "20px",
+      "3xl": "28px"
     }
   }
 });

@@ -10,7 +10,7 @@ const DeleteModal = ({ open, onclosehandler, closeHandler }) => {
 				This action cannot be undone.
 			</Modal.Body>
 			<Modal.Footer>
-				<Button auto bordered onPress={() => closeHandler()}>
+				<Button auto onPress={() => closeHandler()}>
 					Yes
 				</Button>
 				<Button auto bordered flat color="error" onPress={onclosehandler}>

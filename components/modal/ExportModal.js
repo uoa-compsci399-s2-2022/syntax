@@ -6,7 +6,7 @@ const ExportModal = ({ open, closeHandler }) => {
 			<Modal.Header>Export Note</Modal.Header>
 			<Modal.Body>Export as PDF / MD</Modal.Body>
 			<Modal.Footer>
-				<Button auto bordered onClick={closeHandler}>
+				<Button auto onClick={closeHandler}>
 					Export
 				</Button>
 				<Button auto bordered flat color="error" onClick={closeHandler}>

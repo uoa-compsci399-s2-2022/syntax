@@ -4,12 +4,14 @@ import {
 	Button,
 	Dropdown,
 	Container,
-	Row
+	Row,
+	useTheme
 } from "@nextui-org/react";
 import { useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 const SearchModal = ({ open, closeHandler }) => {
+	const { checked, type } = useTheme();
 	const [selectedSort, setSelectedSort] = useState("title-asc");
 	const [titleChecked, setTitleChecked] = useState(true);
 	const [contentChecked, setContentChecked] = useState(false);
@@ -69,7 +71,6 @@ const SearchModal = ({ open, closeHandler }) => {
 				}}
 			>
 				<Input
-					bordered
 					clearable
 					aria-label="Advanced Search Bar"
 					placeholder="Search notes..."
@@ -78,7 +79,7 @@ const SearchModal = ({ open, closeHandler }) => {
 					contentLeft={
 						<MagnifyingGlassIcon style={{ height: "var(--icon-size)" }} />
 					}
-					css={{ width: "100%" }}
+					css={{ width: "100%", $$inputColor: type === "dark" ? "var(--nextui-colors-background)" : "var(--nextui-colors-accents0)" }}
 				/>
 				<Container
 					display="flex"
