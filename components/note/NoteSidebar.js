@@ -149,7 +149,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
 				<Button
 					auto
 					icon={<FolderPlusIcon style={{ height: "var(--icon-size-s)" }} />}
-					onPress={() => createNote()}
+					onPress={() => createGroup()}
 					css={{
 						minWidth: "0",
 						flex: "1",
