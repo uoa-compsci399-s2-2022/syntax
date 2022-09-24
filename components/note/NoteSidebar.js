@@ -1,152 +1,168 @@
 import NoteList from "./NoteList";
 import SearchModal from "@/components/modal/SearchModal";
 import { useState, useEffect } from "react";
+import { Container, Button, Row, useTheme, Input } from "@nextui-org/react";
 import {
-  Container,
-  Input,
-  Button,
-  Dropdown,
-  Navbar,
-  Tooltip
-} from "@nextui-org/react";
-import {
-  MagnifyingGlassIcon,
-  PlusIcon,
-  ChevronDoubleRightIcon,
-  AdjustmentsHorizontalIcon
-} from "@heroicons/react/24/outline";
+	MagnifyingGlassIcon,
+	PlusIcon,
+	ChevronDoubleRightIcon,
+	FolderPlusIcon,
+	DocumentPlusIcon
+} from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
 import {
-  useNote,
-  useDispatchNote,
-  useNotes,
-  useDispatchNotes
+	useNote,
+	useDispatchNote,
+	useNotes,
+	useDispatchNotes
 } from "../../modules/AppContext";
+import { NoteTemplate } from "./NewNote";
 
 const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
-  const [searchModal, setSearchModal] = useState(false);
-  const router = useRouter();
-  const currentNote = useNote();
-  const setCurrentNote = useDispatchNote();
-  const noteslist = useNotes();
-  const setNotes = useDispatchNotes();
+	const { checked, type } = useTheme();
+	const [searchModal, setSearchModal] = useState(false);
+	const router = useRouter();
+	const currentNote = useNote();
+	const setCurrentNote = useDispatchNote();
+	const noteslist = useNotes();
+	const setNotes = useDispatchNotes();
 
-  const createNote = async () => {
-    let res = await fetch("/api/note", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: "untitled", body: [] })
-    });
+	const createNote = async () => {
+		let res = await fetch("/api/note", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(NoteTemplate)
+		});
 
-    const newNote = await res.json();
-    console.log("Create successful", { newNote });
-    setCurrentNote(newNote);
-    setNotes({ note: newNote, type: "add" });
-    router.push(`/note/${newNote.id}`, undefined, { shallow: true });
-  };
+		const newNote = await res.json();
+		console.log("Create successful", { newNote });
+		setCurrentNote(newNote);
+		setNotes({ note: newNote, type: "add" });
+		router.push(`/note/${newNote.id}`, undefined, { shallow: true });
+	};
 
-  const closeModalHandler = () => {
-    setSearchModal(false);
-  };
+	const createGroup = async () => {
+		let res = await fetch("/api/group", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ name: "new group", color: "grey" })
+		});
 
-  return (
-    <Container
-      display="flex"
-      wrap="nowrap"
-      direction="column"
-      css={{
-        position: "absolute",
-        zIndex: 3,
-        width: "100vw",
-        transition: "transform 0.2s ease-in-out",
-        transform: sidebarDisplay ? "translateX(-101%)" : "translateX(0%)",
-        padding: "0",
-        margin: "0",
-        background: "$accents2",
-        height: "100vh",
-        float: "left",
-        "@xs": {
-          position: sidebarDisplay ? "fixed" : "relative",
-          "max-width": "20%",
-          "min-width": "250px"
-        }
-      }}
-    >
-      <Navbar
-        variant="sticky"
-        disableShadow
-        disableBlur
-        containerCss={{
-          background: "$accents2",
-          padding: "0 20px"
-        }}
-      >
-        <Navbar.Content css={{ flex: "1" }}>
-          <Navbar.Item css={{ flex: "1" }}>
-            <Button
-              auto
-              bordered
-              onPress={setSearchModal}
-              icon={
-                <MagnifyingGlassIcon style={{ height: "var(--icon-size)" }} />
-              }
-              css={{ flex: "1" }}
-            >
-              Search notes
-            </Button>
-          </Navbar.Item>
-        </Navbar.Content>
-        <Navbar.Content>
-          <Navbar.Item css={{ display: "flex", "@xs": { display: "none" } }}>
-            <Button
-              auto
-              light
-              animated={false}
-              onPress={handleSidebarDisplay}
-              icon={
-                <ChevronDoubleRightIcon
-                  style={{ height: "var(--icon-size)" }}
-                />
-              }
-            />
-          </Navbar.Item>
-        </Navbar.Content>
-      </Navbar>
+		const newGroup = await res.json();
+		console.log("Create successful", { newGroup });
+		newGroup.notes = [];
+		setNotes({ note: newGroup, type: "addgroup" });
+		router.push(`/note/${currentNote.id || ""}`, undefined, { shallow: true });
+	};
 
-      <Container
-        css={{
-          padding: "0 20px",
-          height: "100%",
-          "overflow-y": "scroll",
-          "overflow-x": "hidden"
-        }}
-      >
-        <NoteList
-          retrieved_notes={notes}
-          showEditor={undefined}
-          key={notes}
-          handleSidebarDisplay={handleSidebarDisplay}
-        />
-      </Container>
-      <Container
-        css={{
-          padding: "20px"
-        }}
-      >
-        <Button
-          auto
-          bordered
-          color="primary"
-          icon={<PlusIcon style={{ height: "var(--icon-size)" }} />}
-          onPress={() => createNote()}
-          css={{ width: "100%" }}
-        >
-          Add new note
-        </Button>
-      </Container>
-      <SearchModal open={searchModal} closeHandler={closeModalHandler} />
-    </Container>
-  );
+	const closeModalHandler = () => {
+		setSearchModal(false);
+	};
+
+	return (
+		<Container
+			display="flex"
+			wrap="nowrap"
+			direction="column"
+			css={{
+				position: "absolute",
+				zIndex: 3,
+				width: "100vw",
+				transition: "transform 0.2s ease-in-out",
+				transform: sidebarDisplay ? "translateX(-101%)" : "translateX(0%)",
+				padding: "0",
+				margin: "0",
+				background: "$accents0",
+				height: "100vh",
+				float: "left",
+				color: type === "light" ? "$textSecondary" : "$text",
+				"@xs": {
+					position: sidebarDisplay ? "fixed" : "relative",
+					maxWidth: "15%",
+					minWidth: "250px"
+				}
+			}}
+		>
+			<Row css={{ padding: "20px 10px" }}>
+				<Button
+					auto
+					icon={
+						<MagnifyingGlassIcon style={{ height: "var(--icon-size-s)" }} />
+					}
+					onPress={setSearchModal}
+					css={{
+						width: "100%",
+						color: "$textSecondary",
+						background: "$background",
+						justifyContent: "flex-start"
+					}}
+				>
+					Search notes
+				</Button>
+				<Button
+					auto
+					light
+					animated={false}
+					onPress={handleSidebarDisplay}
+					icon={
+						<ChevronDoubleRightIcon style={{ height: "var(--icon-size)" }} />
+					}
+					css={{ display: "flex", "@xs": { display: "none" } }}
+				/>
+			</Row>
+			<Container
+				css={{
+					overflowY: "auto",
+					overflowX: "hidden",
+					padding: "0",
+					height: "100%"
+				}}
+			>
+				<NoteList
+					retrieved_notes={notes}
+					showEditor={undefined}
+					handleSidebarDisplay={handleSidebarDisplay}
+					createNote={createNote}
+					key={notes}
+				/>
+			</Container>
+
+			<Container
+				display="flex"
+				wrap="nowrap"
+				css={{ padding: "20px 10px", gap: "10px" }}
+			>
+				<Button
+					auto
+					icon={<DocumentPlusIcon style={{ height: "var(--icon-size-s)" }} />}
+					onPress={() => createNote()}
+					css={{
+						minWidth: "0",
+						flex: "1",
+						background: "$accents4",
+						color: "$textSecondary"
+					}}
+				>
+					Note
+				</Button>
+
+				<Button
+					auto
+					icon={<FolderPlusIcon style={{ height: "var(--icon-size-s)" }} />}
+					onPress={() => createGroup()}
+					css={{
+						minWidth: "0",
+						flex: "1",
+						background: "$accents4",
+						color: "$textSecondary"
+					}}
+				>
+					Group
+				</Button>
+			</Container>
+			<SearchModal open={searchModal} closeHandler={closeModalHandler} />
+		</Container>
+	);
 };
 
 export default NoteSidebar;

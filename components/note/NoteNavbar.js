@@ -1,6 +1,6 @@
-import SettingsModal from "@/components/modal/SettingsModal";
 import ExportModal from "@/components/modal/ExportModal";
 import DeleteModal from "@/components/modal/DeleteModal";
+import SettingsModal from "@/components/modal/SettingsModal";
 import { Avatar, Dropdown, Button, Navbar } from "@nextui-org/react";
 import { useState, useEffect } from "react";
 import {
@@ -11,7 +11,8 @@ import {
   DocumentArrowUpIcon,
   ChevronDoubleRightIcon,
   ChevronDoubleLeftIcon
-} from "@heroicons/react/24/outline";
+} from "@heroicons/react/24/solid";
+
 import {
   useNote,
   useDispatchNote,
@@ -21,9 +22,10 @@ import {
 
 const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
   const [selectedKey, setSelectedKey] = useState();
-  const [settingsModal, setSettingsModal] = useState(false);
   const [exportModal, setExportModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [settingsModal, setSettingsModal] = useState(false);
+
   const currentNote = useNote();
   const setNotes = useDispatchNotes();
 
@@ -66,9 +68,9 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
       variant="sticky"
       disableShadow
       disableBlur
-      css={{ "z-index": 2 }}
+      css={{ zIndex: 2 }}
       containerCss={{
-        "min-width": "100%"
+        minWidth: "100%"
       }}
     >
       <Navbar.Content>
