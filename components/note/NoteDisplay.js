@@ -20,14 +20,14 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
 	const debounceSave = useRef(
 		debounce(async (criteria) => {
 			saveContent(criteria);
-		}, 1000)
+		}, 500)
 	).current;
-		console.log(notesc);
 	const saveContent = async (content) => {
 		console.log("editor debounce", content);
 		let note = {
 			id: content.id,
 			title: content.title,
+			body: content.body,
 			groupId: content.groupId
 		};
 		let res = await fetch("/api/note", {
@@ -78,11 +78,12 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
 							debounceSave({
 								id: currentNote.id,
 								title: e.target.value,
+								body: currentNote.body,
 							});
 						}}></Input>
 					<table
 						className="note-metadata-table"
-						style={{ "text-align": "left" }}>
+						style={{ "textAlign": "left" }}>
 						<tbody>
 							<tr>
 								<th>Created by</th>

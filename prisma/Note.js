@@ -122,10 +122,21 @@ export const changeProfilePicture = async (session) => {
 // group specific calls
 // 
 
-export const createGroup = async (title, session) => {
+export const getGroupByID = async (id) => {
+	const note = await prisma.group.findUnique({
+		where: {
+			id
+		}
+	});
+
+	return JSON.parse(JSON.stringify(note));
+};
+
+export const createGroup = async (name, color, session) => {
 	const newGroup = await prisma.group.create({
 		data: {
-			title,
+			name,
+			color,
 			user: {
 				connect: {
 					email: session?.user?.email
@@ -133,7 +144,7 @@ export const createGroup = async (title, session) => {
 			}
 		},
 	});
-	const group = await getNoteByID(newGroup.id);
+	const group = await getGroupByID(newGroup.id);
 	return group;
 };
 
@@ -150,7 +161,7 @@ export const updateGroup = async (id, updatedData, session) => {
 			...updatedData,
 		}
 	});
-	const group = await getNoteByID(updatedGroup.id);
+	const group = await getGroupByID(updatedGroup.id);
 	return group;
 };
 

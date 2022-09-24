@@ -50,11 +50,15 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
     let res = await fetch("/api/group", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: "defGroup", color: "#ffffff" })
+      body: JSON.stringify({ name: "new group", color: "grey" })
     });
 
     const newGroup = await res.json();
-    console.log("Create successful", { newGroup });
+	 console.log("Create successful", { newGroup });
+	 newGroup.notes = [];
+	 setNotes({ note: newGroup, type: "addgroup" });
+	 router.push(`/note/${currentNote.id||""}`, undefined, { shallow: true });
+    
   };
 
   return (
@@ -133,6 +137,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
         }}
       >
         <NoteList
+		  		key={notes}
           retrieved_notes={notes}
           showEditor={undefined}
           handleSidebarDisplay={handleSidebarDisplay}

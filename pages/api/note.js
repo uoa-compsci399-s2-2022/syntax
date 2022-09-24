@@ -20,8 +20,11 @@ export default async function handle(req, res) {
     // const updatedData = {title, body}
     // Update current note
     // also pass the session which would be use to get the user information
+	if(id==undefined){
+		const note = await createNote(title, body, session);
+		return res.json(note);
+	}
 
-    console.log({ id, title, body });
 
     const note = await updateNote(id, { title, body, groupId }, session);
     return res.json(note);

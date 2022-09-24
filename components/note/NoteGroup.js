@@ -15,9 +15,10 @@ import {
   ChevronRightIcon,
   DocumentTextIcon
 } from "@heroicons/react/24/outline";
-import { useNote } from "../../modules/AppContext";
+import { useNote, useNotes } from "../../modules/AppContext";
 
-const NoteGroup = ({ name, color = "white", notes, openNote, createNote }) => {
+const NoteGroup = ({ name, color = "white", notes, openNote, id, createNote }) => {
+	const notesc = useNotes();
   const [isOpen, setIsOpen] = useState(false);
   const { checked, type } = useTheme();
   const currentNote = useNote();

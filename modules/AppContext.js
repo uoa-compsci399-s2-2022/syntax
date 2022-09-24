@@ -21,6 +21,13 @@ const notesReducer = (state, action) => {
 		return state;
 	} 
 
+	if (type === "addgroup"){
+		var newState = [...state.groups];
+		newState.push(note);
+		state.groups = newState;
+		return state;
+	} 
+
 	// if "replace"
 	// replace entire array with new value
 	if (type === "replace") return note;
@@ -29,16 +36,27 @@ const notesReducer = (state, action) => {
 	// remove the note object in the previous state
 	// that matches the title of the current note object
 	if (type === "remove") {
-		const noteIndex = state.findIndex((x) => x.id === note.id);
+		// const noteIndex = state.findIndex((x) => x.id === note.id);
+
+		// // if no match, return the previous state
+		// if (noteIndex < 0) return state;
+
+		// // avoid mutating the original state, create a copy
+		// const stateUpdate = [...state];
+
+		// // then splice it out from the array
+		// stateUpdate.splice(noteIndex, 1);
+		let noteGroupIndex = state.groups.findIndex((x) => x.id === note.groupId);
+
+		// if no match, return the previous state
+		if (noteGroupIndex < 0) return state;
+
+		let noteIndex = state.groups[noteGroupIndex].notes.findIndex((x) => x.id === note.id);
 
 		// if no match, return the previous state
 		if (noteIndex < 0) return state;
-
-		// avoid mutating the original state, create a copy
-		const stateUpdate = [...state];
-
-		// then splice it out from the array
-		stateUpdate.splice(noteIndex, 1);
+		const stateUpdate = state;
+		stateUpdate.groups[noteGroupIndex].notes.splice(noteIndex, 1)
 		return stateUpdate;
 	}
 
