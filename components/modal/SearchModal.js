@@ -87,25 +87,34 @@ const SearchModal = ({ open, closeHandler }) => {
 				>
 					<Button
 						auto
-						bordered={titleChecked ? false : true}
 						onPress={() => setTitleChecked(!titleChecked)}
-						css={{ border: "2px solid $primary" }}
+						css={{
+							background: titleChecked ? "$accents4" : "transparent",
+							color: "$textSecondary",
+							border: "2px solid $accents4"
+						}}
 					>
 						Title
 					</Button>
 					<Button
 						auto
-						bordered={contentChecked ? false : true}
 						onPress={() => setContentChecked(!contentChecked)}
-						css={{ border: "2px solid $primary" }}
+						css={{
+							background: contentChecked ? "$accents4" : "transparent",
+							color: "$textSecondary",
+							border: "2px solid $accents4"
+						}}
 					>
 						Content
 					</Button>
 					<Button
 						auto
-						bordered={codeChecked ? false : true}
 						onPress={() => setCodeChecked(!codeChecked)}
-						css={{ border: "2px solid $primary" }}
+						css={{
+							background: codeChecked ? "$accents4" : "transparent",
+							color: "$textSecondary",
+							border: "2px solid $accents4"
+						}}
 					>
 						Code
 					</Button>

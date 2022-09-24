@@ -11,7 +11,7 @@ import {
   DocumentArrowUpIcon,
   ChevronDoubleRightIcon,
   ChevronDoubleLeftIcon
-} from "@heroicons/react/24/outline";
+} from "@heroicons/react/24/solid";
 import {
   useNote,
   useDispatchNote,

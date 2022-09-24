@@ -1,13 +1,14 @@
 import NoteList from "./NoteList";
 import SearchModal from "@/components/modal/SearchModal";
 import { useState, useEffect } from "react";
-import { Container, Button, Row, useTheme, Dropdown } from "@nextui-org/react";
+import { Container, Button, Row, useTheme, Input } from "@nextui-org/react";
 import {
 	MagnifyingGlassIcon,
 	PlusIcon,
 	ChevronDoubleRightIcon,
-	AdjustmentsHorizontalIcon
-} from "@heroicons/react/24/outline";
+	FolderPlusIcon,
+	DocumentPlusIcon
+} from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
 import {
 	useNote,
@@ -71,7 +72,7 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
 				background: "$accents0",
 				height: "100vh",
 				float: "left",
-				color: type === "light" ? "$text-secondary" : "$text",
+				color: type === "light" ? "$textSecondary" : "$text",
 				"@xs": {
 					position: sidebarDisplay ? "fixed" : "relative",
 					maxWidth: "15%",
@@ -82,16 +83,19 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
 			<Row css={{ padding: "20px 10px" }}>
 				<Button
 					auto
-          color="primary"
-					icon={<MagnifyingGlassIcon style={{ height: "var(--icon-size-s)" }} />}
+					icon={
+						<MagnifyingGlassIcon style={{ height: "var(--icon-size-s)" }} />
+					}
 					onPress={setSearchModal}
-          css={{
-            width: "100%"
+					css={{
+						width: "100%",
+						color: "$textSecondary",
+						background: "$background",
+						justifyContent: "flex-start"
 					}}
 				>
 					Search notes
 				</Button>
-
 				<Button
 					auto
 					light
@@ -121,15 +125,27 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
 				/>
 			</Container>
 
-			<Container css={{ padding: "20px 10px" }}>
+			<Container
+				display="flex"
+				wrap="nowrap"
+				css={{ padding: "20px 10px", gap: "10px" }}
+			>
 				<Button
 					auto
-					color="primary"
-					icon={<PlusIcon style={{ height: "var(--icon-size-s)" }} />}
+					icon={<DocumentPlusIcon style={{ height: "var(--icon-size-s)" }} />}
 					onPress={() => createNote()}
-					css={{ width: "100%" }}
+					css={{ minWidth: "0", flex: "1", background: "$accents4", color: "$textSecondary" }}
 				>
-					Add new note
+					Note
+				</Button>
+
+				<Button
+					auto
+					icon={<FolderPlusIcon style={{ height: "var(--icon-size-s)" }} />}
+					onPress={() => createNote()}
+					css={{ minWidth: "0", flex: "1", background: "$accents4", color: "$textSecondary" }}
+				>
+					Group
 				</Button>
 			</Container>
 			<SearchModal open={searchModal} closeHandler={closeModalHandler} />

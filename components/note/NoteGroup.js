@@ -25,7 +25,14 @@ const NoteGroup = ({ name, color = "white", notes, openNote, createNote }) => {
 	};
 
 	return (
-		<Container css={{ padding: "0", marginBottom: "0.5rem" }}>
+		<Container
+			css={{
+				padding: "0",
+				marginBottom: "0.5rem",
+				borderRadius: "var(--nextui-radii-md)",
+				background: "$accents4"
+			}}
+		>
 			<Container
 				display="flex"
 				justify="space-between"
@@ -39,6 +46,7 @@ const NoteGroup = ({ name, color = "white", notes, openNote, createNote }) => {
 					textAlign: "left",
 					outline: "none",
 					cursor: "pointer",
+					borderRadius: "var(--nextui-radii-md)",
 					backgroundColor: "$accents4"
 				}}
 			>
@@ -72,7 +80,11 @@ const NoteGroup = ({ name, color = "white", notes, openNote, createNote }) => {
 					<Button
 						light
 						ripple={false}
-						icon={<EllipsisHorizontalIcon style={{ height: "var(--icon-size-xs)" }} />}
+						icon={
+							<EllipsisHorizontalIcon
+								style={{ height: "var(--icon-size-xs)" }}
+							/>
+						}
 						css={{
 							cursor: "pointer",
 							minWidth: "0",
@@ -111,27 +123,32 @@ const NoteGroup = ({ name, color = "white", notes, openNote, createNote }) => {
 					padding: "0",
 					overflow: "hidden",
 					transition: "max-height 0.3s",
-					maxHeight: isOpen ? 34 * notes.length + "px" : "0"
+					maxHeight: isOpen ? 40 * notes.length + "px" : "0"
 				}}
 			>
 				<Container
 					css={{
-						padding: 0,
+						padding: "0",
+						marginBottom: "0.5rem",
+						borderRadius: "var(--nextui-radii-md)",
 						backgroundColor: "$accents4"
 					}}
 				>
 					{notes.map((note) => (
+						<Row css={{padding: "0 0.5rem", marginBottom: "0.3rem"}}>
 						<a
 							key={note.id}
 							onClick={() => {
 								openNote(note);
 							}}
+							style={{width: "100%"}}
 						>
 							<Row
 								align="center"
 								css={{
-									display: "flex",
-									padding: "0.3rem 0.5rem",
+									padding: "0.3rem 0",
+									width: "100%",
+									borderRadius: "var(--nextui-radii-md)",
 									backgroundColor:
 										note.id === currentNote.id ? "$accents5" : "transparent",
 									"&:hover": {
@@ -151,14 +168,16 @@ const NoteGroup = ({ name, color = "white", notes, openNote, createNote }) => {
 										whiteSpace: "nowrap",
 										overflow: "hidden",
 										textOverflow: "ellipsis",
-                    marginRight: "1rem"
+										marginRight: "1rem"
 									}}
 								>
 									{note.title}
 								</Col>
 							</Row>
 						</a>
+						</Row>
 					))}
+					
 				</Container>
 			</Container>
 		</Container>

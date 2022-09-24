@@ -37,7 +37,7 @@ const NoteList = ({ retrieved_notes, handleSidebarDisplay, createNote }) => {
 
   return (
     <>
-      <Container css={{ padding: "0", textOverflow: "break" }}>
+      <Container css={{ padding: "0 0.5rem", textOverflow: "break" }}>
         {"groups" in notes ? (
           notes.groups.map((key) => (
             <NoteGroup
