@@ -20,35 +20,35 @@ const DrawingModal = dynamic(() => import('../editor/Tldraw'), {
 })
 
 async function uploadDrawing(files){
-	let res = await fetch("/api/s3/", {
-	  method: "POST",
-	  body: "drawing",
-	});
-	const {data, src, key} = await res.json();
-	const url = data.url; //url for post
-	const fields = data.fields; //formdata for post
-	const formData = new FormData();
-	formData.append("key", `${key}.png`)
-	Object.entries({ ...fields}).forEach(([key, value]) => {
-	  formData.append(key, value)
-	})
-	formData.append('file', files[0])
-	//POST to upload file
-	const png = await fetch(url, {
-	  method: "POST",
-	  body: formData,
-	});
-	if (png.ok){
-	  formData.set("key", `${key}.json`)
-	  formData.set("file", files[1])
-	  const content = await fetch(url, {
-		method: "POST",
-		body: formData,
-	  });
-	  return src+'.png'
-	}
-	return null
+  let res = await fetch("/api/s3/", {
+    method: "POST",
+    body: "drawing",
+  });
+  const {data, src, key} = await res.json();
+  const url = data.url; //url for post
+  const fields = data.fields; //formdata for post
+  const formData = new FormData();
+  formData.append("key", `${key}.png`)
+  Object.entries({ ...fields}).forEach(([key, value]) => {
+    formData.append(key, value)
+  })
+  formData.append('file', files[0])
+  //POST to upload file
+  const png = await fetch(url, {
+    method: "POST",
+    body: formData,
+  });
+  if (png.ok){
+    formData.set("key", `${key}.json`)
+    formData.set("file", files[1])
+    const content = await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
+    return src+'.png'
   }
+  return null
+}
 
 export default function () {
   if (typeof window === 'undefined'){
@@ -124,7 +124,7 @@ export default function () {
       } else if (drawContent === null) {
         editor.chain().focus()?.setDrawing({src})?.run();
       }
-      if (drawContent !== null){
+      else {
         editor.chain().focus()?.editDrawing({src})?.run();
       }
     }
