@@ -64,29 +64,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           resolve()
         }
     }
-    else if (req.method === "PUT"){
-      try{
-        const fileParams = {
-          Bucket: process.env.AWS_BUCKET_NAME,
-          Expires: 60, 
-          Conditions: [
-            ['starts-with', '$key', objectKey],
-            ['content-length-range', 0, sizeLimit], //file limitation
-          ],
-        };
-  
-        const data = await s3Client.createPresignedPost(fileParams);
-        //return data for presigned post url and image location url
-        res.status(200).json({ 
-            data: data,
-        });
-        resolve()
-      } catch (err) {
-        console.log(err);
-        res.status(400).json({ message: err });
-        resolve()
-      }
-    } else if (req.method === "DELETE") {
+    else if (req.method === "DELETE") {
       const params = {
         Bucket: process.env.AWS_BUCKET_NAME, 
         Key: (typeof objectKey === "string") ? objectKey : objectKey[0]
