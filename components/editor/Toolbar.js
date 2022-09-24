@@ -386,8 +386,8 @@ export default ({ editor }) => {
 			<div className="menu-divider" />
 
 			{/* List-related options*/}
-			{Object.entries(listOptions).map(([key, item]) => (
-				<MenuItem {...item} />
+			{Object.entries(listOptions).map(([key, item], index) => (
+				<MenuItem {...item} key={index}/>
 			))}
 
 			<Tooltip content={"Lists"}>
@@ -427,8 +427,8 @@ export default ({ editor }) => {
 			<div className="menu-divider" />
 
 			{/* Extended node options (image, drawing, code block, video, etc.) */}
-			{Object.entries(insertOptions).map(([key, item]) => (
-				<MenuItem {...item} />
+			{Object.entries(insertOptions).map(([key, item], index) => (
+				<MenuItem {...item} key={index}/>
 			))}
 
 			<Tooltip content={"Insert"}>

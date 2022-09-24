@@ -135,9 +135,9 @@ const NoteGroup = ({ name, color = "white", notes, openNote, id, createNote }) =
 					}}
 				>
 					{notes.map((note) => (
-						<Row css={{padding: "0 0.5rem", marginBottom: "0.3rem"}}>
+						<Row css={{padding: "0 0.5rem", marginBottom: "0.3rem"}} key={note.id}>
 						<a
-							key={note.id}
+							
 							onClick={() => {
 								openNote(note);
 							}}
