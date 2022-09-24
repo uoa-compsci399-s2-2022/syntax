@@ -1,7 +1,7 @@
 import { EditorContent, useEditor, BubbleMenu } from "@tiptap/react";
 
 import StarterKit from "@tiptap/starter-kit";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import Menubar from "./Menubar.js";
 import { TipTapCustomImage } from "@/node/Image";
 import { Drawing } from "@/node/Drawing";
@@ -19,100 +19,36 @@ const DrawingModal = dynamic(() => import('../editor/Tldraw'), {
   ssr: false,
 })
 
-
-async function upload(file){
-  //fetch data from endpoint for presigned link and image src
-  let res = await fetch("/api/s3/", {
-    method: "POST",
-    body: file.type,
-  });
-  const {data, src, key} = await res.json();
-  const url = data.url; //url for post
-  const fields = data.fields; //formdata for post
-  const formData = new FormData();
-  Object.entries({ ...fields}).forEach(([key, value]) => {
-    formData.append(key, value)
-  })
-  formData.append('file', file)
-  //POST to upload file
-  const upload = await fetch(url, {
-    method: "POST",
-    body: formData,
-  });
-  if (upload.ok){
-    return src
-  }
-  return null
-}
-
 async function uploadDrawing(files){
-  let res = await fetch("/api/s3/", {
-    method: "POST",
-    body: "drawing",
-  });
-  const {data, src, key} = await res.json();
-  const url = data.url; //url for post
-  const fields = data.fields; //formdata for post
-  const formData = new FormData();
-  formData.append("key", `${key}.png`)
-  Object.entries({ ...fields}).forEach(([key, value]) => {
-    formData.append(key, value)
-  })
-  formData.append('file', files[0])
-  //POST to upload file
-  const png = await fetch(url, {
-    method: "POST",
-    body: formData,
-  });
-  if (png.ok){
-    formData.set("key", `${key}.json`)
-    formData.set("file", files[1])
-    const content = await fetch(url, {
-      method: "POST",
-      body: formData,
-    });
-    return src+'.png'
+	let res = await fetch("/api/s3/", {
+	  method: "POST",
+	  body: "drawing",
+	});
+	const {data, src, key} = await res.json();
+	const url = data.url; //url for post
+	const fields = data.fields; //formdata for post
+	const formData = new FormData();
+	formData.append("key", `${key}.png`)
+	Object.entries({ ...fields}).forEach(([key, value]) => {
+	  formData.append(key, value)
+	})
+	formData.append('file', files[0])
+	//POST to upload file
+	const png = await fetch(url, {
+	  method: "POST",
+	  body: formData,
+	});
+	if (png.ok){
+	  formData.set("key", `${key}.json`)
+	  formData.set("file", files[1])
+	  const content = await fetch(url, {
+		method: "POST",
+		body: formData,
+	  });
+	  return src+'.png'
+	}
+	return null
   }
-  return null
-}
-
-async function updateDrawing(files){
-  try{
-    const key = files[2].split(".")[0]
-    console.log(key)
-    let res = await fetch(`/api/s3/${key}`, {
-      method: "PUT",
-    });
-    const {data} = await res.json();
-    console.log(data)
-    const url = data.url; //url for post
-    const fields = data.fields; //formdata for post
-    const formData = new FormData();
-    formData.append("key", `${key}.png`)
-    Object.entries({ ...fields}).forEach(([key, value]) => {
-      formData.append(key, value)
-    })
-    formData.append('file', files[0])
-    //POST to upload file
-    const png = await fetch(url, {
-      method: "POST",
-      body: formData,
-    });
-    if (png.ok){
-      formData.set("key", `${key}.json`)
-      formData.set("file", files[1])
-      const content = await fetch(url, {
-        method: "POST",
-        body: formData,
-      });
-      return content.ok
-    }
-    return null
-  }
-  catch (err){
-    return null
-  }
-}
 
 export default function () {
   if (typeof window === 'undefined'){
@@ -148,9 +84,10 @@ export default function () {
   };
 
   const editor = useEditor({
+    disablePasteRules: [Drawing, "drawing"],
     extensions: [
       StarterKit, 
-      TipTapCustomImage(upload).configure({
+      TipTapCustomImage().configure({
         HTMLAttributes: {
           class: 'image'
         }
@@ -160,7 +97,8 @@ export default function () {
           class: 'drawing'
         }
       })
-  ],
+      
+    ],
     content: currentNote.body
   });
   editor?.on("update", ({ editor }) => {
@@ -180,18 +118,17 @@ export default function () {
 
   const closeHandler = async (files) => {
     if (typeof files !== "undefined"){
-      let src
-      if (drawContent !== null){
-        src = await updateDrawing(files)
-      } else {
-        src = await uploadDrawing(files)
-      }
+      const src = await uploadDrawing(files)
       if (src === null) {
         console.log("File size was too large")
       } else if (drawContent === null) {
         editor.chain().focus()?.setDrawing({src})?.run();
       }
+      if (drawContent !== null){
+        editor.chain().focus()?.editDrawing({src})?.run();
+      }
     }
+    
 		setDrawModal(false)
     setDrawContent(null)
 	};
@@ -208,7 +145,7 @@ export default function () {
   const openHandler = () => {
     setDrawModal(true)
   }
-    
+
   return (
     <Container
       display="flex"
@@ -225,17 +162,17 @@ export default function () {
       {editor && <BubbleMenu className="button-menu" pluginKey={"imageMenu"} editor={editor} tippyOptions={{duration: 100}} shouldShow={({ editor, view, state, oldState, from, to }) => {
         return editor?.isActive("image")}}>
         <Button.Group className="is-active" color="primary" light>
-          <Button onPress={() => editor.chain().focus().setImage({size: 'small'}).run()}
+          <Button onPress={() => editor.chain().focus().updateImage({size: 'small'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {size: 'small'}}>Small</Button>
-          <Button onPress={() => editor.chain().focus().setImage({size: 'medium'}).run()}
+          <Button onPress={() => editor.chain().focus().updateImage({size: 'medium'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {size: 'medium'}}>Medium</Button>
-          <Button onPress={() => editor.chain().focus().setImage({size: 'large'}).run()}
+          <Button onPress={() => editor.chain().focus().updateImage({size: 'large'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {size: 'large'}}>Large</Button>
-          <Button onPress={() => editor.chain().focus().setImage({float: 'left'}).run()}
+          <Button onPress={() => editor.chain().focus().updateImage({float: 'left'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {float: 'left'}}>Left</Button>
-          <Button onPress={() => editor.chain().focus().setImage({float: 'none'}).run()}
+          <Button onPress={() => editor.chain().focus().updateImage({float: 'none'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {float: 'none'}}>No float</Button>
-          <Button onPress={() => editor.chain().focus().setImage({float: 'right'}).run()}
+          <Button onPress={() => editor.chain().focus().updateImage({float: 'right'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {float: 'right'}}>Right</Button>
         </Button.Group>
       </BubbleMenu>}
@@ -260,7 +197,7 @@ export default function () {
       </BubbleMenu>}
       <EditorContent editor={editor} key={currentNote} style={{ "max-width": "100%" }} />
       <Spacer />
-      <DrawingModal open={drawModal} closeHandler={closeHandler} content={drawContent}/>
+      <DrawingModal open={drawModal} closeHandler={closeHandler} content={drawContent}/>            
     </Container>
   );
 }

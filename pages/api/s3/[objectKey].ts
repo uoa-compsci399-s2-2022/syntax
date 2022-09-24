@@ -14,12 +14,12 @@ const s3Client = new aws.S3({
 const sizeLimit = 5242880
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-    const { drawingKey } = req.query
+    const { objectKey } = req.query
     if (req.method === "GET") {
       try{
           const params = {
             Bucket: process.env.AWS_BUCKET_NAME,
-            Key: (typeof drawingKey === "string") ? drawingKey : drawingKey[0],
+            Key: (typeof objectKey === "string") ? objectKey : objectKey[0],
           };
           const request = await s3Client.getObject(params, function(err, data) {
             if (err) {
@@ -46,7 +46,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           const body = JSON.parse(req.body)
           const params = {
             Bucket: process.env.AWS_BUCKET_NAME,
-            Key: (typeof drawingKey === "string") ? drawingKey : drawingKey[0],
+            Key: (typeof objectKey === "string") ? objectKey : objectKey[0],
             Tagging: {
               TagSet: [{
                 Key: body.tag.key,
@@ -70,7 +70,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           Bucket: process.env.AWS_BUCKET_NAME,
           Expires: 60, 
           Conditions: [
-            ['starts-with', '$key', drawingKey],
+            ['starts-with', '$key', objectKey],
             ['content-length-range', 0, sizeLimit], //file limitation
           ],
         };
@@ -86,6 +86,24 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         res.status(400).json({ message: err });
         resolve()
       }
+    } else if (req.method === "DELETE") {
+      const params = {
+        Bucket: process.env.AWS_BUCKET_NAME, 
+        Key: (typeof objectKey === "string") ? objectKey : objectKey[0]
+      };
+      const data = await s3Client.deleteObject(params, function(err, data) {
+        if (err) {
+          res.status(400).json({
+            message: err,
+            errorStack: err.stack
+          })
+          resolve()
+        }else {
+          res.status(200).json({
+            file: data
+          });
+          resolve()
+        }});
     } else{
         return res.status(405).json({ message: "Method not allowed" });
     }

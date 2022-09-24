@@ -1,3 +1,4 @@
+
 import { Plugin } from "prosemirror-state";
 
 /**
@@ -11,8 +12,6 @@ export const uploadImagePlugin = (upload: UploadFn) => {
 		props: {
 			handlePaste(view, event) {
 				console.log("----onhandlePaste image---");
-
-				event.preventDefault()
 
 				const items = Array.from(event.clipboardData?.items || []);
 				const { schema } = view.state;
@@ -37,10 +36,10 @@ export const uploadImagePlugin = (upload: UploadFn) => {
 								view.dispatch(transaction);
 							});
 						}
-					} 
+					}
 				});
 
-				return false;
+				return true;
 			},
 			handleDOMEvents: {
 				drop(view, event) {

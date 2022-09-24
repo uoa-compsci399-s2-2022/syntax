@@ -1,6 +1,6 @@
 import { Node, nodeInputRule } from "@tiptap/core";
 import { mergeAttributes } from "@tiptap/react";
-import { uploadImagePlugin, UploadFn } from "./upload_image";
+import { uploadImagePlugin } from "./upload_image";
 
 
 /**
@@ -48,7 +48,33 @@ async function tag(image, Key, Value){
 	});	
 }
 
-export const TipTapCustomImage = (uploadFn: UploadFn) => {
+/** upload images */
+async function upload(file: File | Blob): Promise<string>{
+	//fetch data from endpoint for presigned link and image src
+	let res = await fetch("/api/s3/", {
+	  method: "POST",
+	  body: file.type,
+	});
+	const {data, src, key} = await res.json();
+	const url = data.url; //url for post
+	const fields = data.fields; //formdata for post
+	const formData = new FormData();
+	Object.entries({ ...fields}).forEach(([key, value]) => {
+	  formData.append(key, value as string)
+	})
+	formData.append('file', file)
+	//POST to upload file
+	const upload = await fetch(url, {
+	  method: "POST",
+	  body: formData,
+	});
+	if (upload.ok){
+	  return src
+	}
+	return null
+}
+
+export const TipTapCustomImage = () => {
 	return Node.create<ImageOptions>({
 		name: "image",
 		inline() {
@@ -151,6 +177,10 @@ export const TipTapCustomImage = (uploadFn: UploadFn) => {
 			}
 		},
 
+		addPasteRules() {
+			return []
+		},
+
         addInputRules() {
             return [
                 nodeInputRule({
@@ -166,7 +196,7 @@ export const TipTapCustomImage = (uploadFn: UploadFn) => {
         },
 		//Plugin to be able to drag and drop images
 		addProseMirrorPlugins() {
-			return [uploadImagePlugin(uploadFn)];
+			return [uploadImagePlugin(upload)];
 		},
 	});
 };
