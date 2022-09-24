@@ -22,7 +22,12 @@ export const getServerSideProps = async ({ req, res, params }) => {
 
 	if (!session) {
 		res.statusCode = 403;
-		return { props: { notes: [] } };
+		return {
+			redirect: {
+				destination: '/',
+				permanent: false,
+			},
+		}
 	}
 	if (id && id.length > 1) {
 		return {
