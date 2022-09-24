@@ -12,6 +12,7 @@ import {
   ChevronDoubleRightIcon,
   ChevronDoubleLeftIcon
 } from "@heroicons/react/24/solid";
+
 import {
   useNote,
   useDispatchNote,
@@ -24,6 +25,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
   const [exportModal, setExportModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [settingsModal, setSettingsModal] = useState(false);
+
   const currentNote = useNote();
   const setNotes = useDispatchNotes();
 
