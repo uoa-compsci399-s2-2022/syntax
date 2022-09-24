@@ -137,7 +137,7 @@ export default function () {
       method: "GET",
     })
     const body = await res.json()
-    setDrawContent([body.file])
+    setDrawContent(body.file)
     setDrawModal(true)
   }
 
