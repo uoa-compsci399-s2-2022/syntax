@@ -75,6 +75,12 @@ export default function Component() {
 
       </Head>
       
+      <div className="bckg">
+			<div className="blurcont"></div>
+			<div className="right blob"></div>
+			<div className="left blob"></div>
+      <div className="right2 blob"></div>
+		  </div>
       
       <Navbar disableShadow variant={'sticky'} maxWidth={'fluid'} css={{backgroundColor: isDark ? 'rgba(155,155,155,0.35)' : 'rgba(200,200,200,0.0)'}}>
         <Navbar.Brand>
@@ -239,12 +245,7 @@ export default function Component() {
       </Container>
       <Spacer y={2}/>
 
-      <div className="bckg">
-			<div className="blurcont"></div>
-			<div className="right blob"></div>
-			<div className="left blob"></div>
-      <div className="right2 blob"></div>
-		  </div>
+      
       </>
     );
   }
