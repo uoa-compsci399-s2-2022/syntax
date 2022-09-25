@@ -40,8 +40,7 @@ export default function Component() {
 
   const editor = useEditor({ extensions: [StarterKit], content: `
   <h1>Welcome to syntax !</h1>
-  <p>This is a <b>note-taking app <i>especially</i> made for programmers</b>, where writing notes and running code are all in one application.
-  <br> You can take effective notes without breaking your concentration when switching between apps.</p>
+  <p>This is a <b>note-taking app <i>especially</i> made for programmers</b>, where writing notes and running code are all in one application.</p>
 
   <blockquote>"Any fool can write code that a computer can understand. Good programmers write code that humans can understand."<br> - Martin Fowler</blockquote>
   
@@ -72,10 +71,12 @@ export default function Component() {
         <link rel="icon" href="/favicon.ico"/>
         <meta name="theme-color" content="#317EFB" />
 
-      </Head>
-        
+        <link rel='stylesheet' href='../styles/index.css'/>
 
-      <Navbar disableShadow variant={'sticky'} maxWidth={'fluid'} css={{backgroundColor: isDark ? '#494949' : '#FFFFFF'}}>
+      </Head>
+      
+      
+      <Navbar disableShadow variant={'sticky'} maxWidth={'fluid'} css={{backgroundColor: isDark ? 'rgba(155,155,155,0.35)' : 'rgba(200,200,200,0.0)'}}>
         <Navbar.Brand>
         <Image
             width={50}
@@ -105,7 +106,7 @@ export default function Component() {
 
       <Spacer y={1.5}/>
 
-      <Container sm display='flex' direction='column'>
+      <Container sm display='flex' direction='column' className='onlineNote'>
         <Card variant='bordered' isHoverable css={{$$cardColor: isDark ? '#1D1D1D' : 'white'}}>
           <Card.Body>
               <Menubar editor={editor}/>
@@ -145,7 +146,7 @@ export default function Component() {
             </Card.Body>
           </Card>
         </Grid>
-              <Text h2 css={{m:0}} color={isDark ? '#BD93F9' : '#7D27F8'}>
+              <Text h2 css={{m:0}} color={isDark ? '#EDABFF' : '#5600C3'}>
                 Everything you need, all in one app
               </Text>
               <Text>
@@ -165,7 +166,7 @@ export default function Component() {
             </Card.Body>
           </Card>
         </Grid>
-          <Text h2 css={{m:0}} color={isDark ? '#50FA7B' : '#149935'}>
+          <Text h2 css={{m:0}} color={isDark ? '#50FA7B' : '#005100'}>
                 Supports various programming languages
               </Text>
               <Text>
@@ -211,7 +212,7 @@ export default function Component() {
             </Card.Body>
           </Card>
         </Grid>
-              <Text h2 css={{m:0}} color={ isDark ? '#FFB86C' : '#E57700'}>
+              <Text h2 css={{m:0}} color={ isDark ? '#FFCA63' : '#C20000'}>
                 Share and Collaborate
               </Text>
               <Text>
@@ -219,9 +220,8 @@ export default function Component() {
               </Text>
         </Grid>
       </Grid.Container>
-        
 
-      <Spacer y={4}/>
+      <Spacer y={3}/>
 
       <Container fluid justify='center' display='flex' direction='column'>
         <Row justify='center'>
@@ -237,8 +237,14 @@ export default function Component() {
         </Row>
       
       </Container>
+      <Spacer y={2}/>
 
-      <Spacer y={3}/>
+      <div className="bckg">
+			<div className="blurcont"></div>
+			<div className="right blob"></div>
+			<div className="left blob"></div>
+      <div className="right2 blob"></div>
+		  </div>
       </>
     );
   }
@@ -252,4 +258,7 @@ export default function Component() {
         </Button>
     </>
   );
+}
+function px(arg0: number, px: any) {
+  throw new Error("Function not implemented.");
 }
