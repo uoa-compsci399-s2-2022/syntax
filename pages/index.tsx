@@ -1,17 +1,14 @@
 import { useRouter } from "next/router";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
-import { Button, Text, Grid, Spacer, Switch, useTheme, Image } from '@nextui-org/react';
+import { Button, Text, Spacer, Switch, useTheme, Image, Navbar, Container, Row, Card, Link } from '@nextui-org/react';
 import Head from "next/head";
 
 import { useTheme as useNextTheme } from 'next-themes'
 import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
-import { Container, Row, Card, Link } from '@nextui-org/react';
 
 import Menubar from "@/components/editor/Menubar";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-
-import{ Navbar, Radio } from '@nextui-org/react';
 
 
 const getAllNotesByUserID = require("../prisma/Note").getAllNotesByUserID;
@@ -40,12 +37,14 @@ export default function Component() {
 
   const editor = useEditor({ extensions: [StarterKit], content: `
   <h1>Welcome to syntax !</h1>
-  <p>This is a <b>note-taking app <i>especially</i> made for programmers</b>, where writing notes and running code are all in one application.</p>
+  <p>This is a <b>note-taking app <i>especially</i> made for programmers</b>, where writing notes and running code are all in one application.
+  <br>You can <b>invite other users</b> to the same note page and take effective notes together for group work or discussions.</p>
 
   <blockquote>"Any fool can write code that a computer can understand. Good programmers write code that humans can understand."<br> - Martin Fowler</blockquote>
   
   <h3>Write, compile, and execute your code in your notes and receive live outputs!</h3>
-  <p>Syntax supports selected languages such as <b>Python, Java, C, and C++</b>.</p>
+  <p>Syntax supports selected languages such as <b>Python, Java, JavaScript, C, and C++</b>. 
+  <br>All the necessary languages for a programmers!</p>
   
   <br><br>
   <h5>Psst! Feel free to try me out! ;)</h5>
@@ -74,12 +73,11 @@ export default function Component() {
         <link rel='stylesheet' href='../styles/index.css'/>
 
       </Head>
-      
       <div className="bckg">
 			<div className="blurcont"></div>
 			<div className="right blob"></div>
 			<div className="left blob"></div>
-      <div className="right2 blob"></div>
+      <div className="right2 blob2"></div>
 		  </div>
       
       <Navbar disableShadow variant={'sticky'} maxWidth={'fluid'} css={{backgroundColor: isDark ? 'rgba(155,155,155,0.35)' : 'rgba(200,200,200,0.0)'}}>
@@ -110,9 +108,9 @@ export default function Component() {
 			<Text size={60} weight={'bold'} align="center">syntax</Text>
 			<Text h2 align="center" weight="normal" size={32} >Code. Learn. Collaborate.</Text>
 
-      <Spacer y={1.5}/>
+      <Spacer y={2}/>
 
-      <Container sm display='flex' direction='column' className='onlineNote'>
+      <Container sm display='flex' direction='column'>
         <Card variant='bordered' isHoverable css={{$$cardColor: isDark ? '#1D1D1D' : 'white'}}>
           <Card.Body>
               <Menubar editor={editor}/>
@@ -123,109 +121,6 @@ export default function Component() {
           </Card.Body>
         </Card>
       </Container>
-
-      <Spacer y={3}/>
-
-      <Grid.Container gap={5} justify='center'>
-        <Grid xl={4} lg={4} sm={5} xs={0}>
-        <Card css={{ $$cardColor: '$colors$primary'}}>
-            <Card.Body>
-              <Text h6 size={15} color='white' css={{m:0}}>
-                insert image here 1
-              </Text>
-              <Spacer y={7}/>
-            </Card.Body>
-          </Card>
-        </Grid>
-
-        <Spacer x={3}/>
-
-        <Grid xl={4} lg={4} sm={5} xs={15} direction='column' justify='center'>
-        <Spacer y={1}/>
-        <Grid xl={0} lg={0} sm={0} xs>
-        <Card css={{ $$cardColor: '$colors$primary'}}>
-            <Card.Body>
-              <Text h6 size={15} color='white' css={{m:0}}>
-                insert image here hidden 1
-              </Text>
-              <Spacer y={7}/>
-            </Card.Body>
-          </Card>
-        </Grid>
-              <Text h2 css={{m:0}} color={isDark ? '#EDABFF' : '#5600C3'}>
-                Everything you need, all in one app
-              </Text>
-              <Text>
-                Get into that study flow and simultaneously execute your code and write your notes beside them on one page, in one app.
-              </Text>
-        </Grid>
-
-        <Grid xl={4} lg={4} sm={5} xs={15} direction='column'>
-          
-        <Grid xl={0} lg={0} sm={0} xs>
-        <Card css={{ $$cardColor: '$colors$primary'}}>
-            <Card.Body>
-              <Text h6 size={15} color='white' css={{m:0}}>
-                insert image here hidden 2
-              </Text>
-              <Spacer y={7}/>
-            </Card.Body>
-          </Card>
-        </Grid>
-          <Text h2 css={{m:0}} color={isDark ? '#50FA7B' : '#005100'}>
-                Supports various programming languages
-              </Text>
-              <Text>
-                Our code blocks supports C, C++, Java, JavaScript, and Python! The essential languages for a programming student.
-              </Text>
-        </Grid>
-
-        <Spacer x={3}/>
-
-        <Grid xl={4} lg={4} sm={5} xs={0}>
-        <Card css={{ $$cardColor: '$colors$primary'}}>
-            <Card.Body>
-              <Text h6 size={15} color='white' css={{m:0}}>
-                insert image here 2 
-              </Text>
-              <Spacer y={7}/>
-            </Card.Body>
-          </Card>
-        </Grid>
-
-        <Grid xl={4} lg={4} sm={5} xs={0}>
-        <Card css={{ $$cardColor: '$colors$primary'}}>
-            <Card.Body>
-              <Text h6 size={15} color='white' css={{m:0}}>
-                insert image here 3
-              </Text>
-              <Spacer y={7}/>
-            </Card.Body>
-          </Card>
-        </Grid>
-
-        <Spacer x={3}/>
-
-        <Grid xl={4} lg={4} sm={5} xs={15} direction='column'>
-        <Spacer y={1}/>
-        <Grid xl={0} lg={0} sm={0} xs>
-        <Card css={{ $$cardColor: '$colors$primary'}}>
-            <Card.Body>
-              <Text h6 size={15} color='white' css={{m:0}}>
-                insert image here hidden 3
-              </Text>
-              <Spacer y={7}/>
-            </Card.Body>
-          </Card>
-        </Grid>
-              <Text h2 css={{m:0}} color={ isDark ? '#FFCA63' : '#C20000'}>
-                Share and Collaborate
-              </Text>
-              <Text>
-                Invite and collaborate with your peers on the same note for effective discussions and productive group work.
-              </Text>
-        </Grid>
-      </Grid.Container>
 
       <Spacer y={3}/>
 
@@ -243,7 +138,7 @@ export default function Component() {
         </Row>
       
       </Container>
-      <Spacer y={2}/>
+      <Spacer y={4}/>
 
       
       </>
