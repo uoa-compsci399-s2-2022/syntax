@@ -209,10 +209,10 @@ height: 1em;
 
 const htmlTemplate = (title, body, name, css) => {
     if (css){
-        return(`<!doctype html><html><head><title>${title}</title><meta charset="utf-8">${CSS}</head><body><h1>${title}<h1/><h4>${name}<h4/><br><hr>${body}</body></html>`)
+        return(`<!doctype html><html><head><title>${title}</title><meta charset="utf-8">${CSS}</head><body><h1>${title}<h1/><h4>${name}</h4><br><hr>${body}</body></html>`)
     }
     return(
-        `<!doctype html><html><head><meta charset="utf-8"></head><body><h1>${title}<h1/><h4>${name}<h4/><br><hr>${body}</body></html>`
+        `<!doctype html><html><head><meta charset="utf-8"></head><body><h1>${title}<h1/><h4>${name}</h4><br><hr>${body}</body></html>`
 )} 
 
 
