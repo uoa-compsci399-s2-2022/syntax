@@ -9,6 +9,14 @@ import {
 } from "@nextui-org/react";
 import { useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import {
+	useNote,
+	useDispatchNote,
+	useNotes,
+	useDispatchNotes
+} from "../../modules/AppContext";
+import { useRouter } from "next/router";
+
 
 const SearchModal = ({ open, closeHandler }) => {
 	const { checked, type } = useTheme();
@@ -16,40 +24,43 @@ const SearchModal = ({ open, closeHandler }) => {
 	const [titleChecked, setTitleChecked] = useState(true);
 	const [contentChecked, setContentChecked] = useState(false);
 	const [codeChecked, setCodeChecked] = useState(false);
+	const [returnedNotes, setNotes] = useState([])
+	const setCurrentNote = useDispatchNote();
+	const router = useRouter();
+
 
 	const sortOptions = {
-		"title-asc": "Title (ascending)",
-		"title-desc": "Title (descending)",
-		"modified-asc": "Modified (ascending)",
-		"modified-desc": "Modified (descending)",
-		"created-asc": "Created (ascending)",
-		"created-desc": "Created (descending)"
+		"title: 1": "Title (ascending)",
+		"title: -1": "Title (descending)",
+		"modified: 1": "Modified (ascending)",
+		"modified: -1": "Modified (descending)",
+		"created: 1": "Created (ascending)",
+		"created: -1": "Created (descending)"
 	};
 
-	{
-		/* Filler content to preview the modal with scrollbar */
-	}
-	const exampleNotes = [
-		{ title: "Note Title 1", updatedAt: "Date" },
-		{ title: "Note Title 2", updatedAt: "Date" },
-		{ title: "Note Title 3", updatedAt: "Date" },
-		{ title: "Note Title 4", updatedAt: "Date" },
-		{ title: "Note Title 5", updatedAt: "Date" },
-		{ title: "Note Title 6", updatedAt: "Date" },
-		{ title: "Note Title 7", updatedAt: "Date" },
-		{ title: "Note Title 8", updatedAt: "Date" },
-		{ title: "Note Title 9", updatedAt: "Date" },
-		{ title: "Note Title 10", updatedAt: "Date" },
-		{ title: "Note Title 11", updatedAt: "Date" },
-		{ title: "Note Title 12", updatedAt: "Date" },
-		{ title: "Note Title 13", updatedAt: "Date" },
-		{ title: "Note Title 14", updatedAt: "Date" },
-		{ title: "Note Title 15", updatedAt: "Date" },
-		{ title: "Note Title 16", updatedAt: "Date" },
-		{ title: "Note Title 17", updatedAt: "Date" },
-		{ title: "Note Title 18", updatedAt: "Date" }
-	];
 
+	const Search = async (e) => {
+		let res = await fetch("/api/search", {
+			method: "POST",
+			headers: { "Content-Type": "application/json", "titleChecked": titleChecked, "contentChecked": contentChecked, "codeChecked": codeChecked, "selectedSort": selectedSort },
+			body: JSON.stringify(e.target.value)
+		  });
+		  const notes = await res.json()
+		  setNotes(notes)
+	};
+
+	const openNote = (note) => {
+		console.log(note)
+		note.action = "edit";
+		setCurrentNote(note);
+		router.push(`/note/${note.id}`, undefined, { shallow: true });
+		if (window.innerWidth < 650) {
+			handleSidebarDisplay();
+		}
+		closeHandler()
+	};
+	
+	
 	return (
 		<Modal
 			blur
@@ -74,6 +85,7 @@ const SearchModal = ({ open, closeHandler }) => {
 					clearable
 					aria-label="Advanced Search Bar"
 					placeholder="Search notes..."
+					onChange={Search}
 					type="search"
 					animated={false}
 					contentLeft={
@@ -122,7 +134,7 @@ const SearchModal = ({ open, closeHandler }) => {
 				</Container>
 			</Modal.Header>
 			<Modal.Body>
-				{exampleNotes.length > 0 ? (
+				{returnedNotes.length > 0 ? (
 					<>
 						<Dropdown>
 							<Dropdown.Button
@@ -148,9 +160,11 @@ const SearchModal = ({ open, closeHandler }) => {
 								))}
 							</Dropdown.Menu>
 						</Dropdown>
-						<a>
+
 							<Container css={{ padding: "0" }}>
-								{exampleNotes.map((note, index) => (
+					
+								{returnedNotes.map((note, index) => (
+									<a onClick={() => openNote(note)}>
 									<Container
 										key={note.title + index}
 										css={{
@@ -164,9 +178,10 @@ const SearchModal = ({ open, closeHandler }) => {
 										<Row>{note.title}</Row>
 										<Row css={{ color: "$accents6" }}>{note.updatedAt}</Row>
 									</Container>
+									</a>
 								))}
 							</Container>
-						</a>
+
 					</>
 				) : (
 					<Container display="flex" justify="center">

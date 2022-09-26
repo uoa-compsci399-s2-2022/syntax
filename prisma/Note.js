@@ -53,6 +53,33 @@ export const getNoteByID = async (id) => {
 	return JSON.parse(JSON.stringify(note));
 };
 
+export const getAllNotesBySearch = async (title, content, code, sort, id) => {
+
+	const notes = await prisma.note.findRaw({
+		filter: { 
+		$and: 
+		[{"userId": id}, 
+		{$or: [
+			{"title": {$regex: title }},
+			{"body.content": { $elemMatch: { content: { $elemMatch: { "text": { $regex: content}}}}}},
+			{"body.content": { $elemMatch: { "attrs.code_content": {$regex: code}}}}]
+		}]},
+		options: { projection: { "updatedAt": false }}
+		})
+		console.log(notes)
+		return JSON.parse(JSON.stringify(notes))
+};
+
+
+export const getAllNotesByUserIdSearch = async (id) => {
+	const notes = await prisma.note.findRaw({
+		filter: {
+		"userId": id,},
+		options: {projection: {"updatedAt" : false}}
+	})
+	return JSON.parse(JSON.stringify(notes))
+}
+
 export const updateNote = async (id, updatedData, session) => {
 	let userId = session?.user.id;
 	const updatedNote = await prisma.note.update({
