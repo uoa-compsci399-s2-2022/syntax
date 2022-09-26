@@ -52,15 +52,10 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 			console.log(error);
 		}
 	};
-	const exportType = {
-		"Markdown": 'md',
-		"HTML": 'html',
-		"PDF": 'html'
-	}
 	const exportNoteHandler = async (fileType) => {
 		try{
 			console.log(fileType)
-			if (fileType ==="HTML"){
+			if (fileType =="HTML"){
 				let res = await fetch(`/api/note/${currentNote.id}/export/html`, {
 					method: "GET",
 				});
@@ -71,7 +66,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 				link.href = URL.createObjectURL(blob);
 				link.setAttribute('download', `${currentNote.title}.html`);
 				link.click();
-			} else if (fileType ==="Markdown") {
+			} else if (fileType =="Markdown") {
 				const res = await fetch(`/api/note/${currentNote.id}/export/md`, {
 					method: "GET",
 				});
@@ -82,7 +77,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 				link.setAttribute('download', `${currentNote.title}.md`);
 				link.click();
 			}
-			else if (fileType === "PDF"){
+			else if (fileType == "PDF"){
 				const res = await fetch(`/api/note/${currentNote.id}/export/html`, {
 					method: "GET",
 				});
