@@ -4,7 +4,7 @@ import crypto from 'crypto'
 
 
 //File path of image location
-const path = `http://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_BUCKET_REGION}.amazonaws.com/`
+const path = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_BUCKET_REGION}.amazonaws.com/`
 
 //Set up S3 client with configurations
 const s3Client = new aws.S3({
