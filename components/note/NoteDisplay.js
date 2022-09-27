@@ -129,7 +129,7 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
 												aria-label="Group Selection"
 												selectionMode="single"
 												selectedKeys={currentNote.group.name}
-												onAction={(key) =>
+												onAction={(e) =>
 													debounceSave({
 														id: currentNote.id,
 														groupId: e.target.value

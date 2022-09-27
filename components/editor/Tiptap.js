@@ -99,15 +99,13 @@ async function uploadDrawing(files){
 }
 
 export default function () {
-  if (typeof window === 'undefined'){
-    return null;
-  }
   const notesc = useNotes();
   const setNotes = useDispatchNotes();
   const currentNote = useNote();
   const setCurrentNote = useDispatchNote();
   const [drawModal, setDrawModal] = useState(false);
   const [drawContent, setDrawContent] = useState(null);
+  const router = useRouter();
   const debounceSave = useRef(
     debounce(async (criteria) => {
       saveContent(criteria);
@@ -265,7 +263,7 @@ export default function () {
               className={editor?.isActive('drawing') ? 'is-active' : "editDrawing" }>Edit</Button>
         </Button.Group>
       </BubbleMenu>}
-      <EditorContent editor={editor} key={currentNote} style={{ "max-width": "100%" }} />
+      <EditorContent editor={editor} key={currentNote} style={{ "maxWidth": "100%" }} />
       <Spacer />
       <DrawingModal open={drawModal} closeHandler={closeHandler} content={drawContent}/>            
     </Container>
