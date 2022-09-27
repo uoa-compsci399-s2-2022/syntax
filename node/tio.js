@@ -5,8 +5,8 @@ const SCRIPT_REGEX =
 	/<script src="(\/static\/[0-9a-f]+-frontend\.js)" defer><\/script>/;
 const RUNURL_REGEX = /^var runURL = "\/cgi-bin\/static\/([^"]+)";$/m;
 
-/** Languages we can decide to support: Python3, Java(Oracle JDK), C(clang compiler), C++(clang compiler)*/
-const LANGUAGES = ["python3", "java-jdk", "c-clang", "cpp-clang", "javascript-node"];
+/** Languages we can decide to support: C(clang compiler), C++(clang compiler), Java(Oracle JDK), JavaScript(javascript-node), Python3*/
+const LANGUAGES = ["c-clang", "cpp-clang", "java-jdk", "javascript-node", "python3" ];
 async function getURL() {
 	const num = await fetch("https://tio.run/").then((response) =>
 		response.text()
