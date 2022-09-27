@@ -6,7 +6,7 @@ import Head from "next/head";
 import { useTheme as useNextTheme } from 'next-themes'
 import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
 
-import Menubar from "@/components/editor/Menubar";
+import Toolbar from "@/components/editor/Toolbar";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 
@@ -33,12 +33,12 @@ export default function Component() {
 
   const editor = useEditor({ extensions: [StarterKit], content: `
   <h1>Welcome to syntax !</h1>
-  <p>This is a <b>note-taking app <i>especially</i> made for programmers</b>, where writing notes and running code are all in one application.
-  <br>You can <b>invite other users</b> to the same note page and take effective notes together for group work or discussions.</p>
+  <h3>A note-taking app <b>especially</b> made for programmers.</h3>
+  <h4>Invite other users to the same note page and work effeciently together :D</h4>
 
   <blockquote>"Any fool can write code that a computer can understand. Good programmers write code that humans can understand."<br> - Martin Fowler</blockquote>
   
-  <h3>Write, compile, and execute your code in your notes and receive live outputs!</h3>
+  <h4>Write, compile, and execute your code in your notes and receive live outputs!</h4>
   <p>Syntax supports selected languages such as <b>Python, Java, JavaScript, C, and C++</b>. 
   <br>All the necessary languages for a programmers!</p>
   
@@ -76,7 +76,7 @@ export default function Component() {
       <div className="right2 blob2"></div>
 		  </div>
       
-      <Navbar disableShadow variant={'sticky'} maxWidth={'fluid'} css={{backgroundColor: isDark ? 'rgba(155,155,155,0.35)' : 'rgba(200,200,200,0.0)'}}>
+      <Navbar disableShadow variant={'sticky'} maxWidth={'fluid'} css={{backgroundColor: isDark ? 'rgba(95,95,95,0.35)' : 'rgba(200,200,200,0.0)'}}>
         <Navbar.Brand>
         <Image
             width={50}
@@ -107,9 +107,9 @@ export default function Component() {
       <Spacer y={2}/>
 
       <Container sm display='flex' direction='column'>
-        <Card variant='bordered' isHoverable css={{$$cardColor: isDark ? '#1D1D1D' : 'white'}}>
+        <Card variant='bordered' isHoverable css={{$$cardColor: isDark ? '#121212' : 'white'}}>
           <Card.Body>
-              <Menubar editor={editor}/>
+              <Toolbar editor={editor}/>
               <Spacer/>
               <EditorContent
               editor={editor}
