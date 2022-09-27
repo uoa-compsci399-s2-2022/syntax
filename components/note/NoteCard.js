@@ -5,9 +5,9 @@ const NoteCard = ({ note }) => {
     <Card
       isPressable
       variant="flat"
-      css={{ background: "$background", "line-height": "1" }}
+      css={{ background: "$background", "line-height": "1", "border-radius": "0" }}
     >
-      <Card.Header css={{ "padding-bottom": "0" }}>
+      <Card.Header>
         <Text h4>{note.title}</Text>
       </Card.Header>
       {/* <Card.Body css={{ "padding-top": "0" }}>

@@ -1,19 +1,40 @@
-import { EditorContent, useEditor, BubbleMenu } from "@tiptap/react";
-
+import {
+	EditorContent, useEditor, BubbleMenu,
+	ReactNodeViewRenderer,
+	NodeViewWrapper,
+	NodeViewContent,
+} from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import BulletList from "@tiptap/extension-bullet-list";
+import Underline from "@tiptap/extension-underline";
+import Superscript from "@tiptap/extension-superscript";
+import Subscript from "@tiptap/extension-subscript";
+import Youtube from "@tiptap/extension-youtube";
+import Link from "@tiptap/extension-link";
 import { useEffect, useState, useRef } from "react";
-import Menubar from "./Menubar.js";
+import Toolbar from "./Toolbar.js";
 import { TipTapCustomImage } from "@/node/Image";
 import { Drawing } from "@/node/Drawing";
+import { Extension } from '@tiptap/core'
+import { UploadFn } from "@/node/upload_image";
 import { debounce } from "lodash";
+import { useRouter } from "next/router";
 import { Container, Button, Spacer } from "@nextui-org/react";
+import { EditorView } from 'prosemirror-view'
 import {
-  useNote,
-  useDispatchNote,
-  useNotes,
-  useDispatchNotes
+	useNote,
+	useDispatchNote,
+	useNotes,
+	useDispatchNotes
 } from "@/modules/AppContext";
 import dynamic from 'next/dynamic'
+import { CodeBlockNode } from './CodeMirrorNode';
+
+
+EditorView.prototype.updateState = function updateState(state) {
+	if (!this.docView) return // This prevents the matchesNode error on hot reloads
+	this.updateStateInner(state, this.state.plugins != state.plugins)
+}
 
 const DrawingModal = dynamic(() => import('../editor/Tldraw'), {
   ssr: false,
@@ -131,26 +152,49 @@ export default function () {
     }, 1000)
   ).current;
 
-  const saveContent = async (content) => {
-    console.log("editor debounce", content);
-    let note = {
-      id: content.id,
-      title: content.title,
-      body: content.json
-    };
-    let res = await fetch("/api/note", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(note)
-    });
+	const saveContent = async (content) => {
+		console.log("editor debounce", content);
+		let note = {
+			id: content.id,
+			title: content.title,
+			body: content.json
+		};
+		let res = await fetch("/api/note", {
+			method: "PUT",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(note)
+		});
 
-    const updatedNote = await res.json();
-    setNotes({ note: updatedNote, type: "edit" });
-  };
+		const updatedNote = await res.json();
+		if (!content.id) {
+			router.push(`/note/${updatedNote.id}`, undefined, { shallow: true });
+			setCurrentNote(updatedNote);
+		}
+		setNotes({ note: updatedNote, type: "edit" });
+	};
 
-  const editor = useEditor({
-    extensions: [
-      StarterKit, 
+	const editor = useEditor({
+		extensions: [
+			StarterKit.configure({
+				codeBlock: false,
+				code: false,
+				bulletList: false
+			}),
+			Underline,
+			Superscript,
+			Subscript,
+			Youtube,
+			BulletList.configure({
+				HTMLAttributes: {
+					class: "editor-ul"
+				}
+			}),
+			Link.configure({
+				HTMLAttributes: {
+					class: "editor-link"
+				}
+			}),
+			CodeBlockNode,
       TipTapCustomImage(upload).configure({
         HTMLAttributes: {
           class: 'image'
@@ -161,23 +205,22 @@ export default function () {
           class: 'drawing'
         }
       })
-  ],
-    content: currentNote.body
-  });
-  editor?.on("update", ({ editor }) => {
-    console.log("editor updated");
-    debounceSave({
-      id: currentNote.id,
-      title: currentNote.title,
-      json: editor.getJSON()
-    });
-  });
+		],
+		content: currentNote.body
+	});
+	editor?.on("update", ({ editor }) => {
+		// console.log("editor updated");
+		debounceSave({
+			id: currentNote.id,
+			title: currentNote.title,
+			json: editor.getJSON()
+		});
+	});
 
-  console.log("Editor Rendered", currentNote.id);
+	useEffect(() => {
+		editor?.commands?.setContent(currentNote.body);
+	}, [currentNote.body]);
 
-  useEffect(() => {
-    editor?.commands?.setContent(currentNote.body);
-  }, [editor, currentNote.body]);
 
   const closeHandler = async (files) => {
     if (typeof files !== "undefined"){
@@ -205,7 +248,7 @@ export default function () {
     setDrawModal(true)
   }
 
-  const openHandler = () => {
+  const drawingOpenHandler = () => {
     setDrawModal(true)
   }
     
@@ -216,11 +259,11 @@ export default function () {
       css={{
         padding: "0",
         margin: "0",
-        "min-width": "100%",
+        minWidth: "100%",
         "@xs": { "flex-direction": "column" }
       }}
     > 
-      <Menubar editor={editor} openHandler={openHandler} />
+      <Toolbar editor={editor} drawingOpenHandler={drawingOpenHandler} />
       <Spacer />
       {editor && <BubbleMenu className="button-menu" pluginKey={"imageMenu"} editor={editor} tippyOptions={{duration: 100}} shouldShow={({ editor, view, state, oldState, from, to }) => {
         return editor?.isActive("image")}}>
