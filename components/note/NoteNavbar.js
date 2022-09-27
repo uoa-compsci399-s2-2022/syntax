@@ -3,6 +3,8 @@ import DeleteModal from "@/components/modal/DeleteModal";
 import SettingsModal from "@/components/modal/SettingsModal";
 import { Avatar, Dropdown, Button, Navbar } from "@nextui-org/react";
 import { useState, useEffect } from "react";
+import { Document, Page, pdf} from '@react-pdf/renderer'
+import Html from 'react-pdf-html'
 import {
   EllipsisHorizontalIcon,
   TrashIcon,
@@ -20,14 +22,68 @@ import {
   useDispatchNotes
 } from "../../modules/AppContext";
 
+const PDFElement = (html) => {
+    return (
+        <Document>
+            <Page size="A4">
+                <Html>{html}</Html>
+            </Page>
+        </Document>
+    )
+}
+
 const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
   const [selectedKey, setSelectedKey] = useState();
   const [exportModal, setExportModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [settingsModal, setSettingsModal] = useState(false);
-
   const currentNote = useNote();
   const setNotes = useDispatchNotes();
+
+	const exportNoteHandler = async (fileType) => {
+		try{
+			console.log(fileType)
+			if (fileType =="HTML"){
+				let res = await fetch(`/api/note/${currentNote.id}/export/html`, {
+					method: "GET",
+				});
+				let { text } = await res.json()
+				console.log(text)
+				const blob = new Blob([text], {type: "text/html"})
+				const link = document.createElement('a');
+				link.href = URL.createObjectURL(blob);
+				link.setAttribute('download', `${currentNote.title}.html`);
+				link.click();
+			} else if (fileType =="Markdown") {
+				const res = await fetch(`/api/note/${currentNote.id}/export/md`, {
+					method: "GET",
+				});
+				let { text } = await res.json()
+				const blob = new Blob([text], {type: "text/markdown"})
+				const link = document.createElement('a');
+				link.href = URL.createObjectURL(blob);
+				link.setAttribute('download', `${currentNote.title}.md`);
+				link.click();
+			}
+			else if (fileType == "PDF"){
+				const res = await fetch(`/api/note/${currentNote.id}/export/pdf`, {
+					method: "GET",
+				});
+				let { text } = await res.json();
+				const content = PDFElement(text)
+				const blobPromise = pdf(content).toBlob().then((blob)=> {
+					const link = document.createElement('a');
+					link.href = URL.createObjectURL(blob);
+					link.setAttribute('download', `${currentNote.title}.pdf`);
+					link.click();
+				});
+				
+							
+			}
+		} catch (error) {
+			console.log(error)
+		}
+	}
 
   const closeHandler = () => {
     setSettingsModal(false);
@@ -36,21 +92,8 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
     setSelectedKey();
   };
 
-  const deleteNoteHandler = async () => {
-    try {
-      console.log(currentNote);
-      let res = await fetch(`/api/note`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(currentNote.id)
-      });
-      const deletedNote = await res.json();
-      setNotes({ note: deletedNote, type: "remove" });
-      setDeleteModal(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const currentNote = useNote();
+  const setNotes = useDispatchNotes();
 
   useEffect(() => {
     switch (selectedKey) {
@@ -165,13 +208,9 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
             </Dropdown.Menu>
           </Dropdown>
         </Navbar.Item>
-        <ExportModal open={exportModal} closeHandler={closeHandler} />
-        <DeleteModal
-          open={deleteModal}
-          onclosehandler={closeHandler}
-          closeHandler={deleteNoteHandler}
-        />
-        <SettingsModal open={settingsModal} closeHandler={closeHandler} />
+				<ExportModal open={exportModal} oncloseHandler={closeHandler} closeHandler={exportNoteHandler} />
+				<DeleteModal open={deleteModal} onclosehandler={closeHandler} closeHandler={deleteNoteHandler} />
+				<SettingsModal open={settingsModal} closeHandler={closeHandler} />
       </Navbar.Content>
     </Navbar>
   );

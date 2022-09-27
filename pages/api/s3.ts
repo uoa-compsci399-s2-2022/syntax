@@ -4,7 +4,7 @@ import crypto from 'crypto'
 
 
 //File path of image location
-const path = `http://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_BUCKET_REGION}.amazonaws.com/`
+const path = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_BUCKET_REGION}.amazonaws.com/`
 
 //Set up S3 client with configurations
 const s3Client = new aws.S3({
@@ -17,66 +17,53 @@ const s3Client = new aws.S3({
 
 //Image file size limitation
 const sizeLimit = 5242880
-const methods = ["POST", "DELETE"];
 
 //File name generator to prevent duplicates
 const generateFileName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex')
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-    if (req.method === "POST") {
-      try {
-        let type = req.body;
-        const fileName = generateFileName();
-
-        const fileParams = {
-            Bucket: process.env.AWS_BUCKET_NAME,
-            Fields: {
-              key: fileName, //filename
-              'Content-Type':type, //filetype
-            },
-            Expires: 60, 
-            Conditions: [
-              ['content-length-range', 0, sizeLimit], //file limitation
-            ],
-        };
-    
-        const data = await s3Client.createPresignedPost(fileParams);
-        const imageUrl = path + fileName;
-        //return data for presigned post url and image location url
-        res.status(200).json({ 
-            data: data,
-            src: imageUrl,
-      });
-      } catch (err) {
-        console.log(err);
-        res.status(400).json({ message: err });
-      }
-    }
-    else if (req.method === "PUT") {
-      try{
-        console.log(req.body)
-        const body = JSON.parse(req.body)
-        const params = {
+  if (req.method === "POST") {
+    try {
+      let type = req.body;
+      const fileName = generateFileName();
+      let fileParams: object
+      if (type === "drawing"){
+        fileParams = {
           Bucket: process.env.AWS_BUCKET_NAME,
-          Key: body.name,
-          Tagging: {
-            TagSet: [{
-              Key: body.tag.key,
-              Value: body.tag.value,
-            }]
-          }
+          Expires: 90, 
+          Conditions: [
+            ['starts-with', '$key', fileName],
+            ['content-length-range', 0, sizeLimit], //file limitation
+          ],
+        }
+      } else {
+        fileParams = {
+          Bucket: process.env.AWS_BUCKET_NAME,
+          Fields: {
+            key: fileName, //filename
+            'Content-Type':type, //filetype
+          },
+          Expires: 60, 
+          Conditions: [
+            ['content-length-range', 0, sizeLimit], //file limitation
+          ],
         };
-        const request = await s3Client.putObjectTagging(params);
-        const response = await request.send();
-        res.status(204).json({
-          status: 'success'
-        });
-      } catch (err) {
-        console.log(err);
-        res.status(400).json({ message: err });
       }
+
+      const data = await s3Client.createPresignedPost(fileParams);
+      const imageUrl = path + fileName;
+      //return data for presigned post url and image location url
+      res.status(200).json({ 
+          data: data,
+          src: imageUrl,
+          key: fileName
+    });
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({ message: err });
     }
-    else{
-      return res.status(405).json({ message: "Method not allowed" });
-    }
-  };
+  }
+  else{
+    return res.status(405).json({ message: "Method not allowed" });
+  }
+};

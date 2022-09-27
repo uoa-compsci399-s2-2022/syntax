@@ -1,7 +1,5 @@
 import { Node, nodeInputRule } from "@tiptap/core";
 import { mergeAttributes } from "@tiptap/react";
-import { uploadImagePlugin, UploadFn } from "./upload_image";
-
 
 /**
  * Tiptap Extension to upload images
@@ -23,20 +21,22 @@ interface ImageOptions {
 
 declare module "@tiptap/core" {
 	interface Commands<ReturnType> {
-		image: {
+		drawing: {
 			/**
-			 * Add an image
+			 * Add a drawing
 			 */
-			setImage: (options: { src: string, alt?: string, title?: string }) => ReturnType;
+			setDrawing: (options: { src: string, alt?: string, title?: string }) => ReturnType;
 		};
 	}
 }
 
 const IMAGE_INPUT_REGEX = /!\[(.+|:?)\]\((\S+)(?:(?:\s+)["'](\S+)["'])?\)/;
 
-export const TipTapCustomImage = (uploadFn: UploadFn) => {
+
+
+export const Drawing = () => {
 	return Node.create<ImageOptions>({
-		name: "image",
+		name: "drawing",
 		inline() {
 			return this.options.inline;
 		},
@@ -85,8 +85,8 @@ export const TipTapCustomImage = (uploadFn: UploadFn) => {
 
 		renderHTML({ node, HTMLAttributes }) {
 
-			HTMLAttributes.class = ' image-' + node.attrs.size
-			HTMLAttributes.class += ' image-float-' + node.attrs.float
+			HTMLAttributes.class = ' drawing-' + node.attrs.size
+			HTMLAttributes.class += ' drawing-float-' + node.attrs.float
 	
 			return [
 				'img',
@@ -96,17 +96,14 @@ export const TipTapCustomImage = (uploadFn: UploadFn) => {
 
 		addCommands() {
 			return {
-				setImage:
+				setDrawing:
 					attrs =>
 					({ state, commands }) => {
 						const { selection } = state;
-						console.log(selection?.node?.type?.name == 'image')
-						if (selection?.node?.type?.name == 'image'){
-							return commands?.updateAttributes('image', attrs)
+						console.log(selection?.node?.type?.name == 'drawing')
+						if (selection?.node?.type?.name == 'drawing'){
+							return commands?.updateAttributes('drawing', attrs)
 						}
-						const position = selection.$head ? selection.$head.pos : selection.$to.pos;
-
-						const node = this.type.create(attrs);
 
 						return commands?.insertContent({
 							type: this.name,
@@ -116,8 +113,6 @@ export const TipTapCustomImage = (uploadFn: UploadFn) => {
 			};
 		},
 		
-
-
         addInputRules() {
             return [
                 nodeInputRule({
@@ -132,8 +127,5 @@ export const TipTapCustomImage = (uploadFn: UploadFn) => {
             ];
         },
 		//Plugin to be able to drag and drop images
-		addProseMirrorPlugins() {
-			return [uploadImagePlugin(uploadFn)];
-		},
 	});
 };

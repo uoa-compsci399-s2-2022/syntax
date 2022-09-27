@@ -27,7 +27,7 @@ import {
 	MdOutlineRedo
 } from "react-icons/md";
 
-export default ({ editor }) => {
+export default ({ editor, drawingOpenHandler }) => {
 	if (!editor) {
 		return null;
 	}
@@ -235,7 +235,7 @@ export default ({ editor }) => {
 			icon: <MdOutlineDraw size={iconSize} color={iconColor} />,
 			label: "Drawing",
 			key: "drawing",
-			action: () => console.log("TO-DO"),
+			action: () => drawingOpenHandler(),
 			breakpoint: "sm"
 		},
 		image: {
