@@ -3,7 +3,8 @@ import ExportModal from "@/components/modal/ExportModal";
 import DeleteModal from "@/components/modal/DeleteModal";
 import { Avatar, Dropdown, Button, Navbar } from "@nextui-org/react";
 import { useState, useEffect } from "react";
-import dynamic from 'next/dynamic'
+import { Document, Page, pdf} from '@react-pdf/renderer'
+import Html from 'react-pdf-html'
 import {
 	EllipsisHorizontalIcon,
 	TrashIcon,
@@ -19,8 +20,15 @@ import {
 	useDispatchNotes
 } from "../../modules/AppContext";
 
-
-  
+const PDFElement = (html) => {
+    return (
+        <Document>
+            <Page size="A4">
+                <Html>{html}</Html>
+            </Page>
+        </Document>
+    )
+}
 
 const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 	const [selectedKey, setSelectedKey] = useState();
@@ -66,24 +74,35 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 				link.href = URL.createObjectURL(blob);
 				link.setAttribute('download', `${currentNote.title}.html`);
 				link.click();
+				document.removeChild(link)
 			} else if (fileType =="Markdown") {
 				const res = await fetch(`/api/note/${currentNote.id}/export/md`, {
 					method: "GET",
 				});
 				let { text } = await res.json()
 				const blob = new Blob([text], {type: "text/markdown"})
+				console.log(blob)
 				const link = document.createElement('a');
 				link.href = URL.createObjectURL(blob);
 				link.setAttribute('download', `${currentNote.title}.md`);
 				link.click();
+				document.removeChild(link)
 			}
 			else if (fileType == "PDF"){
-				const res = await fetch(`/api/note/${currentNote.id}/export/html`, {
+				const res = await fetch(`/api/note/${currentNote.id}/export/pdf`, {
 					method: "GET",
 				});
-				let {text} = await res.json()
-				const html2pdf = (await import("html-to-pdf-js")).default
-				html2pdf().from(text).save(`${currentNote.title}`)
+				let { text } = await res.json();
+				
+				const content = PDFElement(text)
+				const blobPromise = pdf(content).toBlob().then((blob)=> {
+					const link = document.createElement('a');
+					link.href = URL.createObjectURL(blob);
+					link.setAttribute('download', `${currentNote.title}.pdf`);
+					link.click();
+				});
+				
+							
 			}
 		} catch (error) {
 			console.log(error)

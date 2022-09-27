@@ -25,16 +25,6 @@ text-decoration: none;
 box-sizing: border-box;
 }
 
-/* scrollbar styling */
-::-webkit-scrollbar {
-width: 5px;
-}
-
-::-webkit-scrollbar-thumb {
-background-color: darkgrey;
-outline: none;
-}
-
 /* note page styling */
 .note-metadata-table td {
 padding: 0;
@@ -43,11 +33,6 @@ padding: 0;
 .note-metadata-table th {
 padding: 0;
 padding-right: 3rem;
-}
-
-/* editor styling */
-.ProseMirror:focus {
-outline: none;
 }
 
 .ProseMirror img.ProseMirror-selectednode {
@@ -124,7 +109,6 @@ text-decoration: none;
 }
 
 .title a:hover,
-.title a:focus,
 .title a:active {
 text-decoration: underline;
 }
@@ -177,7 +161,6 @@ transition: color 0.15s ease, border-color 0.15s ease;
 }
 
 .card:hover,
-.card:focus,
 .card:active {
 color: #0070f3;
 border-color: #0070f3;
@@ -209,10 +192,10 @@ height: 1em;
 
 const htmlTemplate = (title, body, name, css) => {
     if (css){
-        return(`<!doctype html><html><head><title>${title}</title><meta charset="utf-8">${CSS}</head><body><h1>${title}<h1/><h4>${name}</h4><br><hr>${body}</body></html>`)
+        return(`<html><head><title>${title}</title><meta charset="utf-8">${CSS}</head><body><h1>${title}<h1/><h4>${name}</h4><br><hr>${body}</body></html>`)
     }
     return(
-        `<!doctype html><html><head><meta charset="utf-8"></head><body><h1>${title}<h1/><h4>${name}</h4><br><hr>${body}</body></html>`
+        `<html><head><meta charset="utf-8"></head><body><h1>${title}<h1/><h4>${name}</h4><br><hr>${body}</body></html>`
 )} 
 
 
@@ -234,10 +217,14 @@ export default async function handle(req, res) {
                 res.status(200).json({text: markdown})
 
             } else if (param[2] === "html"){
-                const html = htmlTemplate(title, body, note.user.name, true)
+                let html = htmlTemplate(title, body, note.user.name, true)
+                html = "<!doctype html>" + html
                 res.status(200).json({text: html})
                 
-            } else {
+            } else if (param[2] === "pdf") {
+                const html = htmlTemplate(title, body, note.user.name, true)
+                res.status(200).json({text: html})
+            }else {
                 return res.status(501).json({ message: `` });
             }
         } else{

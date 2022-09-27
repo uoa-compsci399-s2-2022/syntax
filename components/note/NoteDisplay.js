@@ -1,6 +1,5 @@
 import Head from "next/head";
 import { Container, Text, Spacer, Grid, Input } from "@nextui-org/react";
-import ImageEditor from "../editor/ImageEditor";
 import Tiptap from "@/components/editor/Tiptap";
 import {
   useNote,
