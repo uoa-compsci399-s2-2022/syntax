@@ -1,65 +1,77 @@
 import NoteLayout from "../../components/note/NoteLayout";
 import { useSession, getSession } from "next-auth/react";
-// import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  useNote,
-  useDispatchNote,
-  useNotes,
-  useDispatchNotes,
+	useNote,
+	useDispatchNote,
+	useNotes,
+	useDispatchNotes,
 } from "../../modules/AppContext";
+import { NoteTemplate } from '../../components/note/NewNote'
 
 const getNoteByID = require("../../prisma/Note").getNoteByID;
 const getAllNotesByUserID = require("../../prisma/Note").getAllNotesByUserID;
 
 export const getServerSideProps = async ({ req, res, params }) => {
-  res.setHeader(
-    "Cache-Control",
-    "public, s-maxage=10, stale-while-revalidate=59"
-  );
-  const session = await getSession({ req });
-  const { id } = params;
+	res.setHeader(
+		"Cache-Control",
+		"public, s-maxage=10, stale-while-revalidate=59"
+	);
+	const session = await getSession({ req });
+	const { id } = params;
 
-  if (!session) {
-    res.statusCode = 403;
-    return { props: { notes: [] } };
-  }
-  if (id && id.length > 1) {
-    return {
-      notFound: true,
-    };
-  }
+	if (!session) {
+		res.statusCode = 403;
+		return {
+			redirect: {
+				destination: '/',
+				permanent: false,
+			},
+		}
+	}
+	if (id && id.length > 1) {
+		return {
+			notFound: true,
+		};
+	}
+	var note;
+	if (id && id.length == 1) {
+		note = await getNoteByID(id[0]);
+		if (!note) {
+			return {
+				redirect: {
+					destination: '/note',
+					permanent: false,
+				},
+			}
+		}
+	} else {
+		note = {
+			...NoteTemplate,
+			updatedAt: Date.now(),
+			user: session?.user,
+		};
+	}
+	const [notes] = await getAllNotesByUserID(session?.user?.id);
 
-  const notes = await getAllNotesByUserID(session?.user?.id);
-  var note;
-  if (id && id.length == 1) {
-    note = await getNoteByID(id[0]);
-	 console.log(note);
-  } else {
-    note = {
-      title: "Hello 👋",
-      body: "Select a note or start typing here to get started…",
-      updatedAt: Date.now(),
-      user: session?.user,
-    };
-  }
-
-  return {
-    props: { notes, note },
-  };
+	return {
+		props: { notes, note },
+	};
 };
 
 export default function Note({ notes, note }) {
-  const { data: session, status } = useSession();
-  const notesc = useNotes();
-  const setNotes = useDispatchNotes();
+	const { data: session, status } = useSession();
+	const notesc = useNotes();
+	const setNotes = useDispatchNotes();
+	const currentNote = useNote();
+	const setCurrentNote = useDispatchNote();
+	useEffect(() => {
+		if (Object.keys(currentNote).length == 0) {
+			note.action = "edit";
+			setCurrentNote(note);
+		}
+	}, [])
 
-  const currentNote = useNote();
-  const setCurrentNote = useDispatchNote();
 
-  if (Object.keys(currentNote).length == 0) {
-    note.action = "edit";
-    setCurrentNote(note);
-  }
-
-  return <NoteLayout allNotes={notes} currentNote={note} />;
+	return <NoteLayout allNotes={notes} currentNote={note} />;
 }

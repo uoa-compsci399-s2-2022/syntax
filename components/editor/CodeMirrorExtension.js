@@ -77,7 +77,7 @@ export const Extension = ({
 
         <Card variant='bordered' css={{$$cardColor: 'rgba(255,255,255,0.0)', resize: 'both'}}>
         <Card.Body>
-        <div className = "maindiv" >
+        <div className = "maindiv" contentEditable={false}>
         <Dropdown>
         <Dropdown.Button light css = {
             { tt: 'capitalize' }

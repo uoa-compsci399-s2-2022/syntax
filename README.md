@@ -5,10 +5,12 @@ Extended note-taking app for programming students
 
 ## Getting Started
 ```
-$ npm install
-$ npx prisma generate
-$ npm run dev
+npm install
+npx prisma generate
+npm run dev
 ```
+For more information and documentation, visit the [syntax wiki](https://github.com/uoa-compsci399-s2-2022/syntax/wiki).
+
 
 ## Team 10 out of 10
 | Name  | Role |
