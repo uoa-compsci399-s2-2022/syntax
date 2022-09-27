@@ -39,6 +39,22 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
   const [settingsModal, setSettingsModal] = useState(false);
   const currentNote = useNote();
   const setNotes = useDispatchNotes();
+	const deleteNoteHandler = async () => {
+		try {
+			console.log(currentNote);
+			let res = await fetch(`/api/note`, {
+				method: "DELETE",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(currentNote.id),
+			});
+			const deletedNote = await res.json();
+			setNotes({ note: deletedNote, type: "remove" });
+			setDeleteModal(false);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 
 	const exportNoteHandler = async (fileType) => {
 		try{
@@ -91,9 +107,6 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
     setDeleteModal(false);
     setSelectedKey();
   };
-
-  const currentNote = useNote();
-  const setNotes = useDispatchNotes();
 
   useEffect(() => {
     switch (selectedKey) {
