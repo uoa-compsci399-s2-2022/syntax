@@ -14,6 +14,7 @@ import Link from "@tiptap/extension-link";
 import { useEffect, useState, useRef } from "react";
 import Toolbar from "./Toolbar.js";
 import { TipTapCustomImage } from "@/node/Image";
+
 import { Drawing } from "@/node/Drawing";
 import { Extension } from '@tiptap/core'
 import { UploadFn } from "@/node/upload_image";
@@ -27,6 +28,7 @@ import {
 	useNotes,
 	useDispatchNotes
 } from "@/modules/AppContext";
+
 import dynamic from 'next/dynamic'
 import { CodeBlockNode } from './CodeMirrorNode';
 
@@ -39,7 +41,6 @@ EditorView.prototype.updateState = function updateState(state) {
 const DrawingModal = dynamic(() => import('../editor/Tldraw'), {
   ssr: false,
 })
-
 
 async function upload(file){
   //fetch data from endpoint for presigned link and image src
