@@ -103,6 +103,8 @@ export const Extension = ({
         } > Run Code </Button> 
 
         <Spacer y ={ 0.5 }/>
+        <hr></hr>
+        <Spacer y ={ 0.5 }/>
         <div className = "output" >
         <span> { result } </span>  
         </div> 
