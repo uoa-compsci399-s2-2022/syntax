@@ -74,26 +74,22 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 				link.href = URL.createObjectURL(blob);
 				link.setAttribute('download', `${currentNote.title}.html`);
 				link.click();
-				document.removeChild(link)
 			} else if (fileType =="Markdown") {
 				const res = await fetch(`/api/note/${currentNote.id}/export/md`, {
 					method: "GET",
 				});
 				let { text } = await res.json()
 				const blob = new Blob([text], {type: "text/markdown"})
-				console.log(blob)
 				const link = document.createElement('a');
 				link.href = URL.createObjectURL(blob);
 				link.setAttribute('download', `${currentNote.title}.md`);
 				link.click();
-				document.removeChild(link)
 			}
 			else if (fileType == "PDF"){
 				const res = await fetch(`/api/note/${currentNote.id}/export/pdf`, {
 					method: "GET",
 				});
 				let { text } = await res.json();
-				
 				const content = PDFElement(text)
 				const blobPromise = pdf(content).toBlob().then((blob)=> {
 					const link = document.createElement('a');
