@@ -1,3 +1,4 @@
+
 import { Plugin } from "prosemirror-state";
 
 /**
@@ -35,21 +36,10 @@ export const uploadImagePlugin = (upload: UploadFn) => {
 								view.dispatch(transaction);
 							});
 						}
-					} else {
-						const reader = new FileReader();
-						reader.onload = readerEvent => {
-							const node = schema.nodes.image.create({
-								src: readerEvent.target?.result,
-							});
-							const transaction = view.state.tr.replaceSelectionWith(node);
-							view.dispatch(transaction);
-						};
-						if (!image) return;
-						reader.readAsDataURL(image);
 					}
 				});
 
-				return false;
+				return true;
 			},
 			handleDOMEvents: {
 				drop(view, event) {

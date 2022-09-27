@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import aws from 'aws-sdk'
 import { resolve } from "path";
 
-const path = `http://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_BUCKET_REGION}.amazonaws.com/`
 //Set up S3 client with configurations
 const s3Client = new aws.S3({
     region: process.env.AWS_BUCKET_REGION,
@@ -15,12 +14,12 @@ const s3Client = new aws.S3({
 const sizeLimit = 5242880
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-    const { drawingKey } = req.query
+    const { objectKey } = req.query
     if (req.method === "GET") {
       try{
           const params = {
             Bucket: process.env.AWS_BUCKET_NAME,
-            Key: (typeof drawingKey === "string") ? drawingKey : drawingKey[0],
+            Key: (typeof objectKey === "string") ? objectKey : objectKey[0],
           };
           const request = await s3Client.getObject(params, function(err, data) {
             if (err) {
@@ -47,7 +46,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           const body = JSON.parse(req.body)
           const params = {
             Bucket: process.env.AWS_BUCKET_NAME,
-            Key: (typeof drawingKey === "string") ? drawingKey : drawingKey[0],
+            Key: (typeof objectKey === "string") ? objectKey : objectKey[0],
             Tagging: {
               TagSet: [{
                 Key: body.tag.key,
@@ -65,29 +64,23 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           resolve()
         }
     }
-    else if (req.method === "PUT"){
-      try{
-        const fileParams = {
-          Bucket: process.env.AWS_BUCKET_NAME,
-          Expires: 60, 
-          Conditions: [
-            ['starts-with', '$key', drawingKey],
-            ['content-length-range', 0, sizeLimit], //file limitation
-          ],
-        };
-  
-        const data = await s3Client.createPresignedPost(fileParams);
-        //return data for presigned post url and image location url
-        res.status(200).json({ 
-            data: data,
-            src: path+drawingKey
-        });
-        resolve()
-      } catch (err) {
-        console.log(err);
-        res.status(400).json({ message: err });
-        resolve()
-      }
+    else if (req.method === "DELETE") {
+      console.log(objectKey)
+      const params = {
+        Bucket: process.env.AWS_BUCKET_NAME, 
+        Key: (typeof objectKey === "string") ? objectKey : objectKey[0]
+      };
+      const data = await s3Client.deleteObject(params, function(err, data) {
+        if (err) {
+          res.status(400).json({
+            message: err,
+            errorStack: err.stack
+          })
+        }else {
+          res.status(200).json({
+            file: data
+          });
+        }});
     } else{
         return res.status(405).json({ message: "Method not allowed" });
     }

@@ -98,45 +98,6 @@ async function uploadDrawing(files){
   return null
 }
 
-async function updateDrawing(files){
-  try{
-    const key = files[2].split(".")[0]
-    console.log(key)
-    let res = await fetch(`/api/s3/${key}`, {
-      method: "PUT",
-    });
-    const {data, src} = await res.json();
-    console.log(data)
-    const url = data.url; //url for post
-    const fields = data.fields; //formdata for post
-    const formData = new FormData();
-    formData.append("key", `${key}.png`)
-    Object.entries({ ...fields}).forEach(([key, value]) => {
-      formData.append(key, value)
-    })
-    formData.append('file', files[0])
-    //POST to upload file
-    const png = await fetch(url, {
-      method: "POST",
-      body: formData,
-    });
-    if (png.ok){
-      formData.set("key", `${key}.json`)
-      formData.set("file", files[1])
-      const content = await fetch(url, {
-        method: "POST",
-        body: formData,
-      });
-      await fetch(src + ".png", {cache: 'reload', mode: 'no-cors'})
-      return src + ".png"
-    }
-    return null
-  }
-  catch (err){
-    return null
-  }
-}
-
 export default function () {
   if (typeof window === 'undefined'){
     return null;
@@ -175,6 +136,7 @@ export default function () {
 	};
 
 	const editor = useEditor({
+  disablePasteRules: [Drawing, "drawing"],
 		extensions: [
 			StarterKit.configure({
 				codeBlock: false,
@@ -223,21 +185,22 @@ export default function () {
 	}, [currentNote.body]);
 
 
-  const closeHandler = async (files) => {
+  async function closeHandler(files) {
     if (typeof files !== "undefined"){
-      let src
-      if (drawContent !== null){
-        src = await updateDrawing(files)
-      } else {
-        src = await uploadDrawing(files)
+      if (typeof files[0] !== "undefined"){
+        const src = await uploadDrawing(files)
+        if (src === null) {
+          console.log("File size was too large")
+        } else if (drawContent === null) {
+          editor.chain().focus()?.setDrawing({src})?.run();
+        }
+        else {
+          editor.chain().focus()?.editDrawing({src})?.run();
+        }
       }
-      if (src === null) {
-        console.log("File size was too large")
-      }
-      editor.chain().focus()?.setDrawing({src})?.run();
+      setDrawModal(false)
+      setDrawContent(null)
     }
-		setDrawModal(false)
-    setDrawContent(null)
 	};
 
   const editHandler = async (key) => {
@@ -245,14 +208,14 @@ export default function () {
       method: "GET",
     })
     const body = await res.json()
-    setDrawContent([body.file, key])
+    setDrawContent(body.file)
     setDrawModal(true)
   }
 
   const drawingOpenHandler = () => {
     setDrawModal(true)
   }
-    
+
   return (
     <Container
       display="flex"
@@ -269,17 +232,17 @@ export default function () {
       {editor && <BubbleMenu className="button-menu" pluginKey={"imageMenu"} editor={editor} tippyOptions={{duration: 100}} shouldShow={({ editor, view, state, oldState, from, to }) => {
         return editor?.isActive("image")}}>
         <Button.Group className="is-active" color="primary" light>
-          <Button onPress={() => editor.chain().focus().setImage({size: 'small'}).run()}
+          <Button onPress={() => editor.chain().focus().updateImage({size: 'small'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {size: 'small'}}>Small</Button>
-          <Button onPress={() => editor.chain().focus().setImage({size: 'medium'}).run()}
+          <Button onPress={() => editor.chain().focus().updateImage({size: 'medium'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {size: 'medium'}}>Medium</Button>
-          <Button onPress={() => editor.chain().focus().setImage({size: 'large'}).run()}
+          <Button onPress={() => editor.chain().focus().updateImage({size: 'large'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {size: 'large'}}>Large</Button>
-          <Button onPress={() => editor.chain().focus().setImage({float: 'left'}).run()}
+          <Button onPress={() => editor.chain().focus().updateImage({float: 'left'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {float: 'left'}}>Left</Button>
-          <Button onPress={() => editor.chain().focus().setImage({float: 'none'}).run()}
+          <Button onPress={() => editor.chain().focus().updateImage({float: 'none'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {float: 'none'}}>No float</Button>
-          <Button onPress={() => editor.chain().focus().setImage({float: 'right'}).run()}
+          <Button onPress={() => editor.chain().focus().updateImage({float: 'right'}).run()}
               className={editor?.isActive('image') ? 'is-active' : {float: 'right'}}>Right</Button>
         </Button.Group>
       </BubbleMenu>}
@@ -299,12 +262,12 @@ export default function () {
           <Button onPress={() => editor.chain().focus().setDrawing({float: 'right'}).run()}
               className={editor?.isActive('drawing') ? 'is-active' : {float: 'right'}}>Right</Button>
           <Button onPress={() => editHandler(editor.state.selection.node.attrs.src.split(".com/")[1].split("png")[0]+"json")}
-              className={editor?.isActive('drawing') ? 'is-active' : "getJson" }>Edit</Button>
+              className={editor?.isActive('drawing') ? 'is-active' : "editDrawing" }>Edit</Button>
         </Button.Group>
       </BubbleMenu>}
       <EditorContent editor={editor} key={currentNote} style={{ "max-width": "100%" }} />
       <Spacer />
-      <DrawingModal open={drawModal} closeHandler={closeHandler} content={drawContent}/>
+      <DrawingModal open={drawModal} closeHandler={closeHandler} content={drawContent}/>            
     </Container>
   );
 }

@@ -1,5 +1,6 @@
 import { Node, nodeInputRule } from "@tiptap/core";
 import { mergeAttributes } from "@tiptap/react";
+import { Plugin } from "prosemirror-state";
 
 /**
  * Tiptap Extension to upload images
@@ -23,16 +24,79 @@ declare module "@tiptap/core" {
 	interface Commands<ReturnType> {
 		drawing: {
 			/**
-			 * Add a drawing
+			 * Add a drawing or set it's attributes
 			 */
-			setDrawing: (options: { src: string, alt?: string, title?: string }) => ReturnType;
+			setDrawing: (options: { src: string, alt?: string, title?: string, size?: string, float?: string }) => ReturnType;
+			/**
+			 * Updates a drawing and deletes the prior version
+			 */
+			edtDrawing: (options: { src: string, alt?: string, title?: string }) => ReturnType;
 		};
 	}
 }
 
 const IMAGE_INPUT_REGEX = /!\[(.+|:?)\]\((\S+)(?:(?:\s+)["'](\S+)["'])?\)/;
 
+async function tag(drawing, Key, Value){
+	const name = drawing.split(".com/").pop()
+	const prefix = name.split(".")[0]
+	const body = {
+		tag: {
+			key: Key,
+			value: Value
+		}
+	}
+	let resDraw = await fetch(`/api/s3/${prefix}.png`, {
+		method: "PATCH",
+		body: JSON.stringify(body)
+	});	
+	let resContent = await fetch(`/api/s3/${prefix}.json`, {
+		method: "PATCH",
+		body: JSON.stringify(body)
+	});	
+}
 
+async function deleteDrawing(url){
+	const name = url.split(".com/").pop()
+	const prefix = name.split(".")[0]
+	let resDraw = await fetch(`/api/s3/${prefix}.png`, {
+	  method: "DELETE"
+	})
+	let resJson = await fetch(`/api/s3/${prefix}.json`, {
+	  method: "DELETE"
+	})
+  }
+
+async function uploadDrawing(files){
+	let res = await fetch("/api/s3/", {
+	  method: "POST",
+	  body: "drawing",
+	});
+	const {data, src, key} = await res.json();
+	const url = data.url; //url for post
+	const fields = data.fields; //formdata for post
+	const formData = new FormData();
+	formData.append("key", `${key}.png`)
+	Object.entries({ ...fields}).forEach(([key, value]) => {
+	  formData.append(key, value as string)
+	})
+	formData.append('file', files[0])
+	//POST to upload file
+	const png = await fetch(url, {
+	  method: "POST",
+	  body: formData,
+	});
+	if (png.ok){
+	  formData.set("key", `${key}.json`)
+	  formData.set("file", files[1])
+	  const content = await fetch(url, {
+		method: "POST",
+		body: formData,
+	  });
+	  return src+'.png'
+	}
+	return null
+  }
 
 export const Drawing = () => {
 	return Node.create<ImageOptions>({
@@ -85,8 +149,8 @@ export const Drawing = () => {
 
 		renderHTML({ node, HTMLAttributes }) {
 
-			HTMLAttributes.class = ' drawing-' + node.attrs.size
-			HTMLAttributes.class += ' drawing-float-' + node.attrs.float
+			HTMLAttributes.class = ' image-' + node.attrs.size
+			HTMLAttributes.class += ' image-float-' + node.attrs.float
 	
 			return [
 				'img',
@@ -100,17 +164,43 @@ export const Drawing = () => {
 					attrs =>
 					({ state, commands }) => {
 						const { selection } = state;
-						console.log(selection?.node?.type?.name == 'drawing')
 						if (selection?.node?.type?.name == 'drawing'){
 							return commands?.updateAttributes('drawing', attrs)
 						}
-
 						return commands?.insertContent({
 							type: this.name,
 							attrs: attrs
 						});
 					},
+				editDrawing:
+					attrs =>
+					({ state, commands }) => {
+						const { selection } = state;
+						if (selection?.node?.type?.name == 'drawing'){
+							deleteDrawing(selection?.node?.attrs?.src)
+							return commands?.updateAttributes('drawing', attrs)
+						}
+					}
 			};
+		},
+
+		onTransaction(props){
+			const before = props.transaction.before.toJSON().content.filter(node => (node.type === 'drawing')).map(element => element.attrs.src);
+			const now = props.transaction.doc.content.toJSON().filter(node => (node.type === 'drawing')).map(element => element.attrs.src);
+			if (before !== now){
+				if (before.length > now.length){
+					const difference = before.filter(drawing => !now.includes(drawing))
+					difference.forEach(async drawing => {
+						await tag(drawing, "USED", "False")
+					})
+				}
+				else if (now.length >= before.length){
+					const difference = now.filter(drawing => !before.includes(drawing));
+             		difference.forEach(async drawing => {
+						await tag(drawing, "USED", "True")
+					})
+				}
+			}
 		},
 		
         addInputRules() {
@@ -126,6 +216,19 @@ export const Drawing = () => {
                 }),
             ];
         },
-		//Plugin to be able to drag and drop images
+
+		addPasteRules(){
+			return []
+		},
+
+		addProseMirrorPlugins() {
+			return [new Plugin({
+				props: {
+					handlePaste(view, event, slice) {
+						return false
+					},
+				}
+			})];
+		},
 	});
 };
