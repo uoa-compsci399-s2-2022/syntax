@@ -1,19 +1,23 @@
 import { Tooltip, Button, styled } from "@nextui-org/react";
 
-const MenuItem = ({ icon, title, action, isActive = null, isCore = false }) => {
-  const MarkdownButton = styled(Button, {
-    "background-color": "transparent !important",
-  });
-
+const MenuItem = ({ icon, label, action, isActive = null, css, breakpoint }) => {
+  const breakpointStyle = {}
+  if (breakpoint) {
+    if (breakpoint === "sm") {
+      breakpointStyle = { display: "none", "@sm": { display: "flex" } }
+    } else if (breakpoint === "md") {
+      breakpointStyle = { display: "none", "@md": { display: "flex" } }
+    }
+  }
 
   return (
-    <Tooltip content={title}>
-      <MarkdownButton
+    <Tooltip content={label}>
+      <Button
         auto
         className={`menu-item${isActive && isActive() ? " is-active" : ""}`}
-        onClick={action}
+        onPress={action}
         icon={icon}
-        css={isCore ? {} : {display: "none", "@md": { display: "flex" }}}
+        css={{ ...css, ...breakpointStyle, backgroundColor: "transparent" }}
       />
     </Tooltip>
   );
