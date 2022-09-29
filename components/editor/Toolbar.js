@@ -227,7 +227,7 @@ export default ({ editor, drawingOpenHandler }) => {
 			icon: <BiCodeBlock size={iconSize} color={iconColor} />,
 			label: "Code Block",
 			key: "codeBlock",
-			action: () => editor.chain().focus().toggleCodeBlock().run(),
+			action: () => editor.chain().focus().insertCodeBlock().run(),
 			isActive: () => editor.isActive("codeBlock"),
 			breakpoint: "sm"
 		},
