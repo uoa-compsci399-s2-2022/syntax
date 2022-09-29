@@ -30,8 +30,9 @@ const BlobBackground = () => {
 					position: "fixed",
 					width: "100%",
 					height: "100%",
-					zIndex: "-1",
-					overflow: "clip"
+					zIndex: "0",
+					overflow: "clip",
+					background: "#161b22"
 				}}
 			></div>
 			<Blob1
@@ -52,13 +53,13 @@ const BlobBackground = () => {
 					background:
 						"linear-gradient(rgba(198, 120, 221, 0.5) 0%, rgba(122, 50, 143, 0.5) 100%)",
 					float: "left",
-                    bottom: "0",
+					bottom: "0",
 					bottom: "22%",
 					left: "-27%",
 					filter: "blur(160px)",
 					"-webkit-animation": "spinleft 23s linear infinite",
 					"-moz-animation": "spinleft 23s linear infinite",
-					animation: "spinleft 23s  linear infinite",
+					animation: "spinleft 23s  linear infinite"
 				}}
 			/>
 			<Blob2
