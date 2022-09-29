@@ -1,7 +1,7 @@
 import MenuItem from "./MenuItem";
 import InputModal from "@/components/modal/InputModal";
-import { useState, useEffect } from "react";
-import { Container, Dropdown, Tooltip } from "@nextui-org/react";
+import { useState, useEffect, useRef } from "react";
+import { Container, Dropdown, Tooltip, Button } from "@nextui-org/react";
 import { BiCodeBlock } from "react-icons/bi";
 import {
 	MdFormatBold,
@@ -46,6 +46,22 @@ export default ({ editor, drawingOpenHandler }) => {
 		"Heading 5",
 		"Heading 6"
 	];
+	const fileRef = useRef();
+	const [file, setFile] = useState();
+
+	const handleFileChange = (e) => {
+		const fileObj = e.target.files[0];
+		if (!fileObj) {
+			return;
+		}
+		setFile(fileObj);
+	};
+
+	useEffect(() => {
+		if (file) {
+			editor.commands.setImageFile({ file: file });
+		}
+	}, [file]);
 
 	const openHandler = (selectedInputType) => {
 		if (selectedInputType === "link" && editor.isActive("link")) {
@@ -387,7 +403,7 @@ export default ({ editor, drawingOpenHandler }) => {
 
 			{/* List-related options*/}
 			{Object.entries(listOptions).map(([key, item], index) => (
-				<MenuItem {...item} key={index}/>
+				<MenuItem {...item} key={index} />
 			))}
 
 			<Tooltip content={"Lists"}>
@@ -428,7 +444,7 @@ export default ({ editor, drawingOpenHandler }) => {
 
 			{/* Extended node options (image, drawing, code block, video, etc.) */}
 			{Object.entries(insertOptions).map(([key, item], index) => (
-				<MenuItem {...item} key={index}/>
+				<MenuItem {...item} key={index} handleFileChange={handleFileChange} />
 			))}
 
 			<Tooltip content={"Insert"}>
