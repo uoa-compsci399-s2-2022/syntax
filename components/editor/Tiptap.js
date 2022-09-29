@@ -196,9 +196,9 @@ export default function () {
           editor.chain().focus()?.editDrawing({src})?.run();
         }
       }
-      setDrawModal(false)
-      setDrawContent(null)
     }
+    setDrawModal(false)
+    setDrawContent(null)
 	};
 
   const editHandler = async (key) => {
