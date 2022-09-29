@@ -27,11 +27,11 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
 	const noteslist = useNotes();
 	const setNotes = useDispatchNotes();
 
-	const createNote = async () => {
+	const createNote = async (id=undefined) => {
 		let res = await fetch("/api/note", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify(NoteTemplate)
+			body: JSON.stringify({...NoteTemplate, ...{groupId: id}})
 		});
 
 		const newNote = await res.json();

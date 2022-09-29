@@ -1,14 +1,18 @@
 // pages/api/note.js
 
-import { createNote, updateNote, deleteNote } from "../../prisma/Note";
+import { createNote, updateNote, deleteNote, createNoteInGroup } from "../../prisma/Note";
 import { getSession } from "next-auth/react";
 
 export default async function handle(req, res) {
 
   const session = await getSession({ req });
   if (req.method == "POST") {
-    const { title, body } = req.body;
-    console.log("POST")
+    const { title, body, groupId } = req.body;
+    console.log("POST", groupId)
+	 if(groupId){
+		const note = await createNoteInGroup(title, body, groupId, session);
+    	return res.json(note);
+	 }
     const note = await createNote(title, body, session);
     return res.json(note);
   }
