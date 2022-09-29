@@ -1,6 +1,9 @@
-import { styled } from "@nextui-org/react";
+import { useTheme, styled } from "@nextui-org/react";
+
 
 const BlobBackground = () => {
+	const { isDark, type } = useTheme();
+
 	const Blob1 = styled("div", {
 		width: "45%",
 		height: "45%",
@@ -30,9 +33,9 @@ const BlobBackground = () => {
 					position: "fixed",
 					width: "100%",
 					height: "100%",
-					zIndex: "0",
+					zIndex: "-1",
 					overflow: "clip",
-					background: "#161b22"
+					background: type === "dark" ? "#161b22" : "white"
 				}}
 			></div>
 			<Blob1
