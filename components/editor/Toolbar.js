@@ -346,7 +346,7 @@ export default ({ editor, drawingOpenHandler }) => {
 
 			{/* Core formatting options (bold, italic, inline code) */}
 			{coreOptions.map((item, index) => (
-				<MenuItem {...item} key={index} css={{ marginRight: "0.3rem" }} />
+				<MenuItem {...item} key={index} />
 			))}
 
 			{/* Extended formatting options + clear formatting */}

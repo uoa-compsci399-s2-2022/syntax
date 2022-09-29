@@ -6,7 +6,6 @@ const MenuItem = ({
 	label,
 	action,
 	isActive = null,
-	css,
 	breakpoint,
 	handleFileChange
 }) => {
@@ -28,11 +27,10 @@ const MenuItem = ({
 					className={`menu-item${isActive && isActive() ? " is-active" : ""}`}
 					onPress={() => fileRef.current.click()}
 					css={{
-						...css,
 						...breakpointStyle,
 						backgroundColor: "transparent",
 						padding: "0",
-						margin: "0 0.5rem"
+						margin: "0 0.8rem 0 0.5rem"
 					}}
 				>
 					<>
@@ -55,7 +53,11 @@ const MenuItem = ({
 					className={`menu-item${isActive && isActive() ? " is-active" : ""}`}
 					onPress={action}
 					icon={icon}
-					css={{ ...css, ...breakpointStyle, backgroundColor: "transparent" }}
+					css={{
+						...breakpointStyle,
+						backgroundColor: "transparent",
+						marginRight: "0.3rem"
+					}}
 				/>
 			)}
 		</Tooltip>

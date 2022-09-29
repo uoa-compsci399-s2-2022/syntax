@@ -119,7 +119,8 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
 													padding: "0",
 													height: "min-content",
 													lineHeight: "0",
-													borderRadius: "0"
+													borderRadius: "0",
+													zIndex: "0"
 												}}
 											>
 												{currentNote.group.name}
