@@ -14,7 +14,6 @@ import Link from "@tiptap/extension-link";
 import { useEffect, useState, useRef } from "react";
 import Toolbar from "./Toolbar.js";
 import { TipTapCustomImage } from "@/node/Image";
-
 import { Drawing } from "@/node/Drawing";
 import { Extension } from '@tiptap/core'
 import { UploadFn } from "@/node/upload_image";
@@ -214,8 +213,8 @@ export default function () {
   const drawingOpenHandler = () => {
     setDrawModal(true)
   }
-
-  return (
+  
+ return (
     <Container
       display="flex"
       direction="column-reverse"
@@ -267,6 +266,6 @@ export default function () {
       <EditorContent editor={editor} key={currentNote} style={{ "maxWidth": "100%" }} />
       <Spacer />
       <DrawingModal open={drawModal} closeHandler={closeHandler} content={drawContent}/>            
-    </Container>
+    </Container>	 
   );
 }

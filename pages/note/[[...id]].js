@@ -1,12 +1,14 @@
 import NoteLayout from "../../components/note/NoteLayout";
 import { useSession, getSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+import { unstable_batchedUpdates } from "react-dom"; 
 import {
 	useNote,
 	useDispatchNote,
 	useNotes,
 	useDispatchNotes,
 } from "../../modules/AppContext";
+import { useRouter } from 'next/router';
 import { NoteTemplate } from '../../components/note/NewNote'
 
 const getNoteByID = require("../../prisma/Note").getNoteByID;
@@ -58,6 +60,7 @@ export const getServerSideProps = async ({ req, res, params }) => {
 		props: { notes, note },
 	};
 };
+
 
 export default function Note({ notes, note }) {
 	const { data: session, status } = useSession();
