@@ -129,8 +129,10 @@ export default function () {
 		if (!content.id) {
 			router.push(`/note/${updatedNote.id}`, undefined, { shallow: true });
 			setCurrentNote(updatedNote);
+			setNotes({ note: updatedNote, type: "add" });
+		}else{
+			setNotes({ note: updatedNote, type: "edit" });
 		}
-		setNotes({ note: updatedNote, type: "edit" });
 	};
 
 	const editor = useEditor({
@@ -195,9 +197,9 @@ export default function () {
           editor.chain().focus()?.editDrawing({src})?.run();
         }
       }
-      setDrawModal(false)
-      setDrawContent(null)
     }
+    setDrawModal(false)
+    setDrawContent(null)
 	};
 
   const editHandler = async (key) => {

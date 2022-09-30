@@ -104,7 +104,6 @@ export default function Component() {
 							bordered
 							ghost
 							onClick={() => signIn()}
-							responsive
 							auto
 						>
 							Sign in
@@ -112,7 +111,6 @@ export default function Component() {
 							bordered
 							ghost
 							onClick={() => signOut()}
-							responsive
 							auto
 						>
 							Sign Out

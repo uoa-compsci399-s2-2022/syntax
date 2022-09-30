@@ -13,10 +13,10 @@ const getNoteByID = require("../../prisma/Note").getNoteByID;
 const getAllNotesByUserID = require("../../prisma/Note").getAllNotesByUserID;
 
 export const getServerSideProps = async ({ req, res, params }) => {
-	res.setHeader(
-		"Cache-Control",
-		"public, s-maxage=10, stale-while-revalidate=59"
-	);
+	// res.setHeader(
+	// 	"Cache-Control",
+	// 	"public, s-maxage=10, stale-while-revalidate=59"
+	// );
 	const session = await getSession({ req });
 	const { id } = params;
 

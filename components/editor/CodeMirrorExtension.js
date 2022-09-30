@@ -95,11 +95,10 @@ export const Extension = ({
 							</Dropdown.Menu>
 						</Dropdown>
 
-						<refEditor ref={refEditor} />
+						<div ref={refEditor} />
 						<Spacer y={0.5} />
 						<Button
 							bordered
-							responsive
 							auto
 							ghost
 							size="xs"

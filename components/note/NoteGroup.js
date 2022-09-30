@@ -103,7 +103,7 @@ const NoteGroup = ({ name, color = "white", notes, openNote, id, createNote }) =
 					<Button
 						light
 						ripple={false}
-						onPress={() => createNote()}
+						onPress={() => createNote(id)}
 						icon={<PlusIcon style={{ height: "var(--icon-size-xs)" }} />}
 						css={{
 							minWidth: "0",

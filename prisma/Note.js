@@ -39,6 +39,28 @@ export const createNote = async (title, body, session) => {
 	return note;
 };
 
+export const createNoteInGroup = async (title, body, groupId, session) => {
+	const newNote = await prisma.note.create({
+		data: {
+			title,
+			body,
+			user: {
+				connect: {
+					email: session?.user?.email
+				}
+			},
+			group: {
+				connect: {
+					id: groupId
+				}
+			},
+		},
+	});
+
+	const note = await getNoteByID(newNote.id);
+	return note;
+};
+
 export const getNoteByID = async (id) => {
 	const note = await prisma.note.findUnique({
 		where: {
