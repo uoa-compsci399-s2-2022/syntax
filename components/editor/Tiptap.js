@@ -140,7 +140,6 @@ export default function () {
 		extensions: [
 			StarterKit.configure({
 				codeBlock: false,
-				code: false,
 				bulletList: false
 			}),
 			Underline,

@@ -25,7 +25,7 @@ export const CodeBlockNode = Node.create({
 	},
 	addCommands() {
 		return {
-			insertcodeBlock: attributes => ({ commands }) => {
+			insertCodeBlock: attributes => ({ commands }) => {
 				commands.clearNodes();
 				return commands.insertContent({
 					type: this.name,
