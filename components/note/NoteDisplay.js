@@ -161,7 +161,7 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
 							"@xs": { border: "none" }
 						}}
 					/>
-					<Tiptap noteContent={currentNote.body} />
+					<Tiptap />
 				</Container>
 				<Spacer />
 			</>

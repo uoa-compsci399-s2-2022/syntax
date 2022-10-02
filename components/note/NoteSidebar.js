@@ -18,7 +18,7 @@ import {
 } from "../../modules/AppContext";
 import { NoteTemplate } from "./NewNote";
 
-const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
+const NoteSidebar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 	const { checked, type } = useTheme();
 	const [searchModal, setSearchModal] = useState(false);
 	const router = useRouter();

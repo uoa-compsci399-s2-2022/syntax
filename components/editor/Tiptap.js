@@ -98,9 +98,7 @@ async function uploadDrawing(files){
 }
 
 export default function () {
-  const notesc = useNotes();
   const setNotes = useDispatchNotes();
-  const currentNote = useNote();
   const setCurrentNote = useDispatchNote();
   const [drawModal, setDrawModal] = useState(false);
   const [drawContent, setDrawContent] = useState(null);
@@ -133,7 +131,6 @@ export default function () {
 			setNotes({ note: updatedNote, type: "edit" });
 		}
 	};
-
 	const editor = useEditor({
   disablePasteRules: [Drawing, "drawing"],
 		extensions: [
@@ -169,18 +166,23 @@ export default function () {
 		],
 		content: currentNote.body
 	});
-	editor?.on("update", ({ editor }) => {
-		// console.log("editor updated");
-		debounceSave({
-			id: currentNote.id,
-			title: currentNote.title,
-			json: editor.getJSON()
-		});
-	});
-
+	
+const debounceEvent = (editor) => {
+  debounceSave({
+    id: currentNote.id,
+    title: currentNote.title,
+    json: editor.getJSON()
+  });
+}
 	useEffect(() => {
-		editor?.commands?.setContent(currentNote.body);
-	}, [currentNote.body]);
+		editor?.on("update", debounceEvent({editor}));
+    return () =>{
+      editor.off("update", debounceEvent);
+    }
+	}, []);
+	// useEffect(() => {
+	// 	editor?.commands?.setContent(currentNote.body);
+	// }, []);
 
 
   async function closeHandler(files) {
