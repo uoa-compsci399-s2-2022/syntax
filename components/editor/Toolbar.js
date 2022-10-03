@@ -24,7 +24,8 @@ import {
 	MdInsertLink,
 	MdAdd,
 	MdOutlineUndo,
-	MdOutlineRedo
+	MdOutlineRedo,
+	MdShare
 } from "react-icons/md";
 
 export default ({ editor, drawingOpenHandler }) => {
@@ -282,6 +283,13 @@ export default ({ editor, drawingOpenHandler }) => {
 			key: "horizontalRule",
 			action: () => editor.chain().focus().setHorizontalRule().run(),
 			breakpoint: "md"
+		},
+		share: {
+			icon: <MdShare size={iconSize} color={iconColor}/>,
+			label: "Share",
+			key: 'share',
+			//insert action here
+			breakpoint: 'md'
 		}
 	};
 
