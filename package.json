@@ -25,6 +25,8 @@
     "@react-pdf/renderer": "^3.0.0",
     "@tiptap/extension-bubble-menu": "^2.0.0-beta.195",
     "@tiptap/extension-code-block": "^2.0.0-beta.42",
+    "@tiptap/extension-collaboration": "^2.0.0-beta.199",
+    "@tiptap/extension-collaboration-cursor": "^2.0.0-beta.199",
     "@tiptap/extension-image": "^2.0.0-beta.30",
     "@tiptap/extension-link": "^2.0.0-beta.195",
     "@tiptap/extension-subscript": "^2.0.0-beta.195",
@@ -40,7 +42,6 @@
     "codemirror": "^6.0.1",
     "crypto": "^1.0.1",
     "fs": "^0.0.1-security",
-    "html-to-pdf-js": "^0.9.3",
     "lodash": "^4.17.21",
     "next": "^12.3.1",
     "next-auth": "^4.10.3",
@@ -56,7 +57,9 @@
     "tiptap": "^1.32.2",
     "tiptap-commands": "^1.17.1",
     "turndown": "^7.1.1",
-    "use-debounce": "^8.0.4"
+    "use-debounce": "^8.0.4",
+    "y-webrtc": "^10.2.3",
+    "yjs": "^13.5.41"
   },
   "devDependencies": {
     "@types/node": "^17.0.4",

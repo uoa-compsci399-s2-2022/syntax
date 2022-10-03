@@ -11,12 +11,10 @@ import Superscript from "@tiptap/extension-superscript";
 import Subscript from "@tiptap/extension-subscript";
 import Youtube from "@tiptap/extension-youtube";
 import Link from "@tiptap/extension-link";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import Toolbar from "./Toolbar.js";
 import { TipTapCustomImage } from "@/node/Image";
 import { Drawing } from "@/node/Drawing";
-import { Extension } from '@tiptap/core'
-import { UploadFn } from "@/node/upload_image";
 import { debounce } from "lodash";
 import { useRouter } from "next/router";
 import { Container, Button, Spacer } from "@nextui-org/react";
@@ -27,10 +25,18 @@ import {
 	useNotes,
 	useDispatchNotes
 } from "@/modules/AppContext";
-
+import getRandomColour from "../../utils/getRandomColour"
 import dynamic from 'next/dynamic'
 import { CodeBlockNode } from './CodeMirrorNode';
+import Collaboration from '@tiptap/extension-collaboration'
+import * as Y from 'yjs'
+import { WebrtcProvider } from 'y-webrtc'
+import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
+import useObservableListener from '../../utils/useObservableListener'
+import { getServerSideProps } from "../../pages/note/[[...id]].js";
 
+const ydoc = new Y.Doc()
+// Registered with a WebRTC provider
 
 EditorView.prototype.updateState = function updateState(state) {
 	if (!this.docView) return // This prevents the matchesNode error on hot reloads
@@ -96,6 +102,10 @@ async function uploadDrawing(files){
   }
   return null
 }
+let provider
+if (typeof window !== "undefined"){
+  provider = new WebrtcProvider('pain', ydoc)
+}
 
 export default function () {
   const notesc = useNotes();
@@ -105,11 +115,31 @@ export default function () {
   const [drawModal, setDrawModal] = useState(false);
   const [drawContent, setDrawContent] = useState(null);
   const router = useRouter();
+  const [clientCount, setClientCount] = useState(0);
+	const [isSynced, setIsSynced] = useState(false);
   const debounceSave = useRef(
     debounce(async (criteria) => {
       saveContent(criteria);
     }, 1000)
-  ).current;
+  ).current; 
+
+  const handlePeersChange = useCallback(
+		({ webrtcPeers }) => {
+			setClientCount(webrtcPeers.length);
+		},
+		[setClientCount],
+	);
+
+  useObservableListener('peers', handlePeersChange, provider);
+
+	const handleSynced = useCallback(
+		({ synced }) => {
+			setIsSynced(synced);
+		},
+		[setIsSynced],
+	);
+
+	useObservableListener('synced', handleSynced, provider);
 
 	const saveContent = async (content) => {
 		console.log("editor debounce", content);
@@ -139,7 +169,8 @@ export default function () {
 		extensions: [
 			StarterKit.configure({
 				codeBlock: false,
-				bulletList: false
+				bulletList: false,
+        history: false,
 			}),
 			Underline,
 			Superscript,
@@ -164,6 +195,16 @@ export default function () {
       Drawing().configure({
         HTMLAttributes: {
           class: 'drawing'
+        }
+      }),
+      Collaboration.configure({
+        document: ydoc,
+      }),
+      CollaborationCursor.configure({
+        provider,
+        user: {
+          name: `${clientCount}`,
+          color: getRandomColour(clientCount)
         }
       })
 		],
@@ -265,7 +306,11 @@ export default function () {
       </BubbleMenu>}
       <EditorContent editor={editor} key={currentNote} style={{ "maxWidth": "100%" }} />
       <Spacer />
-      <DrawingModal open={drawModal} closeHandler={closeHandler} content={drawContent}/>            
+      <DrawingModal open={drawModal} closeHandler={closeHandler} content={drawContent}/>  
+      <div>
+        <p>Users: {clientCount+1}</p>
+        <p>Synced: success={(isSynced || clientCount === 0)}</p>
+      </div>          
     </Container>	 
   );
 }
