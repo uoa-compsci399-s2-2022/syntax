@@ -2,11 +2,21 @@ import BlobBackground from "@/components/BlobBackground";
 import { Button, Text, Container, Card } from "@nextui-org/react";
 import { signIn, getCsrfToken, getProviders } from "next-auth/react";
 
+export async function getServerSideProps(context) {
+	const providers = await getProviders();
+	const csrfToken = await getCsrfToken(context);
+	return {
+		props: {
+			providers,
+			csrfToken
+		}
+	};
+}
+
 const Signin = ({ csrfToken, providers }) => {
 	return (
 		<>
 			<BlobBackground />
-
 			<Container
 				display="flex"
 				justify="center"
@@ -30,7 +40,7 @@ const Signin = ({ csrfToken, providers }) => {
 							Object.values(providers).map((provider) => (
 								<Button
 									key={provider.name}
-									onPress={() => signIn(provider.id)}
+									onPress={() => signIn(provider.id, { callbackUrl: "/note" })}
 									css={{ width: "70%" }}
 								>
 									Sign in with {provider.name}
@@ -45,14 +55,3 @@ const Signin = ({ csrfToken, providers }) => {
 };
 
 export default Signin;
-
-export async function getServerSideProps(context) {
-	const providers = await getProviders();
-	const csrfToken = await getCsrfToken(context);
-	return {
-		props: {
-			providers,
-			csrfToken
-		}
-	};
-}
