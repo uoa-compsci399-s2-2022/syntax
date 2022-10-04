@@ -39,6 +39,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
   const [settingsModal, setSettingsModal] = useState(false);
   const currentNote = useNote();
   const setNotes = useDispatchNotes();
+
 	const deleteNoteHandler = async () => {
 		try {
 			console.log(currentNote);
@@ -54,7 +55,6 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 			console.log(error);
 		}
 	};
-
 
 	// const exportNoteHandler = async (fileType) => {
 	// 	try{
@@ -222,7 +222,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
           </Dropdown>
         </Navbar.Item>
 				{/* <ExportModal open={exportModal} oncloseHandler={closeHandler} closeHandler={exportNoteHandler} /> */}
-				<DeleteModal open={deleteModal} onclosehandler={closeHandler} closeHandler={deleteNoteHandler} />
+				<DeleteModal open={deleteModal} onclosehandler={closeHandler} closeHandler={deleteNoteHandler} type={"note"}/>
 				<SettingsModal open={settingsModal} closeHandler={closeHandler} />
       </Navbar.Content>
     </Navbar>

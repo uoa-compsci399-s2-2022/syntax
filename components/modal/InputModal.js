@@ -11,51 +11,70 @@ const InputModal = ({ open, closeHandler, inputType }) => {
 		closeHandler(value);
 	};
 
-	return (
-		<Modal blur open={open} onClose={closeHelper} css={{ margin: "10px" }}>
-			<Modal.Header css={{ tt: "capitalize" }}>Add {inputType}</Modal.Header>
-			<Modal.Body css={{ minHeight: "100px" }}>
-				<Input
-					{...bindings}
-					bordered
-					clearable
-					animated={false}
-					label={inputType === "video" ? "Video URL" : "Link"}
-					helperText={helperText}
-					helperColor="error"
-					placeholder={
-						`Paste ${inputType === "video" ? "Youtube URL" : "link"}`
-					}
-				/>
-			</Modal.Body>
-			<Modal.Footer>
-				<Button
-					auto
-					bordered
-					onPress={() => {
-						if (!value || value === "") {
-							setHelperText("URL is required");
-						} else {
-							closeHelper(value);
-						}
-					}}
-				>
-					Insert
-				</Button>
-				<Button
-					auto
-					bordered
-					flat
-					color="error"
-					onPress={() => {
-						closeHelper(null);
-					}}
-				>
-					Cancel
-				</Button>
-			</Modal.Footer>
-		</Modal>
-	);
+	const typeValues = {
+		video: {
+			header: "Add Video",
+			label: "Video URL",
+			placeholder: "Paste Youtube URL"
+		},
+		link: {
+			header: "Add Link",
+			label: "Link",
+			placeholder: "Paste link"
+		},
+		group: {
+			header: "Rename Group",
+			label: "New Name",
+			placeholder: "Insert new group name"
+		}
+	};
+
+	if (inputType) {
+		return (
+			<Modal blur open={open} onClose={closeHelper} css={{ margin: "10px" }}>
+				<Modal.Header>{typeValues[inputType].header}</Modal.Header>
+				<Modal.Body css={{ minHeight: "100px" }}>
+					<Input
+						{...bindings}
+						bordered
+						clearable
+						animated={false}
+						label={typeValues[inputType].label}
+						helperText={helperText}
+						helperColor="error"
+						placeholder={typeValues[inputType].placeholder}
+					/>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button
+						auto
+						onPress={() => {
+							if (!value || value === "") {
+								setHelperText("Value is required");
+							} else {
+								closeHelper(value);
+							}
+						}}
+					>
+						{inputType === "group" ? "Confirm": "Insert"}
+					</Button>
+					<Button
+						auto
+						bordered
+						flat
+						color="error"
+						onPress={() => {
+							closeHelper(null);
+						}}
+					>
+						Cancel
+					</Button>
+				</Modal.Footer>
+			</Modal>
+		);
+	} else {
+		return "";
+	}
 };
 
 export default InputModal;

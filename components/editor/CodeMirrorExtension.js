@@ -16,15 +16,15 @@ import { tomorrow } from "thememirror";
 
 const themeExtensions = {
 	light: [tomorrow],
-	dark: [oneDark],
+	dark: [oneDark]
 };
 
 export const Extension = ({
 	node: {
-		attrs: { language: lang, code_content: doc, code_output: result },
+		attrs: { language: lang, code_content: doc, code_output: result }
 	},
 	updateAttributes,
-	extension,
+	extension
 }) => {
 	const refEditor = useRef(null);
 	const [language, setLanguage] = useState();
@@ -38,7 +38,7 @@ export const Extension = ({
 		"cpp-clang": "C++",
 		"java-jdk": "Java",
 		"javascript-node": "JavaScript",
-		python3: "Python",
+		python3: "Python"
 	};
 
 	const run = async (event) => {
@@ -61,9 +61,9 @@ export const Extension = ({
 					}
 				}),
 				EditorView.theme({}, { dark: isDark }),
-				...themeExtensions[isDark ? "dark" : "light"],
+				...themeExtensions[isDark ? "dark" : "light"]
 			],
-			parent: refEditor.current,
+			parent: refEditor.current
 		});
 		return () => {
 			view.destroy();
@@ -86,7 +86,8 @@ export const Extension = ({
 								items={TioLanguages}
 								onAction={(key) => {
 									updateAttributes({ language: TioLanguages[key] });
-								}}>
+								}}
+							>
 								{TioLanguages.map((lang, index) => (
 									<Dropdown.Item key={index} value={lang}>
 										{langDict[lang]}
@@ -97,12 +98,7 @@ export const Extension = ({
 
 						<div ref={refEditor} />
 						<Spacer y={0.5} />
-						<Button
-							bordered
-							auto
-							ghost
-							size="xs"
-							onClick={() => run()}>
+						<Button auto size="xs" onClick={() => run()}>
 							Run Code
 						</Button>
 

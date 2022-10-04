@@ -1,30 +1,56 @@
 import {
-	Collapse,
-	Text,
-	Avatar,
+	Dropdown,
 	Container,
 	Row,
 	Col,
-	Button,
-	useTheme
+	Button
 } from "@nextui-org/react";
-import { useState } from "react";
+import DeleteModal from "@/components/modal/DeleteModal";
+import InputModal from "@/components/modal/InputModal";
+import { useState, useEffect } from "react";
 import {
 	PlusIcon,
 	ChevronDownIcon,
 	ChevronRightIcon,
-	EllipsisHorizontalIcon
+	EllipsisHorizontalIcon,
+	TrashIcon,
+	PencilSquareIcon
 } from "@heroicons/react/24/outline";
 import { useNote, useNotes } from "../../modules/AppContext";
 
-const NoteGroup = ({ name, color = "white", notes, openNote, id, createNote }) => {
-	const notesc = useNotes();
-  const [isOpen, setIsOpen] = useState(false);
-  const { checked, type } = useTheme();
-  const currentNote = useNote();
-  const handleOpen = () => {
-    setIsOpen((current) => !current);
-  };
+const NoteGroup = ({
+	name,
+	color = "white",
+	notes,
+	openNote,
+	id,
+	createNote
+}) => {
+	const [isOpen, setIsOpen] = useState(false);
+	const [selectedKey, setSelectedKey] = useState();
+	const [inputModal, setInputModal] = useState(false);
+	const [deleteModal, setDeleteModal] = useState(false);
+	const currentNote = useNote();
+	const handleOpen = () => {
+		setIsOpen((current) => !current);
+	};
+
+	const closeHandler = () => {
+		setDeleteModal(false);
+		setInputModal(false);
+		setSelectedKey();
+	};
+
+	useEffect(() => {
+		switch (selectedKey) {
+			case "rename":
+				setInputModal(true);
+				break;
+			case "delete":
+				setDeleteModal(true);
+				break;
+		}
+	}, [selectedKey]);
 
 	return (
 		<Container
@@ -62,7 +88,12 @@ const NoteGroup = ({ name, color = "white", notes, openNote, id, createNote }) =
 					{isOpen ? (
 						<ChevronDownIcon style={{ height: "var(--icon-size-xs)" }} />
 					) : (
-						<ChevronRightIcon style={{ height: "var(--icon-size-xs)", color: notes.length > 0 ? "$text" : "grey" }} />
+						<ChevronRightIcon
+							style={{
+								height: "var(--icon-size-xs)",
+								color: notes.length > 0 ? "$text" : "grey"
+							}}
+						/>
 					)}
 				</Col>
 				<Col
@@ -79,25 +110,44 @@ const NoteGroup = ({ name, color = "white", notes, openNote, id, createNote }) =
 					{name}
 				</Col>
 				<Col css={{ flex: "0", marginLeft: "1rem" }}>
-					<Button
-						light
-						ripple={false}
-						icon={
-							<EllipsisHorizontalIcon
-								style={{ height: "var(--icon-size-xs)" }}
-							/>
-						}
-						css={{
-							minWidth: "0",
-							maxWidth: "var(--icon-size-xs)",
-							height: "var(--icon-size-xs)",
-							padding: "0.8rem",
-							borderRadius: "var(--nextui-radii-sm)",
-							"&:hover": {
-								background: "$accents5"
+					<Dropdown>
+						<Dropdown.Button
+							light
+							ripple={false}
+							icon={
+								<EllipsisHorizontalIcon
+									style={{ height: "var(--icon-size-xs)" }}
+								/>
 							}
-						}}
-					/>
+							css={{
+								minWidth: "0",
+								maxWidth: "var(--icon-size-xs)",
+								height: "var(--icon-size-xs)",
+								padding: "0.8rem",
+								borderRadius: "var(--nextui-radii-sm)",
+								"&:hover": {
+									background: "$accents5"
+								}
+							}}
+						/>
+						<Dropdown.Menu onAction={setSelectedKey} aria-label="Group Options">
+							<Dropdown.Item
+								key="rename"
+								icon={
+									<PencilSquareIcon style={{ height: "var(--icon-size-s)" }} />
+								}
+							>
+								Rename
+							</Dropdown.Item>
+							<Dropdown.Item
+								key="delete"
+								color="error"
+								icon={<TrashIcon style={{ height: "var(--icon-size-s)" }} />}
+							>
+								Delete
+							</Dropdown.Item>
+						</Dropdown.Menu>
+					</Dropdown>
 				</Col>
 				<Col css={{ flex: "0" }}>
 					<Button
@@ -135,51 +185,62 @@ const NoteGroup = ({ name, color = "white", notes, openNote, id, createNote }) =
 					}}
 				>
 					{notes.map((note) => (
-						<Row css={{padding: "0 0.5rem", marginBottom: "0.3rem"}} key={note.id}>
-						<a
-							
-							onClick={() => {
-								openNote(note);
-							}}
-							style={{width: "100%"}}
+						<Row
+							css={{ padding: "0 0.5rem", marginBottom: "0.3rem" }}
+							key={note.id}
 						>
-							<Row
-								align="center"
-								css={{
-									padding: "0.3rem 0",
-									width: "100%",
-									borderRadius: "var(--nextui-radii-md)",
-									backgroundColor:
-										note.id === currentNote.id ? "$accents5" : "transparent",
-									"&:hover": {
-										background: "$accents5"
-									}
+							<a
+								onClick={() => {
+									openNote(note);
 								}}
+								style={{ width: "100%" }}
 							>
-								<Col
+								<Row
+									align="center"
 									css={{
-										minWidth: "var(--icon-size-xs)",
-										flex: "0",
-										marginRight: "1rem"
-									}}
-								></Col>
-								<Col
-									css={{
-										whiteSpace: "nowrap",
-										overflow: "hidden",
-										textOverflow: "ellipsis",
-										marginRight: "1rem"
+										padding: "0.3rem 0",
+										width: "100%",
+										borderRadius: "var(--nextui-radii-md)",
+										backgroundColor:
+											note.id === currentNote.id ? "$accents5" : "transparent",
+										"&:hover": {
+											background: "$accents5"
+										}
 									}}
 								>
-									{note.title}
-								</Col>
-							</Row>
-						</a>
+									<Col
+										css={{
+											minWidth: "var(--icon-size-xs)",
+											flex: "0",
+											marginRight: "1rem"
+										}}
+									></Col>
+									<Col
+										css={{
+											whiteSpace: "nowrap",
+											overflow: "hidden",
+											textOverflow: "ellipsis",
+											marginRight: "1rem"
+										}}
+									>
+										{note.title}
+									</Col>
+								</Row>
+							</a>
 						</Row>
 					))}
-					
 				</Container>
 			</Container>
+			<InputModal
+				open={inputModal}
+				closeHandler={closeHandler}
+				inputType={"group"}
+			/>
+			<DeleteModal
+				open={deleteModal}
+				onclosehandler={closeHandler}
+				type={"group"}
+			/>
 		</Container>
 	);
 };
