@@ -166,7 +166,7 @@ const SearchModal = ({ open, closeHandler }) => {
 								{returnedNotes.map((note, index) => (
 									<a onClick={() => openNote(note)}>
 									<Container
-										key={note.title + index}
+										key={index}
 										css={{
 											padding: "10px",
 											borderRadius: "12px",
