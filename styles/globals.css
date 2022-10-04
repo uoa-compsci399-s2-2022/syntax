@@ -327,3 +327,7 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
 	-moz-animation:spinleft 23s linear infinite;
 	animation:spinleft 23s linear infinite;
 }
+
+.output {
+	white-space: pre-line;
+}

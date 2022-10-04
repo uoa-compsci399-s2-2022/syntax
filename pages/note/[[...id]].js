@@ -1,6 +1,6 @@
 import { useSession, getSession } from "next-auth/react";
 import { useEffect, useState, useMemo } from "react";
-import { unstable_batchedUpdates } from "react-dom"; 
+import { unstable_batchedUpdates } from "react-dom";
 import {
 	useNote,
 	useDispatchNote,
@@ -57,6 +57,7 @@ export const getServerSideProps = async ({ req, res, params }) => {
 			...NoteTemplate,
 			updatedAt: Date.now(),
 			user: session?.user,
+			action: 'edit'
 		};
 	}
 	const [notes] = await getAllNotesByUserID(session?.user?.id);
@@ -69,13 +70,11 @@ export const getServerSideProps = async ({ req, res, params }) => {
 const NoteLayout = ({ notes, note }) => {
 	const [sidebarDisplay, setSidebarDisplay] = useState(false);
 	const { data: session, status } = useSession();
-	const currentNote = useNote();
 	const setCurrentNote = useDispatchNote();
+	const setNotes = useDispatchNotes();
 	useEffect(() => {
-		if (Object.keys(currentNote).length == 0) {
-			note.action = "edit";
-			setCurrentNote(note);
-		}
+		setCurrentNote(note);
+		setNotes({ note: notes, type: "replace" });
 	}, [])
 
 	const handleSidebarDisplay = () => {

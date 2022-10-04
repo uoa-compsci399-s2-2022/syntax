@@ -119,11 +119,10 @@ const NoteSidebar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 				}}
 			>
 				<NoteList
-					retrieved_notes={notes}
+					retrieved_notes={noteslist}
 					showEditor={undefined}
 					handleSidebarDisplay={handleSidebarDisplay}
 					createNote={createNote}
-					key={notes}
 				/>
 			</Container>
 

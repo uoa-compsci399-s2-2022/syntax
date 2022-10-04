@@ -16,6 +16,7 @@ import {
 	useDispatchNotes
 } from "../../modules/AppContext";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 
 const SearchModal = ({ open, closeHandler }) => {
@@ -164,7 +165,7 @@ const SearchModal = ({ open, closeHandler }) => {
 							<Container css={{ padding: "0" }}>
 					
 								{returnedNotes.map((note, index) => (
-									<a onClick={() => openNote(note)}>
+									<Link href={`/note/${encodeURIComponent(note.id)}`}>
 									<Container
 										key={index}
 										css={{
@@ -178,7 +179,7 @@ const SearchModal = ({ open, closeHandler }) => {
 										<Row>{note.title}</Row>
 										<Row css={{ color: "$accents6" }}>{note.updatedAt}</Row>
 									</Container>
-									</a>
+									</Link>
 								))}
 							</Container>
 

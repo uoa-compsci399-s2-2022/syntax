@@ -1,8 +1,5 @@
 import {
-	EditorContent, useEditor, BubbleMenu,
-	ReactNodeViewRenderer,
-	NodeViewWrapper,
-	NodeViewContent,
+	EditorContent, useEditor, BubbleMenu
 } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import BulletList from "@tiptap/extension-bullet-list";
@@ -11,25 +8,22 @@ import Superscript from "@tiptap/extension-superscript";
 import Subscript from "@tiptap/extension-subscript";
 import Youtube from "@tiptap/extension-youtube";
 import Link from "@tiptap/extension-link";
-import { useEffect, useState, useRef } from "react";
+import { useState } from "react";
 import Toolbar from "./Toolbar.js";
 import { TipTapCustomImage } from "@/node/Image";
 import { Drawing } from "@/node/Drawing";
-import { Extension } from '@tiptap/core'
-import { UploadFn } from "@/node/upload_image";
-import { debounce } from "lodash";
 import { useRouter } from "next/router";
 import { Container, Button, Spacer } from "@nextui-org/react";
 import { EditorView } from 'prosemirror-view'
 import {
 	useNote,
 	useDispatchNote,
-	useNotes,
 	useDispatchNotes
 } from "@/modules/AppContext";
 
 import dynamic from 'next/dynamic'
 import { CodeBlockNode } from './CodeMirrorNode';
+import { DebounceSave } from './DebounceSaveExtension';
 
 
 EditorView.prototype.updateState = function updateState(state) {
@@ -98,41 +92,12 @@ async function uploadDrawing(files){
 }
 
 export default function () {
-  const setNotes = useDispatchNotes();
-  const setCurrentNote = useDispatchNote();
+  const currentNote = useNote();
   const [drawModal, setDrawModal] = useState(false);
   const [drawContent, setDrawContent] = useState(null);
-  const router = useRouter();
-  const debounceSave = useRef(
-    debounce(async (criteria) => {
-      saveContent(criteria);
-    }, 1000)
-  ).current;
-
-	const saveContent = async (content) => {
-		console.log("editor debounce", content);
-		let note = {
-			id: content.id,
-			title: content.title,
-			body: content.json
-		};
-		let res = await fetch("/api/note", {
-			method: "PUT",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify(note)
-		});
-
-		const updatedNote = await res.json();
-		if (!content.id) {
-			router.push(`/note/${updatedNote.id}`, undefined, { shallow: true });
-			setCurrentNote(updatedNote);
-			setNotes({ note: updatedNote, type: "add" });
-		}else{
-			setNotes({ note: updatedNote, type: "edit" });
-		}
-	};
+  
 	const editor = useEditor({
-  disablePasteRules: [Drawing, "drawing"],
+  		disablePasteRules: [Drawing, "drawing"],
 		extensions: [
 			StarterKit.configure({
 				codeBlock: false,
@@ -153,6 +118,10 @@ export default function () {
 				}
 			}),
 			CodeBlockNode,
+			DebounceSave().configure({
+				noteId: currentNote.id,
+				noteTitle: currentNote.title
+			}),
       TipTapCustomImage(upload).configure({
         HTMLAttributes: {
           class: 'image'
@@ -165,26 +134,8 @@ export default function () {
       })
 		],
 		content: currentNote.body
-	});
+	}, [currentNote.body]);
 	
-const debounceEvent = (editor) => {
-  debounceSave({
-    id: currentNote.id,
-    title: currentNote.title,
-    json: editor.getJSON()
-  });
-}
-	useEffect(() => {
-		editor?.on("update", debounceEvent({editor}));
-    return () =>{
-      editor.off("update", debounceEvent);
-    }
-	}, []);
-	// useEffect(() => {
-	// 	editor?.commands?.setContent(currentNote.body);
-	// }, []);
-
-
   async function closeHandler(files) {
     if (typeof files !== "undefined"){
       if (typeof files[0] !== "undefined"){
@@ -265,7 +216,7 @@ const debounceEvent = (editor) => {
               className={editor?.isActive('drawing') ? 'is-active' : "editDrawing" }>Edit</Button>
         </Button.Group>
       </BubbleMenu>}
-      <EditorContent editor={editor} key={currentNote} style={{ "maxWidth": "100%" }} />
+      <EditorContent editor={editor} style={{ "maxWidth": "100%" }} />
       <Spacer />
       <DrawingModal open={drawModal} closeHandler={closeHandler} content={drawContent}/>            
     </Container>	 
