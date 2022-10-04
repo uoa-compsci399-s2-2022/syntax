@@ -33,7 +33,6 @@ import * as Y from 'yjs'
 import { WebrtcProvider } from 'y-webrtc'
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
 import useObservableListener from '../../utils/useObservableListener'
-import { getServerSideProps } from "../../pages/note/[[...id]].js";
 
 const ydoc = new Y.Doc()
 // Registered with a WebRTC provider
@@ -117,11 +116,14 @@ export default function () {
   const router = useRouter();
   const [clientCount, setClientCount] = useState(0);
 	const [isSynced, setIsSynced] = useState(false);
-  const debounceSave = useRef(
+  /**
+   * const debounceSave = useRef(
     debounce(async (criteria) => {
       saveContent(criteria);
     }, 1000)
   ).current; 
+   */
+  
 
   const handlePeersChange = useCallback(
 		({ webrtcPeers }) => {
@@ -141,7 +143,8 @@ export default function () {
 
 	useObservableListener('synced', handleSynced, provider);
 
-	const saveContent = async (content) => {
+  /**
+   * const saveContent = async (content) => {
 		console.log("editor debounce", content);
 		let note = {
 			id: content.id,
@@ -164,6 +167,8 @@ export default function () {
 		}
 	};
 
+   */
+	
 	const editor = useEditor({
   disablePasteRules: [Drawing, "drawing"],
 		extensions: [
@@ -203,14 +208,15 @@ export default function () {
       CollaborationCursor.configure({
         provider,
         user: {
-          name: `${clientCount}`,
+          name: "bobby",
           color: getRandomColour(clientCount)
         }
       })
 		],
 		content: currentNote.body
 	});
-	editor?.on("update", ({ editor }) => {
+/**
+ * editor?.on("update", ({ editor }) => {
 		// console.log("editor updated");
 		debounceSave({
 			id: currentNote.id,
@@ -218,6 +224,7 @@ export default function () {
 			json: editor.getJSON()
 		});
 	});
+ *  */	
 
 	useEffect(() => {
 		editor?.commands?.setContent(currentNote.body);
