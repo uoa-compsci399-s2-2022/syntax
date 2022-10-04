@@ -5,6 +5,7 @@ import StarterKit from "@tiptap/starter-kit";
 import { TipTapCustomImage } from "@/node/Image";
 import { Drawing } from "@/node/Drawing";
 import TurndownService from 'turndown';
+import mdToPdf from "md-to-pdf";
 
 const CSS = `<style>
 /* general css */
@@ -222,8 +223,14 @@ export default async function handle(req, res) {
                 res.status(200).json({text: html})
                 
             } else if (param[2] === "pdf") {
-                const html = htmlTemplate(title, body, note.user.name, true)
-                res.status(200).json({text: html})
+                const html = htmlTemplate(title, body, note.user.name, false)
+                const turndownService = new TurndownService()
+                const markdown = turndownService.turndown(html)
+                const pdf = await mdToPdf({content: markdown})
+                const json = pdf.content.toJSON()
+                res.status(200).json({
+                    text: json.data
+                })
             }else {
                 return res.status(501).json({ message: `` });
             }
