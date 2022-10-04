@@ -6,7 +6,7 @@ const ShareModal = ({ open, onclosehandler, closeHandler }) => {
 			<Modal.Header><Text size='$2xl'>Invite others to collaborate with on this note!</Text></Modal.Header>
 			<Modal.Body>
                 <Spacer y={0.1}/>
-                    <Input bordered
+                    <Input bordered clearable
                     labelPlaceholder="Enter their email here"
                     />
 			</Modal.Body>
