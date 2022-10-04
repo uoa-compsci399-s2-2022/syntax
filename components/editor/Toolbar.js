@@ -27,6 +27,7 @@ import {
 	MdOutlineRedo,
 	MdShare
 } from "react-icons/md";
+import ShareModal from '@/components/modal/ShareModal';
 
 export default ({ editor, drawingOpenHandler }) => {
 	if (!editor) {
@@ -58,6 +59,8 @@ export default ({ editor, drawingOpenHandler }) => {
 		setFile(fileObj);
 	};
 
+	const [shareModal, setShareModal] = useState(false);
+
 	useEffect(() => {
 		if (file) {
 			editor.commands.setImageFile({ file: file });
@@ -85,6 +88,7 @@ export default ({ editor, drawingOpenHandler }) => {
 			}
 		}
 		setInputModal(false);
+		setShareModal(false);
 	};
 
 	useEffect(() => {
@@ -288,7 +292,7 @@ export default ({ editor, drawingOpenHandler }) => {
 			icon: <MdShare size={iconSize} color={iconColor}/>,
 			label: "Share",
 			key: 'share',
-			//insert action here
+			action: () => setShareModal(true),
 			breakpoint: 'md'
 		}
 	};
@@ -489,6 +493,7 @@ export default ({ editor, drawingOpenHandler }) => {
 						))}
 					</Dropdown.Menu>
 				</Dropdown>
+				<ShareModal open={shareModal} onclosehandler={closeHandler}/>
 			</Tooltip>
 			<InputModal
 				open={inputModal}
