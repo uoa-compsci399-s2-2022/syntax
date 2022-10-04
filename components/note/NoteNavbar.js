@@ -19,8 +19,6 @@ import {
   useNotes,
   useDispatchNotes
 } from "../../modules/AppContext";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 
 const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
   const [selectedKey, setSelectedKey] = useState();
