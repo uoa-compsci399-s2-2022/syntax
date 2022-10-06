@@ -9,13 +9,15 @@ import {
 	useNotes,
 	useDispatchNotes
 } from "../../modules/AppContext";
+import { useRouter } from "next/router";
 
 const NoteDisplay = ({ note, handleSidebarDisplay }) => {
+	const router = useRouter();
 	const notesc = useNotes();
 	const setNotes = useDispatchNotes();
 	const currentNote = useNote();
 	const setCurrentNote = useDispatchNote();
-
+	console.log(router.query)
 	const debounceSave = useRef(
 		debounce(async (criteria) => {
 			saveContent(criteria);
