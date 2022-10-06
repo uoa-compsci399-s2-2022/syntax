@@ -1,6 +1,7 @@
 import ExportModal from "@/components/modal/ExportModal";
 import DeleteModal from "@/components/modal/DeleteModal";
 import SettingsModal from "@/components/modal/SettingsModal";
+import ShareModal from '@/components/modal/ShareModal';
 import { Avatar, Dropdown, Button, Navbar } from "@nextui-org/react";
 import { useState, useEffect } from "react";
 // import { Document, Page, pdf} from '@react-pdf/renderer'
@@ -37,6 +38,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
   const [exportModal, setExportModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [settingsModal, setSettingsModal] = useState(false);
+  const [shareModal, setShareModal] = useState(false);
   const currentNote = useNote();
   const setNotes = useDispatchNotes();
 	const deleteNoteHandler = async () => {
@@ -103,6 +105,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 
   const closeHandler = () => {
     setSettingsModal(false);
+    setShareModal(false);
     setExportModal(false);
     setDeleteModal(false);
     setSelectedKey();
@@ -110,6 +113,9 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 
   useEffect(() => {
     switch (selectedKey) {
+      case "share":
+        setShareModal(true);
+        break;
       case "export":
         setExportModal(true);
         break;
@@ -183,7 +189,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
               icon={<EllipsisHorizontalIcon style={{ height: "30px" }} />}
             />
             <Dropdown.Menu
-              disabledKeys={["share", "lock"]}
+              disabledKeys={["lock"]}
               onAction={setSelectedKey}
               aria-label="Note Options"
             >
@@ -222,6 +228,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
           </Dropdown>
         </Navbar.Item>
 				{/* <ExportModal open={exportModal} oncloseHandler={closeHandler} closeHandler={exportNoteHandler} /> */}
+        <ShareModal open={shareModal} onclosehandler={closeHandler} />
 				<DeleteModal open={deleteModal} onclosehandler={closeHandler} closeHandler={deleteNoteHandler} />
 				<SettingsModal open={settingsModal} closeHandler={closeHandler} />
       </Navbar.Content>
