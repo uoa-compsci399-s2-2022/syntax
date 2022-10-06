@@ -21,8 +21,8 @@ const colours = [
     '#a9a9a9'
 ]
 
-const getRandomColour = (clientId) => {
-    return colours[clientId % colours.length]
+const getRandomColour = () => {
+    return colours[Math.floor(Math.random() * colours.length)]
 }
 
 export default getRandomColour

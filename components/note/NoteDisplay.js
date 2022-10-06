@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { Container, Spacer, Dropdown } from "@nextui-org/react";
-import Tiptap from "@/components/editor/Tiptap";
+import Tiptap from "@/components/editor/TiptapCollab";
 import { debounce } from "lodash";
 import { useRef } from "react";
 import {
