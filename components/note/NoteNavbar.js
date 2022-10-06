@@ -22,6 +22,7 @@ import {
   useNotes,
   useDispatchNotes
 } from "../../modules/AppContext";
+import { useRouter } from "next/router";
 
 // const PDFElement = (html) => {
 //     return (
@@ -41,6 +42,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
   const [shareModal, setShareModal] = useState(false);
   const currentNote = useNote();
   const setNotes = useDispatchNotes();
+  const router = useRouter();
 	const deleteNoteHandler = async () => {
 		try {
 			console.log(currentNote);
@@ -102,6 +104,10 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 	// 		console.log(error)
 	// 	}
 	// }
+
+  const shareHandler = async () => {
+    router.push({pathname: `/room/${currentNote.id}`, query: {sharing: true}, options:{shallow: true}});
+  }
 
   const closeHandler = () => {
     setSettingsModal(false);
@@ -228,7 +234,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
           </Dropdown>
         </Navbar.Item>
 				{/* <ExportModal open={exportModal} oncloseHandler={closeHandler} closeHandler={exportNoteHandler} /> */}
-        <ShareModal open={shareModal} onclosehandler={closeHandler} />
+        <ShareModal open={shareModal} onclosehandler={closeHandler} closeHandler={shareHandler} />
 				<DeleteModal open={deleteModal} onclosehandler={closeHandler} closeHandler={deleteNoteHandler} />
 				<SettingsModal open={settingsModal} closeHandler={closeHandler} />
       </Navbar.Content>
