@@ -328,6 +328,11 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
 	animation:spinleft 23s linear infinite;
 }
 
+.output {
+	white-space: pre-line;
+}
+
+
 /* Give a remote user a caret */
 .collaboration-cursor__caret {
 	border-left: 1px solid #0d0d0d;

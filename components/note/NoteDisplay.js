@@ -21,6 +21,7 @@ const NoteDisplay = () => {
 		}, 500)
 	).current;
 
+
 	const saveContent = async (content) => {
 		console.log("editor debounce", content);
 		let note = {
