@@ -1,8 +1,5 @@
 import {
-	EditorContent, useEditor, BubbleMenu,
-	ReactNodeViewRenderer,
-	NodeViewWrapper,
-	NodeViewContent,
+	EditorContent, useEditor, BubbleMenu
 } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import BulletList from "@tiptap/extension-bullet-list";
@@ -11,26 +8,29 @@ import Superscript from "@tiptap/extension-superscript";
 import Subscript from "@tiptap/extension-subscript";
 import Youtube from "@tiptap/extension-youtube";
 import Link from "@tiptap/extension-link";
-import { useEffect, useState, useRef } from "react";
+import { useState } from "react";
 import Toolbar from "./Toolbar.js";
 import { TipTapCustomImage } from "@/node/Image";
 import { Drawing } from "@/node/Drawing";
-import { Extension } from '@tiptap/core'
-import { UploadFn } from "@/node/upload_image";
-import { debounce } from "lodash";
 import { useRouter } from "next/router";
 import { Container, Button, Spacer } from "@nextui-org/react";
 import { EditorView } from 'prosemirror-view'
 import {
 	useNote,
 	useDispatchNote,
-	useNotes,
 	useDispatchNotes
 } from "@/modules/AppContext";
 
 import dynamic from 'next/dynamic'
 import { CodeBlockNode } from './CodeMirrorNode';
-
+import { DebounceSave } from './DebounceSaveExtension';
+import getRandomColour from "../../hooks/getRandomColour"
+import Collaboration from '@tiptap/extension-collaboration'
+import * as Y from 'yjs'
+import { WebrtcProvider } from 'y-webrtc'
+import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
+import { useSession } from "next-auth/react"
+import { useEffect } from "react";
 
 EditorView.prototype.updateState = function updateState(state) {
 	if (!this.docView) return // This prevents the matchesNode error on hot reloads
@@ -40,31 +40,6 @@ EditorView.prototype.updateState = function updateState(state) {
 const DrawingModal = dynamic(() => import('../editor/Tldraw'), {
   ssr: false,
 })
-
-async function upload(file){
-  //fetch data from endpoint for presigned link and image src
-  let res = await fetch("/api/s3/", {
-    method: "POST",
-    body: file.type,
-  });
-  const {data, src, key} = await res.json();
-  const url = data.url; //url for post
-  const fields = data.fields; //formdata for post
-  const formData = new FormData();
-  Object.entries({ ...fields}).forEach(([key, value]) => {
-    formData.append(key, value)
-  })
-  formData.append('file', file)
-  //POST to upload file
-  const upload = await fetch(url, {
-    method: "POST",
-    body: formData,
-  });
-  if (upload.ok){
-    return src
-  }
-  return null
-}
 
 async function uploadDrawing(files){
   let res = await fetch("/api/s3/", {
@@ -97,49 +72,40 @@ async function uploadDrawing(files){
   return null
 }
 
+const getInitialUser = () => {
+  return {
+    name: "Loading...",
+    color: getRandomColour()
+  }  
+}
+
+const ydoc = new Y.Doc() //Must be outside to make sure users are using the same Y.js doc
+
 export default function () {
-  const notesc = useNotes();
-  const setNotes = useDispatchNotes();
   const currentNote = useNote();
-  const setCurrentNote = useDispatchNote();
   const [drawModal, setDrawModal] = useState(false);
   const [drawContent, setDrawContent] = useState(null);
-  const router = useRouter();
-  const debounceSave = useRef(
-    debounce(async (criteria) => {
-      saveContent(criteria);
-    }, 1000)
-  ).current;
+  const [provider, setProvider] = useState(null)
+  const [currentUser, setCurrentUser] = useState(getInitialUser)
+  const {data: session, status } = useSession()
 
-	const saveContent = async (content) => {
-		console.log("editor debounce", content);
-		let note = {
-			id: content.id,
-			title: content.title,
-			body: content.json
-		};
-		let res = await fetch("/api/note", {
-			method: "PUT",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify(note)
-		});
-
-		const updatedNote = await res.json();
-		if (!content.id) {
-			router.push(`/note/${updatedNote.id}`, undefined, { shallow: true });
-			setCurrentNote(updatedNote);
-			setNotes({ note: updatedNote, type: "add" });
-		}else{
-			setNotes({ note: updatedNote, type: "edit" });
-		}
-	};
-
+  //Creates room based on note id. Deletes the old ydoc and creates a new blank one.
+  useEffect(() => {
+    if (typeof currentNote.id !== "undefined"){
+      if (provider !== null){
+        provider.destroy()
+      }
+      setProvider(new WebrtcProvider(currentNote.id, ydoc))
+    }
+  }, [currentNote.id])
+  
 	const editor = useEditor({
-  disablePasteRules: [Drawing, "drawing"],
+  	disablePasteRules: [Drawing, "drawing"],
 		extensions: [
 			StarterKit.configure({
 				codeBlock: false,
-				bulletList: false
+				bulletList: false,
+        history: false
 			}),
 			Underline,
 			Superscript,
@@ -156,7 +122,12 @@ export default function () {
 				}
 			}),
 			CodeBlockNode,
-      TipTapCustomImage(upload).configure({
+
+			DebounceSave().configure({
+				noteId: currentNote.id,
+				noteTitle: currentNote.title
+			}),
+      TipTapCustomImage().configure({
         HTMLAttributes: {
           class: 'image'
         }
@@ -165,24 +136,17 @@ export default function () {
         HTMLAttributes: {
           class: 'drawing'
         }
-      })
+      }),
+      Collaboration.configure({
+        document: ydoc,
+      }),
+      (provider !== null) ? CollaborationCursor.configure({
+        provider: provider
+      }) : (null)
 		],
-		content: currentNote.body
-	});
-	editor?.on("update", ({ editor }) => {
-		// console.log("editor updated");
-		debounceSave({
-			id: currentNote.id,
-			title: currentNote.title,
-			json: editor.getJSON()
-		});
-	});
-
-	useEffect(() => {
-		editor?.commands?.setContent(currentNote.body);
-	}, [currentNote.body]);
-
-
+    content: currentNote.body
+	}, [currentNote.body, provider]);
+	
   async function closeHandler(files) {
     if (typeof files !== "undefined"){
       if (typeof files[0] !== "undefined"){
@@ -213,7 +177,23 @@ export default function () {
   const drawingOpenHandler = () => {
     setDrawModal(true)
   }
-  
+
+  //gets user's name
+  useEffect(() => {
+    if(typeof session !== "undefined"){
+      const name = session.user.name
+      setCurrentUser({...currentUser, name })
+    }
+  }, [session])
+
+  //updates the users name for awareness
+  useEffect(() => {
+    if (editor?.storage.collaborationCursor?.users && currentUser) {
+      localStorage.setItem('currentUser', JSON.stringify(currentUser))
+      editor.chain().focus().updateUser(currentUser)?.run()
+    }
+  }, [editor, currentUser])  
+
  return (
     <Container
       display="flex"
@@ -263,9 +243,12 @@ export default function () {
               className={editor?.isActive('drawing') ? 'is-active' : "editDrawing" }>Edit</Button>
         </Button.Group>
       </BubbleMenu>}
-      <EditorContent editor={editor} key={currentNote} style={{ "maxWidth": "100%" }} />
+      <EditorContent editor={editor} style={{ "maxWidth": "100%" }} />
       <Spacer />
-      <DrawingModal open={drawModal} closeHandler={closeHandler} content={drawContent}/>            
+      <DrawingModal open={drawModal} closeHandler={closeHandler} content={drawContent}/>     
+      <div>
+        <p>Users: {editor?.storage.collaborationCursor?.users.length} </p>
+      </div>          
     </Container>	 
   );
 }
