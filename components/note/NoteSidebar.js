@@ -18,7 +18,7 @@ import {
 } from "../../modules/AppContext";
 import { NoteTemplate } from "./NewNote";
 
-const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
+const NoteSidebar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 	const { checked, type } = useTheme();
 	const [searchModal, setSearchModal] = useState(false);
 	const router = useRouter();
@@ -119,11 +119,10 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
 				}}
 			>
 				<NoteList
-					retrieved_notes={notes}
+					retrieved_notes={noteslist}
 					showEditor={undefined}
 					handleSidebarDisplay={handleSidebarDisplay}
 					createNote={createNote}
-					key={notes}
 				/>
 			</Container>
 
