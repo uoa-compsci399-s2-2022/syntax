@@ -23,7 +23,6 @@ import {
 	useNotes,
 	useDispatchNotes
 } from "../../modules/AppContext";
-import { useRouter } from "next/router";
 
 // const PDFElement = (html) => {
 //     return (

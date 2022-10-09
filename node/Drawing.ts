@@ -179,6 +179,11 @@ export const Drawing = () => {
 						if (selection?.node?.type?.name == 'drawing'){
 							deleteDrawing(selection?.node?.attrs?.src)
 							return commands?.updateAttributes('drawing', attrs)
+						} else {
+							return commands?.insertContent({
+								type: this.name,
+								attrs: attrs
+							})
 						}
 					}
 			};

@@ -13,15 +13,13 @@ const DrawingModal = ({ open, closeHandler, content }) =>{
 
     const openTldraw = async () => {
         setWidth("1%")
-        await app?.onReady()
         setTimeout(function() { //Start the timer
             setWidth("100%") //After 0.15 second
         }, 100)
-        await app?.zoomToFit();
     }
 
     async function saveAndClose(){
-        app?.selectNone()
+        const none = await app?.selectNone()
         const png = await app?.getImage(TDExportType.PNG);
         let currentContent = await app?.document;
         if (content === currentContent){
