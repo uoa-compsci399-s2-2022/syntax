@@ -41,10 +41,9 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 	const [exportModal, setExportModal] = useState(false);
 	const [deleteModal, setDeleteModal] = useState(false);
 	const [settingsModal, setSettingsModal] = useState(false);
-  const [shareModal, setShareModal] = useState(false);
+ 	const [shareModal, setShareModal] = useState(false);
 	const currentNote = useNote();
 	const setNotes = useDispatchNotes();
-  const router = useRouter();
 	const deleteNoteHandler = async () => {
 		try {
 			console.log(currentNote);
