@@ -43,7 +43,7 @@ export const Extension = ({
 
 	const run = async (event) => {
 		const compiled = await TIO.run(doc, input, lang);
-		updateAttributes({ code_output: compiled[0] });
+		updateAttributes({ code_output: compiled.join("\n") });
 		console.log(compiled);
 	};
 
@@ -72,11 +72,7 @@ export const Extension = ({
 
 	return (
 		<NodeViewWrapper>
-			<Card
-				variant="bordered"
-				css={{ $$cardColor: "rgba(255,255,255,0.0)", resize: "both" }}
-			>
-				<Card.Body>
+			
 					<div className="maindiv" contentEditable={false}>
 						<Dropdown>
 							<Dropdown.Button light css={{ tt: "capitalize" }}>
@@ -113,8 +109,6 @@ export const Extension = ({
 							<span> {result} </span>
 						</div>
 					</div>
-				</Card.Body>
-			</Card>
 		</NodeViewWrapper>
 	);
 };
