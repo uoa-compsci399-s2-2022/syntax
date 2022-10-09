@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { Container, Spacer, Dropdown } from "@nextui-org/react";
-import Tiptap from "@/components/editor/TiptapCollab";
+import TiptapCollab from "@/components/editor/TiptapCollab";
+import Tiptap from "@/components/editor/Tiptap"
 import { debounce } from "lodash";
 import { useRef } from "react";
 import {
@@ -17,13 +18,11 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
 	const setNotes = useDispatchNotes();
 	const currentNote = useNote();
 	const setCurrentNote = useDispatchNote();
-	console.log(router.query)
 	const debounceSave = useRef(
 		debounce(async (criteria) => {
 			saveContent(criteria);
 		}, 500)
 	).current;
-
 	const saveContent = async (content) => {
 		console.log("editor debounce", content);
 		let note = {
@@ -163,7 +162,9 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
 							"@xs": { border: "none" }
 						}}
 					/>
-					<Tiptap noteContent={currentNote.body} />
+					{router.query.sharing === "true" ? (
+					<TiptapCollab noteContent={currentNote.body} />) :
+					(<Tiptap noteContent={currentNote.body} />)}
 				</Container>
 				<Spacer />
 			</>

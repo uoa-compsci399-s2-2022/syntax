@@ -107,7 +107,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 
   const shareHandler = async () => {
     console.log('share')
-    router.push({pathname: `/roomo/${currentNote.id}`, query: {sharing: true}, options: {shallow: true}});
+    router.push({pathname: `/room/${currentNote.id}`, query: {sharing: true}, options: {shallow: true}});
     setShareModal(false);
   }
 
