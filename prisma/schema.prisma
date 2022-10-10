@@ -82,3 +82,14 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model Room {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  noteId        String
+  users         User[]
+  ownerId         String
+  user   User   @relation(fields: [ownerId], references: [id])
+  @@unique([id, ownerId])
+  note   Note   @relation(fields: [noteId], references: [id])
+  @@unique([id, noteId])
+}
