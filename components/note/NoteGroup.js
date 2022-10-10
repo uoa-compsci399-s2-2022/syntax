@@ -143,6 +143,7 @@ const NoteGroup = ({
 						<Dropdown.Button
 							light
 							ripple={false}
+							disabled={name === "Ungrouped" ? true : false}
 							icon={
 								<EllipsisHorizontalIcon
 									style={{ height: "var(--icon-size-xs)" }}
@@ -166,7 +167,7 @@ const NoteGroup = ({
 									<PencilSquareIcon style={{ height: "var(--icon-size-s)" }} />
 								}
 							>
-								Rename
+								Edit
 							</Dropdown.Item>
 							<Dropdown.Item
 								key="delete"

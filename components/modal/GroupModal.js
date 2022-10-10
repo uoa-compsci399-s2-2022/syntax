@@ -50,8 +50,14 @@ const InputModal = ({
 								: "var(--nextui-colors-accents0)"
 					}}
 				/>
-				<Grid.Container>
-					<Grid xs={6}>Color</Grid>
+				<Grid.Container
+					css={{
+						marginTop: "1rem"
+					}}
+				>
+					<Grid xs={6} css={{ fontSize: "$sm", paddingLeft: "4px" }}>
+						Color
+					</Grid>
 					<Grid xs={6} css={{ display: "flex", justifyContent: "flex-end" }}>
 						<input
 							type="color"
@@ -66,7 +72,9 @@ const InputModal = ({
 					auto
 					onPress={() => {
 						if (!value || value === "") {
-							setHelperText("Value is required");
+							setHelperText("Name is required");
+						} else if (value.toLowerCase() === "ungrouped") {
+							setHelperText("Invalid name");
 						} else {
 							closeContentHelper(value);
 						}
