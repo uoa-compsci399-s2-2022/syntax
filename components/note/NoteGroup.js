@@ -1,12 +1,6 @@
-import {
-	Dropdown,
-	Container,
-	Row,
-	Col,
-	Button
-} from "@nextui-org/react";
+import { Dropdown, Container, Row, Col, Button } from "@nextui-org/react";
 import DeleteModal from "@/components/modal/DeleteModal";
-import InputModal from "@/components/modal/InputModal";
+import GroupModal from "@/components/modal/GroupModal";
 import { useState, useEffect } from "react";
 import {
 	PlusIcon,
@@ -16,6 +10,7 @@ import {
 	TrashIcon,
 	PencilSquareIcon
 } from "@heroicons/react/24/outline";
+import { useRouter } from "next/router";
 import { useNote, useNotes } from "../../modules/AppContext";
 
 const NoteGroup = ({
@@ -28,7 +23,7 @@ const NoteGroup = ({
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [selectedKey, setSelectedKey] = useState();
-	const [inputModal, setInputModal] = useState(false);
+	const [groupModal, setGroupModal] = useState(false);
 	const [deleteModal, setDeleteModal] = useState(false);
 	const currentNote = useNote();
 	const handleOpen = () => {
@@ -37,14 +32,34 @@ const NoteGroup = ({
 
 	const closeHandler = () => {
 		setDeleteModal(false);
-		setInputModal(false);
+		setGroupModal(false);
 		setSelectedKey();
+	};
+
+	const updateGroupHandler = (newName, newColor) => {
+		const selectedName = newName && newName !== name ? newName : undefined;
+		const selectedColor = newColor && newColor !== color ? newColor : undefined;
+
+		if (selectedName || selectedColor) {
+			updateGroup(selectedName, selectedColor);
+		}
+	};
+
+	const updateGroup = async (newName = name, newColor = color) => {
+		console.log(newName, newColor);
+		let res = await fetch("/api/group", {
+			method: "PUT",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ id, name: newName, color: newColor })
+		});
+
+		console.log("Update successful");
 	};
 
 	useEffect(() => {
 		switch (selectedKey) {
 			case "rename":
-				setInputModal(true);
+				setGroupModal(true);
 				break;
 			case "delete":
 				setDeleteModal(true);
@@ -153,7 +168,7 @@ const NoteGroup = ({
 					<Button
 						light
 						ripple={false}
-						onPress={() => createNote(id)}
+						onPress={() => updateGroupName()}
 						icon={<PlusIcon style={{ height: "var(--icon-size-xs)" }} />}
 						css={{
 							minWidth: "0",
@@ -231,10 +246,12 @@ const NoteGroup = ({
 					))}
 				</Container>
 			</Container>
-			<InputModal
-				open={inputModal}
+			<GroupModal
+				open={groupModal}
 				closeHandler={closeHandler}
-				inputType={"group"}
+				updateGroupHandler={updateGroupHandler}
+				name={name}
+				color={color}
 			/>
 			<DeleteModal
 				open={deleteModal}

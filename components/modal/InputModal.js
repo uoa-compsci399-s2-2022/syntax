@@ -1,7 +1,8 @@
-import { Button, Modal, Input, useInput } from "@nextui-org/react";
+import { Button, Modal, Input, useInput, useTheme } from "@nextui-org/react";
 import { useState } from "react";
 
 const InputModal = ({ open, closeHandler, inputType }) => {
+	const { checked, type } = useTheme();
 	const { value, reset, bindings } = useInput("");
 	const [helperText, setHelperText] = useState();
 
@@ -21,11 +22,6 @@ const InputModal = ({ open, closeHandler, inputType }) => {
 			header: "Add Link",
 			label: "Link",
 			placeholder: "Paste link"
-		},
-		group: {
-			header: "Rename Group",
-			label: "New Name",
-			placeholder: "Insert new group name"
 		}
 	};
 
@@ -36,13 +32,13 @@ const InputModal = ({ open, closeHandler, inputType }) => {
 				<Modal.Body css={{ minHeight: "100px" }}>
 					<Input
 						{...bindings}
-						bordered
 						clearable
 						animated={false}
 						label={typeValues[inputType].label}
 						helperText={helperText}
 						helperColor="error"
 						placeholder={typeValues[inputType].placeholder}
+						css={{$$inputColor: type === "dark" ? "var(--nextui-colors-background)" : "var(--nextui-colors-accents0)"}}
 					/>
 				</Modal.Body>
 				<Modal.Footer>
