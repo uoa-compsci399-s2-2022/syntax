@@ -11,7 +11,7 @@ import {
 	PencilSquareIcon
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
-import { useNote, useNotes } from "../../modules/AppContext";
+import { useNote, useDispatchNotes } from "@/modules/AppContext";
 
 const NoteGroup = ({
 	name,
@@ -26,7 +26,9 @@ const NoteGroup = ({
 	const [groupModal, setGroupModal] = useState(false);
 	const [deleteModal, setDeleteModal] = useState(false);
 	const currentNote = useNote();
-	const handleOpen = () => {
+	const setNotes = useDispatchNotes();
+
+	const openHandler = () => {
 		setIsOpen((current) => !current);
 	};
 
@@ -34,6 +36,20 @@ const NoteGroup = ({
 		setDeleteModal(false);
 		setGroupModal(false);
 		setSelectedKey();
+	};
+
+	const deleteGroupHandler = async () => {
+		try {
+			let res = await fetch(`/api/group`, {
+				method: "DELETE",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(id)
+			});
+			const deletedGroup = await res.json();
+			setDeleteModal(false);
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	const updateGroupHandler = (newName, newColor) => {
@@ -46,14 +62,12 @@ const NoteGroup = ({
 	};
 
 	const updateGroup = async (newName = name, newColor = color) => {
-		console.log(newName, newColor);
 		let res = await fetch("/api/group", {
 			method: "PUT",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ id, name: newName, color: newColor })
 		});
-
-		console.log("Update successful");
+		const updatedGroup = await res.json();
 	};
 
 	useEffect(() => {
@@ -81,7 +95,7 @@ const NoteGroup = ({
 				justify="space-between"
 				alignItems="center"
 				wrap="nowrap"
-				onClick={notes.length > 0 ? handleOpen : null}
+				onClick={notes.length > 0 ? openHandler : null}
 				css={{
 					padding: "0.5rem",
 					width: "100%",
@@ -168,7 +182,7 @@ const NoteGroup = ({
 					<Button
 						light
 						ripple={false}
-						onPress={() => updateGroupName()}
+						onPress={() => createNote(id)}
 						icon={<PlusIcon style={{ height: "var(--icon-size-xs)" }} />}
 						css={{
 							minWidth: "0",
@@ -256,7 +270,9 @@ const NoteGroup = ({
 			<DeleteModal
 				open={deleteModal}
 				onclosehandler={closeHandler}
-				type={"group"}
+				closeHandler={closeHandler}
+				deleteHandler={deleteGroupHandler}
+				type="group"
 			/>
 		</Container>
 	);
