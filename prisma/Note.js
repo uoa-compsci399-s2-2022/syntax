@@ -82,7 +82,7 @@ export const getAllNotesBySearch = async (title, content, code, sort, id) => {
 		$and: 
 		[{"userId": id}, 
 		{$or: [
-			{"title": {$regex: title }},
+			{"title": {$regex: title, '$options' : 'i' }},
 			{"body.content": { $elemMatch: { content: { $elemMatch: { "text": { $regex: content}}}}}},
 			{"body.content": { $elemMatch: { "attrs.code_content": {$regex: code}}}}]
 		}]},

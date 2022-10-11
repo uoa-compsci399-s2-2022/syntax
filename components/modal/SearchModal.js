@@ -7,7 +7,8 @@ import {
 	Row,
 	useTheme
 } from "@nextui-org/react";
-import { useState } from "react";
+import { throttle } from "lodash";
+import { useState, useRef } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import {
 	useNote,
@@ -28,7 +29,11 @@ const SearchModal = ({ open, closeHandler }) => {
 	const [returnedNotes, setNotes] = useState([])
 	const setCurrentNote = useDispatchNote();
 	const router = useRouter();
-
+	const throttledSearch = useRef(
+		throttle(async (e) => {
+			Search(e);
+		}, 1000)
+	).current;
 
 	const sortOptions = {
 		"title: 1": "Title (ascending)",
@@ -86,7 +91,7 @@ const SearchModal = ({ open, closeHandler }) => {
 					clearable
 					aria-label="Advanced Search Bar"
 					placeholder="Search notes..."
-					onChange={Search}
+					onChange={throttledSearch}
 					type="search"
 					animated={false}
 					contentLeft={
