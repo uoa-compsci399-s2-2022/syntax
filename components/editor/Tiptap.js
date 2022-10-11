@@ -96,14 +96,6 @@ export default function () {
 		return new WebrtcProvider(currentNote.id, ydoc);
 	}, [currentNote.id, ydoc]);
 
-	//  useLayoutEffect(() => {
-	// 	websocketProvider.connect();
-
-	// 	return () => {
-	// 	  websocketProvider.destroy();
-	// 	};
-	//  }, []);
-
 	//Creates room based on note id. Deletes the old ydoc and creates a new blank one.
 	// useEffect(() => {
 	// 	if (typeof currentNote.id !== "undefined") {
