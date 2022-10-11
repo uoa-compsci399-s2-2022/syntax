@@ -1,4 +1,5 @@
 import { Button, Modal, Input, Spacer, Text, Grid} from "@nextui-org/react";
+const share_link = 'Insert Link Here';
 
 const ShareModal = ({ open, onclosehandler, closeHandler }) => {
 	return (
@@ -24,7 +25,7 @@ const ShareModal = ({ open, onclosehandler, closeHandler }) => {
 					<Input width='83%' readOnly
 					label="Don't know their email? Share this link!"
 					placeholder='Share Link TextBox' 
-					className='cliptext' initialValue='Insert Link Here' contentRight={<Button auto responsive>Copy Link</Button>}/>
+					className='cliptext' initialValue={share_link} contentRight={<Button auto responsive onPress={() => {navigator.clipboard.writeText(share_link)}}>Copy Link</Button>}/>
 			</Modal.Body>
 			<Modal.Footer>
 				
