@@ -25,11 +25,14 @@ import { CodeBlockNode } from './CodeMirrorNode';
 import { DebounceSave } from './DebounceSaveExtension';
 import getRandomColour from "../../hooks/getRandomColour"
 import Collaboration from '@tiptap/extension-collaboration'
+import { getSchema } from '@tiptap/core'
 import * as Y from 'yjs'
-import { WebrtcProvider } from 'y-webrtc'
+import { prosemirrorJSONToYDoc, yDocToProsemirrorJSON } from 'y-prosemirror'
+import { Room, WebrtcProvider } from 'y-webrtc'
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
 import { useSession } from "next-auth/react"
 import { useEffect, useMemo, useState } from "react";
+import { MdRoomService } from "react-icons/md";
 
 EditorView.prototype.updateState = function updateState(state) {
 	if (!this.docView) return // This prevents the matchesNode error on hot reloads
@@ -84,13 +87,89 @@ export default function () {
 	const currentNote = useNote();
 	const [drawModal, setDrawModal] = useState(false);
 	const [drawContent, setDrawContent] = useState(null);
-	const [provider, setProvider] = useState(null)
+	const [provider, setProvider] = useState(null);
+	// const [ydoc, setYdoc] = useState(null);
 	const [currentUser, setCurrentUser] = useState(getInitialUser)
 	const { data: session, status } = useSession()
 
+// if this is a Room, load the ydoc from rooms.id.ydoc
+// otherwise load currentnote.body
+// save for now only for owner. saves to room only. handle ydoc to regular note after removing all users
+// ydoc handles crdt
+
+
+// not sure useMemo is doing what we want performantly 
+
+	const extensions = [
+		StarterKit.configure({
+			codeBlock: false,
+			bulletList: false,
+			history: false
+		}),
+		Underline,
+		Superscript,
+		Subscript,
+		Youtube,
+		BulletList.configure({
+			HTMLAttributes: {
+				class: "editor-ul"
+			}
+		}),
+		Link.configure({
+			HTMLAttributes: {
+				class: "editor-link"
+			}
+		}),
+		CodeBlockNode,
+
+		// DebounceSave().configure({
+		// 	noteId: currentNote.id,
+		// 	noteTitle: currentNote.title
+		// }),
+		TipTapCustomImage().configure({
+			HTMLAttributes: {
+				class: 'image'
+			}
+		}),
+		Drawing().configure({
+			HTMLAttributes: {
+				class: 'drawing'
+			}
+		}),
+	];
+
+	// useEffect(() => {
+	// 	var yDocRestore = new Y.Doc();
+	// 	Y.applyUpdate(yDocRestore, currentNote.body);
+	// 	return DocRestore;
+	// }, []);
+
+	// useEffect(() => {
+	// 	var yDocRestore = new Y.Doc();
+	// 	Y.applyUpdate(yDocRestore, currentNote.body);
+	// 	setYdoc(yDocRestore);
+	// 	var roomInit = new WebrtcProvider(currentNote.id, ydoc);
+	// 	setProvider(roomInit);
+	// }, []);
 	const ydoc = useMemo(() => {
-		return new Y.Doc();
+		// console.log(currentNote.body);
+		const schema = getSchema(extensions)
+		// console.log(schema);
+
+		const predoc = prosemirrorJSONToYDoc(schema, currentNote.body, "default")
+		console.log(yDocToProsemirrorJSON(predoc), predoc.getXmlFragment("default").toJSON());
+		// const ydoc = new Y.Doc()
+		// const newdoc = Y.encodeStateAsUpdate(predoc)
+		// Y.applyUpdate(ydoc, newdoc)
+		// console.log(ydoc, predoc, newdoc);
+		return predoc;
 	}, [currentNote.id]);
+
+	// const ydoc = useMemo(() => {
+	// 	var yDocRestore = new Y.Doc();
+	// 	Y.applyUpdate(yDocRestore, currentNote.body);
+	// 	return DocRestore;
+	// }, []);
 
 	const collabWebrtcProvider = useMemo(() => {
 		return new WebrtcProvider(currentNote.id, ydoc);
@@ -109,48 +188,26 @@ export default function () {
 	const editor = useEditor({
 		disablePasteRules: [Drawing, "drawing"],
 		extensions: [
-			StarterKit.configure({
-				codeBlock: false,
-				bulletList: false,
-				history: false
-			}),
-			Underline,
-			Superscript,
-			Subscript,
-			Youtube,
-			BulletList.configure({
-				HTMLAttributes: {
-					class: "editor-ul"
-				}
-			}),
-			Link.configure({
-				HTMLAttributes: {
-					class: "editor-link"
-				}
-			}),
-			CodeBlockNode,
-
-			DebounceSave().configure({
-				noteId: currentNote.id,
-				noteTitle: currentNote.title
-			}),
-			TipTapCustomImage().configure({
-				HTMLAttributes: {
-					class: 'image'
-				}
-			}),
-			Drawing().configure({
-				HTMLAttributes: {
-					class: 'drawing'
-				}
-			}),
-			Collaboration.configure({
-				document: ydoc,
-			}),
-			CollaborationCursor.configure({
-				provider: collabWebrtcProvider
-			})
+			...extensions,
+			// Collaboration.configure({
+			// 	document: ydoc,
+			// }),
+			// CollaborationCursor.configure({
+			// 	provider: collabWebrtcProvider,
+			// 	user: {
+			// 		name: session?.user?.name,
+			// 		color: getRandomColour(),
+			// 	},
+			// })
 		],
+		onDestroy() {
+			// The editor is being destroyed.
+			collabWebrtcProvider.destroy();
+		},
+		onCreate({ editor }) {
+			// The editor is focused.
+			console.log(editor.getJSON());
+		},
 		// this needs to be Ydoc
 		content: currentNote.body
 	}, [currentNote.id]);
@@ -186,24 +243,21 @@ export default function () {
 		setDrawModal(true)
 	}
 
-	
+
 	// not sure this is needed, we can only ever have 1 user per sessions so just set the state
 	//gets user's name
-	useEffect(() => {
-		if (typeof session !== "undefined") {
-			const name = session.user.name
-			setCurrentUser({ ...currentUser, name })
-		}
-	}, [session])
+	// useEffect(() => {
+	// 	setCurrentUser({ ...currentUser, session?.user.name })
+	// }, [])
 
 	// this needs to be changed or removed. if this is for an onUpdate, make a extension
 	//updates the users name for awareness
-	useEffect(() => {
-		if (editor?.storage.collaborationCursor?.users && currentUser) {
-			localStorage.setItem('currentUser', JSON.stringify(currentUser))
-			editor.chain().focus().updateUser(currentUser)?.run()
-		}
-	}, [editor, currentUser])
+	// useEffect(() => {
+	// 	if (editor?.storage.collaborationCursor?.users && currentUser) {
+	// 		localStorage.setItem('currentUser', JSON.stringify(currentUser))
+	// 		editor.chain().focus().updateUser(currentUser)?.run()
+	// 	}
+	// }, [editor, currentUser])
 
 	return (
 		<Container
@@ -260,7 +314,7 @@ export default function () {
 			<Spacer />
 			<DrawingModal open={drawModal} closeHandler={closeHandler} content={drawContent} />
 			<div>
-				<p>Users: {editor?.storage.collaborationCursor?.users.length} </p>
+				{/* <p>Users: {editor?.storage.collaborationCursor?.users.length} </p> */}
 			</div>
 		</Container>
 	);

@@ -47,7 +47,7 @@ model Note {
    groupId   String?
    user      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
    group     Group?    @relation(fields: [groupId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-   Room      Room[]
+   Room      Room?
 
    @@unique([id, userId])
    @@unique([id, groupId])
@@ -75,19 +75,19 @@ model User {
    sessions      Session[]
    notes         Note[]
    groups        Group[]
-   roomIds       String[]  @db.ObjectId
-   rooms         Room[]    @relation(fields: [roomIds], references: [id])
+	roomIds       String[] @db.ObjectId
+   rooms         Room[]@relation(fields: [roomIds], references: [id])
 }
 
 model Room {
-   id      String   @id @default(auto()) @map("_id") @db.ObjectId
-   noteId  String
-   userIds String[] @db.ObjectId
-   users   User[]   @relation(fields: [userIds], references: [id])
-   ownerId String
-   note    Note     @relation(fields: [noteId], references: [id])
+   id      String  @id @default(auto()) @map("_id") @db.ObjectId
+   noteId  String  @unique
+   note    Note    @relation(fields: [noteId], references: [id])
+   ownerId String?
+	userIds String[]   @db.ObjectId
+   users   User[] @relation(fields: [userIds], references: [id])
 
-   @@unique([id, noteId])
+	@@unique([id, noteId])
 }
 
 model VerificationToken {
