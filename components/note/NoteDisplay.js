@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { Container, Spacer, Dropdown } from "@nextui-org/react";
 import dynamic from "next/dynamic";
-import Tiptap from "@/components/editor/Tiptap";
+// import Tiptap from "@/components/editor/Tiptap";
 import { NoteMetaData } from './NoteMetaData'
 import { debounce } from "lodash";
 import { useRef } from "react";
@@ -10,9 +10,9 @@ import {
 	useNotes,
 	useDispatchNotes
 } from "../../modules/AppContext";
-// const Tiptap = dynamic(() => import("@/components/editor/Tiptap"), {
-// 	ssr: false
-//  });
+const Tiptap = dynamic(() => import("@/components/editor/Tiptap"), {
+	ssr: false
+ });
 
 const NoteDisplay = () => {
 	const currentNote = useNote();

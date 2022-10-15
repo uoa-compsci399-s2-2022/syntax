@@ -39,6 +39,16 @@ const NoteList = ({ retrieved_notes, handleSidebarDisplay, createNote }) => {
 	return (
 		<>
 			<Container css={{ padding: "0 0.5rem", textOverflow: "break" }}>
+			{("rooms" in notes) ? (
+						<NoteGroup
+							name={"Shared Notes"}
+							key={notes.rooms}
+							color={"green"}
+							notes={notes.rooms.map(note => (note.note))}
+							openNote={openNote}
+							createNote={createNote}
+						/>
+				) : null}
 				{("groups" in notes) ? (
 					notes.groups.map((key) => (
 						<NoteGroup

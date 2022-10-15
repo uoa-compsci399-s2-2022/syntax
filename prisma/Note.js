@@ -1,3 +1,4 @@
+import { truncate } from "lodash";
 import prisma from "./prisma";
 
 
@@ -149,7 +150,19 @@ export const getAllNotesByUserID = async (id) => {
 					notes: {
 						include: {
 							group: true,
-							user: true
+							user: true,
+							room: true
+						}
+					}
+				}
+			},
+			rooms:{
+				include: {
+					note: {
+						include: {
+							group: true,
+							user: true,
+							room: true
 						}
 					}
 				}

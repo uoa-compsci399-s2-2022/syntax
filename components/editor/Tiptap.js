@@ -74,12 +74,6 @@ async function uploadDrawing(files) {
 	return null
 }
 
-const getInitialUser = () => {
-	return {
-		name: "Loading...",
-		color: getRandomColour()
-	}
-}
 
 // const ydoc = new Y.Doc() //Must be outside to make sure users are using the same Y.js doc
 
@@ -88,19 +82,17 @@ export default function () {
 	const [drawModal, setDrawModal] = useState(false);
 	const [drawContent, setDrawContent] = useState(null);
 	const [provider, setProvider] = useState(null);
-	// const [ydoc, setYdoc] = useState(null);
-	const [currentUser, setCurrentUser] = useState(getInitialUser)
+	const ydoc = useRef();
+	const collabWebrtcProvider = useRef();
 	const { data: session, status } = useSession()
+	if (currentNote.room) {
+		ydoc.current = new Y.Doc();
+		collabWebrtcProvider.current = new WebrtcProvider(currentNote.id, ydoc);
+	}
 
-// if this is a Room, load the ydoc from rooms.id.ydoc
-// otherwise load currentnote.body
-// save for now only for owner. saves to room only. handle ydoc to regular note after removing all users
-// ydoc handles crdt
-
-
-// not sure useMemo is doing what we want performantly 
-
-	const extensions = [
+	// not sure useMemo is doing what we want performantly 
+	console.log(currentNote);
+	const baseExtensions = [
 		StarterKit.configure({
 			codeBlock: false,
 			bulletList: false,
@@ -121,11 +113,6 @@ export default function () {
 			}
 		}),
 		CodeBlockNode,
-
-		// DebounceSave().configure({
-		// 	noteId: currentNote.id,
-		// 	noteTitle: currentNote.title
-		// }),
 		TipTapCustomImage().configure({
 			HTMLAttributes: {
 				class: 'image'
@@ -138,78 +125,42 @@ export default function () {
 		}),
 	];
 
-	// useEffect(() => {
-	// 	var yDocRestore = new Y.Doc();
-	// 	Y.applyUpdate(yDocRestore, currentNote.body);
-	// 	return DocRestore;
-	// }, []);
-
-	// useEffect(() => {
-	// 	var yDocRestore = new Y.Doc();
-	// 	Y.applyUpdate(yDocRestore, currentNote.body);
-	// 	setYdoc(yDocRestore);
-	// 	var roomInit = new WebrtcProvider(currentNote.id, ydoc);
-	// 	setProvider(roomInit);
-	// }, []);
-	const ydoc = useMemo(() => {
-		// console.log(currentNote.body);
-		const schema = getSchema(extensions)
-		// console.log(schema);
-
-		const predoc = prosemirrorJSONToYDoc(schema, currentNote.body, "default")
-		console.log(yDocToProsemirrorJSON(predoc), predoc.getXmlFragment("default").toJSON());
-		// const ydoc = new Y.Doc()
-		// const newdoc = Y.encodeStateAsUpdate(predoc)
-		// Y.applyUpdate(ydoc, newdoc)
-		// console.log(ydoc, predoc, newdoc);
-		return predoc;
-	}, [currentNote.id]);
-
-	// const ydoc = useMemo(() => {
-	// 	var yDocRestore = new Y.Doc();
-	// 	Y.applyUpdate(yDocRestore, currentNote.body);
-	// 	return DocRestore;
-	// }, []);
-
-	const collabWebrtcProvider = useMemo(() => {
-		return new WebrtcProvider(currentNote.id, ydoc);
-	}, [currentNote.id, ydoc]);
-
-	//Creates room based on note id. Deletes the old ydoc and creates a new blank one.
-	// useEffect(() => {
-	// 	if (typeof currentNote.id !== "undefined") {
-	// 		if (provider !== null) {
-	// 			provider.destroy()
-	// 		}
-	// 		setProvider(new WebrtcProvider(currentNote.id, ydoc))
-	// 	}
-	// }, [currentNote.id])
-
 	const editor = useEditor({
 		disablePasteRules: [Drawing, "drawing"],
-		extensions: [
-			...extensions,
-			// Collaboration.configure({
-			// 	document: ydoc,
-			// }),
-			// CollaborationCursor.configure({
-			// 	provider: collabWebrtcProvider,
-			// 	user: {
-			// 		name: session?.user?.name,
-			// 		color: getRandomColour(),
-			// 	},
-			// })
-		],
-		onDestroy() {
-			// The editor is being destroyed.
-			collabWebrtcProvider.destroy();
-		},
-		onCreate({ editor }) {
-			// The editor is focused.
-			console.log(editor.getJSON());
-		},
-		// this needs to be Ydoc
-		content: currentNote.body
+		...(currentNote.room ? {
+			extensions: [
+				...baseExtensions,
+				// save and apply update to ydoc here
+				// DebounceYDOCSave: DebounceYDOCSave().configure({
+				// 	noteId: currentNote.id,
+				// 	noteTitle: currentNote.title
+				// }),
+			],
+			Collaboration: Collaboration.configure({
+				document: ydoc,
+			}),
+			CollaborationCursor: CollaborationCursor.configure({
+				provider: collabWebrtcProvider,
+				user: {
+					name: session?.user?.name,
+					color: getRandomColour(),
+				},
+			}),
+			onDestroy() {
+				collabWebrtcProvider.destroy();
+			},
+		} : {
+			extensions: [
+				...baseExtensions,
+				DebounceSave().configure({
+					noteId: currentNote.id,
+					noteTitle: currentNote.title
+				}),
+			],
+
+			content: currentNote.body
+		})
+
 	}, [currentNote.id]);
 
 	async function closeHandler(files) {
@@ -242,22 +193,6 @@ export default function () {
 	const drawingOpenHandler = () => {
 		setDrawModal(true)
 	}
-
-
-	// not sure this is needed, we can only ever have 1 user per sessions so just set the state
-	//gets user's name
-	// useEffect(() => {
-	// 	setCurrentUser({ ...currentUser, session?.user.name })
-	// }, [])
-
-	// this needs to be changed or removed. if this is for an onUpdate, make a extension
-	//updates the users name for awareness
-	// useEffect(() => {
-	// 	if (editor?.storage.collaborationCursor?.users && currentUser) {
-	// 		localStorage.setItem('currentUser', JSON.stringify(currentUser))
-	// 		editor.chain().focus().updateUser(currentUser)?.run()
-	// 	}
-	// }, [editor, currentUser])
 
 	return (
 		<Container

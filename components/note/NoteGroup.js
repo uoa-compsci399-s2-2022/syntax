@@ -25,7 +25,6 @@ const NoteGroup = ({ name, color = "white", notes, openNote, id, createNote }) =
   const handleOpen = () => {
     setIsOpen((current) => !current);
   };
-
 	return (
 		<Container
 			css={{
