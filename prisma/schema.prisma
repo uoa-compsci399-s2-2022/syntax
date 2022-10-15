@@ -84,6 +84,7 @@ model Room {
    noteId  String  @unique
    note    Note    @relation(fields: [noteId], references: [id])
    userId String?
+	YDOC String
 	user    User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 	userIds String[]   @db.ObjectId
 	@@unique([id, noteId])

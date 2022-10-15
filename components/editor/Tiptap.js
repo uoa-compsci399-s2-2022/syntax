@@ -33,6 +33,7 @@ import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
 import { useSession } from "next-auth/react"
 import { useEffect, useMemo, useState } from "react";
 import { MdRoomService } from "react-icons/md";
+import { syncBuiltinESMExports } from "module";
 
 EditorView.prototype.updateState = function updateState(state) {
 	if (!this.docView) return // This prevents the matchesNode error on hot reloads
@@ -74,9 +75,6 @@ async function uploadDrawing(files) {
 	return null
 }
 
-
-// const ydoc = new Y.Doc() //Must be outside to make sure users are using the same Y.js doc
-
 export default function () {
 	const currentNote = useNote();
 	const [drawModal, setDrawModal] = useState(false);
@@ -85,13 +83,13 @@ export default function () {
 	const ydoc = useRef();
 	const collabWebrtcProvider = useRef();
 	const { data: session, status } = useSession()
+	// depending on how tiptap renders extensions, this could also be moved 
+	// directly into the editor itself which would make things simpler 
 	if (currentNote.room) {
 		ydoc.current = new Y.Doc();
 		collabWebrtcProvider.current = new WebrtcProvider(currentNote.id, ydoc);
 	}
 
-	// not sure useMemo is doing what we want performantly 
-	console.log(currentNote);
 	const baseExtensions = [
 		StarterKit.configure({
 			codeBlock: false,
@@ -124,6 +122,19 @@ export default function () {
 			}
 		}),
 	];
+
+	// if user is the only one in the room, then we need to grab the ydoc from the database
+	// and init the editor with that (ydoc.current). But if there are already useres in the room
+	// we get the ydoc from them to allow data sync. after that saving is the same eitherway
+
+	// saving might be as simple as: 
+	// on room init: editorJSON -> ydoc -> base64 encode -> store in db 
+	// getting ydoc: get from database -> encode to arraybuffer -> init ydoc -> set ydoc in editor
+	// getting ydoc from room: get ydoc from peers -> set ydoc in editor
+	// syncing ydoc: get ydoc from db -> encode as ydoc -> applyupdates(?) -> save back into database
+
+	// this is all based on the links i talked about in #back-end
+
 
 	const editor = useEditor({
 		disablePasteRules: [Drawing, "drawing"],
