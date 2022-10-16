@@ -27,6 +27,7 @@ const NoteGroup = ({
 	const [deleteModal, setDeleteModal] = useState(false);
 	const currentNote = useNote();
 	const setNotes = useDispatchNotes();
+	const router = useRouter();
 
 	const openHandler = () => {
 		setIsOpen((current) => !current);
@@ -46,6 +47,8 @@ const NoteGroup = ({
 				body: JSON.stringify(id)
 			});
 			const deletedGroup = await res.json();
+			setNotes({ note: deletedGroup, type: "removeGroup" });
+			router.push(`/note/${currentNote.id || ""}`, undefined, { shallow: true });
 			setDeleteModal(false);
 		} catch (error) {
 			console.log(error);
@@ -68,6 +71,8 @@ const NoteGroup = ({
 			body: JSON.stringify({ id, name: newName, color: newColor })
 		});
 		const updatedGroup = await res.json();
+		setNotes({ note: updatedGroup, type: "editGroup" });
+		router.push(`/note/${currentNote.id || ""}`, undefined, { shallow: true });
 	};
 
 	useEffect(() => {

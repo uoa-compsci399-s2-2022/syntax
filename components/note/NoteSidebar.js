@@ -45,13 +45,13 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
 		let res = await fetch("/api/group", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ name: "new group", color: "grey" })
+			body: JSON.stringify({ name: "New group", color: "grey" })
 		});
 
 		const newGroup = await res.json();
 		console.log("Create successful", { newGroup });
 		newGroup.notes = [];
-		setNotes({ note: newGroup, type: "addgroup" });
+		setNotes({ note: newGroup, type: "addGroup" });
 		router.push(`/note/${currentNote.id || ""}`, undefined, { shallow: true });
 	};
 
