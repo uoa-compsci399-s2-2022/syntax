@@ -69,7 +69,8 @@ export const getNoteByID = async (id) => {
 		},
 		include: {
 			user: true,
-			group: true
+			group: true,
+			room: true
 		}
 	});
 
@@ -239,4 +240,32 @@ export const deleteGroup = async (id, session) => {
 		}
 	});
 	return deletedGroup;
+};
+
+//
+// room specific calls
+// 
+
+export const createRoom = async (noteId, YDOC, session) => {
+	const newRoom = await prisma.group.create({
+		data: {
+			noteId,
+			color,
+			note: {
+				connect: {
+					id: noteId
+				}
+			},
+			YDOC,
+			user: {
+				connect: {
+					email: session?.user?.email
+				}
+			},
+			userIds: {
+				push: session?.user.id
+			}
+		},
+	});
+	return newRoom;
 };

@@ -25,15 +25,11 @@ import { CodeBlockNode } from './CodeMirrorNode';
 import { DebounceSave } from './DebounceSaveExtension';
 import getRandomColour from "../../hooks/getRandomColour"
 import Collaboration from '@tiptap/extension-collaboration'
-import { getSchema } from '@tiptap/core'
 import * as Y from 'yjs'
-import { prosemirrorJSONToYDoc, yDocToProsemirrorJSON } from 'y-prosemirror'
-import { Room, WebrtcProvider } from 'y-webrtc'
+import { WebrtcProvider } from 'y-webrtc'
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
 import { useSession } from "next-auth/react"
-import { useEffect, useMemo, useState } from "react";
-import { MdRoomService } from "react-icons/md";
-import { syncBuiltinESMExports } from "module";
+import { useEffect, useRef, useState } from "react";
 
 EditorView.prototype.updateState = function updateState(state) {
 	if (!this.docView) return // This prevents the matchesNode error on hot reloads
@@ -79,16 +75,28 @@ export default function () {
 	const currentNote = useNote();
 	const [drawModal, setDrawModal] = useState(false);
 	const [drawContent, setDrawContent] = useState(null);
-	const [provider, setProvider] = useState(null);
 	const ydoc = useRef();
 	const collabWebrtcProvider = useRef();
+	// const [ydoc, setYdoc] = useState();
+	// const [collabWebrtcProvider, setProvider] = useState(null);
 	const { data: session, status } = useSession()
+
 	// depending on how tiptap renders extensions, this could also be moved 
 	// directly into the editor itself which would make things simpler 
-	if (currentNote.room) {
-		ydoc.current = new Y.Doc();
-		collabWebrtcProvider.current = new WebrtcProvider(currentNote.id, ydoc);
-	}
+	useEffect(()=>{
+		if(currentNote.room){
+			ydoc.current = new Y.Doc();
+		collabWebrtcProvider.current = new WebrtcProvider(currentNote.id, ydoc.current);
+		}
+		
+	}, [])
+	// const ydoc = useRef(() => {
+	// 	return new Y.Doc();
+	// });
+
+	// const collabWebrtcProvider = useRef(() => {
+	// 	return new WebrtcProvider(currentNote.id, ydoc.current);
+	// });
 
 	const baseExtensions = [
 		StarterKit.configure({
@@ -148,17 +156,17 @@ export default function () {
 				// }),
 			],
 			Collaboration: Collaboration.configure({
-				document: ydoc,
+				document: ydoc.current,
 			}),
 			CollaborationCursor: CollaborationCursor.configure({
-				provider: collabWebrtcProvider,
+				provider: collabWebrtcProvider.current,
 				user: {
 					name: session?.user?.name,
 					color: getRandomColour(),
 				},
 			}),
 			onDestroy() {
-				collabWebrtcProvider.destroy();
+				collabWebrtcProvider.current.destroy();
 			},
 		} : {
 			extensions: [
