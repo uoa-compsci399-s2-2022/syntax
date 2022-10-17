@@ -91,7 +91,7 @@ const NoteGroup = ({
 			css={{
 				padding: "0",
 				marginBottom: "0.5rem",
-				borderRadius: "var(--nextui-radii-md)",
+				borderRadius: "$md",
 				background: "$accents4"
 			}}
 		>
@@ -108,7 +108,7 @@ const NoteGroup = ({
 					textAlign: "left",
 					outline: "none",
 					cursor: notes.length > 0 ? "pointer" : "auto",
-					borderRadius: "var(--nextui-radii-md)",
+					borderRadius: "$md",
 					backgroundColor: notes.length > 0 ? "$accents4" : "$accents2"
 				}}
 			>
@@ -125,7 +125,7 @@ const NoteGroup = ({
 						<ChevronRightIcon
 							style={{
 								height: "var(--icon-size-xs)",
-								color: notes.length > 0 ? "$text" : "grey"
+								color: notes.length > 0 ? "var(--nextui-colors-text)" : "var(--nextui-colors-textDisabled)"
 							}}
 						/>
 					)}
@@ -159,7 +159,7 @@ const NoteGroup = ({
 								maxWidth: "var(--icon-size-xs)",
 								height: "var(--icon-size-xs)",
 								padding: "0.8rem",
-								borderRadius: "var(--nextui-radii-sm)",
+								borderRadius: "$sm",
 								"&:hover": {
 									background: "$accents5"
 								}
@@ -195,7 +195,7 @@ const NoteGroup = ({
 							maxWidth: "var(--icon-size-xs)",
 							height: "var(--icon-size-xs)",
 							padding: "0.8rem",
-							borderRadius: "var(--nextui-radii-sm)",
+							borderRadius: "$sm",
 							"&:hover": {
 								background: "$accents5"
 							}
@@ -215,7 +215,7 @@ const NoteGroup = ({
 					css={{
 						padding: "0",
 						marginBottom: "0.5rem",
-						borderRadius: "var(--nextui-radii-md)",
+						borderRadius: "$md",
 						backgroundColor: "$accents4"
 					}}
 				>
@@ -235,7 +235,7 @@ const NoteGroup = ({
 									css={{
 										padding: "0.3rem 0",
 										width: "100%",
-										borderRadius: "var(--nextui-radii-md)",
+										borderRadius: "$md",
 										backgroundColor:
 											note.id === currentNote.id ? "$accents5" : "transparent",
 										"&:hover": {

@@ -18,7 +18,8 @@ const darkTheme = createTheme({
       background: "#121212",
       backgroundContrast: "#1D1D1D",
       textSecondary: "#A4A4A4",
-      selection: "#3297FD"
+      textDisabled: "#363636",
+      selection: "#3297FD",
     },
     radii: {
       xs: "3px",
