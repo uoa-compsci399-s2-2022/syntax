@@ -5,7 +5,9 @@ import { useRouter } from 'next/router';
 import {
 	useDispatchNotes
 } from "@/modules/AppContext";
-
+import { yDocToProsemirrorJSON, prosemirrorJSONToYDoc } from 'y-prosemirror'
+import * as Y from 'yjs'
+import { fromUint8Array, toUint8Array } from 'js-base64'
 
 export const DebounceSave = () => {
 	const router = useRouter();
@@ -21,7 +23,8 @@ export const DebounceSave = () => {
 		let note = {
 			id: content.id,
 			title: content.title,
-			body: content.json
+			body: content.json,
+			YDOC: content.ydoc
 		};
 		let res = await fetch("/api/note", {
 			method: "PUT",
@@ -44,20 +47,28 @@ export const DebounceSave = () => {
 			return {
 				noteTitle: undefined,
 				noteId: undefined,
+				YDOC: undefined,
 			};
 		},
 		onBeforeCreate({ editor }) {
-			if (this.options.noteId == undefined) console.log("noteId not set");
+			if (this.options.noteId == undefined) console.warn("noteId not set");
 		},
 		// onCreate({ editor }) {
 		// 	console.log("create");
 		// },
 		onUpdate({ editor }) {
+			const yjson = prosemirrorJSONToYDoc(editor.schema, editor.getJSON());
+			const ut8arr = Y.encodeStateAsUpdate(yjson)
+			const ydocb64 = fromUint8Array(ut8arr);
+
 			debounceSave({
 				id: this.options.noteId,
 				title: this.options.noteTitle,
-				json: editor.getJSON()
+				json: editor.getJSON(),
+				ydoc: ydocb64
 			});
+						
+			
 		},
 		onDestroy() {
 			console.log("destroy");
