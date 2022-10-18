@@ -4,6 +4,7 @@ import SettingsModal from "@/components/modal/SettingsModal";
 import { Avatar, Dropdown, Button, Navbar } from "@nextui-org/react";
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
+import { useSession } from "next-auth/react";
 // import { Document, Page, pdf} from '@react-pdf/renderer'
 // import Html from 'react-pdf-html'
 import {
@@ -39,15 +40,18 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 	const [exportModal, setExportModal] = useState(false);
 	const [deleteModal, setDeleteModal] = useState(false);
 	const [settingsModal, setSettingsModal] = useState(false);
+	const [userInitials, setUserInitials] = useState();
 	const currentNote = useNote();
+	const { data: session, status } = useSession();
 	const setNotes = useDispatchNotes();
+
 	const deleteNoteHandler = async () => {
 		try {
 			console.log(currentNote);
 			let res = await fetch(`/api/note`, {
 				method: "DELETE",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(currentNote.id),
+				body: JSON.stringify(currentNote.id)
 			});
 			const deletedNote = await res.json();
 			setNotes({ note: deletedNote, type: "remove" });
@@ -58,6 +62,11 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 		}
 	};
 
+	useEffect(() => {
+		if (session) {
+			setUserInitials(session.user.name.match(/\b(\w)/g).join(""));
+		}
+	}, [session?.user.name]);
 
 	// const exportNoteHandler = async (fileType) => {
 	// 	try{
@@ -96,8 +105,6 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 	// 				link.setAttribute('download', `${currentNote.title}.pdf`);
 	// 				link.click();
 	// 			});
-
-
 	// 		}
 	// 	} catch (error) {
 	// 		console.log(error)
@@ -173,7 +180,9 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 						onPress={setSettingsModal}
 						icon={
 							<Avatar
-								src="https://cdn3.emoji.gg/emojis/3568-catkiss.gif"
+								text={userInitials}
+								color="primary"
+								textColor="white"
 								css={{ cursor: "pointer" }}
 							/>
 						}
@@ -225,7 +234,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 					</Dropdown>
 				</Navbar.Item>
 				{/* <ExportModal open={exportModal} oncloseHandler={closeHandler} closeHandler={exportNoteHandler} /> */}
-				<DeleteModal open={deleteModal} onclosehandler={closeHandler} closeHandler={deleteNoteHandler} />
+				<DeleteModal open={deleteModal} closehandler={closeHandler} deleteHandler={deleteNoteHandler} type={"note"}/>
 				<SettingsModal open={settingsModal} closeHandler={closeHandler} />
 			</Navbar.Content>
 		</Navbar>

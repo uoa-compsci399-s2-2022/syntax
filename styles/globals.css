@@ -1,331 +1,213 @@
 /* css variables */
 :root {
-  --icon-size: 24px;
-  --icon-size-s: 20px;
-  --icon-size-xs: 16px;
+	--icon-size: 24px;
+	--icon-size-s: 20px;
+	--icon-size-xs: 16px;
 }
 
 /* general css */
 html,
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+	padding: 0;
+	margin: 0;
+	background: none;
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+		Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+	color: inherit;
+	text-decoration: none;
 }
 
 * {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 /* scrollbar styling */
 ::-webkit-scrollbar {
-  width: 5px;
+	width: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--nextui-colors-border);
-  outline: none;
+	background-color: var(--nextui-colors-border);
+	outline: none;
 }
 
 /* note page styling */
 .note-metadata-table td {
-  padding: 0;
+	padding: 0;
 }
 
 .note-metadata-table th {
-  padding: 0;
-  padding-right: 3rem;
+	padding: 0;
+	padding-right: 3rem;
 }
 
 /* menubar styling */
 .is-active {
-  background-color: var(--nextui-colors-accents2) !important;
+	background-color: var(--nextui-colors-accents2) !important;
 }
 
 .menu-divider {
-  background-color: var(--nextui-colors-border);
-  height: 2rem;
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-  width: 1px;
+	background-color: var(--nextui-colors-border);
+	height: 2rem;
+	margin-left: 0.5rem;
+	margin-right: 0.5rem;
+	width: 1px;
 }
-
 
 /* editor styling */
 div[contenteditable] {
-  outline: 0px solid transparent;
+	outline: 0px solid transparent;
 }
 
-
 .ProseMirror:focus {
-  outline: none;
+	outline: none;
 }
 
 /* NextUI components */
 .nextui-collapse-view {
-  padding: 0;
+	padding: 0;
 }
 
 .nextui-collapse {
-  margin: 0 0 10px 0 !important;
-  padding: 10px !important;
-  box-shadow: none !important;
+	margin: 0 0 10px 0 !important;
+	padding: 10px !important;
+	box-shadow: none !important;
 }
 
 .nextui-collapse-content {
-  padding: 0;
+	padding: 0;
 }
 
 .nextui-collapse--open {
-  
 }
 .ProseMirror img.ProseMirror-selectednode {
-  outline: 3px solid #68cef8;
+	outline: 3px solid #68cef8;
 }
 
 .editor-ul {
-  list-style-type: disc;
+	list-style-type: disc;
 }
 
 .editor-link {
-  color: var(--nextui-colors-primary);
-  text-decoration: underline;
+	color: var(--nextui-colors-primary);
+	text-decoration: underline;
 }
 
 .editor-link:hover {
-  text-decoration: underline;
+	text-decoration: underline;
 }
 
 /* Youtube embed styling */
 iframe {
-  border: none;
-  width: 100%;
-  height: 100%;
+	border: none;
+	width: 100%;
+	height: 100%;
 }
 
 div[data-youtube-video] {
-  aspect-ratio: 4/3;
-  max-height: 480px;
+	aspect-ratio: 4/3;
+	max-height: 480px;
 }
 
-
 /* remove default x symbol in search input */
-input[type=search]::-ms-clear {  display: none; width : 0; height: 0; }
-input[type=search]::-ms-reveal {  display: none; width : 0; height: 0; }
+input[type="search"]::-ms-clear {
+	display: none;
+	width: 0;
+	height: 0;
+}
+input[type="search"]::-ms-reveal {
+	display: none;
+	width: 0;
+	height: 0;
+}
 input[type="search"]::-webkit-search-decoration,
 input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-results-button,
-input[type="search"]::-webkit-search-results-decoration { display: none; }
+input[type="search"]::-webkit-search-results-decoration {
+	display: none;
+}
 
 /* image resizer styling */
 .image-small {
-  max-width: 200px;
+	max-width: 200px;
 }
 .image-medium {
-  max-width: 500px;
+	max-width: 500px;
 }
-.image-large  {
-  max-width: 100%;
+.image-large {
+	max-width: 100%;
 }
 .image-float-none {
-  float: none;
+	float: none;
 }
 .image-float-left {
-  float: left;
+	float: left;
 }
 .image-float-right {
-  float: right;
+	float: right;
 }
 
 .bubble-menu {
-  display: flex;
-  background-color: #0d0d0d;
-  padding: 0.2rem;
-  border-radius: 0.5rem;
-}
-
-.blurcont {
 	display: flex;
-	position: fixed;
-	width: 100%;
-	height: 100%;
-	z-index: -1;
-	overflow: clip;
+	background-color: #0d0d0d;
+	padding: 0.2rem;
+	border-radius: 0.5rem;
 }
 
-.bckg {
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-	overflow-x: hidden;
+/* color picker styling (in group modal) */
+#color-picker {
+  width: 5rem;
+	border: none;
+	outline: none;
+  background-color: transparent;
+  border-color: transparent;
+	-webkit-appearance: none;
 }
 
-:root {
-	--blobsize: 45%;
-	--blob2size: 35%;
+#color-picker::-webkit-color-swatch-wrapper {
+	padding: 0;
+
+}
+#color-picker::-webkit-color-swatch {
+	border: 1px solid var(--nextui-colors-border);
+  border-radius: var(--nextui-radii-lg);
 }
 
-
-.blob {
-	width: var(--blobsize);
-	height: var(--blobsize);
-	border-radius: 40%;
-	position: absolute;
+/* home page & sign in page background keyframes*/
+@-moz-keyframes spin {
+	100% {
+		-moz-transform: rotate(360deg);
+	}
 }
-
-.blob2{
-	width: var(--blob2size);
-	height: var(--blob2size);
-	border-radius: 35%;
-	position: absolute;
+@-webkit-keyframes spin {
+	100% {
+		-webkit-transform: rotate(360deg);
+	}
 }
-
-@-moz-keyframes spin { 
-	100% { -moz-transform: rotate(360deg); } 
+@keyframes spin {
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
 }
-@-webkit-keyframes spin { 
-	100% { -webkit-transform: rotate(360deg); } 
+@-moz-keyframes spinleft {
+	100% {
+		-moz-transform: rotate(360deg);
+	}
 }
-@keyframes spin { 
-	100% { 
-		 -webkit-transform: rotate(360deg); 
-		 transform:rotate(360deg); 
-	} 
+@-webkit-keyframes spinleft {
+	100% {
+		-webkit-transform: rotate(360deg);
+	}
 }
-
-.right {
-	background: linear-gradient(180deg, rgba(97, 175, 239, 0.5) 0%, rgba(59, 132, 192, 0.5) 90.62%);
-	right: -13%;
-	  filter: blur(160px);
-	top: -12%;
-	-webkit-animation:spin 20s linear infinite;
-	-moz-animation:spin 20s linear infinite;
-	animation:spin 20s linear infinite;
-}
-
-.right2 {
-	background: linear-gradient(180deg, rgba(94, 197, 129, 0.5) 0%, rgba(109, 189, 126, 0.5) 90.62%);
-	right: -15%;
-	  filter: blur(160px);
-	top: 50%;
-	-webkit-animation:spinleft 25s linear infinite;
-	-moz-animation:spinleft 25s linear infinite;
-	animation:spinleft 25s linear infinite;
-}
-
-
-@-moz-keyframes spinleft { 
-	100% { -moz-transform: rotate(360deg); } 
-}
-@-webkit-keyframes spinleft { 
-	100% { -webkit-transform: rotate(360deg); } 
-}
-@keyframes spinleft { 
-	100% { 
-		 -webkit-transform: rotate(360deg); 
-		 transform:rotate(360deg); 
-	} 
-}
-
-.blurcont {
-	display: flex;
-	position: fixed;
-	width: 100%;
-	height: 100%;
-	z-index: -1;
-	overflow: clip;
-}
-
-.bckg {
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-	overflow-x: hidden;
-}
-
-:root {
-	--blobsize: 45%;
-	--blob2size: 35%;
-}
-
-
-.blob {
-	width: var(--blobsize);
-	height: var(--blobsize);
-	border-radius: 40%;
-	position: absolute;
-}
-
-.blob2{
-	width: var(--blob2size);
-	height: var(--blob2size);
-	border-radius: 35%;
-	position: absolute;
-}
-
-@-moz-keyframes spin { 
-	100% { -moz-transform: rotate(360deg); } 
-}
-@-webkit-keyframes spin { 
-	100% { -webkit-transform: rotate(360deg); } 
-}
-@keyframes spin { 
-	100% { 
-		 -webkit-transform: rotate(360deg); 
-		 transform:rotate(360deg); 
-	} 
-}
-
-.right {
-	background: linear-gradient(180deg, rgba(97, 175, 239, 0.5) 0%, rgba(59, 132, 192, 0.5) 90.62%);
-	right: -13%;
-	  filter: blur(160px);
-	top: -12%;
-	-webkit-animation:spin 20s linear infinite;
-	-moz-animation:spin 20s linear infinite;
-	animation:spin 20s linear infinite;
-}
-
-.right2 {
-	background: linear-gradient(180deg, rgba(94, 197, 129, 0.5) 0%, rgba(109, 189, 126, 0.5) 90.62%);
-	right: -15%;
-	  filter: blur(160px);
-	top: 50%;
-	-webkit-animation:spinleft 25s linear infinite;
-	-moz-animation:spinleft 25s linear infinite;
-	animation:spinleft 25s linear infinite;
-}
-
-
-@-moz-keyframes spinleft { 
-	100% { -moz-transform: rotate(360deg); } 
-}
-@-webkit-keyframes spinleft { 
-	100% { -webkit-transform: rotate(360deg); } 
-}
-@keyframes spinleft { 
-	100% { 
-		 -webkit-transform: rotate(360deg); 
-		 transform:rotate(360deg); 
-	} 
-}
-
-.left {
-	background: linear-gradient(rgba(198, 120, 221, 0.5) 0%, rgba(122, 50, 143, 0.5) 100%);
-	float: left;
-  filter: blur(160px);
-	bottom: 0;
-	left: -27%; 
-	bottom: 22%;
-	-webkit-animation:spinleft 23s linear infinite;
-	-moz-animation:spinleft 23s linear infinite;
-	animation:spinleft 23s linear infinite;
+@keyframes spinleft {
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
 }
 
 .output {

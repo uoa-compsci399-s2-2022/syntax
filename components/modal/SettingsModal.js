@@ -1,6 +1,7 @@
-import { Modal, Grid, Switch, useTheme } from "@nextui-org/react";
+import { Modal, Grid, Switch, Button, useTheme } from "@nextui-org/react";
 import { useTheme as useNextTheme } from "next-themes";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
+import { signOut } from "next-auth/react";
 
 const UserSettingsModal = ({ open, closeHandler }) => {
 	const { setTheme } = useNextTheme();
@@ -27,6 +28,7 @@ const UserSettingsModal = ({ open, closeHandler }) => {
 						/>
 					</Grid>
 				</Grid.Container>
+				<Button onPress={() => signOut()} css={{marginTop: "1rem"}}>Sign Out</Button>
 			</Modal.Body>
 			<Modal.Footer></Modal.Footer>
 		</Modal>
