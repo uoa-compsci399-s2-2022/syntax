@@ -109,7 +109,7 @@ const notesReducer = (state, action) => {
 // providing all the nested state and dispatch context
 export const NoteProvider = ({ children }) => {
 	// useState for note, to get and set a single note
-	const [note, setNote] = useState({});
+	const [note, setNote] = useState(null);
 
 	// use Reducer for notes, to get all notes
 	// and add, edit or remove a note from the array

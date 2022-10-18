@@ -14,14 +14,14 @@ import {
 	Card,
 	Link
 } from "@nextui-org/react";
-import Head from "next/head";
+// import Head from "next/head";
 
 import { useTheme as useNextTheme } from "next-themes";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
 
-import Toolbar from "@/components/editor/Toolbar";
-import { EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+// import Toolbar from "@/components/editor/Toolbar";
+// import { EditorContent, useEditor } from "@tiptap/react";
+// import StarterKit from "@tiptap/starter-kit";
 
 export const getServerSideProps = async ({ req }) => {
 	const session = await getSession({ req });
@@ -43,6 +43,7 @@ export default function Component() {
 
 	const { setTheme } = useNextTheme();
 	const { isDark, type } = useTheme();
+
 	const editor = useEditor({
 		extensions: [StarterKit],
 		content: `
@@ -118,9 +119,9 @@ export default function Component() {
 
 				<Card css={{ $$cardColor: isDark ? "#121212" : "white" }}>
 					<Card.Body>
-						<Toolbar editor={editor} />
+						{/* <Toolbar editor={editor} /> */}
 						<Spacer />
-						<EditorContent editor={editor} style={{ minWidth: "100%" }} />
+						{/* <EditorContent editor={editor} style={{ minWidth: "100%" }} /> */}
 					</Card.Body>
 				</Card>
 			</Container>

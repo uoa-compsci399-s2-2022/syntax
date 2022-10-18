@@ -209,3 +209,7 @@ input[type="search"]::-webkit-search-results-decoration {
 		transform: rotate(360deg);
 	}
 }
+
+.output {
+	white-space: pre-line;
+}

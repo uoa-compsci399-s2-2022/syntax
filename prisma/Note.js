@@ -148,7 +148,8 @@ export const getAllNotesByUserID = async (id) => {
 				include: {
 					notes: {
 						include: {
-							group: true
+							group: true,
+							user: true
 						}
 					}
 				}
