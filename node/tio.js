@@ -1,6 +1,5 @@
-import cypto from "crypto";
 import { deflateRawSync, gunzipSync } from "zlib";
-
+import crypto from "crypto"
 const SCRIPT_REGEX =
 	/<script src="(\/static\/[0-9a-f]+-frontend\.js)" defer><\/script>/;
 const RUNURL_REGEX = /^var runURL = "\/cgi-bin\/static\/([^"]+)";$/m;
@@ -24,7 +23,7 @@ async function getURL() {
 }
 
 function hex(size) {
-	const randomHex = cypto.randomBytes(size).toString("hex");
+	const randomHex = crypto.randomBytes(size).toString("hex");
 	return randomHex;
 }
 
