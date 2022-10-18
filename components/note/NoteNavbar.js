@@ -3,6 +3,7 @@ import DeleteModal from "@/components/modal/DeleteModal";
 import SettingsModal from "@/components/modal/SettingsModal";
 import { Avatar, Dropdown, Button, Navbar } from "@nextui-org/react";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 // import { Document, Page, pdf} from '@react-pdf/renderer'
 // import Html from 'react-pdf-html'
@@ -40,6 +41,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 	const [settingsModal, setSettingsModal] = useState(false);
 	const [userInitials, setUserInitials] = useState();
 	const currentNote = useNote();
+	const router = useRouter();
 	const { data: session, status } = useSession();
 	const setNotes = useDispatchNotes();
 
@@ -54,6 +56,8 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 			const deletedNote = await res.json();
 			setNotes({ note: deletedNote, type: "remove" });
 			setDeleteModal(false);
+			setSelectedKey();
+			//router.push("/note", undefined, { shallow: true });
 		} catch (error) {
 			console.log(error);
 		}

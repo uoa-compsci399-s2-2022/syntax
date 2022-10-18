@@ -57,7 +57,6 @@ const NoteDisplay = ({ note, handleSidebarDisplay }) => {
 			<>
 				<Head>
 					<title>{currentNote.title}</title>
-					{/*<meta name="description" content={`By ${note.user.name}`} />*/}
 					<link rel="icon" href="/favicon.ico" />
 				</Head>
 				<Container
