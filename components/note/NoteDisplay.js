@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Container, Spacer, Dropdown } from "@nextui-org/react";
+import { Container, Spacer, Dropdown, Card } from "@nextui-org/react";
 import Tiptap from "@/components/editor/Tiptap";
 import { NoteMetaData } from './NoteMetaData'
 import { debounce } from "lodash";

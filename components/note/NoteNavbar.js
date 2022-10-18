@@ -35,7 +35,6 @@ import {
 // }
 
 const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
-	const router = useRouter();
 	const [selectedKey, setSelectedKey] = useState();
 	const [exportModal, setExportModal] = useState(false);
 	const [deleteModal, setDeleteModal] = useState(false);
