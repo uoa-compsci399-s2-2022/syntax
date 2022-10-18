@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Container, Spacer, Dropdown } from "@nextui-org/react";
+import { Container, Spacer, Dropdown, Card } from "@nextui-org/react";
 import Tiptap from "@/components/editor/Tiptap";
 import { NoteMetaData } from './NoteMetaData'
 import { debounce } from "lodash";
@@ -45,7 +45,6 @@ const NoteDisplay = () => {
 		<>
 			<Head>
 				<title>{currentNote.title}</title>
-				{/*<meta name="description" content={`By ${note.user.name}`} />*/}
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<Container

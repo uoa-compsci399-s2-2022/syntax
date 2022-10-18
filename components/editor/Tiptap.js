@@ -8,6 +8,7 @@ import Superscript from "@tiptap/extension-superscript";
 import Subscript from "@tiptap/extension-subscript";
 import Youtube from "@tiptap/extension-youtube";
 import Link from "@tiptap/extension-link";
+import Placeholder from "@tiptap/extension-placeholder";
 import { useState } from "react";
 import Toolbar from "./Toolbar.js";
 import { TipTapCustomImage } from "@/node/Image";
@@ -131,6 +132,9 @@ export default function () {
         HTMLAttributes: {
           class: 'drawing'
         }
+      }),
+      Placeholder.configure({
+        placeholder: "Select a note or start typing here to get started..."
       })
 		],
 		content: currentNote.body

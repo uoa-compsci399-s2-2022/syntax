@@ -23,13 +23,13 @@ import {
 } from "../../modules/AppContext";
 
 const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
-	const router = useRouter();
 	const [selectedKey, setSelectedKey] = useState();
 	const [exportModal, setExportModal] = useState(false);
 	const [deleteModal, setDeleteModal] = useState(false);
 	const [settingsModal, setSettingsModal] = useState(false);
 	const [userInitials, setUserInitials] = useState();
 	const currentNote = useNote();
+	const router = useRouter();
 	const { data: session, status } = useSession();
 	const setNotes = useDispatchNotes();
 
@@ -44,6 +44,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 			const deletedNote = await res.json();
 			setNotes({ note: deletedNote, type: "remove" });
 			setDeleteModal(false);
+			setSelectedKey();
 			router.push(`/note/`, undefined, { shallow: true });
 		} catch (error) {
 			console.log(error);

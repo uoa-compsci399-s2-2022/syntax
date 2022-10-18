@@ -213,3 +213,11 @@ input[type="search"]::-webkit-search-results-decoration {
 .output {
 	white-space: pre-line;
 }
+
+.ProseMirror p.is-editor-empty:first-child::before {
+	color: var(--nextui-colors-textDisabled);
+	content: attr(data-placeholder);
+	float: left;
+	height: 0;
+	pointer-events: none;
+  }

@@ -45,7 +45,7 @@ const NoteSidebar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 		let res = await fetch("/api/group", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ name: "New group", color: "#ffffff" })
+			body: JSON.stringify({ name: "Untitled", color: "#ffffff" })
 		});
 
 		const newGroup = await res.json();
