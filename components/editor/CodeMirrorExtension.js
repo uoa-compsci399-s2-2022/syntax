@@ -3,7 +3,13 @@ import { EditorView, keymap } from "@codemirror/view";
 import { indentWithTab } from "@codemirror/commands";
 import { javascript } from "@codemirror/lang-javascript";
 import { useEffect, useState, useRef } from "react";
-import { useTheme, Button, Spacer, Dropdown, Container } from "@nextui-org/react";
+import {
+	useTheme,
+	Button,
+	Spacer,
+	Dropdown,
+	Container
+} from "@nextui-org/react";
 import { NodeViewWrapper } from "@tiptap/react";
 import { TIO, LANGUAGES as TioLanguages } from "@/node/tio";
 import { oneDark } from "@codemirror/theme-one-dark";
@@ -67,9 +73,22 @@ export const Extension = ({
 
 	return (
 		<NodeViewWrapper>
-			<Container contentEditable={false} css={{background: "$backgroundContrast", borderRadius: "$lg", padding: "$lg $sm", margin: "$10 0", border: "1px solid $border"}}>
+			<Container
+				contentEditable={false}
+				css={{
+					background: "$backgroundContrast",
+					borderRadius: "$lg",
+					padding: "$lg $sm",
+					margin: "$10 0",
+					border: "1px solid $border"
+				}}
+			>
 				<Dropdown>
-					<Dropdown.Button light ripple={false} css={{ tt: "capitalize", paddingLeft: "0" }}>
+					<Dropdown.Button
+						light
+						ripple={false}
+						css={{ tt: "capitalize", paddingLeft: "0", zIndex: 0 }}
+					>
 						{langDict[lang]}
 					</Dropdown.Button>
 					<Dropdown.Menu
@@ -88,14 +107,14 @@ export const Extension = ({
 
 				<div ref={refEditor} />
 				<Spacer y={0.5} />
-				<Button auto size="xs" onClick={() => run()}>
+				<Button auto size="xs" onClick={() => run()} css={{ zIndex: 0 }}>
 					Run Code
 				</Button>
 
 				<Spacer y={0.5} />
 				<hr></hr>
 				<Spacer y={0.5} />
-				<div className="output">
+				<div style={{ whiteSpace: "pre-line" }}>
 					<span> {result} </span>
 				</div>
 			</Container>

@@ -8,7 +8,7 @@ export const NoteTemplate = {
 			 "content": [
 				{
 				  "type": "text",
-				  "text": "Select a note or start typing here to get started…"
+				  "text": ""
 				}
 			 ]
 		  }
