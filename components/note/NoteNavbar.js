@@ -36,13 +36,14 @@ import {
 
 const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 	const router = useRouter();
-	const [selectedKey, setSelectedKey] = useState();
-	const [exportModal, setExportModal] = useState(false);
-	const [deleteModal, setDeleteModal] = useState(false);
-	const [settingsModal, setSettingsModal] = useState(false);
  	const [shareModal, setShareModal] = useState(false);
-	const currentNote = useNote();
-	const setNotes = useDispatchNotes();
+  const [selectedKey, setSelectedKey] = useState();
+  const [exportModal, setExportModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [settingsModal, setSettingsModal] = useState(false);
+  const currentNote = useNote();
+  const setNotes = useDispatchNotes();
+
 	const deleteNoteHandler = async () => {
 		try {
 			console.log(currentNote);
@@ -59,7 +60,6 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 			console.log(error);
 		}
 	};
-
 
 	// const exportNoteHandler = async (fileType) => {
 	// 	try{

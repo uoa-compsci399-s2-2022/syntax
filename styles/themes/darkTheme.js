@@ -17,7 +17,8 @@ const darkTheme = createTheme({
       accents9: "#6B6B6B",
       background: "#121212",
       backgroundContrast: "#1D1D1D",
-      textSecondary: "#A4A4A4"
+      textSecondary: "#A4A4A4",
+      selection: "#3297FD"
     },
     radii: {
       xs: "3px",

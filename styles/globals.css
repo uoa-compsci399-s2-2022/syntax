@@ -10,6 +10,7 @@ html,
 body {
   padding: 0;
   margin: 0;
+  background: none;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
@@ -150,42 +151,7 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
   border-radius: 0.5rem;
 }
 
-.blurcont {
-	display: flex;
-	position: fixed;
-	width: 100%;
-	height: 100%;
-	z-index: -1;
-	overflow: clip;
-}
-
-.bckg {
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-	overflow-x: hidden;
-}
-
-:root {
-	--blobsize: 45%;
-	--blob2size: 35%;
-}
-
-
-.blob {
-	width: var(--blobsize);
-	height: var(--blobsize);
-	border-radius: 40%;
-	position: absolute;
-}
-
-.blob2{
-	width: var(--blob2size);
-	height: var(--blob2size);
-	border-radius: 35%;
-	position: absolute;
-}
-
+/* home page & sign in page background keyframes*/
 @-moz-keyframes spin { 
 	100% { -moz-transform: rotate(360deg); } 
 }
@@ -198,28 +164,6 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
 		 transform:rotate(360deg); 
 	} 
 }
-
-.right {
-	background: linear-gradient(180deg, rgba(97, 175, 239, 0.5) 0%, rgba(59, 132, 192, 0.5) 90.62%);
-	right: -13%;
-	  filter: blur(160px);
-	top: -12%;
-	-webkit-animation:spin 20s linear infinite;
-	-moz-animation:spin 20s linear infinite;
-	animation:spin 20s linear infinite;
-}
-
-.right2 {
-	background: linear-gradient(180deg, rgba(94, 197, 129, 0.5) 0%, rgba(109, 189, 126, 0.5) 90.62%);
-	right: -15%;
-	  filter: blur(160px);
-	top: 50%;
-	-webkit-animation:spinleft 25s linear infinite;
-	-moz-animation:spinleft 25s linear infinite;
-	animation:spinleft 25s linear infinite;
-}
-
-
 @-moz-keyframes spinleft { 
 	100% { -moz-transform: rotate(360deg); } 
 }

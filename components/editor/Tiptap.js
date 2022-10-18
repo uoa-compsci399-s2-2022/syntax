@@ -83,13 +83,13 @@ export default function () {
 
 	// depending on how tiptap renders extensions, this could also be moved 
 	// directly into the editor itself which would make things simpler 
-	useEffect(()=>{
-		if(currentNote.room){
-			ydoc.current = new Y.Doc();
-		collabWebrtcProvider.current = new WebrtcProvider(currentNote.id, ydoc.current);
-		}
+	// useEffect(()=>{
+	// 	if(currentNote.room){
+	// 		ydoc.current = new Y.Doc();
+	// 	collabWebrtcProvider.current = new WebrtcProvider(currentNote.id, ydoc.current);
+	// 	}
 		
-	}, [])
+	// }, [])
 	// const ydoc = useRef(() => {
 	// 	return new Y.Doc();
 	// });
