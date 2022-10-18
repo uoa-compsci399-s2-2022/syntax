@@ -178,7 +178,10 @@ export default function () {
 			],
 
 			content: currentNote.body
-		})
+		}),
+		onFocus({editor}) {
+			console.log(editor);
+		}
 
 	}, [currentNote.id]);
 

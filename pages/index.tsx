@@ -20,8 +20,8 @@ import { useTheme as useNextTheme } from "next-themes";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
 
 // import Toolbar from "@/components/editor/Toolbar";
-// import { EditorContent, useEditor } from "@tiptap/react";
-// import StarterKit from "@tiptap/starter-kit";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 
 export const getServerSideProps = async ({ req }) => {
 	const session = await getSession({ req });
@@ -43,34 +43,15 @@ export default function Component() {
 
 	const { setTheme } = useNextTheme();
 	const { isDark, type } = useTheme();
-<<<<<<< HEAD
-// 	const editor = useEditor({
-// 		extensions: [StarterKit],
-// 		content: `
-//   <h1>Welcome to syntax !</h1>
-//   <h3>A note-taking app <b>especially</b> made for programmers.</h3>
-//   <h4>Invite other users to the same note page and work effeciently together :D</h4>
-=======
 	const editor = useEditor({
 		extensions: [StarterKit],
 		content: `
   <h1>Welcome to syntax!</h1>
   <h3>A note-taking app <b>specifically</b> made for programmers.</h3>
   <h4>Invite other users to collaborate on the same note and work efficiently together :D</h4>
->>>>>>> origin/note-group-options
 
 //   <blockquote>"Any fool can write code that a computer can understand. Good programmers write code that humans can understand."<br> - Martin Fowler</blockquote>
   
-<<<<<<< HEAD
-//   <h4>Write, compile, and execute your code in your notes and receive live outputs!</h4>
-//   <p>Syntax supports selected languages such as <b>Python, Java, JavaScript, C, and C++</b>. 
-//   <br>All the necessary languages for a programmers!</p>
-  
-//   <br><br>
-//   <h5>Psst! Feel free to try me out! ;)</h5>
-//   `,
-// 	});
-=======
   <h4>Write, compile, and execute your code in your notes and receive live outputs!</h4>
   <p>Syntax supports selected languages such as <b>Python, Java, JavaScript, C, and C++</b>. 
   <br>All the necessary languages for programmers!</p>
@@ -79,7 +60,6 @@ export default function Component() {
   <h6>Psst! Feel free to try me out! ;)</h6>
   `
 	});
->>>>>>> origin/note-group-options
 
 	return (
 		<>
