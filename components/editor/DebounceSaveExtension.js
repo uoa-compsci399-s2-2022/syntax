@@ -60,7 +60,7 @@ export const DebounceSave = () => {
 			const yjson = prosemirrorJSONToYDoc(editor.schema, editor.getJSON());
 			const ut8arr = Y.encodeStateAsUpdate(yjson)
 			const ydocb64 = fromUint8Array(ut8arr);
-
+			// console.log(yDocToProsemirrorJSON(this.options.ydoc));
 			debounceSave({
 				id: this.options.noteId,
 				title: this.options.noteTitle,
