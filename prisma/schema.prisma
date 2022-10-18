@@ -48,9 +48,10 @@ model Note {
    user      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
    group     Group?    @relation(fields: [groupId], references: [id], onDelete: Cascade, onUpdate: Cascade)
    roomId    String?
-	room      Room?
-	YDOC  String?
-	noteText String?
+   room      Room?
+   YDOC      String?
+   noteText  String?
+
    @@unique([id, userId])
    @@unique([id, groupId])
 }
@@ -77,18 +78,20 @@ model User {
    sessions      Session[]
    notes         Note[]
    groups        Group[]
-   rooms         Room[] 
+   roomIds       String[] @db.ObjectId
+   rooms         Room[] @relation(fields: [roomIds], references: [id])
 }
 
 model Room {
-   id      String  @id @default(auto()) @map("_id") @db.ObjectId
-   noteId  String  @unique
-   note    Note    @relation(fields: [noteId], references: [id])
-   userId String?
-	YDOC String?
-	user    User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
-	userIds String[]   @db.ObjectId
-	@@unique([id, noteId])
+   id      String   @id @default(auto()) @map("_id") @db.ObjectId
+   noteId  String   @unique
+   note    Note     @relation(fields: [noteId], references: [id])
+   userId  String?
+   YDOC    String?
+   user    User[]   @relation(fields: [userIds], references: [id])
+   userIds String[] @db.ObjectId
+
+   @@unique([id, noteId])
 }
 
 model VerificationToken {
