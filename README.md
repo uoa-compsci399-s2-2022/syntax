@@ -3,14 +3,58 @@ Extended note-taking app for programming students
 
 [![https://vercel.com/?utm_source=10outof10&utm_campaign=oss](powered-by-vercel.svg)](https://vercel.com/?utm_source=10outof10&utm_campaign=oss)
 
+#### Our editor and main page
+
+
+#### Home Page
+![syntax home page](https://syntaximages.s3.ap-southeast-2.amazonaws.com/home.jpg)
+
+#### Sign-In Page via Google
+![Sign-in page](https://syntaximages.s3.ap-southeast-2.amazonaws.com/sign_in.jpg)
+
+## Project Description
+The purpose of this project is to create a note-taking application designed for computer science students. To adapt our application to suit computer science students, the application is able to support writing and executing code, searching by code, collaboration as well as other major note-taking features.
+
+## Technologies
+
+### Language:
+* Typescript
+* Javascript
+
+### Libraries/Frameworks/APIs:
+* React 
+* Prisma
+* Next.js
+* NextAuth.js
+* next-pwa
+* next-themes 
+* NextUI 
+* heroicons
+* Tiptap
+* Prosemirror
+* CodeMirror
+* TIO.run
+* Turndown
+* Y.js
+* lodash
+* AWS SDK
+* Tldraw
+* md-to-pdf
+
+### Softwares:
+* Amazon S3 from Amazon Web Services
+
 ## Getting Started
 ```
-npm install
-npx prisma generate
-npm run dev
+$ npm install
+$ npx prisma generate
+$ npm run dev
 ```
-For more information and documentation, visit the [syntax wiki](https://github.com/uoa-compsci399-s2-2022/syntax/wiki).
+## Project Management Tool
+* [Jira](https://www.atlassian.com/software/jira) 
+* [Notion](https://www.notion.so/)
 
+## Future Plans
 
 ## Team 10 out of 10
 | Name  | Role |
@@ -20,3 +64,7 @@ For more information and documentation, visit the [syntax wiki](https://github.c
 | [Sarah Kim](https://github.com/bonjuruu)  | Backend Developer  |
 | [Hayden White](https://github.com/HFx6)  | Backend Developer, Designer  |
 | [Kevin Yip](https://github.com/kyip053)  | Backend Developer  |
+
+### Acknowledgements
+
+Our client Paravmir and sponsor Vercel. 

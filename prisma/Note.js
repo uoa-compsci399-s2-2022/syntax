@@ -148,7 +148,8 @@ export const getAllNotesByUserID = async (id) => {
 				include: {
 					notes: {
 						include: {
-							group: true
+							group: true,
+							user: true
 						}
 					}
 				}
@@ -175,6 +176,9 @@ export const getGroupByID = async (id) => {
 	const note = await prisma.group.findUnique({
 		where: {
 			id
+		},
+		include: {
+			notes: true
 		}
 	});
 

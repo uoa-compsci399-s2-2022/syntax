@@ -16,15 +16,15 @@ import { tomorrow } from "thememirror";
 
 const themeExtensions = {
 	light: [tomorrow],
-	dark: [oneDark],
+	dark: [oneDark]
 };
 
 export const Extension = ({
 	node: {
-		attrs: { language: lang, code_content: doc, code_output: result },
+		attrs: { language: lang, code_content: doc, code_output: result }
 	},
 	updateAttributes,
-	extension,
+	extension
 }) => {
 	const refEditor = useRef(null);
 	const [language, setLanguage] = useState();
@@ -38,12 +38,12 @@ export const Extension = ({
 		"cpp-clang": "C++",
 		"java-jdk": "Java",
 		"javascript-node": "JavaScript",
-		python3: "Python",
+		python3: "Python"
 	};
 
 	const run = async (event) => {
 		const compiled = await TIO.run(doc, input, lang);
-		updateAttributes({ code_output: compiled[0] });
+		updateAttributes({ code_output: compiled.join("\n") });
 		console.log(compiled);
 	};
 
@@ -61,9 +61,9 @@ export const Extension = ({
 					}
 				}),
 				EditorView.theme({}, { dark: isDark }),
-				...themeExtensions[isDark ? "dark" : "light"],
+				...themeExtensions[isDark ? "dark" : "light"]
 			],
-			parent: refEditor.current,
+			parent: refEditor.current
 		});
 		return () => {
 			view.destroy();
@@ -72,11 +72,7 @@ export const Extension = ({
 
 	return (
 		<NodeViewWrapper>
-			<Card
-				variant="bordered"
-				css={{ $$cardColor: "rgba(255,255,255,0.0)", resize: "both" }}
-			>
-				<Card.Body>
+			
 					<div className="maindiv" contentEditable={false}>
 						<Dropdown>
 							<Dropdown.Button light css={{ tt: "capitalize" }}>
@@ -86,7 +82,8 @@ export const Extension = ({
 								items={TioLanguages}
 								onAction={(key) => {
 									updateAttributes({ language: TioLanguages[key] });
-								}}>
+								}}
+							>
 								{TioLanguages.map((lang, index) => (
 									<Dropdown.Item key={index} value={lang}>
 										{langDict[lang]}
@@ -97,12 +94,7 @@ export const Extension = ({
 
 						<div ref={refEditor} />
 						<Spacer y={0.5} />
-						<Button
-							bordered
-							auto
-							ghost
-							size="xs"
-							onClick={() => run()}>
+						<Button auto size="xs" onClick={() => run()}>
 							Run Code
 						</Button>
 
@@ -113,8 +105,6 @@ export const Extension = ({
 							<span> {result} </span>
 						</div>
 					</div>
-				</Card.Body>
-			</Card>
 		</NodeViewWrapper>
 	);
 };
