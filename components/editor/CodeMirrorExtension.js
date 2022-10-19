@@ -7,7 +7,7 @@ import { python } from "@codemirror/lang-python";
 import { StreamLanguage } from "@codemirror/language";
 import { clike } from "@codemirror/legacy-modes/mode/clike";
 import { useEffect, useState, useRef } from "react";
-import { useTheme, Button, Spacer, Dropdown, Card } from "@nextui-org/react";
+import { useTheme, Button, Spacer, Dropdown, Card, Collapse } from "@nextui-org/react";
 import { NodeViewWrapper } from "@tiptap/react";
 import { TIO, LANGUAGES as TioLanguages } from "@/node/tio";
 
@@ -21,7 +21,7 @@ const themeExtensions = {
 
 export const Extension = ({
 	node: {
-		attrs: { language: lang, code_content: doc, code_output: result },
+		attrs: { language: lang, code_content: doc, code_output: result, system_output: time },
 	},
 	updateAttributes,
 	extension,
@@ -29,8 +29,7 @@ export const Extension = ({
 	const refEditor = useRef(null);
 	const [language, setLanguage] = useState();
 	const [input, setInput] = useState([]);
-	const [code, setCode] = useState();
-	const [output, setOutput] = useState(result);
+	const [systemInfo, setSystemInfo] = useState(time == "" ? true : false);
 	const { checked, type } = useTheme();
 
 	const langDict = {
@@ -38,12 +37,15 @@ export const Extension = ({
 		"cpp-clang": "C++",
 		"java-jdk": "Java",
 		"javascript-node": "JavaScript",
-		python3: "Python",
+		"python3": "Python",
 	};
 
 	const run = async (event) => {
 		const compiled = await TIO.run(doc, input, lang);
-		updateAttributes({ code_output: compiled.slice(0, (compiled.length - 6)).join("\n")});
+		const output = compiled.slice(0, (compiled.length - 6)).join("\n")
+		const system = compiled.slice(compiled.length-6).join("\n")
+		updateAttributes({ code_output: output, system_output: system});
+		setSystemInfo(false)
 		console.log(compiled);
 	};
 
@@ -110,7 +112,14 @@ export const Extension = ({
 						<hr></hr>
 						<Spacer y={0.5} />
 						<div className="output">
-							<span> {result} </span>
+							<Collapse.Group accordion={false}>
+							<Collapse disabled={systemInfo} title="Output:">
+								<span> {result} </span>
+							</Collapse>
+							<Collapse disabled={systemInfo} title="System Info:">
+								{time}
+							</Collapse>
+							</Collapse.Group>
 						</div>
 					</div>
 				</Card.Body>
