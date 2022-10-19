@@ -43,7 +43,7 @@ export const Extension = ({
 
 	const run = async (event) => {
 		const compiled = await TIO.run(doc, input, lang);
-		updateAttributes({ code_output: compiled[0] });
+		updateAttributes({ code_output: compiled.slice(0, (compiled.length - 6)).join("\n")});
 		console.log(compiled);
 	};
 
