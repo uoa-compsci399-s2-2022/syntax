@@ -44,6 +44,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 			const deletedNote = await res.json();
 			setNotes({ note: deletedNote, type: "remove" });
 			setDeleteModal(false);
+			setSelectedKey();
 			router.push(`/note/`, undefined, { shallow: true });
 		} catch (error) {
 			console.log(error);

@@ -1,7 +1,6 @@
-import NoteLayout from "../../components/note/NoteLayout";
 import { useSession, getSession } from "next-auth/react";
 import { useEffect, useState, useMemo } from "react";
-import { unstable_batchedUpdates } from "react-dom"; 
+import { unstable_batchedUpdates } from "react-dom";
 import {
 	useNote,
 	useDispatchNote,
@@ -10,6 +9,12 @@ import {
 } from "../../modules/AppContext";
 import { useRouter } from 'next/router';
 import { NoteTemplate } from '../../components/note/NewNote'
+
+import NoteDisplay from "../../components/note/NoteDisplay";
+import NoteSidebar from "../../components/note/NoteSidebar";
+import NoteNavbar from "../../components/note/NoteNavbar";
+import { Container } from "@nextui-org/react";
+
 
 const getNoteByID = require("../../prisma/Note").getNoteByID;
 const getAllNotesByUserID = require("../../prisma/Note").getAllNotesByUserID;
@@ -52,6 +57,7 @@ export const getServerSideProps = async ({ req, res, params }) => {
 			...NoteTemplate,
 			updatedAt: Date.now(),
 			user: session?.user,
+			action: 'edit'
 		};
 	}
 	const [notes] = await getAllNotesByUserID(session?.user?.id);
@@ -61,20 +67,66 @@ export const getServerSideProps = async ({ req, res, params }) => {
 	};
 };
 
-
-export default function Note({ notes, note }) {
+const NoteLayout = ({ notes, note }) => {
+	const [sidebarDisplay, setSidebarDisplay] = useState(false);
 	const { data: session, status } = useSession();
-	const notesc = useNotes();
-	const setNotes = useDispatchNotes();
-	const currentNote = useNote();
 	const setCurrentNote = useDispatchNote();
+	const setNotes = useDispatchNotes();
 	useEffect(() => {
-		if (Object.keys(currentNote).length == 0) {
-			note.action = "edit";
-			setCurrentNote(note);
-		}
+		setCurrentNote(note);
+		setNotes({ note: notes, type: "replace" });
 	}, [])
 
+	const handleSidebarDisplay = () => {
+		setSidebarDisplay((current) => !current);
+	};
 
-	return <NoteLayout allNotes={notes} currentNote={note} />;
-}
+	return (
+		<Container
+			fluid
+			display="flex"
+			wrap="nowrap"
+			css={{
+				minWidth: "100vw",
+				minHeight: "100vh",
+				padding: "0",
+				margin: "0"
+			}}
+		>
+			<NoteSidebar
+				sidebarDisplay={sidebarDisplay}
+				handleSidebarDisplay={handleSidebarDisplay}
+			/>
+			<Container
+				display="flex"
+				direction="column"
+				wrap="nowrap"
+				css={{
+					padding: "0",
+					margin: "0",
+					maxHeight: "100vh",
+					maxWidth: "100vw",
+					overflow: "hidden"
+				}}
+			>
+				<NoteNavbar
+					sidebarDisplay={sidebarDisplay}
+					handleSidebarDisplay={handleSidebarDisplay}
+				/>
+				<Container
+					css={{
+						padding: "0",
+						minHeight: "100%",
+						minWidth: "100%",
+						overflowY: "scroll",
+						overflowX: "hidden"
+					}}
+				>
+					<NoteDisplay />
+				</Container>
+			</Container>
+		</Container>
+	);
+};
+
+export default NoteLayout;

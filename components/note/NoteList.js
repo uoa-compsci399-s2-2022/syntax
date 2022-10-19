@@ -18,18 +18,18 @@ const NoteList = ({ retrieved_notes, handleSidebarDisplay, createNote }) => {
 	const notes = useNotes();
 	const setNotes = useDispatchNotes();
 
-	const currentNote = useNote();
 	const setCurrentNote = useDispatchNote();
 
-	useEffect(() => {
-		// replace notes in notes context state
-		setNotes({ note: retrieved_notes, type: "replace" });
-	}, [retrieved_notes]);
+	// useEffect(() => {
+	// 	// replace notes in notes context state
+	// 	setNotes({ note: retrieved_notes, type: "replace" });
+	// }, [retrieved_notes]);
 	
 	const openNote = (note) => {
+		console.log(notes, note );
 		note.action = "edit";
 		setCurrentNote(note);
-		router.push(`/note/${note.id}`, undefined, { shallow: true });
+		router.push(`/note/${note.id}`);
 		// if width is below the 650px breakpoint, close the sidebar upon clicking a note
 		if (window.innerWidth < 650) {
 			handleSidebarDisplay();
@@ -39,8 +39,8 @@ const NoteList = ({ retrieved_notes, handleSidebarDisplay, createNote }) => {
 	return (
 		<>
 			<Container css={{ padding: "0 0.5rem", textOverflow: "break" }}>
-				{("groups" in retrieved_notes) ? (
-					retrieved_notes.groups.map((key) => (
+				{("groups" in notes) ? (
+					notes.groups.map((key) => (
 						<NoteGroup
 							name={key.name}
 							key={key.id}
