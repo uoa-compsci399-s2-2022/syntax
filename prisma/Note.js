@@ -74,7 +74,7 @@ export const getNoteByID = async (id) => {
 	return JSON.parse(JSON.stringify(note));
 };
 
-export const getAllNotesBySearch = async (sq, active, id) => {
+export const getAllNotesBySearch = async (sq, active, sortingField, id) => {
 	var queryBase = {
 		titleChecked: { "title": { $regex: sq, '$options': 'i' } },
 		contentChecked: { "body.content": { $elemMatch: { content: { $elemMatch: { "text": { $regex: sq, '$options': 'i' } } } } } },
@@ -89,7 +89,7 @@ export const getAllNotesBySearch = async (sq, active, id) => {
 					$or: {...queries}[0]
 				}]
 		},
-		options: { projection: { "updatedAt": false } }
+		options: { projection: { "updatedAt": false }, sort: sortingField }
 	})
 	return JSON.parse(JSON.stringify(notes))
 };

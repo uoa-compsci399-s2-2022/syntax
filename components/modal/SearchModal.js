@@ -22,46 +22,56 @@ import Link from "next/link";
 
 const SearchModal = ({ open, closeHandler }) => {
 	const { checked, type } = useTheme();
-	const [selectedSort, setSelectedSort] = useState("title-asc");
+	const sortOptions = {
+		"Title (ascending)": {
+		  "title": 1
+		},
+		"Title (descending)": {
+		  "title": -1
+		},
+		"Last Modified (ascending)": {
+		  "updatedAt": 1
+		},
+		"Last Modified (descending)": {
+		  "updatedAt": -1
+		},
+		"Created (ascending)": {
+		  "createdAt": 1
+		},
+		"Created (descending)": {
+		  "createdAt": -1
+		}
+	 };
+	const [selectedSort, setSelectedSort] = useState("Title (ascending)");
 	const [titleChecked, setTitleChecked] = useState(true);
 	const [contentChecked, setContentChecked] = useState(false);
 	const [codeChecked, setCodeChecked] = useState(false);
+	const [sq, setSQ] = useState('')
 	const [returnedNotes, setNotes] = useState([])
 	const setCurrentNote = useDispatchNote();
 	const router = useRouter();
 	const throttledSearch = useRef(
-		throttle(async (searchtype, e) => {
-			if (e.target.value) Search(searchtype, e);
+		throttle(async (searchtype, sorting, sq) => {
+			if (sq) Search(searchtype, sorting, sq);
+			else{
+				setNotes([]);
+			}
 		}, 1000)
 	).current;
-	const sortOptions = {
-		"title: 1": "Title (ascending)",
-		"title: -1": "Title (descending)",
-		"modified: 1": "Modified (ascending)",
-		"modified: -1": "Modified (descending)",
-		"created: 1": "Created (ascending)",
-		"created: -1": "Created (descending)"
-	};
+	
+	const triggerSearch = (psq) =>{
+		throttledSearch({ titleChecked, contentChecked, codeChecked }, selectedSort, psq);
+	}
 
-	const Search = async (searchtype, e) => {
+	const Search = async (searchtype, sorting, sq) => {
+		const sortingField = sortOptions[sorting];
 		let res = await fetch("/api/search", {
 			method: "POST",
 			headers: { "Content-Type": "application/json"},
-			body: JSON.stringify({searchtype, "sq":e.target.value})
+			body: JSON.stringify({searchtype, sortingField, "sq":sq})
 		});
 		const notes = await res.json()
 		setNotes(notes)
-	};
-
-	const openNote = (note) => {
-		console.log(note)
-		note.action = "edit";
-		setCurrentNote(note);
-		router.push(`/note/${note.id}`, undefined, { shallow: true });
-		if (window.innerWidth < 650) {
-			handleSidebarDisplay();
-		}
-		closeHandler()
 	};
 
 
@@ -89,7 +99,10 @@ const SearchModal = ({ open, closeHandler }) => {
 					clearable
 					aria-label="Advanced Search Bar"
 					placeholder="Search notes..."
-					onChange={(e) => { throttledSearch({ titleChecked, contentChecked, codeChecked }, e) }}
+					onChange={(e) => { 
+						setSQ(e.target.value);
+						triggerSearch(e.target.value);
+					}}
 					type="search"
 					animated={false}
 					contentLeft={
@@ -151,15 +164,18 @@ const SearchModal = ({ open, closeHandler }) => {
 									minHeight: "36px"
 								}}
 							>
-								{sortOptions[selectedSort]}
+								{selectedSort}
 							</Dropdown.Button>
 							<Dropdown.Menu
 								aria-label="Sort Options"
-								onAction={setSelectedSort}
+								onAction={(key) => {
+									setSelectedSort(key);
+									triggerSearch(sq);
+								}}
 							>
-								{Object.keys(sortOptions).map((option) => (
-									<Dropdown.Item key={option}>
-										{sortOptions[option]}
+								{Object.entries(sortOptions).map(([k, v]) => (
+									<Dropdown.Item key={k} value={k}>
+										{k}
 									</Dropdown.Item>
 								))}
 							</Dropdown.Menu>
@@ -168,7 +184,7 @@ const SearchModal = ({ open, closeHandler }) => {
 						<Container css={{ padding: "0" }}>
 
 							{returnedNotes.map((note, index) => (
-								<Link href={`/note/${encodeURIComponent(note.id)}`}>
+								<Link href={`/note/${encodeURIComponent(note._id.$oid)}`}>
 									<Container
 										key={index}
 										css={{
