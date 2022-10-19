@@ -89,7 +89,7 @@ export const getAllNotesBySearch = async (sq, active, sortingField, id) => {
 					$or: {...queries}[0]
 				}]
 		},
-		options: { projection: { "updatedAt": false }, sort: sortingField }
+		options: { sort: sortingField }
 	})
 	return JSON.parse(JSON.stringify(notes))
 };
