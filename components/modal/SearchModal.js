@@ -7,7 +7,8 @@ import {
 	Row,
 	useTheme
 } from "@nextui-org/react";
-import { useState } from "react";
+import { throttle } from "lodash";
+import { useState, useRef, useEffect } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import {
 	useNote,
@@ -28,8 +29,11 @@ const SearchModal = ({ open, closeHandler }) => {
 	const [returnedNotes, setNotes] = useState([])
 	const setCurrentNote = useDispatchNote();
 	const router = useRouter();
-
-
+	const throttledSearch = useRef(
+		throttle(async (searchtype, e) => {
+			if (e.target.value) Search(searchtype, e);
+		}, 1000)
+	).current;
 	const sortOptions = {
 		"title: 1": "Title (ascending)",
 		"title: -1": "Title (descending)",
@@ -39,15 +43,14 @@ const SearchModal = ({ open, closeHandler }) => {
 		"created: -1": "Created (descending)"
 	};
 
-
-	const Search = async (e) => {
+	const Search = async (searchtype, e) => {
 		let res = await fetch("/api/search", {
 			method: "POST",
-			headers: { "Content-Type": "application/json", "titleChecked": titleChecked, "contentChecked": contentChecked, "codeChecked": codeChecked, "selectedSort": selectedSort },
-			body: JSON.stringify(e.target.value)
-		  });
-		  const notes = await res.json()
-		  setNotes(notes)
+			headers: { "Content-Type": "application/json"},
+			body: JSON.stringify({searchtype, "sq":e.target.value})
+		});
+		const notes = await res.json()
+		setNotes(notes)
 	};
 
 	const openNote = (note) => {
@@ -60,8 +63,8 @@ const SearchModal = ({ open, closeHandler }) => {
 		}
 		closeHandler()
 	};
-	
-	
+
+
 	return (
 		<Modal
 			blur
@@ -86,7 +89,7 @@ const SearchModal = ({ open, closeHandler }) => {
 					clearable
 					aria-label="Advanced Search Bar"
 					placeholder="Search notes..."
-					onChange={Search}
+					onChange={(e) => { throttledSearch({ titleChecked, contentChecked, codeChecked }, e) }}
 					type="search"
 					animated={false}
 					contentLeft={
@@ -101,7 +104,7 @@ const SearchModal = ({ open, closeHandler }) => {
 				>
 					<Button
 						auto
-						onPress={() => setTitleChecked(!titleChecked)}
+						onPress={() => setTitleChecked(prevTitleChecked => !prevTitleChecked)}
 						css={{
 							background: titleChecked ? "$accents4" : "transparent",
 							color: "$textSecondary",
@@ -112,7 +115,7 @@ const SearchModal = ({ open, closeHandler }) => {
 					</Button>
 					<Button
 						auto
-						onPress={() => setContentChecked(!contentChecked)}
+						onPress={() => setContentChecked(prevContentChecked => !prevContentChecked)}
 						css={{
 							background: contentChecked ? "$accents4" : "transparent",
 							color: "$textSecondary",
@@ -123,7 +126,7 @@ const SearchModal = ({ open, closeHandler }) => {
 					</Button>
 					<Button
 						auto
-						onPress={() => setCodeChecked(!codeChecked)}
+						onPress={() => setCodeChecked(prevCodeChecked => !prevCodeChecked)}
 						css={{
 							background: codeChecked ? "$accents4" : "transparent",
 							color: "$textSecondary",
@@ -162,10 +165,10 @@ const SearchModal = ({ open, closeHandler }) => {
 							</Dropdown.Menu>
 						</Dropdown>
 
-							<Container css={{ padding: "0" }}>
-					
-								{returnedNotes.map((note, index) => (
-									<Link href={`/note/${encodeURIComponent(note.id)}`}>
+						<Container css={{ padding: "0" }}>
+
+							{returnedNotes.map((note, index) => (
+								<Link href={`/note/${encodeURIComponent(note.id)}`}>
 									<Container
 										key={index}
 										css={{
@@ -179,9 +182,9 @@ const SearchModal = ({ open, closeHandler }) => {
 										<Row>{note.title}</Row>
 										<Row css={{ color: "$accents6" }}>{note.updatedAt}</Row>
 									</Container>
-									</Link>
-								))}
-							</Container>
+								</Link>
+							))}
+						</Container>
 
 					</>
 				) : (

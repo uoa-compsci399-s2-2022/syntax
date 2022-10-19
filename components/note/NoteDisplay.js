@@ -43,10 +43,6 @@ const NoteDisplay = () => {
 	console.log(currentNote, notes);
 	return (
 		<>
-			<Head>
-				<title>{currentNote.title}</title>
-				<link rel="icon" href="/favicon.ico" />
-			</Head>
 			<Container
 				css={{
 					margin: "0",
