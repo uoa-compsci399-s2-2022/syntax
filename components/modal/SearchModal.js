@@ -196,7 +196,7 @@ const SearchModal = ({ open, closeHandler }) => {
 										}}
 									>
 										<Row>{note.title}</Row>
-										<Row css={{ color: "$accents6" }}>{note.updatedAt}</Row>
+										<Row css={{ color: "$accents6" }}>{note.updatedAt.$date}</Row>
 									</Container>
 								</Link>
 							))}
