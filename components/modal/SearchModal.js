@@ -19,61 +19,62 @@ import {
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-
 const SearchModal = ({ open, closeHandler }) => {
 	const { checked, type } = useTheme();
 	const sortOptions = {
 		"Title (ascending)": {
-		  "title": 1
+			title: 1
 		},
 		"Title (descending)": {
-		  "title": -1
+			title: -1
 		},
 		"Last Modified (ascending)": {
-		  "updatedAt": 1
+			updatedAt: 1
 		},
 		"Last Modified (descending)": {
-		  "updatedAt": -1
+			updatedAt: -1
 		},
 		"Created (ascending)": {
-		  "createdAt": 1
+			createdAt: 1
 		},
 		"Created (descending)": {
-		  "createdAt": -1
+			createdAt: -1
 		}
-	 };
+	};
 	const [selectedSort, setSelectedSort] = useState("Title (ascending)");
 	const [titleChecked, setTitleChecked] = useState(true);
 	const [contentChecked, setContentChecked] = useState(false);
 	const [codeChecked, setCodeChecked] = useState(false);
-	const [sq, setSQ] = useState('')
-	const [returnedNotes, setNotes] = useState([])
-	const setCurrentNote = useDispatchNote();
-	const router = useRouter();
+	const [sq, setSQ] = useState("");
+	const [returnedNotes, setNotes] = useState([]);
+
 	const throttledSearch = useRef(
 		throttle(async (searchtype, sorting, sq) => {
-			if (sq) Search(searchtype, sorting, sq);
-			else{
+			if (sq) search(searchtype, sorting, sq);
+			else {
 				setNotes([]);
 			}
 		}, 1000)
 	).current;
-	
-	const triggerSearch = (psq) =>{
-		throttledSearch({ titleChecked, contentChecked, codeChecked }, selectedSort, psq);
-	}
 
-	const Search = async (searchtype, sorting, sq) => {
+	const triggerSearch = (psq) => {
+		throttledSearch(
+			{ titleChecked, contentChecked, codeChecked },
+			selectedSort,
+			psq
+		);
+	};
+
+	const search = async (searchtype, sorting, sq) => {
 		const sortingField = sortOptions[sorting];
 		let res = await fetch("/api/search", {
 			method: "POST",
-			headers: { "Content-Type": "application/json"},
-			body: JSON.stringify({searchtype, sortingField, "sq":sq})
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ searchtype, sortingField, sq: sq })
 		});
-		const notes = await res.json()
-		setNotes(notes)
+		const notes = await res.json();
+		setNotes(notes);
 	};
-
 
 	return (
 		<Modal
@@ -99,7 +100,7 @@ const SearchModal = ({ open, closeHandler }) => {
 					clearable
 					aria-label="Advanced Search Bar"
 					placeholder="Search notes..."
-					onChange={(e) => { 
+					onChange={(e) => {
 						setSQ(e.target.value);
 						triggerSearch(e.target.value);
 					}}
@@ -108,7 +109,13 @@ const SearchModal = ({ open, closeHandler }) => {
 					contentLeft={
 						<MagnifyingGlassIcon style={{ height: "var(--icon-size)" }} />
 					}
-					css={{ width: "100%", $$inputColor: type === "dark" ? "var(--nextui-colors-background)" : "var(--nextui-colors-accents0)" }}
+					css={{
+						width: "100%",
+						$$inputColor:
+							type === "dark"
+								? "var(--nextui-colors-background)"
+								: "var(--nextui-colors-accents0)"
+					}}
 				/>
 				<Container
 					display="flex"
@@ -117,7 +124,9 @@ const SearchModal = ({ open, closeHandler }) => {
 				>
 					<Button
 						auto
-						onPress={() => setTitleChecked(prevTitleChecked => !prevTitleChecked)}
+						onPress={() =>
+							setTitleChecked((prevTitleChecked) => !prevTitleChecked)
+						}
 						css={{
 							background: titleChecked ? "$accents4" : "transparent",
 							color: "$textSecondary",
@@ -128,7 +137,9 @@ const SearchModal = ({ open, closeHandler }) => {
 					</Button>
 					<Button
 						auto
-						onPress={() => setContentChecked(prevContentChecked => !prevContentChecked)}
+						onPress={() =>
+							setContentChecked((prevContentChecked) => !prevContentChecked)
+						}
 						css={{
 							background: contentChecked ? "$accents4" : "transparent",
 							color: "$textSecondary",
@@ -139,7 +150,9 @@ const SearchModal = ({ open, closeHandler }) => {
 					</Button>
 					<Button
 						auto
-						onPress={() => setCodeChecked(prevCodeChecked => !prevCodeChecked)}
+						onPress={() =>
+							setCodeChecked((prevCodeChecked) => !prevCodeChecked)
+						}
 						css={{
 							background: codeChecked ? "$accents4" : "transparent",
 							color: "$textSecondary",
@@ -182,7 +195,6 @@ const SearchModal = ({ open, closeHandler }) => {
 						</Dropdown>
 
 						<Container css={{ padding: "0" }}>
-
 							{returnedNotes.map((note, index) => (
 								<Link href={`/note/${encodeURIComponent(note._id.$oid)}`}>
 									<Container
@@ -190,19 +202,25 @@ const SearchModal = ({ open, closeHandler }) => {
 										css={{
 											padding: "10px",
 											borderRadius: "12px",
+											cursor: "pointer",
 											"&:hover": {
 												background: "$accents4"
 											}
 										}}
 									>
 										<Row>{note.title}</Row>
-										<Row css={{ color: "$accents6" }}>{note.updatedAt.$date}</Row>
+										<Row css={{ color: "$accents6" }}>
+											{note.updatedAt.$date}
+										</Row>
 									</Container>
 								</Link>
 							))}
 						</Container>
-
 					</>
+				) : !titleChecked && !contentChecked && !codeChecked ? (
+					<Container display="flex" justify="center">
+						{"At least one search type is required (title, content or code)."}
+					</Container>
 				) : (
 					<Container display="flex" justify="center">
 						No results
