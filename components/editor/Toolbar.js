@@ -1,7 +1,7 @@
 import MenuItem from "./MenuItem";
 import InputModal from "@/components/modal/InputModal";
 import { useState, useEffect, useRef } from "react";
-import { Container, Dropdown, Tooltip, Button } from "@nextui-org/react";
+import { Container, Dropdown, Tooltip } from "@nextui-org/react";
 import { BiCodeBlock } from "react-icons/bi";
 import {
 	MdFormatBold,
@@ -15,16 +15,16 @@ import {
 	MdFormatClear,
 	MdFormatListBulleted,
 	MdFormatListNumbered,
-	MdOutlineDraw,
+	MdDraw,
 	MdFormatQuote,
 	MdHorizontalRule,
 	MdFormatSize,
 	MdVideocam,
-	MdOutlineImage,
+	MdImage,
 	MdInsertLink,
 	MdAdd,
-	MdOutlineUndo,
-	MdOutlineRedo
+	MdUndo,
+	MdRedo
 } from "react-icons/md";
 
 export default ({ editor, drawingOpenHandler }) => {
@@ -202,12 +202,12 @@ export default ({ editor, drawingOpenHandler }) => {
 			action: () => editor.chain().focus().clearNodes().unsetAllMarks().run()
 		},
 		undo: {
-			icon: <MdOutlineUndo size={iconSize} color={iconColor} />,
+			icon: <MdUndo size={iconSize} color={iconColor} />,
 			label: "Undo",
 			action: () => editor.chain().focus().undo().run()
 		},
 		redo: {
-			icon: <MdOutlineRedo size={iconSize} color={iconColor} />,
+			icon: <MdRedo size={iconSize} color={iconColor} />,
 			label: "Redo",
 			action: () => editor.chain().focus().redo().run()
 		}
@@ -248,14 +248,14 @@ export default ({ editor, drawingOpenHandler }) => {
 			breakpoint: "sm"
 		},
 		drawing: {
-			icon: <MdOutlineDraw size={iconSize} color={iconColor} />,
+			icon: <MdDraw size={iconSize} color={iconColor} />,
 			label: "Drawing",
 			key: "drawing",
 			action: () => drawingOpenHandler(),
 			breakpoint: "sm"
 		},
 		image: {
-			icon: <MdOutlineImage size={iconSize} color={iconColor} />,
+			icon: <MdImage size={iconSize} color={iconColor} />,
 			label: "Image",
 			key: "image",
 			action: () => console.log("TO-DO"),
