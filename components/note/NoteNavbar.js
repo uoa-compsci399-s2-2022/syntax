@@ -1,10 +1,10 @@
 import ExportModal from "@/components/modal/ExportModal";
 import DeleteModal from "@/components/modal/DeleteModal";
-import SettingsModal from "@/components/modal/SettingsModal";
-import { Avatar, Dropdown, Button, Navbar } from "@nextui-org/react";
+import { Dropdown, Button, Navbar, useTheme } from "@nextui-org/react";
+import { useTheme as useNextTheme } from "next-themes";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import {
 	EllipsisHorizontalIcon,
 	TrashIcon,
@@ -12,7 +12,10 @@ import {
 	LockClosedIcon,
 	DocumentArrowUpIcon,
 	ChevronDoubleRightIcon,
-	ChevronDoubleLeftIcon
+	ChevronDoubleLeftIcon,
+	SunIcon,
+	MoonIcon,
+	ArrowLeftOnRectangleIcon
 } from "@heroicons/react/24/solid";
 
 import {
@@ -23,15 +26,15 @@ import {
 } from "../../modules/AppContext";
 
 const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
-	const router = useRouter();
+	const { setTheme } = useNextTheme();
+	const { checked, type } = useTheme();
 	const [selectedKey, setSelectedKey] = useState();
 	const [exportModal, setExportModal] = useState(false);
 	const [deleteModal, setDeleteModal] = useState(false);
-	const [settingsModal, setSettingsModal] = useState(false);
-	const [userInitials, setUserInitials] = useState();
 	const currentNote = useNote();
-	const { data: session, status } = useSession();
 	const setNotes = useDispatchNotes();
+	const router = useRouter();
+	const { data: session, status } = useSession();
 
 	const deleteNoteHandler = async () => {
 		try {
@@ -50,12 +53,6 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 			console.log(error);
 		}
 	};
-
-	useEffect(() => {
-		if (session) {
-			setUserInitials(session.user.name.match(/\b(\w)/g).join(""));
-		}
-	}, [session?.user.name]);
 
 	const exportNoteHandler = async (fileType) => {
 		try {
@@ -100,7 +97,6 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 	};
 
 	const closeHandler = () => {
-		setSettingsModal(false);
 		setExportModal(false);
 		setDeleteModal(false);
 		setSelectedKey();
@@ -113,6 +109,14 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 				break;
 			case "delete":
 				setDeleteModal(true);
+				break;
+			case "changeTheme":
+				type === "dark" ? setTheme("light") : setTheme("dark");
+				setSelectedKey();
+				break;
+			case "signOut":
+				signOut();
+				setSelectedKey();
 				break;
 		}
 	}, [selectedKey]);
@@ -161,22 +165,6 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 			</Navbar.Content>
 			<Navbar.Content gap={5}>
 				<Navbar.Item>
-					<Button
-						auto
-						light
-						animated={false}
-						onPress={setSettingsModal}
-						icon={
-							<Avatar
-								text={userInitials}
-								color="primary"
-								textColor="white"
-								css={{ cursor: "pointer" }}
-							/>
-						}
-					/>
-				</Navbar.Item>
-				<Navbar.Item>
 					<Dropdown placement="bottom-right">
 						<Dropdown.Button
 							light
@@ -187,37 +175,63 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 							onAction={setSelectedKey}
 							aria-label="Note Options"
 						>
-							<Dropdown.Item
-								key="share"
-								icon={<ShareIcon style={{ height: "var(--icon-size-s)" }} />}
-							>
-								Share
-							</Dropdown.Item>
-							<Dropdown.Item
-								key="lock"
-								icon={
-									<LockClosedIcon style={{ height: "var(--icon-size-s)" }} />
-								}
-							>
-								Lock
-							</Dropdown.Item>
-							<Dropdown.Item
-								key="export"
-								icon={
-									<DocumentArrowUpIcon
-										style={{ height: "var(--icon-size-s)" }}
-									/>
-								}
-							>
-								Export
-							</Dropdown.Item>
-							<Dropdown.Item
-								key="delete"
-								color="error"
-								icon={<TrashIcon style={{ height: "var(--icon-size-s)" }} />}
-							>
-								Delete
-							</Dropdown.Item>
+							<Dropdown.Section aria-label="Note Actions">
+								<Dropdown.Item
+									key="share"
+									icon={<ShareIcon style={{ height: "var(--icon-size-s)" }} />}
+								>
+									Share
+								</Dropdown.Item>
+								<Dropdown.Item
+									key="lock"
+									icon={
+										<LockClosedIcon style={{ height: "var(--icon-size-s)" }} />
+									}
+								>
+									Lock
+								</Dropdown.Item>
+								<Dropdown.Item
+									key="export"
+									icon={
+										<DocumentArrowUpIcon
+											style={{ height: "var(--icon-size-s)" }}
+										/>
+									}
+								>
+									Export
+								</Dropdown.Item>
+								<Dropdown.Item
+									key="delete"
+									color="error"
+									icon={<TrashIcon style={{ height: "var(--icon-size-s)" }} />}
+								>
+									Delete
+								</Dropdown.Item>
+							</Dropdown.Section>
+							<Dropdown.Section aria-label="User Actions">
+								<Dropdown.Item
+									key="changeTheme"
+									icon={
+										type === "dark" ? (
+											<SunIcon style={{ height: "var(--icon-size-s)" }} />
+										) : (
+											<MoonIcon style={{ height: "var(--icon-size-s)" }} />
+										)
+									}
+								>
+									{type === "dark" ? "Light" : "Dark"} mode
+								</Dropdown.Item>
+								<Dropdown.Item
+									key="signOut"
+									icon={
+										<ArrowLeftOnRectangleIcon
+											style={{ height: "var(--icon-size-s)" }}
+										/>
+									}
+								>
+									Sign out
+								</Dropdown.Item>
+							</Dropdown.Section>
 						</Dropdown.Menu>
 					</Dropdown>
 				</Navbar.Item>
@@ -232,7 +246,6 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 					deleteHandler={deleteNoteHandler}
 					type="note"
 				/>
-				<SettingsModal open={settingsModal} closeHandler={closeHandler} />
 			</Navbar.Content>
 		</Navbar>
 	);
