@@ -108,6 +108,7 @@ export const Extension = ({
 								lineHeight: "0",
 								height: "min-content",
 								zIndex: 0,
+								borderRadius: 0,
 								color: type === "dark" ? oneDarkColors.ivory : "#4D4D4C"
 							}}
 						>
