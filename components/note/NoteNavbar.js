@@ -1,10 +1,11 @@
 import ExportModal from "@/components/modal/ExportModal";
 import DeleteModal from "@/components/modal/DeleteModal";
 import SettingsModal from "@/components/modal/SettingsModal";
-import ShareModal from '@/components/modal/ShareModal';
+import ShareModal from "@/components/modal/ShareModal";
+import AvatarGroup from "@/components/note/AvatarGroup";
 import { Avatar, Dropdown, Button, Navbar } from "@nextui-org/react";
 import { useState, useEffect } from "react";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 // import { Document, Page, pdf} from '@react-pdf/renderer'
 // import Html from 'react-pdf-html'
 import {
@@ -36,13 +37,13 @@ import {
 
 const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 	const router = useRouter();
- 	const [shareModal, setShareModal] = useState(false);
-  const [selectedKey, setSelectedKey] = useState();
-  const [exportModal, setExportModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [settingsModal, setSettingsModal] = useState(false);
-  const currentNote = useNote();
-  const setNotes = useDispatchNotes();
+	const [shareModal, setShareModal] = useState(false);
+	const [selectedKey, setSelectedKey] = useState();
+	const [exportModal, setExportModal] = useState(false);
+	const [deleteModal, setDeleteModal] = useState(false);
+	const [settingsModal, setSettingsModal] = useState(false);
+	const currentNote = useNote();
+	const setNotes = useDispatchNotes();
 
 	const deleteNoteHandler = async () => {
 		try {
@@ -50,7 +51,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 			let res = await fetch(`/api/note`, {
 				method: "DELETE",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(currentNote.id),
+				body: JSON.stringify(currentNote.id)
 			});
 			const deletedNote = await res.json();
 			setNotes({ note: deletedNote, type: "remove" });
@@ -99,40 +100,43 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 	// 				link.click();
 	// 			});
 
-
 	// 		}
 	// 	} catch (error) {
 	// 		console.log(error)
 	// 	}
 	// }
 
-  const shareHandler = async () => {
-    console.log('share')
-    router.push({pathname: `/room/${currentNote.id}`, query: {sharing: true}, options: {shallow: true}});
-    setShareModal(false);
-  }
+	const shareHandler = async () => {
+		console.log("share");
+		router.push({
+			pathname: `/room/${currentNote.id}`,
+			query: { sharing: true },
+			options: { shallow: true }
+		});
+		setShareModal(false);
+	};
 
-  const closeHandler = () => {
-    setSettingsModal(false);
-    setShareModal(false);
-    setExportModal(false);
-    setDeleteModal(false);
-    setSelectedKey();
-  };
+	const closeHandler = () => {
+		setSettingsModal(false);
+		setShareModal(false);
+		setExportModal(false);
+		setDeleteModal(false);
+		setSelectedKey();
+	};
 
-  useEffect(() => {
-    switch (selectedKey) {
-      case "share":
-        setShareModal(true);
-        break;
-      case "export":
-        setExportModal(true);
-        break;
-      case "delete":
-        setDeleteModal(true);
-        break;
-    }
-  }, [selectedKey]);
+	useEffect(() => {
+		switch (selectedKey) {
+			case "share":
+				setShareModal(true);
+				break;
+			case "export":
+				setExportModal(true);
+				break;
+			case "delete":
+				setDeleteModal(true);
+				break;
+		}
+	}, [selectedKey]);
 
 	return (
 		<Navbar
@@ -177,6 +181,9 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 				</Navbar.Item>
 			</Navbar.Content>
 			<Navbar.Content gap={5}>
+				<Navbar.Item>
+					<AvatarGroup />
+				</Navbar.Item>
 				<Navbar.Item>
 					<Button
 						auto
@@ -237,8 +244,16 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 					</Dropdown>
 				</Navbar.Item>
 				{/* <ExportModal open={exportModal} oncloseHandler={closeHandler} closeHandler={exportNoteHandler} /> */}
-        <ShareModal open={shareModal} onclosehandler={closeHandler} closeHandler={shareHandler} />
-				<DeleteModal open={deleteModal} onclosehandler={closeHandler} closeHandler={deleteNoteHandler} />
+				<ShareModal
+					open={shareModal}
+					onclosehandler={closeHandler}
+					closeHandler={shareHandler}
+				/>
+				<DeleteModal
+					open={deleteModal}
+					onclosehandler={closeHandler}
+					closeHandler={deleteNoteHandler}
+				/>
 				<SettingsModal open={settingsModal} closeHandler={closeHandler} />
 			</Navbar.Content>
 		</Navbar>
