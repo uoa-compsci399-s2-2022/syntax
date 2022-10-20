@@ -24,9 +24,24 @@ const NoteList = ({ retrieved_notes, handleSidebarDisplay, createNote }) => {
 	// 	// replace notes in notes context state
 	// 	setNotes({ note: retrieved_notes, type: "replace" });
 	// }, [retrieved_notes]);
-	
+
+	const groupSort = (a, b) => {
+		a = a.name.toLowerCase();
+		b = b.name.toLowerCase();
+
+		if (a === b) {
+			return 0;
+		} else if (a === "ungrouped") {
+			return -1;
+		} else if (b === "ungrouped" ) {
+			return 1;
+		} else {
+			return a > b ? 1 : -1;
+		}
+	};
+
 	const openNote = (note) => {
-		console.log(notes, note );
+		console.log(notes, note);
 		note.action = "edit";
 		setCurrentNote(note);
 		router.push(`/note/${note.id}`);
@@ -39,21 +54,23 @@ const NoteList = ({ retrieved_notes, handleSidebarDisplay, createNote }) => {
 	return (
 		<>
 			<Container css={{ padding: "0 0.5rem", textOverflow: "break" }}>
-				{("groups" in notes) ? (
-					notes.groups.map((key) => (
-						<NoteGroup
-							name={key.name}
-							key={key.id}
-							id={key.id}
-							color={key.color}
-							notes={key.notes}
-							openNote={openNote}
-							createNote={createNote}
-						/>
-					))
+				{"groups" in notes ? (
+					notes.groups
+						.sort(groupSort)
+						.map((key) => (
+							<NoteGroup
+								name={key.name}
+								key={key.id}
+								id={key.id}
+								color={key.color}
+								notes={key.notes}
+								openNote={openNote}
+								createNote={createNote}
+							/>
+						))
 				) : (
 					<div>
-						<p>Oops.. no notes yet</p>
+						<p>Oops... no notes yet</p>
 					</div>
 				)}
 			</Container>
