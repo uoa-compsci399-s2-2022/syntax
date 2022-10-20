@@ -3,13 +3,13 @@ Extended note-taking app for programming students
 
 [![https://vercel.com/?utm_source=10outof10&utm_campaign=oss](powered-by-vercel.svg)](https://vercel.com/?utm_source=10outof10&utm_campaign=oss)
 
-#### Our editor and main page
-
+#### Editor
+TBA
 
 #### Home Page
 ![syntax home page](https://syntaximages.s3.ap-southeast-2.amazonaws.com/home.jpg)
 
-#### Sign-In Page via Google
+#### Sign In Page (via Google)
 ![Sign-in page](https://syntaximages.s3.ap-southeast-2.amazonaws.com/sign_in.jpg)
 
 ## Project Description
@@ -17,11 +17,11 @@ The purpose of this project is to create a note-taking application designed for 
 
 ## Technologies
 
-### Language:
+### Languages
 * Typescript
 * Javascript
 
-### Libraries/Frameworks/APIs:
+### Libraries/Frameworks/APIs
 * React 
 * Prisma
 * Next.js
@@ -41,8 +41,8 @@ The purpose of this project is to create a note-taking application designed for 
 * Tldraw
 * md-to-pdf
 
-### Softwares:
-* Amazon S3 from Amazon Web Services
+### Cloud Services
+* Amazon S3 (AWS)
 
 ## Getting Started
 ```
@@ -50,11 +50,17 @@ $ npm install
 $ npx prisma generate
 $ npm run dev
 ```
-## Project Management Tool
+
+## Project Management Tools
 * [Jira](https://www.atlassian.com/software/jira) 
 * [Notion](https://www.notion.so/)
 
 ## Future Plans
+TBA
+
+## Acknowledgements
+
+Our client Paravmir and sponsor Vercel.
 
 ## Team 10 out of 10
 | Name  | Role |
@@ -64,7 +70,3 @@ $ npm run dev
 | [Sarah Kim](https://github.com/bonjuruu)  | Backend Developer  |
 | [Hayden White](https://github.com/HFx6)  | Backend Developer, Designer  |
 | [Kevin Yip](https://github.com/kyip053)  | Backend Developer  |
-
-### Acknowledgements
-
-Our client Paravmir and sponsor Vercel. 
