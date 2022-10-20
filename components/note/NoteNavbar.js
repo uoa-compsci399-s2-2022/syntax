@@ -45,6 +45,28 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 	const currentNote = useNote();
 	const setNotes = useDispatchNotes();
 
+	const placeholderUserData = [
+		{
+			name: "Johnny Appleseed",
+			color: "grey",
+			email: "j.appleseed@gmail.com",
+			owner: true
+		},
+		{ name: "Jane Doe", color: "grey", email: "jane.d@hotmail.com" },
+		{ name: "Test User 1", color: "grey", email: "testtest123@gmail.com" },
+		{ name: "Test User 2", color: "grey", email: "tu2@hotmail.com" },
+		{ name: "Test User 3", color: "grey", email: "tu3@hotmail.com" },
+		{ name: "Test User 4", color: "grey", email: "tu4@hotmail.com" },
+		{ name: "Test User 5", color: "grey", email: "tu5@hotmail.com" },
+		{ name: "Test User 6", color: "grey", email: "tu6@hotmail.com" },
+		{
+			name: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec metus enim, sodales vel nisl vel, lobortis suscipit enim. Praesent scelerisque fringilla urna, at semper mi aliquam sed. Ut nec placerat nulla. Sed non odio vel dolor sodales maximus. Duis ut leo velit. Duis egestas nisi sit amet diam egestas, quis aliquam odio fermentum. Morbi eu ultrices felis.",
+			color: "grey",
+			email:
+				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec metus enim, sodales vel nisl vel, lobortis suscipit enim. Praesent scelerisque fringilla urna, at semper mi aliquam sed. Ut nec placerat nulla. Sed non odio vel dolor sodales maximus. Duis ut leo velit. Duis egestas nisi sit amet diam egestas, quis aliquam odio fermentum. Morbi eu ultrices felis."
+		}
+	];
+
 	const deleteNoteHandler = async () => {
 		try {
 			console.log(currentNote);
@@ -182,7 +204,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 			</Navbar.Content>
 			<Navbar.Content gap={5}>
 				<Navbar.Item>
-					<AvatarGroup />
+					<AvatarGroup users={placeholderUserData} />
 				</Navbar.Item>
 				<Navbar.Item>
 					<Button
@@ -246,8 +268,9 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 				{/* <ExportModal open={exportModal} oncloseHandler={closeHandler} closeHandler={exportNoteHandler} /> */}
 				<ShareModal
 					open={shareModal}
-					onclosehandler={closeHandler}
-					closeHandler={shareHandler}
+					closeHandler={closeHandler}
+					shareHandler={shareHandler}
+					users={placeholderUserData}
 				/>
 				<DeleteModal
 					open={deleteModal}
