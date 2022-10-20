@@ -275,7 +275,6 @@ const NoteGroup = ({
 			/>
 			<DeleteModal
 				open={deleteModal}
-				onclosehandler={closeHandler}
 				closeHandler={closeHandler}
 				deleteHandler={deleteGroupHandler}
 				type="group"
