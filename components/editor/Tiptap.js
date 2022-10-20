@@ -30,6 +30,8 @@ import { WebrtcProvider } from 'y-webrtc'
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
 import { useSession } from "next-auth/react"
 import { useEffect, useRef, useState } from "react";
+import { fromUint8Array, toUint8Array } from 'js-base64'
+import { yDocToProsemirrorJSON, prosemirrorJSONToYDoc } from 'y-prosemirror'
 
 EditorView.prototype.updateState = function updateState(state) {
 	if (!this.docView) return // This prevents the matchesNode error on hot reloads
@@ -71,118 +73,93 @@ async function uploadDrawing(files) {
 	return null
 }
 
+const getInitialUser = () => {
+	return {
+		name: "Loading...",
+		color: getRandomColour()
+	}
+}
+
+
+
 export default function () {
 	const currentNote = useNote();
 	const [drawModal, setDrawModal] = useState(false);
 	const [drawContent, setDrawContent] = useState(null);
-	const ydoc = useRef();
-	const collabWebrtcProvider = useRef();
-	// const [ydoc, setYdoc] = useState();
-	// const [collabWebrtcProvider, setProvider] = useState(null);
+	const [provider, setProvider] = useState(null);
+	const [currentUser, setCurrentUser] = useState(getInitialUser)
 	const { data: session, status } = useSession()
 
-	// depending on how tiptap renders extensions, this could also be moved 
-	// directly into the editor itself which would make things simpler 
-	// useEffect(()=>{
-	// 	if(currentNote.room){
-	// 		ydoc.current = new Y.Doc();
-	// 	collabWebrtcProvider.current = new WebrtcProvider(currentNote.id, ydoc.current);
-	// 	}
-		
-	// }, [])
-	// const ydoc = useRef(() => {
-	// 	return new Y.Doc();
-	// });
+	//Creates room based on note id. Deletes the old ydoc and creates a new blank one.
+const ydoc = new Y.Doc();
 
-	// const collabWebrtcProvider = useRef(() => {
-	// 	return new WebrtcProvider(currentNote.id, ydoc.current);
-	// });
+	useEffect(() => {
+		console.log("load tiptap", currentNote.room);
 
-	const baseExtensions = [
-		StarterKit.configure({
-			codeBlock: false,
-			bulletList: false,
-			history: false
-		}),
-		Underline,
-		Superscript,
-		Subscript,
-		Youtube,
-		BulletList.configure({
-			HTMLAttributes: {
-				class: "editor-ul"
-			}
-		}),
-		Link.configure({
-			HTMLAttributes: {
-				class: "editor-link"
-			}
-		}),
-		CodeBlockNode,
-		TipTapCustomImage().configure({
-			HTMLAttributes: {
-				class: 'image'
-			}
-		}),
-		Drawing().configure({
-			HTMLAttributes: {
-				class: 'drawing'
-			}
-		}),
-	];
-
-	// if user is the only one in the room, then we need to grab the ydoc from the database
-	// and init the editor with that (ydoc.current). But if there are already useres in the room
-	// we get the ydoc from them to allow data sync. after that saving is the same eitherway
-
-	// saving might be as simple as: 
-	// on room init: editorJSON -> ydoc -> base64 encode -> store in db 
-	// getting ydoc: get from database -> encode to arraybuffer -> init ydoc -> set ydoc in editor
-	// getting ydoc from room: get ydoc from peers -> set ydoc in editor
-	// syncing ydoc: get ydoc from db -> encode as ydoc -> applyupdates(?) -> save back into database
-
-	// this is all based on the links i talked about in #back-end
-
+		if (provider !== null) {
+			provider.destroy()
+		}
+		if (currentNote.room) {
+			console.log("shared note");
+			setProvider(new WebrtcProvider(currentNote.id, ydoc))
+		}
+	}, [currentNote.id])
 
 	const editor = useEditor({
 		disablePasteRules: [Drawing, "drawing"],
-		...(currentNote.room ? {
-			extensions: [
-				...baseExtensions,
-				// save and apply update to ydoc here
-				// DebounceYDOCSave: DebounceYDOCSave().configure({
-				// 	noteId: currentNote.id,
-				// 	noteTitle: currentNote.title
-				// }),
-			],
-			Collaboration: Collaboration.configure({
-				document: ydoc.current,
+		extensions: [
+			StarterKit.configure({
+				codeBlock: false,
+				bulletList: false,
+				history: false
 			}),
-			CollaborationCursor: CollaborationCursor.configure({
-				provider: collabWebrtcProvider.current,
+			Underline,
+			Superscript,
+			Subscript,
+			Youtube,
+			BulletList.configure({
+				HTMLAttributes: {
+					class: "editor-ul"
+				}
+			}),
+			Link.configure({
+				HTMLAttributes: {
+					class: "editor-link"
+				}
+			}),
+			CodeBlockNode,
+
+			DebounceSave().configure({
+				noteId: currentNote.id,
+				noteTitle: currentNote.title,
+				YDOC: ydoc
+			}),
+			TipTapCustomImage().configure({
+				HTMLAttributes: {
+					class: 'image'
+				}
+			}),
+			Drawing().configure({
+				HTMLAttributes: {
+					class: 'drawing'
+				}
+			}),
+			Collaboration.configure({
+				document: ydoc
+			}),
+			(provider !== null) ? CollaborationCursor.configure({
+				provider: provider,
 				user: {
 					name: session?.user?.name,
 					color: getRandomColour(),
 				},
-			}),
-			onDestroy() {
-				collabWebrtcProvider.current.destroy();
-			},
-		} : {
-			extensions: [
-				...baseExtensions,
-				DebounceSave().configure({
-					noteId: currentNote.id,
-					noteTitle: currentNote.title
-				}),
-			],
-
-			content: currentNote.body
-		}),
-		onFocus({editor}) {
-			console.log(editor);
-		}
-
+			}) : (null)
+		],
+		// onCreate({editor}){
+		// 	const u8arr = toUint8Array(currentNote.YDOC);
+		// 	Y.applyUpdate(ydoc, u8arr);
+		// },
+		content: currentNote.body,
 	}, [currentNote.id]);
 
 	async function closeHandler(files) {
@@ -215,6 +192,7 @@ export default function () {
 	const drawingOpenHandler = () => {
 		setDrawModal(true)
 	}
+
 
 	return (
 		<Container
@@ -271,7 +249,7 @@ export default function () {
 			<Spacer />
 			<DrawingModal open={drawModal} closeHandler={closeHandler} content={drawContent} />
 			<div>
-				{/* <p>Users: {editor?.storage.collaborationCursor?.users.length} </p> */}
+				<p>Users: {editor?.storage.collaborationCursor?.users.length} </p>
 			</div>
 		</Container>
 	);

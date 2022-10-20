@@ -53,25 +53,44 @@ export const DebounceSave = () => {
 		onBeforeCreate({ editor }) {
 			if (this.options.noteId == undefined) console.warn("noteId not set");
 		},
-		// onCreate({ editor }) {
-		// 	console.log("create");
-		// },
-		onUpdate({ editor }) {
-			const yjson = prosemirrorJSONToYDoc(editor.schema, editor.getJSON());
-			const ut8arr = Y.encodeStateAsUpdate(yjson)
-			const ydocb64 = fromUint8Array(ut8arr);
-			// console.log(yDocToProsemirrorJSON(this.options.ydoc));
-			debounceSave({
-				id: this.options.noteId,
-				title: this.options.noteTitle,
-				json: editor.getJSON(),
-				ydoc: ydocb64
-			});
+		onCreate({ editor }) {
+			this.options.YDOC.on('update', function handler(update, origin) {
+					// const yjson = prosemirrorJSONToYDoc(editor.schema, editor.getJSON());
+					// const ut8arr = Y.encodeStateAsUpdate(yjson)
+					// const ydocb64 = fromUint8Array(ut8arr);
+					
+					// console.log(yDocToProsemirrorJSON(this.options.ydoc));
+					// debounceSave({
+					// 	id: this.options.noteId,
+					// 	title: this.options.noteTitle,
+					// 	json: editor.getJSON(),
+					// 	ydoc: ydocb64
+					// });
+					console.log(origin);
+			 })
+		},
+		// onUpdate({ editor }) {
+		// 	console.log("update", editor);
+		// 	const yjson = prosemirrorJSONToYDoc(editor.schema, editor.getJSON());
+		// 	const ut8arr = Y.encodeStateAsUpdate(yjson)
+		// 	const ydocb64 = fromUint8Array(ut8arr);
+			
+		// 	// console.log(yDocToProsemirrorJSON(this.options.ydoc));
+		// 	// debounceSave({
+		// 	// 	id: this.options.noteId,
+		// 	// 	title: this.options.noteTitle,
+		// 	// 	json: editor.getJSON(),
+		// 	// 	ydoc: ydocb64
+		// 	// });
 						
 			
-		},
+		// },
+		// onTransaction({ editor, transaction }){
+		// 	console.log("transaction", transaction);
+		// },
 		onDestroy() {
 			console.log("destroy");
-		},
+		}
+
 	});
 };
