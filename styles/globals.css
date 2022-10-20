@@ -159,21 +159,20 @@ input[type="search"]::-webkit-search-results-decoration {
 
 /* color picker styling (in group modal) */
 #color-picker {
-  width: 5rem;
+	width: 5rem;
 	border: none;
 	outline: none;
-  background-color: transparent;
-  border-color: transparent;
+	background-color: transparent;
+	border-color: transparent;
 	-webkit-appearance: none;
 }
 
 #color-picker::-webkit-color-swatch-wrapper {
 	padding: 0;
-
 }
 #color-picker::-webkit-color-swatch {
 	border: 1px solid var(--nextui-colors-border);
-  border-radius: var(--nextui-radii-lg);
+	border-radius: var(--nextui-radii-lg);
 }
 
 /* home page & sign in page background keyframes*/
@@ -220,4 +219,4 @@ input[type="search"]::-webkit-search-results-decoration {
 	float: left;
 	height: 0;
 	pointer-events: none;
-  }
+}
