@@ -34,7 +34,7 @@ const ExportModal = ({ open, oncloseHandler, closeHandler }) => {
         </Grid.Container>
       </Modal.Body>
       <Modal.Footer>
-        <Button auto bordered onClick={() => closeHandler(selected)}>
+        <Button auto onPress={() => closeHandler(selected)}>
           Export
         </Button>
         <Button auto bordered flat color="error" onPress={oncloseHandler}>
