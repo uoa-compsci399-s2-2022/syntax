@@ -17,7 +17,6 @@ import {
 	useDispatchNotes
 } from "../../modules/AppContext";
 import { useRouter } from "next/router";
-import Link from "next/link";
 
 const SearchModal = ({ open, closeHandler }) => {
 	const { checked, type } = useTheme();
@@ -47,10 +46,13 @@ const SearchModal = ({ open, closeHandler }) => {
 	const [codeChecked, setCodeChecked] = useState(false);
 	const [sq, setSQ] = useState("");
 	const [returnedNotes, setNotes] = useState([]);
+	const setCurrentNote = useDispatchNote();
+	const notes = useNotes();
+	const router = useRouter();
 
 	const throttledSearch = useRef(
 		throttle(async (searchtype, sorting, sq) => {
-			if (sq) search(searchtype, sorting, sq);
+			if (sq && Object.values(sorting).some(Boolean)) search(searchtype, sorting, sq);
 			else {
 				setNotes([]);
 			}
@@ -74,6 +76,18 @@ const SearchModal = ({ open, closeHandler }) => {
 		});
 		const notes = await res.json();
 		setNotes(notes);
+	};
+
+	const openNote = (preNote) => {
+		for (let group of temp1.groups) {
+			if (group.id == preNote.groupId) for (let note of group.notes) {
+				if (note.id == preNote._id.$oid) {
+					note.action = "edit";
+					setCurrentNote(note);
+					router.push(`/note/${note.id}`, undefined, { shallow: true });
+				};
+			}
+		}
 	};
 
 	return (
@@ -196,9 +210,13 @@ const SearchModal = ({ open, closeHandler }) => {
 
 						<Container css={{ padding: "0" }}>
 							{returnedNotes.map((note, index) => (
-								<Link href={`/note/${encodeURIComponent(note._id.$oid)}`}>
+								<a
+									onClick={() => {
+										openNote(note);
+									}}
+									key={index}>
 									<Container
-										key={index}
+
 										css={{
 											padding: "10px",
 											borderRadius: "12px",
@@ -229,7 +247,7 @@ const SearchModal = ({ open, closeHandler }) => {
 											})}
 										</Row>
 									</Container>
-								</Link>
+								</a>
 							))}
 						</Container>
 					</>
