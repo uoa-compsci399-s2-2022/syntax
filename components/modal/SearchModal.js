@@ -28,10 +28,10 @@ const SearchModal = ({ open, closeHandler }) => {
 		"Title (descending)": {
 			title: -1
 		},
-		"Last Modified (ascending)": {
+		"Last modified (ascending)": {
 			updatedAt: 1
 		},
-		"Last Modified (descending)": {
+		"Last modified (descending)": {
 			updatedAt: -1
 		},
 		"Created (ascending)": {
@@ -207,10 +207,26 @@ const SearchModal = ({ open, closeHandler }) => {
 												background: "$accents4"
 											}
 										}}
+										onClick={closeHandler}
 									>
 										<Row>{note.title}</Row>
 										<Row css={{ color: "$accents6" }}>
-											{note.updatedAt.$date}
+											Last modified: {new Date(note.updatedAt.$date).toLocaleString("en-us", {
+												year: "numeric",
+												month: "short",
+												day: "numeric",
+												hour: "numeric",
+												minute: "numeric"
+											})}
+										</Row>
+										<Row css={{ color: "$accents6" }}>
+											Created: {new Date(note.createdAt.$date).toLocaleString("en-us", {
+												year: "numeric",
+												month: "short",
+												day: "numeric",
+												hour: "numeric",
+												minute: "numeric"
+											})}
 										</Row>
 									</Container>
 								</Link>
