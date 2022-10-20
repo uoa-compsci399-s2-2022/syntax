@@ -47,7 +47,8 @@ const NoteDisplay = () => {
 				css={{
 					margin: "0",
 					padding: "0 10% 10% 10%",
-					maxWidth: "100vw"
+					maxWidth: "100vw",
+					background: "$background"
 				}}
 			>
 				<div
