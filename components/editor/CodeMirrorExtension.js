@@ -88,7 +88,7 @@ export const Extension = ({
 					background: type === "dark" ? oneDarkColors.background : "white",
 					color: type === "dark" ? oneDarkColors.ivory : "#4D4D4C",
 					borderRadius: "$lg",
-					padding: "$md $sm",
+					padding: "$md $lg",
 					margin: "$10 0",
 					border: type === "dark" ? "" : "1px solid $border"
 				}}
