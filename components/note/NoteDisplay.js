@@ -36,7 +36,6 @@ const NoteDisplay = () => {
 	};
 
 	if (!currentNote && notes) return null;
-	console.log(currentNote, notes);
 	return (
 		<>
 			<Container

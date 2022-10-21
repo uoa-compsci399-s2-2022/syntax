@@ -179,7 +179,6 @@ const NoteGroup = ({
 								}
 							>
 								Edit
-								{console.log("default", defaultGroup)}
 							</Dropdown.Item>
 							<Dropdown.Item
 								key="delete"
