@@ -29,7 +29,7 @@ import * as Y from 'yjs'
 import { WebrtcProvider } from 'y-webrtc'
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
 import { useSession } from "next-auth/react"
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { fromUint8Array, toUint8Array } from 'js-base64'
 import { yDocToProsemirrorJSON, prosemirrorJSONToYDoc } from 'y-prosemirror'
 
@@ -91,17 +91,16 @@ export default function () {
 	const { data: session, status } = useSession()
 
 	//Creates room based on note id. Deletes the old ydoc and creates a new blank one.
-const ydoc = new Y.Doc();
+	const ydoc = useMemo(() => new Y.Doc(), [currentNote.id]);
 
 	useEffect(() => {
 		console.log("load tiptap", currentNote.room);
-
 		if (provider !== null) {
 			provider.destroy()
 		}
-		if (currentNote.room) {
+		if (currentNote.room !== null) {
 			console.log("shared note");
-			setProvider(new WebrtcProvider(currentNote.id, ydoc))
+			setProvider(new WebrtcProvider(currentNote.id+"_43785b3457gt", ydoc))
 		}
 	}, [currentNote.id])
 
@@ -155,12 +154,19 @@ const ydoc = new Y.Doc();
 				},
 			}) : (null)
 		],
-		// onCreate({editor}){
-		// 	const u8arr = toUint8Array(currentNote.YDOC);
-		// 	Y.applyUpdate(ydoc, u8arr);
-		// },
-		content: currentNote.body,
-	}, [currentNote.id]);
+		onUpdate({editor}){
+			console.log(currentNote.room==null || provider?.awareness?.states?.size==1);
+			console.log(provider?.awareness?.states?.size);
+		},
+		onDestroy(){
+			provider?.destroy();
+		},
+		onCreate({editor}){
+			console.log(editor?.storage.collaborationCursor);
+			if(editor?.storage.collaborationCursor.users.length==1) editor.commands.setContent(currentNote.body);
+		},
+		...((currentNote.room==null) ? {content: currentNote.body} : {}),
+	}, [currentNote.id, provider]);
 
 	async function closeHandler(files) {
 		if (typeof files !== "undefined") {
