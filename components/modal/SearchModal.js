@@ -59,16 +59,17 @@ const SearchModal = ({ open, closeHandler }) => {
 		}, 1000)
 	).current;
 
-	const triggerSearch = (psq) => {
+	const triggerSearch = (psq, ss=selectedSort) => {
 		throttledSearch(
 			{ titleChecked, contentChecked, codeChecked },
-			selectedSort,
+			ss,
 			psq
 		);
 	};
 
 	const search = async (searchtype, sorting, sq) => {
 		const sortingField = sortOptions[sorting];
+		console.log(sortingField, sorting)
 		let res = await fetch("/api/search", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
@@ -197,7 +198,7 @@ const SearchModal = ({ open, closeHandler }) => {
 								aria-label="Sort Options"
 								onAction={(key) => {
 									setSelectedSort(key);
-									triggerSearch(sq);
+									triggerSearch(sq, key);
 								}}
 							>
 								{Object.entries(sortOptions).map(([k, v]) => (
