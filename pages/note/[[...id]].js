@@ -43,8 +43,25 @@ export const getServerSideProps = async ({ req, res, params }) => {
 	}
 	var note;
 	if (id && id.length == 1) {
-		note = await getNoteByID(id[0]);
+		try {
+			note = await getNoteByID(id[0]);
+		} catch {
+			return {
+				redirect: {
+					destination: '/note',
+					permanent: false
+				}
+			}
+		}
 		if (!note) {
+			return {
+				redirect: {
+					destination: '/note',
+					permanent: false,
+				},
+			}
+		}
+		else if (session.user.id != note.userId) {
 			return {
 				redirect: {
 					destination: '/note',
