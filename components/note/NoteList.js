@@ -7,7 +7,7 @@ import {
 	useNote,
 	useDispatchNote,
 	useNotes,
-	useDispatchNotes
+	useDispatchNotes,
 } from "@/modules/AppContext";
 
 const NoteList = ({ retrieved_notes, handleSidebarDisplay, createNote }) => {
@@ -25,21 +25,6 @@ const NoteList = ({ retrieved_notes, handleSidebarDisplay, createNote }) => {
 	// 	setNotes({ note: retrieved_notes, type: "replace" });
 	// }, [retrieved_notes]);
 
-	const groupSort = (a, b) => {
-		a = a.name.toLowerCase();
-		b = b.name.toLowerCase();
-
-		if (a === b) {
-			return 0;
-		} else if (a === "ungrouped") {
-			return -1;
-		} else if (b === "ungrouped" ) {
-			return 1;
-		} else {
-			return a > b ? 1 : -1;
-		}
-	};
-
 	const openNote = (note) => {
 		console.log(notes, note);
 		note.action = "edit";
@@ -55,19 +40,18 @@ const NoteList = ({ retrieved_notes, handleSidebarDisplay, createNote }) => {
 		<>
 			<Container css={{ padding: "0 0.5rem", textOverflow: "break" }}>
 				{"groups" in notes ? (
-					notes.groups
-						.sort(groupSort)
-						.map((key) => (
-							<NoteGroup
-								name={key.name}
-								key={key.id}
-								id={key.id}
-								color={key.color}
-								notes={key.notes}
-								openNote={openNote}
-								createNote={createNote}
-							/>
-						))
+					notes.groups.map((group) => (
+						<NoteGroup
+							name={group.name}
+							key={group.id}
+							id={group.id}
+							color={group.color}
+							notes={group.notes}
+							defaultGroup={group.default}
+							openNote={openNote}
+							createNote={createNote}
+						/>
+					))
 				) : (
 					<div>
 						<p>Oops... no notes yet</p>

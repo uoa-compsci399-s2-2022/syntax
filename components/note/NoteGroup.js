@@ -19,6 +19,7 @@ const NoteGroup = ({
 	notes,
 	openNote,
 	id,
+	defaultGroup,
 	createNote
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -153,7 +154,7 @@ const NoteGroup = ({
 						<Dropdown.Button
 							light
 							ripple={false}
-							disabled={name === "Ungrouped" ? true : false}
+							disabled={defaultGroup ? true : false}
 							icon={
 								<EllipsisHorizontalIcon
 									style={{ height: "var(--icon-size-xs)" }}
@@ -178,6 +179,7 @@ const NoteGroup = ({
 								}
 							>
 								Edit
+								{console.log("default", defaultGroup)}
 							</Dropdown.Item>
 							<Dropdown.Item
 								key="delete"
