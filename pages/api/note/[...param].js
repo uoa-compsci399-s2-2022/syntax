@@ -203,42 +203,46 @@ const htmlTemplate = (title, body, name, css) => {
 
 
 export default async function handle(req, res) {
-    const { param } = req.query
     const session = await getSession({ req });
-    if (param.length === 3){
-        if (param[1] === "export"){
-            const noteId = param[0]
-            const note = await getNoteByID(noteId)
-            const title = note.title
-            const body = generateHTML(note.body, [StarterKit, Drawing(), TipTapCustomImage(null)])
-            if (param[2] === "md"){
-                const html = htmlTemplate(title, body, note.user.name, false)
-                const turndownService = new TurndownService()
-                const markdown = turndownService.turndown(html)
-                res.status(200).json({text: markdown})
-
-            } else if (param[2] === "html"){
-                let html = htmlTemplate(title, body, note.user.name, true)
-                html = "<!doctype html>" + html
-                res.status(200).json({text: html})
-                
-            } else if (param[2] === "pdf") {
-                const html = htmlTemplate(title, body, note.user.name, false)
-                const turndownService = new TurndownService()
-                const markdown = turndownService.turndown(html)
-                const pdf = await mdToPdf({content: markdown})
-                const json = pdf.content.toJSON()
-                res.status(200).json({
-                    text: json.data
-                })
-            }else {
-                return res.status(501).json({ message: `` });
+    if (session) {
+        const { param } = req.query
+        if (param.length === 3){
+            if (param[1] === "export"){
+                const noteId = param[0]
+                const note = await getNoteByID(noteId)
+                const title = note.title
+                const body = generateHTML(note.body, [StarterKit, Drawing(), TipTapCustomImage(null)])
+                if (param[2] === "md"){
+                    const html = htmlTemplate(title, body, note.user.name, false)
+                    const turndownService = new TurndownService()
+                    const markdown = turndownService.turndown(html)
+                    res.status(200).json({text: markdown})
+    
+                } else if (param[2] === "html"){
+                    let html = htmlTemplate(title, body, note.user.name, true)
+                    html = "<!doctype html>" + html
+                    res.status(200).json({text: html})
+                    
+                } else if (param[2] === "pdf") {
+                    const html = htmlTemplate(title, body, note.user.name, false)
+                    const turndownService = new TurndownService()
+                    const markdown = turndownService.turndown(html)
+                    const pdf = await mdToPdf({content: markdown})
+                    const json = pdf.content.toJSON()
+                    res.status(200).json({
+                        text: json.data
+                    })
+                }else {
+                    return res.status(501).json({ message: "Method not allowed" });
+                }
+            } else{
+                return res.status(501).json({ message: `/api/note/${param.join('/')} is not implemented` });
             }
-        } else{
+        }
+        else{
             return res.status(501).json({ message: `/api/note/${param.join('/')} is not implemented` });
         }
-    }
-    else{
-        return res.status(501).json({ message: `/api/note/${param.join('/')} is not implemented` });
+    } else {
+        return res.status(401).json({message: "Unauthorized access"})
     }
 }

@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import aws from 'aws-sdk'
 import { resolve } from "path";
+import { getSession } from "next-auth/react";
 
 //Set up S3 client with configurations
 const s3Client = new aws.S3({
@@ -14,6 +15,8 @@ const s3Client = new aws.S3({
 const sizeLimit = 5242880
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const session = await getSession()
+  if (session){
     const { objectKey } = req.query
     if (req.method === "GET") {
       try{
@@ -83,5 +86,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         }});
     } else{
         return res.status(405).json({ message: "Method not allowed" });
-    }
+    }    
+  } else {
+    return res.status(401).json({message: "Unauthorized access"})
   }
+}
