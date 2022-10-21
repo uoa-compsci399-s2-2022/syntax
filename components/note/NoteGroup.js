@@ -19,6 +19,7 @@ const NoteGroup = ({
 	notes,
 	openNote,
 	id,
+	defaultGroup,
 	createNote
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -48,7 +49,9 @@ const NoteGroup = ({
 			});
 			const deletedGroup = await res.json();
 			setNotes({ note: deletedGroup, type: "removeGroup" });
-			router.push(`/note/${currentNote.id || ""}`, undefined, { shallow: true });
+			router.push(`/note/${currentNote.id || ""}`, undefined, {
+				shallow: true
+			});
 			setDeleteModal(false);
 		} catch (error) {
 			console.log(error);
@@ -119,13 +122,16 @@ const NoteGroup = ({
 						marginRight: "1rem"
 					}}
 				>
-					{isOpen ? (
+					{isOpen && notes.length > 0 ? (
 						<ChevronDownIcon style={{ height: "var(--icon-size-xs)" }} />
 					) : (
 						<ChevronRightIcon
 							style={{
 								height: "var(--icon-size-xs)",
-								color: notes.length > 0 ? "var(--nextui-colors-text)" : "var(--nextui-colors-textDisabled)"
+								color:
+									notes.length > 0
+										? "var(--nextui-colors-text)"
+										: "var(--nextui-colors-textDisabled)"
 							}}
 						/>
 					)}
@@ -148,7 +154,7 @@ const NoteGroup = ({
 						<Dropdown.Button
 							light
 							ripple={false}
-							disabled={name === "Ungrouped" ? true : false}
+							disabled={defaultGroup ? true : false}
 							icon={
 								<EllipsisHorizontalIcon
 									style={{ height: "var(--icon-size-xs)" }}
@@ -173,6 +179,7 @@ const NoteGroup = ({
 								}
 							>
 								Edit
+								{console.log("default", defaultGroup)}
 							</Dropdown.Item>
 							<Dropdown.Item
 								key="delete"
@@ -188,7 +195,10 @@ const NoteGroup = ({
 					<Button
 						light
 						ripple={false}
-						onPress={() => createNote(id)}
+						onPress={() => {
+							createNote(id);
+							setIsOpen(true);
+						}}
 						icon={<PlusIcon style={{ height: "var(--icon-size-xs)" }} />}
 						css={{
 							minWidth: "0",
@@ -275,7 +285,6 @@ const NoteGroup = ({
 			/>
 			<DeleteModal
 				open={deleteModal}
-				onclosehandler={closeHandler}
 				closeHandler={closeHandler}
 				deleteHandler={deleteGroupHandler}
 				type="group"

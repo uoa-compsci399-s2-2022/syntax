@@ -1,14 +1,10 @@
 import Head from "next/head";
 import { Container, Spacer, Dropdown, Card } from "@nextui-org/react";
 import Tiptap from "@/components/editor/Tiptap";
-import { NoteMetaData } from './NoteMetaData'
+import { NoteMetaData } from "./NoteMetaData";
 import { debounce } from "lodash";
 import { useRef } from "react";
-import {
-	useNote,
-	useNotes,
-	useDispatchNotes
-} from "../../modules/AppContext";
+import { useNote, useNotes, useDispatchNotes } from "../../modules/AppContext";
 
 const NoteDisplay = () => {
 	const currentNote = useNote();
@@ -51,7 +47,8 @@ const NoteDisplay = () => {
 				css={{
 					margin: "0",
 					padding: "0 10% 10% 10%",
-					maxWidth: "100vw"
+					maxWidth: "100vw",
+					background: "$background"
 				}}
 			>
 				<div
@@ -105,12 +102,23 @@ const NoteDisplay = () => {
 											css={{
 												padding: "0",
 												height: "min-content",
-												lineHeight: "0",
+												lineHeight: "2",
 												borderRadius: "0",
-												zIndex: "0"
+												zIndex: "0",
+												overflow: "hidden"
 											}}
 										>
-											{currentNote.group.name}
+											<span
+												style={{
+													minWidth: "0",
+													maxWidth: "200px",
+													overflow: "hidden",
+													whiteSpace: "nowrap",
+													textOverflow: "ellipsis"
+												}}
+											>
+												{currentNote.group.name}
+											</span>
 										</Dropdown.Button>
 										<Dropdown.Menu
 											disallowEmptySelection
@@ -153,7 +161,6 @@ const NoteDisplay = () => {
 			<Spacer />
 		</>
 	);
-
 };
 
 export default NoteDisplay;
