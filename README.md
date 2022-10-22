@@ -4,12 +4,12 @@ Extended note-taking app for programming students
 [![https://vercel.com/?utm_source=10outof10&utm_campaign=oss](powered-by-vercel.svg)](https://vercel.com/?utm_source=10outof10&utm_campaign=oss)
 
 #### Editor
-![Editor (dark mode)](https://i.imgur.com/S8lrF3T.png)
-![Editor (light mode)](https://i.imgur.com/SY0VzBH.png)
+![Editor (dark mode)](https://i.imgur.com/GbcE0gK.png)
+![Editor (light mode)](https://i.imgur.com/8wLahnf.png)
 
 #### Home Page
-![Home page (dark mode)](https://i.imgur.com/jWkmwOW.png)
-![Home page (light mode)](https://i.imgur.com/wecZBsj.png)
+![Home page (dark mode)](https://i.imgur.com/I9CgjRp.png)
+![Home page (light mode)](https://i.imgur.com/KIF6Wy7.png)
 
 #### Sign In Page (via Google)
 ![Sign-in page (dark mode)](https://i.imgur.com/O6DB0Pv.png)
