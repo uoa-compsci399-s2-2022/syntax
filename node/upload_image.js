@@ -5,9 +5,8 @@ import { Plugin } from "prosemirror-state";
  * function for image drag n drop(for tiptap)
  * @see https://gist.github.com/slava-vishnyakov/16076dff1a77ddaca93c4bccd4ec4521#gistcomment-3744392
  */
-export type UploadFn = (image: File) => Promise<string>;
 
-export const uploadImagePlugin = (upload: UploadFn) => {
+export const uploadImagePlugin = (upload) => {
 	return new Plugin({
 		props: {
 			handlePaste(view, event) {
@@ -50,7 +49,7 @@ export const uploadImagePlugin = (upload: UploadFn) => {
 						return false;
 					}
 
-					const images = Array.from(event!.dataTransfer!.files).filter(file => /image/i.test(file.type));
+					const images = Array.from(event.dataTransfer.files).filter(file => /image/i.test(file.type));
 
 					if (images.length === 0) {
 						return false;
@@ -68,17 +67,8 @@ export const uploadImagePlugin = (upload: UploadFn) => {
 							const node = schema.nodes.image.create({
 								src: await upload(image),
 							});
-							const transaction = view.state.tr.insert(coordinates!.pos, node);
+							const transaction = view.state.tr.insert(coordinates.pos, node);
 							view.dispatch(transaction);
-						} else {
-							reader.onload = readerEvent => {
-								const node = schema.nodes.image.create({
-									src: readerEvent!.target?.result,
-								});
-								const transaction = view.state.tr.insert(coordinates!.pos, node);
-								view.dispatch(transaction);
-							};
-							reader.readAsDataURL(image);
 						}
 					});
 					return false;
