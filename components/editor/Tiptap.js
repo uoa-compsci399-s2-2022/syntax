@@ -11,8 +11,8 @@ import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import { useState } from "react";
 import Toolbar from "./Toolbar.js";
-import { TipTapCustomImage } from "@/node/Image";
-import { Drawing } from "@/node/Drawing";
+import { TipTapCustomImage } from "../../node/Image";
+import { Drawing } from "../../node/Drawing";
 import { useRouter } from "next/router";
 import { Container, Button, Spacer } from "@nextui-org/react";
 import { EditorView } from 'prosemirror-view'
