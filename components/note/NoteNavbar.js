@@ -83,16 +83,16 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 	 			link.click();
 	 		}
 	 		else if (fileType == "PDF"){
-        let res = await fetch(`/api/note/${currentNote.id}/export/pdf`, {
-          method: "GET",
-        });
-        const {text} = await res.json()
-        const blob = await new Blob([Buffer.from(text)], {type: "application/pdf"})
-	 			const link = document.createElement('a');
-	 			link.href = URL.createObjectURL(blob);
-	 			link.setAttribute('download', `${currentNote.title}.pdf`);
-	 			link.click();
-      } 
+				let res = await fetch(`/api/note/${currentNote.id}/export/pdf`, {
+				method: "GET",
+				});
+				const {text} = await res.json()
+				const blob = await new Blob([Buffer.from(text.data)], {type: "application/pdf"})
+				const link = document.createElement('a');
+				link.href = URL.createObjectURL(blob);
+				link.setAttribute('download', `${currentNote.title}.pdf`);
+				link.click();
+			} 
 	 	} catch (error) {
 	 		console.log(error)
 	 	}
