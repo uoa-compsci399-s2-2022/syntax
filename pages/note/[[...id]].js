@@ -62,7 +62,7 @@ export const getServerSideProps = async ({ req, res, params }) => {
 		};
 	}
 	const [notes] = await getAllNotesByUserID(session?.user?.id);
-
+	console.log(note);
 	return {
 		props: { notes, note },
 	};

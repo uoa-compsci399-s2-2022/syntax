@@ -3,13 +3,14 @@ import { Container, Spacer, Dropdown } from "@nextui-org/react";
 import Tiptap from "@/components/editor/Tiptap";
 import { debounce } from "lodash";
 import { useRef } from "react";
+import { useRouter } from "next/router";
 import { useNote, useNotes, useDispatchNotes } from "../../modules/AppContext";
 
 const NoteDisplay = () => {
 	const currentNote = useNote();
 	const notes = useNotes();
 	const setNotes = useDispatchNotes();
-
+	const router = useRouter();
 	const debounceSave = useRef(
 		debounce(async (criteria) => {
 			saveContent(criteria);
@@ -17,7 +18,7 @@ const NoteDisplay = () => {
 	).current;
 
 	const saveContent = async (content) => {
-		console.log("editor debounce", content);
+		console.log("save title debounce", content);
 		let note = {
 			id: content.id,
 			title: content.title,
@@ -32,6 +33,9 @@ const NoteDisplay = () => {
 
 		const updatedNote = await res.json();
 		setNotes({ note: updatedNote, type: "edit" });
+		router.push(`/note/${updatedNote.id}`, undefined, {
+			shallow: true
+		});
 	};
 
 	if (!currentNote && notes) return null;

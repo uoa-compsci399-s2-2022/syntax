@@ -111,24 +111,24 @@ export default function () {
 			noteTitle: currentNote.title
 		}),],
 		content: currentNote.body
-	}, [currentNote.body]);
-
-	async function closeHandler(files) {
-		if (typeof files !== "undefined") {
-			if (typeof files[0] !== "undefined") {
-				const src = await uploadDrawing(files)
-				if (src === null) {
-					console.log("File size was too large")
-				} else if (drawContent === null) {
-					editor.chain().focus()?.setDrawing({ src })?.run();
-				}
-				else {
-					editor.chain().focus()?.editDrawing({ src })?.run();
-				}
-			}
-		}
-		setDrawModal(false)
-		setDrawContent(null)
+	}, [currentNote.id]);
+	
+  async function closeHandler(files) {
+    if (typeof files !== "undefined"){
+      if (typeof files[0] !== "undefined"){
+        const src = await uploadDrawing(files)
+        if (src === null) {
+          console.log("File size was too large")
+        } else if (drawContent === null) {
+          editor.chain().focus()?.setDrawing({src})?.run();
+        }
+        else {
+          editor.chain().focus()?.editDrawing({src})?.run();
+        }
+      }
+    }
+    setDrawModal(false)
+    setDrawContent(null)
 	};
 
 	const editHandler = async (key) => {
