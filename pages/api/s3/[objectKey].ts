@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import aws from 'aws-sdk'
 import { resolve } from "path";
 import { getSession } from "next-auth/react";
+import rateLimit from "../../../utils/rate-limit"
 
 //Set up S3 client with configurations
 const s3Client = new aws.S3({
@@ -12,11 +13,20 @@ const s3Client = new aws.S3({
     apiVersion: '2006-03-01',
 });
 
-const sizeLimit = 5242880
+const limiter = rateLimit({
+  interval: 60 * 1000,
+  uniqueTokenPerInterval: 500
+})
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const session = await getSession()
+  const session = await getSession({req})
+  console.log(session)
   if (session){
+    try{
+      await limiter.check(res, 100, 'CACHE_TOKEN')
+    } catch {
+      res.status(429).json({error: "Rate limit exceeded"})
+    }
     const { objectKey } = req.query
     if (req.method === "GET") {
       try{
@@ -30,18 +40,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 message: err,
                 errorStack: err.stack
               })
-              resolve()
             }else {
               const json = JSON.parse(data.Body.toString())
               res.status(200).json({
                 file: json
               });
-              resolve()
             }
           })
       } catch (err) {
           res.status(400).json({ message: err});
-          resolve()
       }
     }
     else if (req.method === "PATCH") {
@@ -60,11 +67,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           const request = await s3Client.putObjectTagging(params);
           const response = await request.send();
           res.status(204).json({});
-          resolve()
         } catch (err) {
           console.log(err);
           res.status(400).json({ message: err });
-          resolve()
         }
     }
     else if (req.method === "DELETE") {

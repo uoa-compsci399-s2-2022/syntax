@@ -2,11 +2,22 @@
 
 import { createNote, updateNote, deleteNote, createNoteInGroup } from "../../prisma/Note";
 import { getSession } from "next-auth/react";
+import rateLimit from "../../utils/rate-limit"
+
+const limiter = rateLimit({
+	interval: 60 * 1000,
+	uniqueTokenPerInterval: 500
+})
 
 export default async function handle(req, res) {
 
   const session = await getSession({ req });
   if (session) {
+    try{
+			await limiter.check(res, 100, 'CACHE_TOKEN')
+		} catch {
+			res.status(429).json({error: "Rate limit exceeded"})
+		}
     if (req.method == "POST") {
       const { title, body, groupId } = req.body;
       console.log("POST", groupId)

@@ -5,6 +5,7 @@ import StarterKit from "@tiptap/starter-kit";
 import { TipTapCustomImage } from "@/node/Image";
 import { Drawing } from "@/node/Drawing";
 import TurndownService from 'turndown';
+import rateLimit from "../../../utils/rate-limit"
 import mdToPdf from "md-to-pdf";
 
 const CSS = `<style>
@@ -199,12 +200,19 @@ const htmlTemplate = (title, body, name, css) => {
         `<html><head><meta charset="utf-8"></head><body><h1>${title}<h1/><h4>${name}</h4><br><hr>${body}</body></html>`
 )} 
 
-
-
+const limiter = rateLimit({
+    interval: 60 * 1000,
+    uniqueTokenPerInterval: 500
+})
 
 export default async function handle(req, res) {
     const session = await getSession({ req });
     if (session) {
+        try{
+            await limiter.check(res, 100, 'CACHE_TOKEN')
+        } catch {
+            res.status(429).json({error: "Rate limit exceeded"})
+        }
         const { param } = req.query
         if (param.length === 3){
             if (param[1] === "export"){

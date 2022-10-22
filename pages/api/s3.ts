@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import aws from 'aws-sdk'
 import crypto from 'crypto'
 import { getSession } from "next-auth/react";
-
+import rateLimit from "../../utils/rate-limit"
 
 //File path of image location
 const path = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_BUCKET_REGION}.amazonaws.com/`
@@ -22,9 +22,19 @@ const sizeLimit = 5242880
 //File name generator to prevent duplicates
 const generateFileName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex')
 
+const limiter = rateLimit({
+  interval: 60 * 1000,
+  uniqueTokenPerInterval: 500
+})
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const session = await getSession()
+  const session = await getSession({req})
   if (session){
+    try{
+      await limiter.check(res, 100, 'CACHE_TOKEN')
+    } catch {
+      res.status(429).json({error: 'Rate limit exceeded'})
+    }
     if (req.method === "POST") {
       try {
         let type = req.body;
