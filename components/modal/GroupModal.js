@@ -75,8 +75,6 @@ const InputModal = ({
 					onPress={() => {
 						if (!value || value === "") {
 							setHelperText("Name is required");
-						} else if (value.toLowerCase() === "ungrouped") {
-							setHelperText("Invalid name");
 						} else {
 							closeContentHelper(value);
 						}

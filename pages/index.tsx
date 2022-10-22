@@ -16,15 +16,12 @@ import {
 } from "@nextui-org/react";
 import { useState } from "react";
 import dynamic from "next/dynamic";
+import Head from "next/head";
 import { useTheme as useNextTheme } from "next-themes";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
 import HomeToolbar from "@/components/home/HomeToolbar";
 import { baseExtensions } from "@/components/editor/baseExtensions";
 import { EditorContent, useEditor } from "@tiptap/react";
-
-const DrawingModal = dynamic(() => import("@/components/editor/Tldraw"), {
-	ssr: false,
-});
 
 export const getServerSideProps = async ({ req }) => {
 	const session = await getSession({ req });
@@ -44,7 +41,6 @@ export default function Component() {
 	const { data: session, status } = useSession();
 	const { setTheme } = useNextTheme();
 	const { isDark, type } = useTheme();
-
 	const editor = useEditor({
 		extensions: [...baseExtensions()],
 		content: `
