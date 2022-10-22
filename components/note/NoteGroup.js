@@ -49,7 +49,7 @@ const NoteGroup = ({
 			});
 			const deletedGroup = await res.json();
 			setNotes({ note: deletedGroup, type: "removeGroup" });
-			router.push(`/note/${currentNote.id || ""}`, undefined, {
+			router.push(`/note/${id!=currentNote.groupId ? currentNote.groupId : ""}`, undefined, {
 				shallow: true
 			});
 			setDeleteModal(false);

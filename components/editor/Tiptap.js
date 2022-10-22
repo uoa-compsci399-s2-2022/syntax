@@ -138,7 +138,7 @@ export default function () {
       })
 		],
 		content: currentNote.body
-	}, [currentNote.body]);
+	}, [currentNote.id]);
 	
   async function closeHandler(files) {
     if (typeof files !== "undefined"){

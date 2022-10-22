@@ -38,7 +38,6 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 
 	const deleteNoteHandler = async () => {
 		try {
-			console.log(currentNote);
 			let res = await fetch(`/api/note`, {
 				method: "DELETE",
 				headers: { "Content-Type": "application/json" },
@@ -46,9 +45,10 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 			});
 			const deletedNote = await res.json();
 			setNotes({ note: deletedNote, type: "remove" });
+			router.push(`/note`, "/");
 			setDeleteModal(false);
 			setSelectedKey();
-			router.push(`/note/`, undefined, { shallow: true });
+			
 		} catch (error) {
 			console.log(error);
 		}

@@ -1,16 +1,14 @@
-import {
-	useNote,
-	useNotes
-} from "../../modules/AppContext";
+
 import { Dropdown } from "@nextui-org/react";
 import { debounce } from "lodash";
 import { useRef } from "react";
-
+import { useNote, useNotes, useDispatchNotes } from "../../modules/AppContext";
 
 export const NoteMetaData = () => {
 	const notes = useNotes();
 	console.log(notes);
 	const currentNote = useNote();
+	const setNotes = useDispatchNotes();
 	const debounceSave = useRef(
 		debounce(async (criteria) => {
 			saveContent(criteria);
