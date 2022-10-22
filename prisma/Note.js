@@ -108,10 +108,7 @@ export const updateNote = async (id, updatedData, session) => {
 	let userId = session?.user.id;
 	const updatedNote = await prisma.note.update({
 		where: {
-			id_userId: {
-				id,
-				userId
-			}
+			id: id
 		},
 		data: {
 			...updatedData,
