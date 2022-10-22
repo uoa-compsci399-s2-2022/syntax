@@ -17,31 +17,6 @@ import { Image } from "@tiptap/extension-image"
  * ![Lorem](image.jpg "Ipsum") -> [, "Lorem", "image.jpg", "Ipsum"]
  */
 
-declare module "@tiptap/core" {
-	interface Commands<ReturnType> {
-		image: {
-			/**
-			 * Add an image
-			 */
-			setImage: (options: { src: string, alt?: string, title?: string }) => ReturnType;
-		};
-		customImage: {
-			/**
-			 * Add an image by URL
-			 */
-			setImageURL: (options: { src: string, alt?: string, title?: string }) => ReturnType;
-			/**
-			 * Add an image by file
-			 */
-			setImageFile: (options: { file: File, alt?: string, title?: string }) => ReturnType;
-			/**
-			 * Update an image's attributes
-			 */
-			updateImage: (options: { src?: string, alt?: string, title?: string, size?: string, float?: string }) => ReturnType;
-		}
-	}
-}
-
 const IMAGE_INPUT_REGEX = /!\[(.+|:?)\]\((\S+)(?:(?:\s+)["'](\S+)["'])?\)/;
 const sizeLimit = 5242880
 
@@ -64,7 +39,7 @@ async function tag(image, Key, Value){
 	
 
 /** upload images */
-async function upload(file: File | Blob): Promise<string>{
+async function upload(file){
 	//fetch data from endpoint for presigned link and image src
 	if (file.size > sizeLimit){
 		throw Error("File size is too large")
@@ -78,7 +53,7 @@ async function upload(file: File | Blob): Promise<string>{
 	const fields = data.fields; //formdata for post
 	const formData = new FormData();
 	Object.entries({ ...fields}).forEach(([key, value]) => {
-	  formData.append(key, value as string)
+	  formData.append(key, value)
 	})
 	formData.append('file', file)
 	//POST to upload file
@@ -92,7 +67,7 @@ async function upload(file: File | Blob): Promise<string>{
 	return null
   }
 
-async function getImage(src): Promise<string>{
+async function getImage(src){
 		const res = await fetch(src)
 		const blob = await res.blob()
 		const url = await upload(blob)
@@ -136,7 +111,7 @@ export const TipTapCustomImage = () => {
 				tag: "img[src]",
 				getAttrs: dom => {
 					if (typeof dom === "string") return {};
-					const element = dom as HTMLImageElement;
+					const element = dom;
 
 					const obj = {
 						src: element.getAttribute("src"),

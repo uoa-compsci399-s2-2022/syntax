@@ -4,13 +4,16 @@ Extended note-taking app for programming students
 [![https://vercel.com/?utm_source=10outof10&utm_campaign=oss](powered-by-vercel.svg)](https://vercel.com/?utm_source=10outof10&utm_campaign=oss)
 
 #### Editor
-TBA
+![Editor (dark mode)](https://i.imgur.com/GbcE0gK.png)
+![Editor (light mode)](https://i.imgur.com/8wLahnf.png)
 
 #### Home Page
-![syntax home page](https://syntaximages.s3.ap-southeast-2.amazonaws.com/home.jpg)
+![Home page (dark mode)](https://i.imgur.com/I9CgjRp.png)
+![Home page (light mode)](https://i.imgur.com/KIF6Wy7.png)
 
 #### Sign In Page (via Google)
-![Sign-in page](https://syntaximages.s3.ap-southeast-2.amazonaws.com/sign_in.jpg)
+![Sign-in page (dark mode)](https://i.imgur.com/O6DB0Pv.png)
+![Sign-in page (light mode)](https://i.imgur.com/ny3wFFQ.png)
 
 ## Project Description
 The purpose of this project is to create a note-taking application designed for computer science students. To adapt our application to suit computer science students, the application is able to support writing and executing code, searching by code, collaboration as well as other major note-taking features.
