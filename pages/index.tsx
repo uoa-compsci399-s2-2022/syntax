@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
-import BlobBackground from "@/components/BlobBackground";
+import BlobBackground from "@/components/home/BlobBackground";
 import {
 	Button,
 	Text,
@@ -12,16 +12,16 @@ import {
 	Container,
 	Row,
 	Card,
-	Link
+	Link,
 } from "@nextui-org/react";
+import { useState } from "react";
+import dynamic from "next/dynamic";
 import Head from "next/head";
-
 import { useTheme as useNextTheme } from "next-themes";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
-
-import Toolbar from "@/components/editor/Toolbar";
+import HomeToolbar from "@/components/home/HomeToolbar";
+import { baseExtensions } from "@/components/editor/baseExtensions";
 import { EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 
 export const getServerSideProps = async ({ req }) => {
 	const session = await getSession({ req });
@@ -30,35 +30,43 @@ export const getServerSideProps = async ({ req }) => {
 		return {
 			redirect: {
 				destination: "/note",
-				permanent: false
-			}
+				permanent: false,
+			},
 		};
 	}
 	return { props: {} };
 };
 
 export default function Component() {
-	const router = useRouter();
 	const { data: session, status } = useSession();
-
 	const { setTheme } = useNextTheme();
 	const { isDark, type } = useTheme();
 	const editor = useEditor({
-		extensions: [StarterKit],
+		extensions: [...baseExtensions()],
 		content: `
-  <h1>Welcome to syntax!</h1>
-  <h3>A note-taking app <b>specifically</b> made for programmers.</h3>
-  <h4>Invite other users to collaborate on the same note and work efficiently together :D</h4>
+<h2>A note-taking app made for programmers by programmers.</h2>
+<p>Write, compile, and execute code from within your notes, removing the need for an external code editor.</p>
+<p>Languages supported include <b>Python</b>, <b>Java</b>, <b>JavaScript</b>, <b>C</b>, and <b>C++</b>.</p>
 
-  <blockquote>"Any fool can write code that a computer can understand. Good programmers write code that humans can understand."<br> - Martin Fowler</blockquote>
-  
-  <h4>Write, compile, and execute your code in your notes and receive live outputs!</h4>
-  <p>Syntax supports selected languages such as <b>Python, Java, JavaScript, C, and C++</b>. 
-  <br>All the necessary languages for programmers!</p>
-  
-  <br><br>
-  <h6>Psst! Feel free to try me out! ;)</h6>
-  `
+<code_block code_content='for n in range(1, 11):
+	if n % 3 == 0 and n % 5 == 0:
+		print("FizzBuzz")
+	elif n % 3 == 0:
+		print("Fizz")
+	elif n % 5 == 0:
+		print("Buzz")
+	else:
+		print(n)' code_output="" system_output="" language="python3"></code_block>
+
+<p>syntax also contains many other features designed to enhance your note-taking experience, including markdown,
+drawing & stylus support, images, Youtube video embeds, and more.</p><p></p>
+
+<p>Real-time collaborative editing is also supported - invite other users to collaborate on the same note and work efficiently together!</p>
+
+<blockquote>"Any fool can write code that a computer can understand. Good programmers write code that humans can understand."<br> - Martin Fowler</blockquote>
+
+<p><em>Psst! Feel free to try me out!</em></p>
+`,
 	});
 
 	return (
@@ -69,7 +77,7 @@ export default function Component() {
 				disableShadow
 				maxWidth="fluid"
 				css={{
-					background: "transparent"
+					background: "transparent",
 				}}
 				containerCss={{ background: "transparent !important" }}
 			>
@@ -84,12 +92,14 @@ export default function Component() {
 					/>
 				</Navbar.Brand>
 				<Navbar.Content>
+					<Navbar.Item>
 					<Switch
 						checked={isDark}
 						iconOn={<MoonIcon />}
 						iconOff={<SunIcon />}
 						onChange={(e) => setTheme(e.target.checked ? "dark" : "light")}
 					/>
+					</Navbar.Item>
 					<Navbar.Item>
 						{!session ? (
 							<Button auto onPress={() => signIn()}>
@@ -113,16 +123,23 @@ export default function Component() {
 				<Text weight="normal" size={32} css={{ textAlign: "center" }}>
 					Code. Learn. Collaborate.
 				</Text>
-
 				<Spacer y={2} />
-
-				<Card css={{ $$cardColor: isDark ? "#121212" : "white" }}>
-					<Card.Body>
-						<Toolbar editor={editor} />
-						<Spacer />
-						<EditorContent editor={editor} style={{ minWidth: "100%" }} />
-					</Card.Body>
-				</Card>
+				<Container
+					css={{
+						background: "$background",
+						borderRadius: "$lg",
+						zIndex: 2,
+						padding: "0",
+						border: "1px solid $border",
+					}}
+				>
+					<HomeToolbar editor={editor} />
+					<Spacer />
+					<EditorContent
+						editor={editor}
+						style={{ minWidth: "100%", padding: "0 5% 5% 5%" }}
+					/>
+				</Container>
 			</Container>
 
 			<Spacer y={3} />

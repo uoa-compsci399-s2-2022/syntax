@@ -30,6 +30,12 @@ const NoteGroup = ({
 	const setNotes = useDispatchNotes();
 	const router = useRouter();
 
+	useEffect(() => {
+		if (id === currentNote.groupId) {
+			setIsOpen(true);
+		}
+	}, [currentNote.groupId]);
+
 	const openHandler = () => {
 		setIsOpen((current) => !current);
 	};
