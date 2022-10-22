@@ -7,12 +7,14 @@ const MenuItem = ({
 	action,
 	isActive = null,
 	breakpoint,
-	handleFileChange
+	handleFileChange,
 }) => {
 	const fileRef = useRef();
 	const breakpointStyle = {};
 	if (breakpoint) {
-		if (breakpoint === "sm") {
+		if (breakpoint === "xs") {
+			breakpointStyle = { display: "none", "@xs": { display: "flex" } };
+		} else if (breakpoint === "sm") {
 			breakpointStyle = { display: "none", "@sm": { display: "flex" } };
 		} else if (breakpoint === "md") {
 			breakpointStyle = { display: "none", "@md": { display: "flex" } };
@@ -30,7 +32,7 @@ const MenuItem = ({
 						...breakpointStyle,
 						backgroundColor: "transparent",
 						padding: "0",
-						margin: "0 0.8rem 0 0.5rem"
+						margin: "0 0.8rem 0 0.5rem",
 					}}
 				>
 					<>
@@ -56,7 +58,7 @@ const MenuItem = ({
 					css={{
 						...breakpointStyle,
 						backgroundColor: "transparent",
-						marginRight: "0.3rem"
+						marginRight: "0.3rem",
 					}}
 				/>
 			)}

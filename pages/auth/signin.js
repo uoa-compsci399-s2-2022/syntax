@@ -1,4 +1,4 @@
-import BlobBackground from "@/components/BlobBackground";
+import BlobBackground from "@/components/home/BlobBackground";
 import { Button, Text, Container, Card } from "@nextui-org/react";
 import { signIn, getCsrfToken, getProviders } from "next-auth/react";
 

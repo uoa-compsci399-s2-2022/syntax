@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
-import BlobBackground from "@/components/BlobBackground";
+import BlobBackground from "@/components/home/BlobBackground";
 import {
 	Button,
 	Text,
@@ -18,7 +18,7 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import { useTheme as useNextTheme } from "next-themes";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
-import Toolbar from "@/components/editor/Toolbar";
+import HomeToolbar from "@/components/home/HomeToolbar";
 import { baseExtensions } from "@/components/editor/baseExtensions";
 import { EditorContent, useEditor } from "@tiptap/react";
 
@@ -42,8 +42,6 @@ export const getServerSideProps = async ({ req }) => {
 
 export default function Component() {
 	const { data: session, status } = useSession();
-	const [drawModal, setDrawModal] = useState(false);
-	const [drawContent, setDrawContent] = useState(null);
 	const { setTheme } = useNextTheme();
 	const { isDark, type } = useTheme();
 
@@ -55,32 +53,25 @@ export default function Component() {
 <p>Languages supported include <b>Python</b>, <b>Java</b>, <b>JavaScript</b>, <b>C</b>, and <b>C++</b>.</p>
 
 <code_block code_content='for n in range(1, 11):
-		if n % 3 == 0 and n % 5 == 0:
-			print("FizzBuzz")
-		elif n % 3 == 0:
-			print("Fizz")
-		elif n % 5 == 0:
-			print("Buzz")
-		else:
-			print(n)' code_output="" system_output="" language="python3"></code_block>
+	if n % 3 == 0 and n % 5 == 0:
+		print("FizzBuzz")
+	elif n % 3 == 0:
+		print("Fizz")
+	elif n % 5 == 0:
+		print("Buzz")
+	else:
+		print(n)' code_output="" system_output="" language="python3"></code_block>
 
 <p>syntax also contains many other features designed to enhance your note-taking experience, including markdown,
-drawing/stylus support, images, Youtube video embeds, and more.</p>
+drawing & stylus support, images, Youtube video embeds, and more.</p><p></p>
+
+<p>Real-time collaborative editing is also supported - invite other users to collaborate on the same note and work efficiently together!</p>
 
 <blockquote>"Any fool can write code that a computer can understand. Good programmers write code that humans can understand."<br> - Martin Fowler</blockquote>
 
-<em>Psst! Feel free to try me out!</em>
+<p><em>Psst! Feel free to try me out!</em></p>
 `,
 	});
-
-	const drawingOpenHandler = () => {
-		setDrawModal(true);
-	};
-
-	async function closeHandler(files) {
-		setDrawModal(false);
-		setDrawContent(null);
-	}
 
 	return (
 		<>
@@ -105,12 +96,14 @@ drawing/stylus support, images, Youtube video embeds, and more.</p>
 					/>
 				</Navbar.Brand>
 				<Navbar.Content>
+					<Navbar.Item>
 					<Switch
 						checked={isDark}
 						iconOn={<MoonIcon />}
 						iconOff={<SunIcon />}
 						onChange={(e) => setTheme(e.target.checked ? "dark" : "light")}
 					/>
+					</Navbar.Item>
 					<Navbar.Item>
 						{!session ? (
 							<Button auto onPress={() => signIn()}>
@@ -136,18 +129,19 @@ drawing/stylus support, images, Youtube video embeds, and more.</p>
 				</Text>
 				<Spacer y={2} />
 				<Container
-					css={{ background: "$background", borderRadius: "$lg", zIndex: 2 }}
+					css={{
+						background: "$background",
+						borderRadius: "$lg",
+						zIndex: 2,
+						padding: "0",
+						border: "1px solid $border",
+					}}
 				>
-					<Toolbar editor={editor} drawingOpenHandler={drawingOpenHandler} />
+					<HomeToolbar editor={editor} />
 					<Spacer />
 					<EditorContent
 						editor={editor}
 						style={{ minWidth: "100%", padding: "0 5% 5% 5%" }}
-					/>
-					<DrawingModal
-						open={drawModal}
-						closeHandler={closeHandler}
-						content={drawContent}
 					/>
 				</Container>
 			</Container>
