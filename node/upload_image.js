@@ -9,37 +9,6 @@ import { Plugin } from "prosemirror-state";
 export const uploadImagePlugin = (upload) => {
 	return new Plugin({
 		props: {
-			handlePaste(view, event) {
-				console.log("----onhandlePaste image---");
-
-				const items = Array.from(event.clipboardData?.items || []);
-				const { schema } = view.state;
-
-				console.log({ items });
-
-				items.forEach(item => {
-					const image = item.getAsFile();
-
-					console.log({ image, item });
-
-					if (item.type.indexOf("image") === 0) {
-						console.log("item is an image");
-						event.preventDefault();
-
-						if (upload && image) {
-							upload(image).then(src => {
-								const node = schema.nodes.image.create({
-									src,
-								});
-								const transaction = view.state.tr.replaceSelectionWith(node);
-								view.dispatch(transaction);
-							});
-						}
-					}
-				});
-
-				return true;
-			},
 			handleDOMEvents: {
 				drop(view, event) {
 					console.log("----handleDom.onDrop----");
@@ -73,6 +42,37 @@ export const uploadImagePlugin = (upload) => {
 					});
 					return false;
 				},
+				paste(view, event){
+					console.log("----onhandlePaste image---");
+	
+					const items = Array.from(event.clipboardData?.items || []);
+					const { schema } = view.state;
+	
+					console.log({ items });
+	
+					items.forEach(item => {
+						const image = item.getAsFile();
+	
+						console.log({ image, item });
+	
+						if (item.type.indexOf("image") === 0) {
+							console.log("item is an image");
+							event.preventDefault();
+	
+							if (upload && image) {
+								upload(image).then(src => {
+									const node = schema.nodes.image.create({
+										src,
+									});
+									const transaction = view.state.tr.replaceSelectionWith(node);
+									view.dispatch(transaction);
+								});
+							}
+						}
+					});
+	
+					return true;
+				}
 			},
 		},
 	});
