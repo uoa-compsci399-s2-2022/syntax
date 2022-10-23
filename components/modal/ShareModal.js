@@ -1,36 +1,165 @@
-import { Button, Modal, Input, Spacer, Text, Grid} from "@nextui-org/react";
-const share_link = 'Insert Link Here';
+import { XMarkIcon } from "@heroicons/react/24/solid";
+import {
+	Button,
+	Modal,
+	Input,
+	Avatar,
+	Container,
+	Row,
+	Col,
+	Spacer,
+	useTheme
+} from "@nextui-org/react";
 
-const ShareModal = ({ open, onclosehandler, closeHandler }) => {
+const ShareModal = ({ open, closeHandler, shareHandler, users }) => {
+	const { checked, type } = useTheme();
+	const share_link = "Insert Link Here";
+
 	return (
-		<Modal blur width='500px' open={open} onClose={onclosehandler} css={{ margin: "10px"}}>
-			<Modal.Header><Text size='$2xl'>Invite others to collaborate with on this note!</Text></Modal.Header>
+		<Modal
+			blur
+			scroll
+			closeButton
+			width="500px"
+			open={open}
+			onClose={closeHandler}
+			css={{ margin: "10px" }}
+		>
+			<Modal.Header>Invite others to collaborate on this note</Modal.Header>
 			<Modal.Body>
-					<Grid.Container>
-						<Grid xs={9} sm={9.9} xl>
-							<Input clearable bordered
-						width='89%'
-						label="Enter their email here"/>
-						</Grid>
-						<Grid auto>
-							<Spacer y={1.3}/>
-							<Button auto xs onPress={onclosehandler}>
-							Invite
-						</Button>
-						</Grid>
-					</Grid.Container>
-					<Spacer y={1}/>
-                    <hr></hr>
-					
-					<Input width='83%' readOnly
-					label="Don't know their email? Share this link!"
-					placeholder='Share Link TextBox' 
-					className='cliptext' initialValue={share_link} contentRight={<Button auto responsive onPress={() => {navigator.clipboard.writeText(share_link)}}>Copy Link</Button>}/>
+				<Container
+					display="flex"
+					alignItems="flex-end"
+					wrap="nowrap"
+					css={{ padding: "0", gap: "1rem" }}
+				>
+					<Input
+						clearable
+						type="email"
+						label="Enter their email here"
+						animated={false}
+						css={{
+							flex: "1",
+							$$inputColor:
+								type === "dark"
+									? "var(--nextui-colors-background)"
+									: "var(--nextui-colors-accents0)"
+						}}
+					/>
+					<Button
+						auto
+						xs
+						onPress={closeHandler}
+						css={{ alignSelf: "flex-end" }}
+					>
+						Invite
+					</Button>
+				</Container>
+				<Spacer
+					css={{
+						minWidth: "100%",
+						marginTop: "0 !important",
+						marginLeft: "0 !important",
+						borderBottom: "1px solid $border"
+					}}
+				/>
+				<Container css={{ padding: "0" }}>
+					People with access
+					<Spacer />
+					{users.map((user, index) => (
+						<Row
+							align="center"
+							key={index}
+							css={{
+								gap: "1rem",
+								padding: "0.3rem 0"
+							}}
+						>
+							<Avatar
+								src={user.image}
+								text={user.name[0]}
+								css={{
+									background: "$accents6"
+								}}
+							/>
+							<Col
+								css={{
+									maxWidth: "70%"
+								}}
+							>
+								<Row>
+									<span
+										style={{
+											overflow: "hidden",
+											whiteSpace: "nowrap",
+											textOverflow: "ellipsis"
+										}}
+									>
+										{user.name}
+									</span>
+								</Row>
+								<Row
+									css={{
+										color: "$accents6"
+									}}
+								>
+									<span
+										style={{
+											overflow: "hidden",
+											whiteSpace: "nowrap",
+											textOverflow: "ellipsis"
+										}}
+									>
+										{user.email}
+									</span>
+								</Row>
+							</Col>
+							{user.owner ? (
+								"Owner"
+							) : (
+								<Button
+									auto
+									light
+									ripple={false}
+									icon={
+										<XMarkIcon
+											style={{
+												height: "var(--icon-size-xs)"
+											}}
+										/>
+									}
+									css={{
+										color: "$accents6",
+										minWidth: "0",
+										maxWidth: "var(--icon-size-xs)",
+										height: "var(--icon-size-xs)",
+										padding: "0.8rem",
+										borderRadius: "var(--nextui-radii-sm)",
+										marginLeft: "auto",
+										"&:hover": {
+											background: "$accents4",
+											color: "$text"
+										}
+									}}
+								/>
+							)}
+						</Row>
+					))}
+				</Container>
 			</Modal.Body>
-			<Modal.Footer>
-				
-				<Button auto bordered flat color="error" onPress={onclosehandler}>
-					No
+			<Modal.Footer justify="space-between">
+				<Button
+					auto
+					bordered
+					flat
+					onPress={() => {
+						navigator.clipboard.writeText(share_link);
+					}}
+				>
+					Copy Link
+				</Button>
+				<Button auto onPress={closeHandler}>
+					Done
 				</Button>
 			</Modal.Footer>
 		</Modal>
