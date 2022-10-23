@@ -55,8 +55,8 @@ $ npm run dev
 ```
 
 ## Project Management Tools
-* [Jira](https://www.atlassian.com/software/jira) 
-* [Notion](https://www.notion.so/)
+* [Jira](https://10outof10.atlassian.net/jira/software/projects/TEN10/boards/1/roadmap) 
+* [Notion](https://elegant-joke-27e.notion.site/CS399-Project-Team-10-c6ba4a95d1ae4e14bf42fd1657b88776)
 
 ## Future Plans
 TBA
