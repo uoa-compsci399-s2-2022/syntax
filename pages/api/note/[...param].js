@@ -201,7 +201,7 @@ const htmlTemplate = (title, body, name, css) => {
 )} 
 
 const limiter = rateLimit({
-    interval: 60 * 1000,
+    interval: 1000,
     uniqueTokenPerInterval: 500
 })
 
@@ -209,9 +209,9 @@ export default async function handle(req, res) {
     const session = await getSession({ req });
     if (session) {
         try{
-            await limiter.check(res, 100, 'CACHE_TOKEN')
+            await limiter.check(res, 60, 'CACHE_TOKEN')
         } catch {
-            res.status(429).json({error: "Rate limit exceeded"})
+            return res.status(429).json({error: "Rate limit exceeded"})
         }
         const { param } = req.query
         if (param.length === 3){
@@ -224,12 +224,12 @@ export default async function handle(req, res) {
                     const html = htmlTemplate(title, body, note.user.name, false)
                     const turndownService = new TurndownService()
                     const markdown = turndownService.turndown(html)
-                    res.status(200).json({text: markdown})
+                    return res.status(200).json({text: markdown})
     
                 } else if (param[2] === "html"){
                     let html = htmlTemplate(title, body, note.user.name, true)
                     html = "<!doctype html>" + html
-                    res.status(200).json({text: html})
+                    return res.status(200).json({text: html})
                     
                 } else if (param[2] === "pdf") {
                     const html = htmlTemplate(title, body, note.user.name, false)
@@ -237,7 +237,7 @@ export default async function handle(req, res) {
                     const markdown = turndownService.turndown(html)
                     const pdf = await mdToPdf({content: markdown})
                     const json = pdf.content.toJSON()
-                    res.status(200).json({
+                    return res.status(200).json({
                         text: json.data
                     })
                 }else {

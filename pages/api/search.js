@@ -3,7 +3,7 @@ import { getSession } from "next-auth/react";
 import rateLimit from "../../utils/rate-limit"
 
 const limiter = rateLimit({
-	interval: 60 * 1000,
+	interval: 1 * 1000,
 	uniqueTokenPerInterval: 500
 })
 
@@ -11,9 +11,9 @@ export default async function handle(req, res) {
     const session = await getSession({ req });
     if (session) {
         try{
-			await limiter.check(res, 100, 'CACHE_TOKEN')
+			await limiter.check(res, 20, 'CACHE_TOKEN')
 		} catch {
-            res.status(429).json({error: "Rate limit exceeded"})
+			res.status(429).json({error: "Rate limit exceeded"})
 		}
         var title = undefined
         var content = undefined
@@ -32,6 +32,7 @@ export default async function handle(req, res) {
                 code = req.body
             }
             const note = await getAllNotesBySearch(title, content, code, sort, session?.user?.id)
+            console.log(note)
             return res.json(note)
         } else {
             return res.status(405).json({ message: "Method not allowed" });

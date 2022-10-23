@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import aws from 'aws-sdk'
-import { resolve } from "path";
 import { getSession } from "next-auth/react";
 import rateLimit from "../../../utils/rate-limit"
 
@@ -14,19 +13,18 @@ const s3Client = new aws.S3({
 });
 
 const limiter = rateLimit({
-  interval: 60 * 1000,
+  interval: 1000,
   uniqueTokenPerInterval: 500
 })
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({req})
-  console.log(session)
   if (session){
     try{
-      await limiter.check(res, 100, 'CACHE_TOKEN')
-    } catch {
-      res.status(429).json({error: "Rate limit exceeded"})
-    }
+			await limiter.check(res, 2, 'CACHE_TOKEN')
+		} catch {
+			res.status(429).json({error: "Rate limit exceeded"})
+		}
     const { objectKey } = req.query
     if (req.method === "GET") {
       try{
@@ -36,19 +34,19 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           };
           const request = await s3Client.getObject(params, function(err, data) {
             if (err) {
-              res.status(400).json({
+              return res.status(400).json({
                 message: err,
                 errorStack: err.stack
               })
             }else {
               const json = JSON.parse(data.Body.toString())
-              res.status(200).json({
+              return res.status(200).json({
                 file: json
               });
             }
           })
       } catch (err) {
-          res.status(400).json({ message: err});
+          return res.status(400).json({ message: err});
       }
     }
     else if (req.method === "PATCH") {
@@ -66,10 +64,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           };
           const request = await s3Client.putObjectTagging(params);
           const response = await request.send();
-          res.status(204).json({});
+          return res.status(204).json({});
         } catch (err) {
           console.log(err);
-          res.status(400).json({ message: err });
+          return res.status(400).json({ message: err });
         }
     }
     else if (req.method === "DELETE") {
@@ -80,12 +78,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       };
       const data = await s3Client.deleteObject(params, function(err, data) {
         if (err) {
-          res.status(400).json({
+          return res.status(400).json({
             message: err,
             errorStack: err.stack
           })
         }else {
-          res.status(200).json({
+          return res.status(200).json({
             file: data
           });
         }});

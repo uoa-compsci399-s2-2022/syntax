@@ -23,17 +23,17 @@ const sizeLimit = 5242880
 const generateFileName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex')
 
 const limiter = rateLimit({
-  interval: 60 * 1000,
-  uniqueTokenPerInterval: 500
+  interval: 1000,
+  uniqueTokenPerInterval: 500,
 })
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({req})
   if (session){
     try{
-      await limiter.check(res, 100, 'CACHE_TOKEN')
+      await limiter.check(res, 2, 'CACHE_TOKEN')
     } catch {
-      res.status(429).json({error: 'Rate limit exceeded'})
+      return res.status(429).json({error: 'Rate limit exceeded'})
     }
     if (req.method === "POST") {
       try {
@@ -66,14 +66,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         const data = await s3Client.createPresignedPost(fileParams);
         const imageUrl = path + fileName;
         //return data for presigned post url and image location url
-        res.status(200).json({ 
+        return res.status(200).json({ 
             data: data,
             src: imageUrl,
             key: fileName
       });
       } catch (err) {
         console.log(err);
-        res.status(400).json({ message: err });
+        return res.status(400).json({ message: err });
       }
     }
     else{
