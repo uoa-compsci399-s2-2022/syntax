@@ -34,7 +34,7 @@ export const createNote = async (title, body, session) => {
 		},
 	});
 
-	const note = await getNoteByID(newNote.id);
+	const note = await getNoteByID(newNote.id, session);
 	return note;
 };
 
@@ -56,7 +56,7 @@ export const createNoteInGroup = async (title, body, groupId, session) => {
 		},
 	});
 
-	const note = await getNoteByID(newNote.id);
+	const note = await getNoteByID(newNote.id, session);
 	return note;
 };
 
@@ -122,7 +122,7 @@ export const updateNote = async (id, updatedData, session) => {
 			...updatedData,
 		}
 	});
-	const note = await getNoteByID(updatedNote.id);
+	const note = await getNoteByID(updatedNote.id, session);
 	return note;
 };
 

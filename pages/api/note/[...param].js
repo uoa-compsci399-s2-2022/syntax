@@ -13,7 +13,7 @@ import { TipTapCustomImage } from "@/node/Image";
 import { Drawing } from "@/node/Drawing";
 import { CodeBlockNode } from "../../../node/ExportCode";
 import TurndownService from "turndown";
-import MarkdownPDF from "markdown-pdf";
+import mdToPdf from "md-to-pdf";
 import rateLimit from "../../../utils/rate-limit";
 
 const CSS = `<style>
@@ -118,7 +118,8 @@ export default async function handle(req, res) {
 				const title = note.title;
 				const body = generateHTML(note.body, [
 					...baseExtensions(),
-					TipTapCustomImage(null)
+					TipTapCustomImage(null),
+                    CodeBlockNode
 				]);
 				if (param[2] === "md") {
 					const html = htmlTemplate(title, body, note.user.name, false);
@@ -130,16 +131,14 @@ export default async function handle(req, res) {
 					html = "<!doctype html>" + html;
 					return res.status(200).json({ text: html });
 				} else if (param[2] === "pdf") {
-					const html = htmlTemplate(title, body, note.user.name, false);
-					const turndownService = new TurndownService();
-					const markdown = turndownService.turndown(html);
-					MarkdownPDF()
-						.from.string(markdown)
-						.to.buffer(function (er, string) {
-							res.status(200).json({
-								text: string
-							});
-						});
+                    const html = htmlTemplate(title, body, note.user.name, false)
+                    const turndownService = new TurndownService()
+                    const markdown = turndownService.turndown(html)
+                    const pdf = await mdToPdf({content: markdown})
+                    const json = pdf.content.toJSON()
+                    res.status(200).json({
+                        text: json.data
+                    })
 				} else {
 					return res.status(501).json({ message: "Method not allowed" });
 				}
