@@ -57,18 +57,50 @@ Deployed at http://syntaxapp.vercel.app/
 * Amazon S3 (AWS)
 
 ## Getting Started
+To get started clone this repo and install all dependancies 
 ```
+$ git clone https://github.com/uoa-compsci399-s2-2022/syntax.git
 $ npm install
-$ npx prisma generate
-$ npm run dev
 ```
+To use Prisma with the application, generate the schema bindings via
+```
+$ npx prisma generate
+```
+*this is a required step, doing so will cause the compile to fail*
+Any changes made to the schema will require you to re-generate the Prisma client.
+
+this will also mean, any previously created objects that now break the schema could fail.
+
+These Enviroment variables will need to be set
+
+* `S3_SECRET_KEY`
+* `S3_ACCESS_KEY`
+* `AWS_BUCKET_REGION`
+* `AWS_BUCKET_NAME`
+* `NEXTAUTH_SECRET`
+* `NEXTAUTH_URL`
+* `GOOGLE_SECRET`
+* `GOOGLE_ID`
+* `DATABASE_URL`
+
+[you can read more about them here](wiki/Environment-Variables)
+
+If hosting through vercel, you can [link a project to handle storing these for dev, preview and prod](https://vercel.com/docs/concepts/projects/environment-variables#development-environment-variables)
+
+```
+$ npm install -g vercel
+$ vercel link
+. . .
+$ vercel env pull
+```
+
 
 ## Project Management Tools
 * [Jira](https://10outof10.atlassian.net/jira/software/projects/TEN10/boards/1/roadmap) 
 * [Notion](https://elegant-joke-27e.notion.site/CS399-Project-Team-10-c6ba4a95d1ae4e14bf42fd1657b88776)
 
 ## Future Plans
-https://github.com/uoa-compsci399-s2-2022/syntax/wiki/Considerations-&-Future-Plans
+[Read here in the Wiki](wiki)
 
 ## Acknowledgements
 
