@@ -66,7 +66,7 @@ To use Prisma with the application, generate the schema bindings via
 ```
 $ npx prisma generate
 ```
-*this is a required step, doing so will cause the compile to fail*
+*this is a required step, not doing so will cause the compile to fail*
 Any changes made to the schema will require you to re-generate the Prisma client.
 
 this will also mean, any previously created objects that now break the schema could fail.
@@ -92,6 +92,13 @@ $ npm install -g vercel
 $ vercel link
 . . .
 $ vercel env pull
+```
+
+When deploying to Vercel, It might be likely that you do not wish to build every branch in your repo. you can [skip "build-steps"](https://vercel.com/docs/concepts/deployments/configure-a-build#skip-build-step).
+An example to only track and build "Production"
+
+```
+[ "$VERCEL_ENV" != production ]
 ```
 
 
