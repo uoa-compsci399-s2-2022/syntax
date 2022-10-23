@@ -52,7 +52,8 @@ const InputModal = ({
 				/>
 				<Grid.Container
 					css={{
-						marginTop: "1rem"
+						marginTop: "1rem",
+						alignItems: "center"
 					}}
 				>
 					<Grid xs={6} css={{ fontSize: "$sm", paddingLeft: "4px" }}>
@@ -61,6 +62,7 @@ const InputModal = ({
 					<Grid xs={6} css={{ display: "flex", justifyContent: "flex-end" }}>
 						<input
 							type="color"
+							id="color-picker"
 							value={selectedColor}
 							onChange={(e) => setSelectedColor(e.target.value)}
 						/>
@@ -73,8 +75,6 @@ const InputModal = ({
 					onPress={() => {
 						if (!value || value === "") {
 							setHelperText("Name is required");
-						} else if (value.toLowerCase() === "ungrouped") {
-							setHelperText("Invalid name");
 						} else {
 							closeContentHelper(value);
 						}

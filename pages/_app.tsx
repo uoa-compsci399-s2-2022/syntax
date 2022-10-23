@@ -8,11 +8,12 @@ import { NextUIProvider } from "@nextui-org/react";
 import { AppProps } from "next/app";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import '../styles/globals.css'
+import {Session} from "next-auth"
 
 export default function App({
   Component,
   pageProps: { session, ...pageProps },
-}: AppProps) {
+}) {
   return (
     <>
       <Head>
@@ -44,7 +45,7 @@ export default function App({
       </Head>
       <SessionProvider session={session}>
         <NextThemesProvider
-          defaultTheme="system"
+          defaultTheme="dark"
           attribute="class"
           value={{
             light: lightTheme.className,

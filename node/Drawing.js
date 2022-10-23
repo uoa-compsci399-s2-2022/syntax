@@ -2,39 +2,6 @@ import { Node, nodeInputRule } from "@tiptap/core";
 import { mergeAttributes } from "@tiptap/react";
 import { Plugin } from "prosemirror-state";
 
-/**
- * Tiptap Extension to upload images
- * @see  https://gist.github.com/slava-vishnyakov/16076dff1a77ddaca93c4bccd4ec4521#gistcomment-3744392
- * @since 7th July 2021
- *
- * Matches following attributes in Markdown-typed image: [, alt, src, title]
- *
- * Example:
- * ![Lorem](image.jpg) -> [, "Lorem", "image.jpg"]
- * ![](image.jpg "Ipsum") -> [, "", "image.jpg", "Ipsum"]
- * ![Lorem](image.jpg "Ipsum") -> [, "Lorem", "image.jpg", "Ipsum"]
- */
-
-interface ImageOptions {
-	inline: boolean;
-	HTMLAttributes: Record<string, any>;
-}
-
-declare module "@tiptap/core" {
-	interface Commands<ReturnType> {
-		drawing: {
-			/**
-			 * Add a drawing or set it's attributes
-			 */
-			setDrawing: (options: { src: string, alt?: string, title?: string, size?: string, float?: string }) => ReturnType;
-			/**
-			 * Updates a drawing and deletes the prior version
-			 */
-			edtDrawing: (options: { src: string, alt?: string, title?: string }) => ReturnType;
-		};
-	}
-}
-
 const IMAGE_INPUT_REGEX = /!\[(.+|:?)\]\((\S+)(?:(?:\s+)["'](\S+)["'])?\)/;
 
 async function tag(drawing, Key, Value){
@@ -67,39 +34,8 @@ async function deleteDrawing(url){
 	})
   }
 
-async function uploadDrawing(files){
-	let res = await fetch("/api/s3/", {
-	  method: "POST",
-	  body: "drawing",
-	});
-	const {data, src, key} = await res.json();
-	const url = data.url; //url for post
-	const fields = data.fields; //formdata for post
-	const formData = new FormData();
-	formData.append("key", `${key}.png`)
-	Object.entries({ ...fields}).forEach(([key, value]) => {
-	  formData.append(key, value as string)
-	})
-	formData.append('file', files[0])
-	//POST to upload file
-	const png = await fetch(url, {
-	  method: "POST",
-	  body: formData,
-	});
-	if (png.ok){
-	  formData.set("key", `${key}.json`)
-	  formData.set("file", files[1])
-	  const content = await fetch(url, {
-		method: "POST",
-		body: formData,
-	  });
-	  return src+'.png'
-	}
-	return null
-  }
-
 export const Drawing = () => {
-	return Node.create<ImageOptions>({
+	return Node.create({
 		name: "drawing",
 		inline() {
 			return this.options.inline;
@@ -135,7 +71,7 @@ export const Drawing = () => {
 				tag: "img[src]",
 				getAttrs: dom => {
 					if (typeof dom === "string") return {};
-					const element = dom as HTMLImageElement;
+					const element = dom;
 
 					const obj = {
 						src: element.getAttribute("src"),

@@ -10,7 +10,7 @@ html,
 body {
 	padding: 0;
 	margin: 0;
-	background: none;
+	background: var(--nextui-colors-background);
 	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
 		Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
@@ -35,6 +35,12 @@ a {
 }
 
 /* note page styling */
+@media (max-width: 650px) {
+	.note-metadata-table {
+		font-size: var(--nextui-fontSizes-sm);
+	}
+}
+
 .note-metadata-table td {
 	padding: 0;
 }
@@ -67,6 +73,22 @@ div[contenteditable] {
 }
 
 /* NextUI components */
+.nextui-collapse-view {
+	padding: 0;
+}
+
+.nextui-collapse {
+	margin: 0 0 10px 0 !important;
+	padding: 10px !important;
+	box-shadow: none !important;
+}
+
+.nextui-collapse-content {
+	padding: 0;
+}
+
+.nextui-collapse--open {
+}
 .ProseMirror img.ProseMirror-selectednode {
 	outline: 3px solid #68cef8;
 }
@@ -148,6 +170,24 @@ input[type="search"]::-webkit-search-results-decoration {
 	border-radius: 0.5rem;
 }
 
+/* color picker styling (in group modal) */
+#color-picker {
+	width: 5rem;
+	border: none;
+	outline: none;
+	background-color: transparent;
+	border-color: transparent;
+	-webkit-appearance: none;
+}
+
+#color-picker::-webkit-color-swatch-wrapper {
+	padding: 0;
+}
+#color-picker::-webkit-color-swatch {
+	border: 1px solid var(--nextui-colors-border);
+	border-radius: var(--nextui-radii-lg);
+}
+
 /* home page & sign in page background keyframes*/
 @-moz-keyframes spin {
 	100% {
@@ -182,118 +222,6 @@ input[type="search"]::-webkit-search-results-decoration {
 	}
 }
 
-.blurcont {
-	display: flex;
-	position: fixed;
-	width: 100%;
-	height: 100%;
-	z-index: -1;
-	overflow: clip;
-}
-
-.bckg {
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-	overflow-x: hidden;
-}
-
-:root {
-	--blobsize: 45%;
-	--blob2size: 35%;
-}
-
-.blob {
-	width: var(--blobsize);
-	height: var(--blobsize);
-	border-radius: 40%;
-	position: absolute;
-}
-
-.blob2 {
-	width: var(--blob2size);
-	height: var(--blob2size);
-	border-radius: 35%;
-	position: absolute;
-}
-
-@-moz-keyframes spin {
-	100% {
-		-moz-transform: rotate(360deg);
-	}
-}
-@-webkit-keyframes spin {
-	100% {
-		-webkit-transform: rotate(360deg);
-	}
-}
-@keyframes spin {
-	100% {
-		-webkit-transform: rotate(360deg);
-		transform: rotate(360deg);
-	}
-}
-
-.right {
-	background: linear-gradient(
-		180deg,
-		rgba(97, 175, 239, 0.5) 0%,
-		rgba(59, 132, 192, 0.5) 90.62%
-	);
-	right: -13%;
-	filter: blur(160px);
-	top: -12%;
-	-webkit-animation: spin 20s linear infinite;
-	-moz-animation: spin 20s linear infinite;
-	animation: spin 20s linear infinite;
-}
-
-.right2 {
-	background: linear-gradient(
-		180deg,
-		rgba(94, 197, 129, 0.5) 0%,
-		rgba(109, 189, 126, 0.5) 90.62%
-	);
-	right: -15%;
-	filter: blur(160px);
-	top: 50%;
-	-webkit-animation: spinleft 25s linear infinite;
-	-moz-animation: spinleft 25s linear infinite;
-	animation: spinleft 25s linear infinite;
-}
-
-@-moz-keyframes spinleft {
-	100% {
-		-moz-transform: rotate(360deg);
-	}
-}
-@-webkit-keyframes spinleft {
-	100% {
-		-webkit-transform: rotate(360deg);
-	}
-}
-@keyframes spinleft {
-	100% {
-		-webkit-transform: rotate(360deg);
-		transform: rotate(360deg);
-	}
-}
-
-.left {
-	background: linear-gradient(
-		rgba(198, 120, 221, 0.5) 0%,
-		rgba(122, 50, 143, 0.5) 100%
-	);
-	float: left;
-	filter: blur(160px);
-	bottom: 0;
-	left: -27%;
-	bottom: 22%;
-	-webkit-animation: spinleft 23s linear infinite;
-	-moz-animation: spinleft 23s linear infinite;
-	animation: spinleft 23s linear infinite;
-}
-
 .output {
 	white-space: pre-line;
 }
@@ -325,7 +253,10 @@ input[type="search"]::-webkit-search-results-decoration {
 	white-space: nowrap;
 }
 
-/* override NextUI defaults */
-.nextui-avatar-bg {
-	background: none !important;
+.ProseMirror p.is-editor-empty:first-child::before {
+	color: var(--nextui-colors-textDisabled);
+	content: attr(data-placeholder);
+	float: left;
+	height: 0;
+	pointer-events: none;
 }

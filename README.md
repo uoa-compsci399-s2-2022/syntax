@@ -3,14 +3,67 @@ Extended note-taking app for programming students
 
 [![https://vercel.com/?utm_source=10outof10&utm_campaign=oss](powered-by-vercel.svg)](https://vercel.com/?utm_source=10outof10&utm_campaign=oss)
 
+#### Editor
+![Editor (dark mode)](https://i.imgur.com/GbcE0gK.png)
+![Editor (light mode)](https://i.imgur.com/8wLahnf.png)
+
+#### Home Page
+![Home page (dark mode)](https://i.imgur.com/I9CgjRp.png)
+![Home page (light mode)](https://i.imgur.com/KIF6Wy7.png)
+
+#### Sign In Page (via Google)
+![Sign-in page (dark mode)](https://i.imgur.com/O6DB0Pv.png)
+![Sign-in page (light mode)](https://i.imgur.com/ny3wFFQ.png)
+
+## Project Description
+The purpose of this project is to create a note-taking application designed for computer science students. To adapt our application to suit computer science students, the application is able to support writing and executing code, searching by code, collaboration as well as other major note-taking features.
+
+## Technologies
+
+### Languages
+* Typescript
+* Javascript
+
+### Libraries/Frameworks/APIs
+* React 
+* Prisma
+* Next.js
+* NextAuth.js
+* next-pwa
+* next-themes 
+* NextUI 
+* heroicons
+* Tiptap
+* Prosemirror
+* CodeMirror
+* TIO.run
+* Turndown
+* Y.js
+* lodash
+* AWS SDK
+* Tldraw
+* md-to-pdf
+
+### Cloud Services
+* Amazon S3 (AWS)
+
 ## Getting Started
 ```
-npm install
-npx prisma generate
-npm run dev
+$ npm install
+$ npx prisma generate
+$ npm run dev
 ```
-For more information and documentation, visit the [syntax wiki](https://github.com/uoa-compsci399-s2-2022/syntax/wiki).
 
+## Project Management Tools
+* [Jira](https://10outof10.atlassian.net/jira/software/projects/TEN10/boards/1/roadmap) 
+* [Notion](https://elegant-joke-27e.notion.site/CS399-Project-Team-10-c6ba4a95d1ae4e14bf42fd1657b88776)
+
+## Future Plans
+TBA
+
+## Acknowledgements
+
+Our client Paravmir and sponsor Vercel.
 
 ## Team 10 out of 10
 | Name  | Role |

@@ -1,7 +1,6 @@
 import { truncate } from "lodash";
 import prisma from "./prisma";
 
-
 // 
 // note specific calls
 // 
@@ -77,29 +76,33 @@ export const getNoteByID = async (id) => {
 	return JSON.parse(JSON.stringify(note));
 };
 
-export const getAllNotesBySearch = async (title, content, code, sort, id) => {
-
+export const getAllNotesBySearch = async (sq, active, sortingField, id) => {
+	var queryBase = {
+		titleChecked: { "title": { $regex: sq, '$options': 'i' } },
+		contentChecked: { "body.content": { $elemMatch: { content: { $elemMatch: { "text": { $regex: sq, '$options': 'i' } } } } } },
+		codeChecked: { "body.content": { $elemMatch: { "attrs.code_content": { $regex: sq, '$options': 'i'  } } } },
+	}
+	const queries = [active.map(i=>queryBase[i])]; 
 	const notes = await prisma.note.findRaw({
-		filter: { 
-		$and: 
-		[{"userId": id}, 
-		{$or: [
-			{"title": {$regex: title, '$options' : 'i' }},
-			{"body.content": { $elemMatch: { content: { $elemMatch: { "text": { $regex: content}}}}}},
-			{"body.content": { $elemMatch: { "attrs.code_content": {$regex: code}}}}]
-		}]},
-		options: { projection: { "updatedAt": false }}
-		})
-		console.log(notes)
-		return JSON.parse(JSON.stringify(notes))
+		filter: {
+			$and:
+				[{ "userId": id },
+				{
+					$or: {...queries}[0]
+				}]
+		},
+		options: { sort: sortingField }
+	})
+	return JSON.parse(JSON.stringify(notes))
 };
 
 
 export const getAllNotesByUserIdSearch = async (id) => {
 	const notes = await prisma.note.findRaw({
 		filter: {
-		"userId": id,},
-		options: {projection: {"updatedAt" : false}}
+			"userId": id,
+		},
+		options: { projection: { "updatedAt": false } }
 	})
 	return JSON.parse(JSON.stringify(notes))
 }
@@ -187,6 +190,9 @@ export const getGroupByID = async (id) => {
 	const note = await prisma.group.findUnique({
 		where: {
 			id
+		},
+		include: {
+			notes: true
 		}
 	});
 

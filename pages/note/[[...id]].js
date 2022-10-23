@@ -1,6 +1,7 @@
 import { useSession, getSession } from "next-auth/react";
 import { useEffect, useState, useMemo } from "react";
 import { unstable_batchedUpdates } from "react-dom";
+import Head from "next/head";
 import {
 	useNote,
 	useDispatchNote,
@@ -61,7 +62,7 @@ export const getServerSideProps = async ({ req, res, params }) => {
 		};
 	}
 	const [notes] = await getAllNotesByUserID(session?.user?.id);
-
+	console.log(note);
 	return {
 		props: { notes, note },
 	};
@@ -81,7 +82,10 @@ const NoteLayout = ({ notes, note }) => {
 		setSidebarDisplay((current) => !current);
 	};
 
-	return (
+	return (<>
+		<Head>
+				<title>{note.title}</title>
+			</Head>
 		<Container
 			fluid
 			display="flex"
@@ -125,7 +129,7 @@ const NoteLayout = ({ notes, note }) => {
 					<NoteDisplay />
 				</Container>
 			</Container>
-		</Container>
+		</Container></>
 	);
 };
 

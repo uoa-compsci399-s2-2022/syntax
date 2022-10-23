@@ -26,7 +26,8 @@ const NoteLayout = ({ allNotes, currentNote }) => {
 				minWidth: "100vw",
 				minHeight: "100vh",
 				padding: "0",
-				margin: "0"
+				margin: "0",
+				background: "$background"
 			}}
 		>
 			<NoteSidebar

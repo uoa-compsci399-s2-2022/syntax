@@ -2,13 +2,12 @@ import ExportModal from "@/components/modal/ExportModal";
 import DeleteModal from "@/components/modal/DeleteModal";
 import ShareModal from "@/components/modal/ShareModal";
 import AvatarGroup from "@/components/note/AvatarGroup";
-import { Avatar, Dropdown, Button, Navbar, useTheme } from "@nextui-org/react";
+import { Dropdown, Button, Navbar, useTheme } from "@nextui-org/react";
 import { useTheme as useNextTheme } from "next-themes";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
-// import { Document, Page, pdf} from '@react-pdf/renderer'
-// import Html from 'react-pdf-html'
+
 import {
 	EllipsisHorizontalIcon,
 	TrashIcon,
@@ -28,16 +27,6 @@ import {
 	useNotes,
 	useDispatchNotes
 } from "../../modules/AppContext";
-
-// const PDFElement = (html) => {
-//     return (
-//         <Document>
-//             <Page size="A4">
-//                 <Html>{html}</Html>
-//             </Page>
-//         </Document>
-//     )
-// }
 
 const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 	const { setTheme } = useNextTheme();
@@ -75,7 +64,6 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 
 	const deleteNoteHandler = async () => {
 		try {
-			console.log(currentNote);
 			let res = await fetch(`/api/note`, {
 				method: "DELETE",
 				headers: { "Content-Type": "application/json" },
@@ -83,56 +71,56 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 			});
 			const deletedNote = await res.json();
 			setNotes({ note: deletedNote, type: "remove" });
+			router.push(`/note`, "/");
 			setDeleteModal(false);
-			router.push(`/note/`, undefined, { shallow: true });
+			setSelectedKey();
+			
 		} catch (error) {
 			console.log(error);
 		}
 	};
 
-	// const exportNoteHandler = async (fileType) => {
-	// 	try{
-	// 		console.log(fileType)
-	// 		if (fileType =="HTML"){
-	// 			let res = await fetch(`/api/note/${currentNote.id}/export/html`, {
-	// 				method: "GET",
-	// 			});
-	// 			let { text } = await res.json()
-	// 			console.log(text)
-	// 			const blob = new Blob([text], {type: "text/html"})
-	// 			const link = document.createElement('a');
-	// 			link.href = URL.createObjectURL(blob);
-	// 			link.setAttribute('download', `${currentNote.title}.html`);
-	// 			link.click();
-	// 		} else if (fileType =="Markdown") {
-	// 			const res = await fetch(`/api/note/${currentNote.id}/export/md`, {
-	// 				method: "GET",
-	// 			});
-	// 			let { text } = await res.json()
-	// 			const blob = new Blob([text], {type: "text/markdown"})
-	// 			const link = document.createElement('a');
-	// 			link.href = URL.createObjectURL(blob);
-	// 			link.setAttribute('download', `${currentNote.title}.md`);
-	// 			link.click();
-	// 		}
-	// 		else if (fileType == "PDF"){
-	// 			const res = await fetch(`/api/note/${currentNote.id}/export/pdf`, {
-	// 				method: "GET",
-	// 			});
-	// 			let { text } = await res.json();
-	// 			const content = PDFElement(text)
-	// 			const blobPromise = pdf(content).toBlob().then((blob)=> {
-	// 				const link = document.createElement('a');
-	// 				link.href = URL.createObjectURL(blob);
-	// 				link.setAttribute('download', `${currentNote.title}.pdf`);
-	// 				link.click();
-	// 			});
-
-	// 		}
-	// 	} catch (error) {
-	// 		console.log(error)
-	// 	}
-	// }
+	const exportNoteHandler = async (fileType) => {
+		try {
+			console.log(fileType);
+			if (fileType == "HTML") {
+				let res = await fetch(`/api/note/${currentNote.id}/export/html`, {
+					method: "GET"
+				});
+				let { text } = await res.json();
+				console.log(text);
+				const blob = new Blob([text], { type: "text/html" });
+				const link = document.createElement("a");
+				link.href = URL.createObjectURL(blob);
+				link.setAttribute("download", `${currentNote.title}.html`);
+				link.click();
+			} else if (fileType == "Markdown") {
+				const res = await fetch(`/api/note/${currentNote.id}/export/md`, {
+					method: "GET"
+				});
+				let { text } = await res.json();
+				const blob = new Blob([text], { type: "text/markdown" });
+				const link = document.createElement("a");
+				link.href = URL.createObjectURL(blob);
+				link.setAttribute("download", `${currentNote.title}.md`);
+				link.click();
+			} else if (fileType == "PDF") {
+				let res = await fetch(`/api/note/${currentNote.id}/export/pdf`, {
+					method: "GET"
+				});
+				const { text } = await res.json();
+				const blob = await new Blob([Buffer.from(text)], {
+					type: "application/pdf"
+				});
+				const link = document.createElement("a");
+				link.href = URL.createObjectURL(blob);
+				link.setAttribute("download", `${currentNote.title}.pdf`);
+				link.click();
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
 	const shareHandler = async () => {
 		router.push({
@@ -292,7 +280,11 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 						</Dropdown.Menu>
 					</Dropdown>
 				</Navbar.Item>
-				{/* <ExportModal open={exportModal} oncloseHandler={closeHandler} closeHandler={exportNoteHandler} /> */}
+				<ExportModal
+					open={exportModal}
+					oncloseHandler={closeHandler}
+					closeHandler={exportNoteHandler}
+				/>
 				<ShareModal
 					open={shareModal}
 					closeHandler={closeHandler}
@@ -302,8 +294,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 				<DeleteModal
 					open={deleteModal}
 					onclosehandler={closeHandler}
-					closeHandler={deleteNoteHandler}
-				/>
+					closeHandler={deleteNoteHandler}/>
 			</Navbar.Content>
 		</Navbar>
 	);

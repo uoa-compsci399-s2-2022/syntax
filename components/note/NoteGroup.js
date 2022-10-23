@@ -19,6 +19,7 @@ const NoteGroup = ({
 	notes,
 	openNote,
 	id,
+	defaultGroup,
 	createNote
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -27,6 +28,13 @@ const NoteGroup = ({
 	const [deleteModal, setDeleteModal] = useState(false);
 	const currentNote = useNote();
 	const setNotes = useDispatchNotes();
+	const router = useRouter();
+
+	useEffect(() => {
+		if (id === currentNote.groupId) {
+			setIsOpen(true);
+		}
+	}, [currentNote.groupId]);
 
 	const openHandler = () => {
 		setIsOpen((current) => !current);
@@ -46,6 +54,10 @@ const NoteGroup = ({
 				body: JSON.stringify(id)
 			});
 			const deletedGroup = await res.json();
+			setNotes({ note: deletedGroup, type: "removeGroup" });
+			router.push(`/note/${id!=currentNote.groupId ? currentNote.groupId : ""}`, undefined, {
+				shallow: true
+			});
 			setDeleteModal(false);
 		} catch (error) {
 			console.log(error);
@@ -68,6 +80,8 @@ const NoteGroup = ({
 			body: JSON.stringify({ id, name: newName, color: newColor })
 		});
 		const updatedGroup = await res.json();
+		setNotes({ note: updatedGroup, type: "editGroup" });
+		router.push(`/note/${currentNote.id || ""}`, undefined, { shallow: true });
 	};
 
 	useEffect(() => {
@@ -86,7 +100,7 @@ const NoteGroup = ({
 			css={{
 				padding: "0",
 				marginBottom: "0.5rem",
-				borderRadius: "var(--nextui-radii-md)",
+				borderRadius: "$md",
 				background: "$accents4"
 			}}
 		>
@@ -103,7 +117,7 @@ const NoteGroup = ({
 					textAlign: "left",
 					outline: "none",
 					cursor: notes.length > 0 ? "pointer" : "auto",
-					borderRadius: "var(--nextui-radii-md)",
+					borderRadius: "$md",
 					backgroundColor: notes.length > 0 ? "$accents4" : "$accents2"
 				}}
 			>
@@ -114,13 +128,16 @@ const NoteGroup = ({
 						marginRight: "1rem"
 					}}
 				>
-					{isOpen ? (
+					{isOpen && notes.length > 0 ? (
 						<ChevronDownIcon style={{ height: "var(--icon-size-xs)" }} />
 					) : (
 						<ChevronRightIcon
 							style={{
 								height: "var(--icon-size-xs)",
-								color: notes.length > 0 ? "$text" : "grey"
+								color:
+									notes.length > 0
+										? "var(--nextui-colors-text)"
+										: "var(--nextui-colors-textDisabled)"
 							}}
 						/>
 					)}
@@ -143,7 +160,7 @@ const NoteGroup = ({
 						<Dropdown.Button
 							light
 							ripple={false}
-							disabled={name === "Ungrouped" ? true : false}
+							disabled={defaultGroup ? true : false}
 							icon={
 								<EllipsisHorizontalIcon
 									style={{ height: "var(--icon-size-xs)" }}
@@ -154,7 +171,7 @@ const NoteGroup = ({
 								maxWidth: "var(--icon-size-xs)",
 								height: "var(--icon-size-xs)",
 								padding: "0.8rem",
-								borderRadius: "var(--nextui-radii-sm)",
+								borderRadius: "$sm",
 								"&:hover": {
 									background: "$accents5"
 								}
@@ -183,14 +200,17 @@ const NoteGroup = ({
 					<Button
 						light
 						ripple={false}
-						onPress={() => createNote(id)}
+						onPress={() => {
+							createNote(id);
+							setIsOpen(true);
+						}}
 						icon={<PlusIcon style={{ height: "var(--icon-size-xs)" }} />}
 						css={{
 							minWidth: "0",
 							maxWidth: "var(--icon-size-xs)",
 							height: "var(--icon-size-xs)",
 							padding: "0.8rem",
-							borderRadius: "var(--nextui-radii-sm)",
+							borderRadius: "$sm",
 							"&:hover": {
 								background: "$accents5"
 							}
@@ -210,7 +230,7 @@ const NoteGroup = ({
 					css={{
 						padding: "0",
 						marginBottom: "0.5rem",
-						borderRadius: "var(--nextui-radii-md)",
+						borderRadius: "$md",
 						backgroundColor: "$accents4"
 					}}
 				>
@@ -230,7 +250,7 @@ const NoteGroup = ({
 									css={{
 										padding: "0.3rem 0",
 										width: "100%",
-										borderRadius: "var(--nextui-radii-md)",
+										borderRadius: "$md",
 										backgroundColor:
 											note.id === currentNote.id ? "$accents5" : "transparent",
 										"&:hover": {
@@ -270,7 +290,6 @@ const NoteGroup = ({
 			/>
 			<DeleteModal
 				open={deleteModal}
-				onclosehandler={closeHandler}
 				closeHandler={closeHandler}
 				deleteHandler={deleteGroupHandler}
 				type="group"
