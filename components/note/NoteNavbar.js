@@ -28,7 +28,7 @@ import {
 	useDispatchNotes
 } from "../../modules/AppContext";
 
-const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
+const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers }) => {
 	const { setTheme } = useNextTheme();
 	const { checked, type } = useTheme();
 	const router = useRouter();
@@ -205,7 +205,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 			<Navbar.Content gap={5}>
 				<Navbar.Item>
 					<AvatarGroup
-						users={placeholderUserData}
+						users={collabUsers}
 						setShareModal={setShareModal}
 					/>
 				</Navbar.Item>
