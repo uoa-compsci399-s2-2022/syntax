@@ -27,6 +27,7 @@ import { WebrtcProvider } from "y-webrtc";
 import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState, useMemo } from "react";
+import { baseExtensions } from './baseExtensions';
 // import { fromBase64, fromUint8Array, toUint8Array } from 'js-base64'
 // import { yDocToProsemirrorJSON, prosemirrorJSONToYDoc } from 'y-prosemirror'
 
@@ -128,54 +129,24 @@ export default function () {
 		{
 			disablePasteRules: [Drawing, "drawing"],
 			extensions: [
-				StarterKit.configure({
-					codeBlock: false,
-					bulletList: false,
-					history: false
-				}),
-				Underline,
-				Superscript,
-				Subscript,
-				Youtube,
-				BulletList.configure({
-					HTMLAttributes: {
-						class: "editor-ul"
-					}
-				}),
-				Link.configure({
-					HTMLAttributes: {
-						class: "editor-link"
-					}
-				}),
-				CodeBlockNode,
-
+				...baseExtensions(),
 				DebounceSave().configure({
 					noteId: currentNote.id,
 					noteTitle: currentNote.title,
 					YDOC: ydoc,
 					PROVIDER: provider
 				}),
-				TipTapCustomImage().configure({
-					HTMLAttributes: {
-						class: "image"
-					}
-				}),
-				Drawing().configure({
-					HTMLAttributes: {
-						class: "drawing"
-					}
-				}),
 				Collaboration.configure({
 					document: ydoc
 				}),
 				provider !== null
 					? CollaborationCursor.configure({
-							provider: provider,
-							user: {
-								name: session?.user?.name,
-								color: getRandomColour()
-							}
-					  })
+						provider: provider,
+						user: {
+							name: session?.user?.name,
+							color: getRandomColour()
+						}
+					})
 					: null
 			],
 			onBeforeCreate({ editor }) {

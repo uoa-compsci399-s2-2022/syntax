@@ -9,7 +9,7 @@ const AvatarGroup = ({ users, setShareModal }) => {
 			count={users.length - avatarLimit > 0 && users.length - avatarLimit}
 		>
 			{users.slice(0, avatarLimit).map((user, index) => (
-				<Tooltip placement="bottom" content={user.name}>
+				<Tooltip placement="bottom" content={user.name} key={index}>
 				<Avatar
 					pointer
 					key={index}
