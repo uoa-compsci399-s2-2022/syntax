@@ -2,6 +2,10 @@ import { basicSetup } from "codemirror";
 import { EditorView, keymap } from "@codemirror/view";
 import { indentWithTab } from "@codemirror/commands";
 import { javascript } from "@codemirror/lang-javascript";
+import { python } from "@codemirror/lang-python";
+import { cpp } from "@codemirror/lang-cpp";
+import { java } from "@codemirror/lang-java";
+import { StreamLanguage } from "@codemirror/language"
 import { useEffect, useState, useRef } from "react";
 import {
 	useTheme,
@@ -58,13 +62,22 @@ export const Extension = ({
 	};
 
 	useEffect(() => {
+		
+		const langpick = {
+			"python3": python(),
+			"javascript-node": javascript(),
+			"c-clang": cpp(),
+			"cpp-clang": cpp(),
+			"java-jdk": java(),
+		}
+		console.log(lang, langpick[lang]);
 		let isDark = type === "dark" ? true : false;
 		const view = new EditorView({
 			doc,
 			extensions: [
 				basicSetup,
 				keymap.of([indentWithTab]),
-				javascript(),
+				langpick[lang],
 				EditorView.updateListener.of((v) => {
 					if (v.docChanged) {
 						updateAttributes({ code_content: v.state.doc.toString() });
@@ -78,7 +91,7 @@ export const Extension = ({
 		return () => {
 			view.destroy();
 		};
-	}, [type]);
+	}, [type, lang]);
 
 	return (
 		<NodeViewWrapper>
