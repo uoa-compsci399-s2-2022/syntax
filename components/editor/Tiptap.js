@@ -28,8 +28,8 @@ import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState, useMemo } from "react";
 import { baseExtensions } from './baseExtensions';
-// import { fromBase64, fromUint8Array, toUint8Array } from 'js-base64'
-// import { yDocToProsemirrorJSON, prosemirrorJSONToYDoc } from 'y-prosemirror'
+import { fromBase64, fromUint8Array, toUint8Array } from 'js-base64'
+import { yDocToProsemirrorJSON, prosemirrorJSONToYDoc } from 'y-prosemirror'
 
 EditorView.prototype.updateState = function updateState(state) {
 	if (!this.docView) return; // This prevents the matchesNode error on hot reloads
@@ -103,25 +103,22 @@ const getInitialUser = () => {
 	};
 };
 
-export default function () {
+export default function ({ setCollabUsers }) {
 	const currentNote = useNote();
 	const [drawModal, setDrawModal] = useState(false);
 	const [drawContent, setDrawContent] = useState(null);
-	const [provider, setProvider] = useState(null);
+	// const [provider, setProvider] = useState(null);
 	const [currentUser, setCurrentUser] = useState(getInitialUser);
 	const { data: session, status } = useSession();
 
 	//Creates room based on note id. Deletes the old ydoc and creates a new blank one.
 	const ydoc = useMemo(() => new Y.Doc(), [currentNote.id]);
+	const provider = useMemo(() => { if (currentNote.room) return new WebrtcProvider(currentNote.id + "_43785b3457gt", ydoc) }, [currentNote.room]);
 
 	useEffect(() => {
-		console.log("load tiptap", currentNote.room);
-		if (provider !== null) {
-			provider.destroy();
-		}
-		if (currentNote.room !== null) {
+		if (currentNote.room == null) {
 			console.log("shared note");
-			setProvider(new WebrtcProvider(currentNote.id + "_43785b3457gt", ydoc));
+			provider?.destroy();
 		}
 	}, [currentNote.id]);
 
@@ -133,59 +130,41 @@ export default function () {
 				DebounceSave().configure({
 					noteId: currentNote.id,
 					noteTitle: currentNote.title,
-					YDOC: ydoc,
-					PROVIDER: provider
+					YDOC: ydoc
 				}),
 				Collaboration.configure({
 					document: ydoc
 				}),
-				provider !== null
+				currentNote.room !== null
 					? CollaborationCursor.configure({
 						provider: provider,
 						user: {
 							name: session?.user?.name,
-							color: getRandomColour()
+							color: getRandomColour(),
+							avatar: session?.user?.avatar
 						}
 					})
 					: null
 			],
 			onBeforeCreate({ editor }) {
-				// Before the view is created.
-				console.log(
-					"onBeforeCreate: collaborationCursor ",
-					editor?.storage.collaborationCursor?.users?.length
-				);
-				console.log(
-					"onBeforeCreate: provider state ",
-					provider?.awareness?.states?.size
-				);
-			},
-			onUpdate({ editor }) {
-				console.log(
-					"onUpdate: no room or only person ",
-					currentNote.room == null || provider?.awareness?.states?.size == 1
-				);
-				console.log(
-					"onUpdate: provider state ",
-					provider?.awareness?.states?.size
-				);
+				provider?.once('synced', synced => {
+					if (ydoc.getXmlFragment().length == 0) {
+						editor.commands.setContent(currentNote.body);
+					} else {
+						Y.applyUpdate(ydoc, fromBase64(currentNote.YDOC));
+					}
+					// console.log(editor?.storage.collaborationCursor?.users);
+					const users = editor?.storage.collaborationCursor?.users;
+					setCollabUsers([...users] || []);
+					console.log('synced!', synced)
+				})
 			},
 			onDestroy() {
 				provider?.destroy();
 			},
-			onCreate({ editor }) {
-				console.log(provider);
-				console.log(
-					"onCreate: collaborationCursor ",
-					editor?.storage.collaborationCursor.users
-				);
-				console.log(
-					"onCreate: provider state ",
-					provider?.awareness?.states?.size
-				);
-				// if(editor?.storage.collaborationCursor.users.length==1) editor.commands.setContent(currentNote.body);
+			onCreate({editor}){
+				if(currentNote.room && ydoc.getXmlFragment().length == 0) editor.commands.setContent(currentNote.body);
 			},
-
 			...(currentNote.room == null ? { content: currentNote.body } : {})
 		},
 		[currentNote.id, provider]

@@ -73,6 +73,8 @@ const NoteLayout = ({ notes, note }) => {
 	const { data: session, status } = useSession();
 	const setCurrentNote = useDispatchNote();
 	const setNotes = useDispatchNotes();
+	const [collabUsers, setCollabUsers] = useState([]);
+
 	useEffect(() => {
 		setCurrentNote(note);
 		setNotes({ note: notes, type: "replace" });
@@ -116,6 +118,7 @@ const NoteLayout = ({ notes, note }) => {
 				<NoteNavbar
 					sidebarDisplay={sidebarDisplay}
 					handleSidebarDisplay={handleSidebarDisplay}
+					collabUsers={collabUsers}
 				/>
 				<Container
 					css={{
@@ -126,7 +129,7 @@ const NoteLayout = ({ notes, note }) => {
 						overflowX: "hidden"
 					}}
 				>
-					<NoteDisplay />
+					<NoteDisplay setCollabUsers={setCollabUsers}/>
 				</Container>
 			</Container>
 		</Container></>

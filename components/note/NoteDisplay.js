@@ -14,7 +14,7 @@ const Tiptap = dynamic(() => import("@/components/editor/Tiptap"), {
  });
 
 
-const NoteDisplay = () => {
+const NoteDisplay = ({setCollabUsers}) => {
 	const currentNote = useNote();
 	const notes = useNotes();
 	const setNotes = useDispatchNotes();
@@ -166,7 +166,7 @@ const NoteDisplay = () => {
 						"@xs": { border: "none" }
 					}}
 				/>
-				<Tiptap />
+				<Tiptap setCollabUsers={setCollabUsers}/>
 			</Container>
 			<Spacer y={4} />
 		</>
