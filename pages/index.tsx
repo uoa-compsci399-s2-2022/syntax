@@ -1,6 +1,11 @@
-import { useRouter } from "next/router";
-import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import BlobBackground from "@/components/home/BlobBackground";
+import HomeToolbar from "@/components/home/HomeToolbar";
+import Head from "next/head";
+import { useTheme as useNextTheme } from "next-themes";
+import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
+import { baseExtensions } from "@/components/editor/baseExtensions";
+import { EditorContent, useEditor } from "@tiptap/react";
+import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import {
 	Button,
 	Text,
@@ -12,16 +17,8 @@ import {
 	Container,
 	Row,
 	Card,
-	Link,
+	Link
 } from "@nextui-org/react";
-import { useState } from "react";
-import dynamic from "next/dynamic";
-import Head from "next/head";
-import { useTheme as useNextTheme } from "next-themes";
-import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
-import HomeToolbar from "@/components/home/HomeToolbar";
-import { baseExtensions } from "@/components/editor/baseExtensions";
-import { EditorContent, useEditor } from "@tiptap/react";
 
 export const getServerSideProps = async ({ req }) => {
 	const session = await getSession({ req });
@@ -30,8 +27,8 @@ export const getServerSideProps = async ({ req }) => {
 		return {
 			redirect: {
 				destination: "/note",
-				permanent: false,
-			},
+				permanent: false
+			}
 		};
 	}
 	return { props: {} };
@@ -66,39 +63,42 @@ drawing & stylus support, images, Youtube video embeds, and more.</p><p></p>
 <blockquote>"Any fool can write code that a computer can understand. Good programmers write code that humans can understand."<br> - Martin Fowler</blockquote>
 
 <p><em>Psst! Feel free to try me out!</em></p>
-`,
+`
 	});
 
 	return (
 		<>
+			<Head>
+				<meta name="theme-color" content={isDark ? "#121212" : "white"} />
+			</Head>
 			<BlobBackground />
 			<Navbar
 				disableBlur
 				disableShadow
 				maxWidth="fluid"
 				css={{
-					background: "transparent",
+					background: "transparent"
 				}}
 				containerCss={{ background: "transparent !important" }}
 			>
 				<Navbar.Brand>
-					<Image
-						width={50}
-						height={50}
-						draggable="false"
-						src="/favicon.ico"
-						alt="syntax logo"
-						objectFit="initial"
-					/>
+					<Link href="/">
+						<Image
+							width={40}
+							draggable="false"
+							src="/icons/icon-64x64.png"
+							alt="syntax logo"
+						/>
+					</Link>
 				</Navbar.Brand>
 				<Navbar.Content>
 					<Navbar.Item>
-					<Switch
-						checked={isDark}
-						iconOn={<MoonIcon />}
-						iconOff={<SunIcon />}
-						onChange={(e) => setTheme(e.target.checked ? "dark" : "light")}
-					/>
+						<Switch
+							checked={isDark}
+							iconOn={<MoonIcon />}
+							iconOff={<SunIcon />}
+							onChange={(e) => setTheme(e.target.checked ? "dark" : "light")}
+						/>
 					</Navbar.Item>
 					<Navbar.Item>
 						{!session ? (
@@ -130,7 +130,7 @@ drawing & stylus support, images, Youtube video embeds, and more.</p><p></p>
 						borderRadius: "$lg",
 						zIndex: 2,
 						padding: "0",
-						border: "1px solid $border",
+						border: "1px solid $border"
 					}}
 				>
 					<HomeToolbar editor={editor} />

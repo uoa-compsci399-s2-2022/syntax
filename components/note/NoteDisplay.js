@@ -4,13 +4,14 @@ import Tiptap from "@/components/editor/Tiptap";
 import { debounce } from "lodash";
 import { useRef } from "react";
 import { useRouter } from "next/router";
-import { useNote, useNotes, useDispatchNotes } from "../../modules/AppContext";
+import { useNote, useNotes, useDispatchNotes, useDispatchNote } from "../../modules/AppContext";
 
 const NoteDisplay = () => {
 	const currentNote = useNote();
 	const notes = useNotes();
 	const setNotes = useDispatchNotes();
 	const router = useRouter();
+	const setCurrentNote = useDispatchNote();
 	const debounceSave = useRef(
 		debounce(async (criteria) => {
 			saveContent(criteria);
@@ -34,6 +35,7 @@ const NoteDisplay = () => {
 		const updatedNote = await res.json();
 		updatedNote.currentGroupId = content.currentGroupId;
 		setNotes({ note: updatedNote, type: "edit" });
+		setCurrentNote(updatedNote);
 		router.push(`/note/${updatedNote.id}`, undefined, {
 			shallow: true
 		});
