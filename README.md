@@ -3,25 +3,28 @@ Extended note-taking app for programming students
 
 [![https://vercel.com/?utm_source=10outof10&utm_campaign=oss](powered-by-vercel.svg)](https://vercel.com/?utm_source=10outof10&utm_campaign=oss)
 
-#### Our editor and main page
-
+#### Editor
+![Editor (dark mode)](https://i.imgur.com/GbcE0gK.png)
+![Editor (light mode)](https://i.imgur.com/8wLahnf.png)
 
 #### Home Page
-![syntax home page](https://syntaximages.s3.ap-southeast-2.amazonaws.com/home.jpg)
+![Home page (dark mode)](https://i.imgur.com/I9CgjRp.png)
+![Home page (light mode)](https://i.imgur.com/KIF6Wy7.png)
 
-#### Sign-In Page via Google
-![Sign-in page](https://syntaximages.s3.ap-southeast-2.amazonaws.com/sign_in.jpg)
+#### Sign In Page (via Google)
+![Sign-in page (dark mode)](https://i.imgur.com/O6DB0Pv.png)
+![Sign-in page (light mode)](https://i.imgur.com/ny3wFFQ.png)
 
 ## Project Description
 The purpose of this project is to create a note-taking application designed for computer science students. To adapt our application to suit computer science students, the application is able to support writing and executing code, searching by code, collaboration as well as other major note-taking features.
 
 ## Technologies
 
-### Language:
+### Languages
 * Typescript
 * Javascript
 
-### Libraries/Frameworks/APIs:
+### Libraries/Frameworks/APIs
 * React 
 * Prisma
 * Next.js
@@ -41,8 +44,8 @@ The purpose of this project is to create a note-taking application designed for 
 * Tldraw
 * md-to-pdf
 
-### Softwares:
-* Amazon S3 from Amazon Web Services
+### Cloud Services
+* Amazon S3 (AWS)
 
 ## Getting Started
 ```
@@ -50,11 +53,17 @@ $ npm install
 $ npx prisma generate
 $ npm run dev
 ```
-## Project Management Tool
-* [Jira](https://www.atlassian.com/software/jira) 
-* [Notion](https://www.notion.so/)
+
+## Project Management Tools
+* [Jira](https://10outof10.atlassian.net/jira/software/projects/TEN10/boards/1/roadmap) 
+* [Notion](https://elegant-joke-27e.notion.site/CS399-Project-Team-10-c6ba4a95d1ae4e14bf42fd1657b88776)
 
 ## Future Plans
+TBA
+
+## Acknowledgements
+
+Our client Paravmir and sponsor Vercel.
 
 ## Team 10 out of 10
 | Name  | Role |
@@ -64,7 +73,3 @@ $ npm run dev
 | [Sarah Kim](https://github.com/bonjuruu)  | Backend Developer  |
 | [Hayden White](https://github.com/HFx6)  | Backend Developer, Designer  |
 | [Kevin Yip](https://github.com/kyip053)  | Backend Developer  |
-
-### Acknowledgements
-
-Our client Paravmir and sponsor Vercel. 

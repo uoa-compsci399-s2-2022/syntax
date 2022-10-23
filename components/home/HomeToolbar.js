@@ -1,7 +1,7 @@
-import MenuItem from "./MenuItem";
+import MenuItem from "@/components/editor/MenuItem";
 import InputModal from "@/components/modal/InputModal";
 import { useState, useEffect, useRef } from "react";
-import { Container, Dropdown, Tooltip } from "@nextui-org/react";
+import { Container, Dropdown, Tooltip, Button } from "@nextui-org/react";
 import { BiCodeBlock } from "react-icons/bi";
 import {
 	MdFormatBold,
@@ -15,19 +15,19 @@ import {
 	MdFormatClear,
 	MdFormatListBulleted,
 	MdFormatListNumbered,
-	MdDraw,
+	MdOutlineDraw,
 	MdFormatQuote,
 	MdHorizontalRule,
 	MdFormatSize,
 	MdVideocam,
-	MdImage,
+	MdOutlineImage,
 	MdInsertLink,
 	MdAdd,
-	MdUndo,
-	MdRedo
+	MdOutlineUndo,
+	MdOutlineRedo
 } from "react-icons/md";
 
-export default ({ editor, drawingOpenHandler }) => {
+export default ({ editor }) => {
 	if (!editor) {
 		return null;
 	}
@@ -46,22 +46,6 @@ export default ({ editor, drawingOpenHandler }) => {
 		"Heading 5",
 		"Heading 6"
 	];
-	const fileRef = useRef();
-	const [file, setFile] = useState();
-
-	const handleFileChange = (e) => {
-		const fileObj = e.target.files[0];
-		if (!fileObj) {
-			return;
-		}
-		setFile(fileObj);
-	};
-
-	useEffect(() => {
-		if (file) {
-			editor.commands.setImageFile({ file: file });
-		}
-	}, [file]);
 
 	const openHandler = (selectedInputType) => {
 		if (selectedInputType === "link" && editor.isActive("link")) {
@@ -160,7 +144,7 @@ export default ({ editor, drawingOpenHandler }) => {
 			label: "Code",
 			action: () => editor.chain().focus().toggleCode().run(),
 			isActive: () => editor.isActive("code"),
-			breakpoint: "md"
+			breakpoint: "sm"
 		}
 	];
 
@@ -170,7 +154,7 @@ export default ({ editor, drawingOpenHandler }) => {
 			label: "Code",
 			action: () => editor.chain().focus().toggleCode().run(),
 			isActive: () => editor.isActive("code"),
-			breakpoint: "md"
+			breakpoint: "sm"
 		},
 		underline: {
 			icon: <MdFormatUnderlined size={iconSize} color={iconColor} />,
@@ -202,12 +186,12 @@ export default ({ editor, drawingOpenHandler }) => {
 			action: () => editor.chain().focus().clearNodes().unsetAllMarks().run()
 		},
 		undo: {
-			icon: <MdUndo size={iconSize} color={iconColor} />,
+			icon: <MdOutlineUndo size={iconSize} color={iconColor} />,
 			label: "Undo",
 			action: () => editor.chain().focus().undo().run()
 		},
 		redo: {
-			icon: <MdRedo size={iconSize} color={iconColor} />,
+			icon: <MdOutlineRedo size={iconSize} color={iconColor} />,
 			label: "Redo",
 			action: () => editor.chain().focus().redo().run()
 		}
@@ -219,14 +203,14 @@ export default ({ editor, drawingOpenHandler }) => {
 			label: "Bulleted List",
 			action: () => editor.chain().focus().toggleBulletList().run(),
 			isActive: () => editor.isActive("bulletList"),
-			breakpoint: "md"
+			breakpoint: "sm"
 		},
 		orderedList: {
 			icon: <MdFormatListNumbered size={iconSize} color={iconColor} />,
 			label: "Ordered List",
 			action: () => editor.chain().focus().toggleOrderedList().run(),
 			isActive: () => editor.isActive("orderedList"),
-			breakpoint: "md"
+			breakpoint: "sm"
 		}
 	};
 
@@ -237,7 +221,7 @@ export default ({ editor, drawingOpenHandler }) => {
 			key: "link",
 			action: () => openHandler("link"),
 			isActive: () => editor.isActive("link"),
-			breakpoint: "sm"
+			breakpoint: "xs"
 		},
 		codeBlock: {
 			icon: <BiCodeBlock size={iconSize} color={iconColor} />,
@@ -245,28 +229,14 @@ export default ({ editor, drawingOpenHandler }) => {
 			key: "codeBlock",
 			action: () => editor.chain().focus().insertCodeBlock().run(),
 			isActive: () => editor.isActive("codeBlock"),
-			breakpoint: "sm"
-		},
-		drawing: {
-			icon: <MdDraw size={iconSize} color={iconColor} />,
-			label: "Drawing",
-			key: "drawing",
-			action: () => drawingOpenHandler(),
-			breakpoint: "sm"
-		},
-		image: {
-			icon: <MdImage size={iconSize} color={iconColor} />,
-			label: "Image",
-			key: "image",
-			action: () => console.log("TO-DO"),
-			breakpoint: "md"
+			breakpoint: "xs"
 		},
 		video: {
 			icon: <MdVideocam size={iconSize} color={iconColor} />,
 			label: "Video",
 			key: "video",
 			action: () => openHandler("video"),
-			breakpoint: "md"
+			breakpoint: "sm"
 		},
 		blockquote: {
 			icon: <MdFormatQuote size={iconSize} color={iconColor} />,
@@ -274,14 +244,14 @@ export default ({ editor, drawingOpenHandler }) => {
 			key: "blockquote",
 			action: () => editor.chain().focus().toggleBlockquote().run(),
 			isActive: () => editor.isActive("blockquote"),
-			breakpoint: "md"
+			breakpoint: "sm"
 		},
 		horizontalRule: {
 			icon: <MdHorizontalRule size={iconSize} color={iconColor} />,
 			label: "Divider",
 			key: "horizontalRule",
 			action: () => editor.chain().focus().setHorizontalRule().run(),
-			breakpoint: "md"
+			breakpoint: "sm"
 		}
 	};
 
@@ -298,12 +268,12 @@ export default ({ editor, drawingOpenHandler }) => {
 				left: "0",
 				bottom: "0",
 				background: "$background",
-				padding: "0.3rem 0",
+				padding: "0.3rem 1rem",
 				margin: "0",
 				"@xs": {
 					justifyContent: "flex-start",
 					borderBottom: "1px solid $border",
-					borderTop: "1px solid $border",
+					borderRadius: "$lg $lg 0 0",
 					position: "sticky",
 					top: "0",
 					right: "0"
@@ -401,7 +371,7 @@ export default ({ editor, drawingOpenHandler }) => {
 
 			<div className="menu-divider" />
 
-			{/* List-related options*/}
+			{/* List-related options */}
 			{Object.entries(listOptions).map(([key, item], index) => (
 				<MenuItem {...item} key={index} />
 			))}
@@ -418,8 +388,8 @@ export default ({ editor, drawingOpenHandler }) => {
 						}`}
 						css={{
 							padding: "5px",
-							"@sm": { padding: "10px" },
-							"@md": { display: "none" }
+							"@xs": { padding: "10px" },
+							"@sm": { display: "none" }
 						}}
 					>
 						<MdFormatListBulleted size={iconSize} />
@@ -442,9 +412,9 @@ export default ({ editor, drawingOpenHandler }) => {
 
 			<div className="menu-divider" />
 
-			{/* Extended node options (image, drawing, code block, video, etc.) */}
+			{/* Extended node options (code block, video, etc.) - home page does not have image/drawing */}
 			{Object.entries(insertOptions).map(([key, item], index) => (
-				<MenuItem {...item} key={index} handleFileChange={handleFileChange} />
+				<MenuItem {...item} key={index} />
 			))}
 
 			<Tooltip content={"Insert"}>
@@ -456,8 +426,8 @@ export default ({ editor, drawingOpenHandler }) => {
 							transition: "none",
 							padding: "0",
 							display: "flex",
-							"@sm": { padding: "10px" },
-							"@md": { display: "none" }
+							"@xs": { padding: "10px" },
+							"@sm": { display: "none" }
 						}}
 					>
 						<MdAdd size={iconSize} color={iconColor} />
@@ -472,8 +442,8 @@ export default ({ editor, drawingOpenHandler }) => {
 								key={key}
 								css={{
 									background: editor.isActive(key) ? "$neutralLight" : "",
-									"@sm": { display: item.breakpoint === "sm" ? "none" : "" },
-									"@md": { display: item.breakpoint === "md" ? "none" : "" }
+									"@xs": { display: item.breakpoint === "xs" ? "none" : "" },
+									"@sm": { display: item.breakpoint === "sm" ? "none" : "" }
 								}}
 							>
 								{item.label}
