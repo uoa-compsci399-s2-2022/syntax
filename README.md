@@ -3,6 +3,8 @@
 
 **syntax** is a multi-platform note-taking application designed specifically for programming students. In order to meet the needs of its target audience, the application supports writing, compiling, and executing code. It also contains many additional note-taking features, including searchable code snippets, drawing & stylus support, exportable notes, image upload, Youtube video embeds, and collaborative note creation.
 
+*Further information, documentation, and considerations can be found at https://github.com/uoa-compsci399-s2-2022/syntax/wiki*
+
 http://syntaxapp.vercel.app/
 
 [![https://vercel.com/?utm_source=10outof10&utm_campaign=oss](powered-by-vercel.svg)](https://vercel.com/?utm_source=10outof10&utm_campaign=oss)
