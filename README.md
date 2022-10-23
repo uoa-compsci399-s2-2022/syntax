@@ -24,24 +24,32 @@ http://syntaxapp.vercel.app/
 * Javascript
 
 ### Libraries/Frameworks/APIs
-* React 
-* Prisma
-* Next.js
-* NextAuth.js
-* next-pwa
-* next-themes 
-* NextUI 
-* heroicons
-* Tiptap
-* Prosemirror
-* CodeMirror
+* React (17.0.2)
+* Prisma (4.2.1)
+    * prisma-client (4.3.1)
+* Next.js (12.3.1)
+* NextAuth.js (4.10.3)
+    * next-auth/prisma-adapter (1.0.4)
+* next-pwa (5.5.4)
+* next-themes (0.2.0)
+* NextUI (1.0.0-beta.9)
+* heroicons (2.0.11)
+* Tiptap (2.0.0-beta.199)
+* Prosemirror 
+    * prosemirror-state (1.4.1)
+    * prosemirror-view (1.28.2)
+* CodeMirror 
+    * codemirror/view (6.2.4)
+    * codemirror/commands (6.1.0)
+    * codemirror/language (6.2.1)
 * TIO.run
-* Turndown
-* Y.js
-* lodash
-* AWS SDK
-* Tldraw
-* md-to-pdf
+* Turndown (7.1.1)
+* Y.js (13.5.41)
+* lodash (4.17.21)
+* AWS SDK (2.1204.0)
+* tldraw (1.24.5)
+* md-to-pdf (5.1.0)
+* lru-cache (7.14.0)
 
 ### Cloud Services
 * Amazon S3 (AWS)
