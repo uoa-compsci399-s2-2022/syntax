@@ -38,23 +38,11 @@ export const getServerSideProps = async ({ req, res, params }) => {
 	var note;
 	if (id && id.length == 1) {
 		//catches errors if user inputs invalid noteId then returns user to /note
-		//e.g. note/kdjfnajksnf
-		try {
-			note = await getNoteByID(id[0]);
-		} catch {
-			return {
-				notFound:true
-			}
-		}
-		//if note doesn't exist then returns user to /note
+		note = await getNoteByID(id[0], session);
 		if (!note) {
 			return {
-				notFound:true
+				notFound: true
 			}
-		}
-		//if user is not the owner of the note then returns user to /note
-		else if (session.user.id != note.userId) {
-			ownership = false
 		}
 	} else {
 		note = {
@@ -72,11 +60,6 @@ export const getServerSideProps = async ({ req, res, params }) => {
 };
 
 const NoteLayout = ({ notes, note, ownership }) => {
-	if (ownership == false){
-		console.log("Sorry you do not have permission to access this note.")
-		return <Error statusCode={403}/>
-	}
-
 	const [sidebarDisplay, setSidebarDisplay] = useState(false);
 	const { isDark, type } = useTheme();
 	const { data: session, status } = useSession();
@@ -97,6 +80,7 @@ const NoteLayout = ({ notes, note, ownership }) => {
 				<title>{note.title}</title>
 				<meta name="theme-color" content={isDark ? "#121212" : "white"} />
 			</Head>
+
 			<Container
 				fluid
 				display="flex"

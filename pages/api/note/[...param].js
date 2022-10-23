@@ -8,6 +8,7 @@ import Superscript from "@tiptap/extension-superscript";
 import Subscript from "@tiptap/extension-subscript";
 import Youtube from "@tiptap/extension-youtube";
 import Link from "@tiptap/extension-link";
+import { baseExtensions } from '../../../components/editor/baseExtensions';
 import { TipTapCustomImage } from "@/node/Image";
 import { Drawing } from "@/node/Drawing";
 import {CodeBlockNode} from '../../../node/ExportCode'
@@ -116,8 +117,7 @@ export default async function handle(req, res) {
                 const noteId = param[0]
                 const note = await getNoteByID(noteId)
                 const title = note.title
-                const body = generateHTML(note.body, [StarterKit, Drawing(), TipTapCustomImage(null), BulletList,
-                                                    Underline, Superscript, Subscript, Youtube, Link, CodeBlockNode])
+                const body = generateHTML(note.body, [...baseExtensions(), TipTapCustomImage(null)])
                 if (param[2] === "md"){
                     const html = htmlTemplate(title, body, note.user.name, false)
                     const turndownService = new TurndownService()

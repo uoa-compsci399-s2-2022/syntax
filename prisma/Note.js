@@ -60,10 +60,14 @@ export const createNoteInGroup = async (title, body, groupId, session) => {
 	return note;
 };
 
-export const getNoteByID = async (id) => {
+export const getNoteByID = async (id, session) => {
+	let userId = session?.user.id;
 	const note = await prisma.note.findUnique({
 		where: {
-			id
+			id_userId: {
+				id,
+				userId
+			}
 		},
 		include: {
 			user: true,
