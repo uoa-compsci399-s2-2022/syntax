@@ -168,27 +168,21 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 							icon={<EllipsisHorizontalIcon style={{ height: "30px" }} />}
 						/>
 						<Dropdown.Menu
-							disabledKeys={["share", "lock"]}
+							disabledKeys={["share"]}
 							onAction={setSelectedKey}
 							aria-label="Note Options"
 						>
 							<Dropdown.Section aria-label="Note Actions">
 								<Dropdown.Item
 									key="share"
+									textValue="Share"
 									icon={<ShareIcon style={{ height: "var(--icon-size-s)" }} />}
 								>
 									Share
 								</Dropdown.Item>
 								<Dropdown.Item
-									key="lock"
-									icon={
-										<LockClosedIcon style={{ height: "var(--icon-size-s)" }} />
-									}
-								>
-									Lock
-								</Dropdown.Item>
-								<Dropdown.Item
 									key="export"
+									textValue="Export"
 									icon={
 										<DocumentArrowUpIcon
 											style={{ height: "var(--icon-size-s)" }}
@@ -199,6 +193,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 								</Dropdown.Item>
 								<Dropdown.Item
 									key="delete"
+									textValue="Delete"
 									color="error"
 									icon={<TrashIcon style={{ height: "var(--icon-size-s)" }} />}
 								>
@@ -208,6 +203,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 							<Dropdown.Section aria-label="User Actions">
 								<Dropdown.Item
 									key="changeTheme"
+									textValue="Change theme"
 									icon={
 										type === "dark" ? (
 											<SunIcon style={{ height: "var(--icon-size-s)" }} />
@@ -220,6 +216,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 								</Dropdown.Item>
 								<Dropdown.Item
 									key="signOut"
+									textValue="Sign out"
 									icon={
 										<ArrowLeftOnRectangleIcon
 											style={{ height: "var(--icon-size-s)" }}
