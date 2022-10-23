@@ -80,7 +80,7 @@ const SearchModal = ({ open, closeHandler }) => {
 	};
 
 	const openNote = (preNote) => {
-		for (let group of temp1.groups) {
+		for (let group of notes.groups) {
 			if (group.id == preNote.groupId) for (let note of group.notes) {
 				if (note.id == preNote._id.$oid) {
 					note.action = "edit";
@@ -226,7 +226,7 @@ const SearchModal = ({ open, closeHandler }) => {
 												background: "$accents4"
 											}
 										}}
-										onClick={closeHandler}
+										onClick={() => closeHandler(true)}
 									>
 										<Row>{note.title}</Row>
 										<Row css={{ color: "$accents6" }}>

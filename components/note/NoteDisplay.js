@@ -63,10 +63,11 @@ const NoteDisplay = () => {
 						width: "100%",
 						fontSize: "var(--nextui-fontSizes-5xl)",
 						letterSpacing: "var(--nextui-letterSpacings-tighter)",
-						lineHeight: "var(--nextui-lineHeights-md)",
+						lineHeight: "var(--nextui-lineHeights-sm)",
 						fontWeight: "var(--nextui-fontWeights-bold)",
 						background: "none",
-						border: "none"
+						border: "none",
+						marginBottom: "1rem"
 					}}
 				>
 					{currentNote.title}
@@ -156,7 +157,7 @@ const NoteDisplay = () => {
 				/>
 				<Tiptap />
 			</Container>
-			<Spacer />
+			<Spacer y={4} />
 		</>
 	);
 };
