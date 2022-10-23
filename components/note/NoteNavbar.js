@@ -6,7 +6,7 @@ import { Avatar, Dropdown, Button, Navbar, useTheme } from "@nextui-org/react";
 import { useTheme as useNextTheme } from "next-themes";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 // import { Document, Page, pdf} from '@react-pdf/renderer'
 // import Html from 'react-pdf-html'
 import {
@@ -49,21 +49,22 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 	const [deleteModal, setDeleteModal] = useState(false);
 	const currentNote = useNote();
 	const setNotes = useDispatchNotes();
+	const { data: session, status } = useSession();
 
 	const placeholderUserData = [
 		{
-			name: "Johnny Appleseed",
-			color: "grey",
-			email: "j.appleseed@gmail.com",
+			name: session?.user.name,
+			email: session?.user.email,
+			image: session?.user.image,
 			owner: true
 		},
-		{ name: "Jane Doe", color: "grey", email: "jane.d@hotmail.com" },
-		{ name: "Test User 1", color: "grey", email: "testtest123@gmail.com" },
-		{ name: "Test User 2", color: "grey", email: "tu2@hotmail.com" },
-		{ name: "Test User 3", color: "grey", email: "tu3@hotmail.com" },
-		{ name: "Test User 4", color: "grey", email: "tu4@hotmail.com" },
-		{ name: "Test User 5", color: "grey", email: "tu5@hotmail.com" },
-		{ name: "Test User 6", color: "grey", email: "tu6@hotmail.com" },
+		{ name: "Jane Doe", email: "jane.d@hotmail.com" },
+		{ name: "Test User 1", email: "testtest123@gmail.com" },
+		{ name: "Test User 2", email: "tu2@hotmail.com" },
+		{ name: "Test User 3", email: "tu3@hotmail.com" },
+		{ name: "Test User 4", email: "tu4@hotmail.com" },
+		{ name: "Test User 5", email: "tu5@hotmail.com" },
+		{ name: "Test User 6", email: "tu6@hotmail.com" },
 		{
 			name: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec metus enim, sodales vel nisl vel, lobortis suscipit enim. Praesent scelerisque fringilla urna, at semper mi aliquam sed. Ut nec placerat nulla. Sed non odio vel dolor sodales maximus. Duis ut leo velit. Duis egestas nisi sit amet diam egestas, quis aliquam odio fermentum. Morbi eu ultrices felis.",
 			color: "grey",
@@ -134,7 +135,6 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 	// }
 
 	const shareHandler = async () => {
-		console.log("share");
 		router.push({
 			pathname: `/room/${currentNote.id}`,
 			query: { sharing: true },
@@ -216,7 +216,10 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 			</Navbar.Content>
 			<Navbar.Content gap={5}>
 				<Navbar.Item>
-					<AvatarGroup users={placeholderUserData} />
+					<AvatarGroup
+						users={placeholderUserData}
+						setShareModal={setShareModal}
+					/>
 				</Navbar.Item>
 				<Navbar.Item>
 					<Dropdown placement="bottom-right">
@@ -229,7 +232,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 							onAction={setSelectedKey}
 							aria-label="Note Options"
 						>
-							<Dropdown.Section  aria-label="Note Actions">
+							<Dropdown.Section aria-label="Note Actions">
 								<Dropdown.Item
 									key="share"
 									icon={<ShareIcon style={{ height: "var(--icon-size-s)" }} />}
@@ -265,13 +268,23 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 							<Dropdown.Section aria-label="User Actions">
 								<Dropdown.Item
 									key="changeTheme"
-									icon={type === "dark" ? <SunIcon style={{ height: "var(--icon-size-s)" }} /> : <MoonIcon style={{ height: "var(--icon-size-s)" }} />}
+									icon={
+										type === "dark" ? (
+											<SunIcon style={{ height: "var(--icon-size-s)" }} />
+										) : (
+											<MoonIcon style={{ height: "var(--icon-size-s)" }} />
+										)
+									}
 								>
 									{type === "dark" ? "Light" : "Dark"} mode
 								</Dropdown.Item>
 								<Dropdown.Item
 									key="signOut"
-									icon={<ArrowLeftOnRectangleIcon style={{ height: "var(--icon-size-s)" }} />}
+									icon={
+										<ArrowLeftOnRectangleIcon
+											style={{ height: "var(--icon-size-s)" }}
+										/>
+									}
 								>
 									Sign out
 								</Dropdown.Item>

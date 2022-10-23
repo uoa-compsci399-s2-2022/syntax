@@ -1,3 +1,4 @@
+import { XMarkIcon } from "@heroicons/react/24/solid";
 import {
 	Button,
 	Modal,
@@ -7,15 +8,12 @@ import {
 	Row,
 	Col,
 	Spacer,
-	Tooltip,
 	useTheme
 } from "@nextui-org/react";
-import { XMarkIcon } from "@heroicons/react/24/solid";
 
 const ShareModal = ({ open, closeHandler, shareHandler, users }) => {
 	const { checked, type } = useTheme();
 	const share_link = "Insert Link Here";
-	const userInitials = users.map((user) => user.name.match(/\b(\w)/g).join(""));
 
 	return (
 		<Modal
@@ -78,9 +76,10 @@ const ShareModal = ({ open, closeHandler, shareHandler, users }) => {
 							}}
 						>
 							<Avatar
-								text={userInitials[index]}
+								src={user.image}
+								text={user.name[0]}
 								css={{
-									background: user.color
+									background: "$accents6"
 								}}
 							/>
 							<Col

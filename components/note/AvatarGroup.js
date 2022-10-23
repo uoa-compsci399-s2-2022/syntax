@@ -1,24 +1,30 @@
-import { Avatar } from "@nextui-org/react";
+import { Avatar, Tooltip } from "@nextui-org/react";
 
-const AvatarGroup = ({ users }) => {
+const AvatarGroup = ({ users, setShareModal }) => {
 	const avatarLimit = 5;
-	const userInitials = users.map((user) => user.name.match(/\b(\w)/g).join(""));
+	const avatarSize = "30px";
 
 	return (
 		<Avatar.Group
 			count={users.length - avatarLimit > 0 && users.length - avatarLimit}
 		>
 			{users.slice(0, avatarLimit).map((user, index) => (
+				<Tooltip placement="bottom" content={user.name}>
 				<Avatar
 					pointer
-					stacked
-					size="sm"
 					key={index}
-					text={userInitials[index]}
+					src={user.image}
+					text={user.name[0]}
+					onClick={() => setShareModal(true)}
 					css={{
-						background: user.color
+						background: "$accents6",
+						minWidth: avatarSize,
+						minHeight: avatarSize,
+						width: avatarSize,
+						height: avatarSize
 					}}
 				/>
+				</Tooltip>
 			))}
 		</Avatar.Group>
 	);

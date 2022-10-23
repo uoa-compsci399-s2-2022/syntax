@@ -67,22 +67,6 @@ div[contenteditable] {
 }
 
 /* NextUI components */
-.nextui-collapse-view {
-	padding: 0;
-}
-
-.nextui-collapse {
-	margin: 0 0 10px 0 !important;
-	padding: 10px !important;
-	box-shadow: none !important;
-}
-
-.nextui-collapse-content {
-	padding: 0;
-}
-
-.nextui-collapse--open {
-}
 .ProseMirror img.ProseMirror-selectednode {
 	outline: 3px solid #68cef8;
 }
@@ -98,6 +82,13 @@ div[contenteditable] {
 
 .editor-link:hover {
 	text-decoration: underline;
+}
+
+/* avatar styling */
+.nextui-avatar-text {
+	font-size: 1.5rem !important;
+	font-weight: normal !important;
+	color: white !important;
 }
 
 /* Youtube embed styling */
