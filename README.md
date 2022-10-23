@@ -1,5 +1,5 @@
 # syntax
-COMPSCI 399 Project 10 (Extended note-taking app for programming students)
+*COMPSCI 399 Project 10 (Extended note-taking app for programming students)*
 
 **syntax** is a multi-platform note-taking application designed specifically for programming students. In order to meet the needs of its target audience, the application supports writing, compiling, and executing code. It also contains many additional note-taking features, including searchable code snippets, drawing & stylus support, exportable notes, image upload, Youtube video embeds, and collaborative note creation.
 
@@ -9,16 +9,13 @@ http://syntaxapp.vercel.app/
 
 ## Interface
 #### Editor
-![Editor (dark mode)](https://i.imgur.com/GbcE0gK.png)
-![Editor (light mode)](https://i.imgur.com/8wLahnf.png)
+<img src="https://i.imgur.com/GbcE0gK.png" alt="Editor (dark mode)" width="50%" /><img src="https://i.imgur.com/8wLahnf.png" alt="Editor (light mode)" width="50%" />
 
 #### Home Page
-![Home page (dark mode)](https://i.imgur.com/WjYekpE.png)
-![Home page (light mode)](https://i.imgur.com/6Gxf73k.png)
+<img src="https://i.imgur.com/WjYekpE.png" alt="Home page (dark mode)" width="50%" /><img src="https://i.imgur.com/6Gxf73k.png" alt="Home page (light mode)" width="50%" />
 
 #### Sign In Page (via Google)
-![Sign-in page (dark mode)](https://i.imgur.com/DjeHkxX.png)
-![Sign-in page (light mode)](https://i.imgur.com/t1nY8nY.png)
+<img src="https://i.imgur.com/DjeHkxX.png" alt="Sign in page (dark mode)" width="50%" /><img src="https://i.imgur.com/t1nY8nY.png" alt="Sign in page (light mode)" width="50%" />
 
 ## Technologies
 
