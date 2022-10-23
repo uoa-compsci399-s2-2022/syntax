@@ -12,6 +12,7 @@ import { TipTapCustomImage } from "@/node/Image";
 import { Drawing } from "@/node/Drawing";
 import {CodeBlockNode} from '../../../node/ExportCode'
 import TurndownService from 'turndown';
+import rateLimit from "../../../utils/rate-limit"
 import mdToPdf from "md-to-pdf";
 
 const CSS = `<style>
@@ -96,46 +97,58 @@ const htmlTemplate = (title, body, name, css) => {
         `<html><head><meta charset="utf-8"></head><body><h1>${title}<h1/><h4>${name}</h4><br><hr>${body}</body></html>`
 )} 
 
-const extensions = [StarterKit, Drawing(), TipTapCustomImage()]
-
+const limiter = rateLimit({
+    interval: 1000, //resets token every second
+    uniqueTokenPerInterval: 500 //500 unique users per call
+})
 
 export default async function handle(req, res) {
-    const { param } = req.query
     const session = await getSession({ req });
-    if (param.length === 3){
-        if (param[1] === "export"){
-            const noteId = param[0]
-            const note = await getNoteByID(noteId)
-            const title = note.title
-            const body = generateHTML(note.body, [StarterKit, Drawing(), TipTapCustomImage(),BulletList,Underline,Superscript,Subscript,Youtube,Link,CodeBlockNode])
-            if (param[2] === "md"){
-                const html = htmlTemplate(title, body, note.user.name, false)
-                const turndownService = new TurndownService()
-                const markdown = turndownService.turndown(html)
-                res.status(200).json({text: markdown})
-
-            } else if (param[2] === "html"){
-                let html = htmlTemplate(title, body, note.user.name, true)
-                html = "<!doctype html>" + html
-                res.status(200).json({text: html})
-                
-            } else if (param[2] === "pdf") {
-                const html = htmlTemplate(title, body, note.user.name, false)
-                const turndownService = new TurndownService()
-                const markdown = turndownService.turndown(html)
-                const pdf = await mdToPdf({content: markdown})
-                const json = pdf.content.toJSON()
-                res.status(200).json({
-                    text: json.data
-                })
-            }else {
-                return res.status(501).json({ message: `` });
+    if (session) {
+        try{
+            await limiter.check(res, 2, 'CACHE_TOKEN') //2 requests per second is the limit
+        } catch {
+            return res.status(429).json({error: "Rate limit exceeded"})
+        }
+        const { param } = req.query
+        if (param.length === 3){
+            if (param[1] === "export"){
+                const noteId = param[0]
+                const note = await getNoteByID(noteId)
+                const title = note.title
+                const body = generateHTML(note.body, [StarterKit, Drawing(), TipTapCustomImage(null), BulletList,
+                                                    Underline, Superscript, Subscript, Youtube, Link, CodeBlockNode])
+                if (param[2] === "md"){
+                    const html = htmlTemplate(title, body, note.user.name, false)
+                    const turndownService = new TurndownService()
+                    const markdown = turndownService.turndown(html)
+                    return res.status(200).json({text: markdown})
+    
+                } else if (param[2] === "html"){
+                    let html = htmlTemplate(title, body, note.user.name, true)
+                    html = "<!doctype html>" + html
+                    return res.status(200).json({text: html})
+                    
+                } else if (param[2] === "pdf") {
+                    const html = htmlTemplate(title, body, note.user.name, false)
+                    const turndownService = new TurndownService()
+                    const markdown = turndownService.turndown(html)
+                    const pdf = await mdToPdf({content: markdown})
+                    const json = pdf.content.toJSON()
+                    return res.status(200).json({
+                        text: json.data
+                    })
+                }else {
+                    return res.status(501).json({ message: "Method not allowed" });
+                }
+            } else{
+                return res.status(501).json({ message: `/api/note/${param.join('/')} is not implemented` });
             }
-        } else{
+        }
+        else{
             return res.status(501).json({ message: `/api/note/${param.join('/')} is not implemented` });
         }
-    }
-    else{
-        return res.status(501).json({ message: `/api/note/${param.join('/')} is not implemented` });
+    } else {
+        return res.status(401).json({message: "Unauthorized access"})
     }
 }
