@@ -4,13 +4,14 @@ import Tiptap from "@/components/editor/Tiptap";
 import { debounce } from "lodash";
 import { useRef } from "react";
 import { useRouter } from "next/router";
-import { useNote, useNotes, useDispatchNotes } from "../../modules/AppContext";
+import { useNote, useNotes, useDispatchNotes, useDispatchNote } from "../../modules/AppContext";
 
 const NoteDisplay = () => {
 	const currentNote = useNote();
 	const notes = useNotes();
 	const setNotes = useDispatchNotes();
 	const router = useRouter();
+	const setCurrentNote = useDispatchNote();
 	const debounceSave = useRef(
 		debounce(async (criteria) => {
 			saveContent(criteria);
@@ -18,7 +19,7 @@ const NoteDisplay = () => {
 	).current;
 
 	const saveContent = async (content) => {
-		console.log("save title debounce", content);
+		console.log("save title debounce", content, currentNote);
 		let note = {
 			id: content.id,
 			title: content.title,
@@ -32,7 +33,9 @@ const NoteDisplay = () => {
 		});
 
 		const updatedNote = await res.json();
+		updatedNote.currentGroupId = content.currentGroupId;
 		setNotes({ note: updatedNote, type: "edit" });
+		setCurrentNote(updatedNote);
 		router.push(`/note/${updatedNote.id}`, undefined, {
 			shallow: true
 		});
@@ -63,10 +66,11 @@ const NoteDisplay = () => {
 						width: "100%",
 						fontSize: "var(--nextui-fontSizes-5xl)",
 						letterSpacing: "var(--nextui-letterSpacings-tighter)",
-						lineHeight: "var(--nextui-lineHeights-md)",
+						lineHeight: "var(--nextui-lineHeights-sm)",
 						fontWeight: "var(--nextui-fontWeights-bold)",
 						background: "none",
-						border: "none"
+						border: "none",
+						marginBottom: "1rem"
 					}}
 				>
 					{currentNote.title}
@@ -126,7 +130,8 @@ const NoteDisplay = () => {
 											onAction={(e) =>
 												debounceSave({
 													id: currentNote.id,
-													groupId: e.target.value
+													groupId: e,
+													currentGroupId: currentNote.groupId,
 												})
 											}
 										>
@@ -156,7 +161,7 @@ const NoteDisplay = () => {
 				/>
 				<Tiptap />
 			</Container>
-			<Spacer />
+			<Spacer y={4} />
 		</>
 	);
 };

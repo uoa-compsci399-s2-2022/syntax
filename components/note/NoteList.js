@@ -43,7 +43,7 @@ const NoteList = ({ retrieved_notes, handleSidebarDisplay, createNote }) => {
 					notes.groups.map((group) => (
 						<NoteGroup
 							name={group.name}
-							key={group.id}
+							key={group.notes}
 							id={group.id}
 							color={group.color}
 							notes={group.notes}
