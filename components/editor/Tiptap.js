@@ -19,7 +19,7 @@ import {
 	useDispatchNote,
 	useDispatchNotes
 } from "@/modules/AppContext";
-
+import { getSchema } from '@tiptap/core'
 import dynamic from 'next/dynamic'
 import { CodeBlockNode } from './CodeMirrorNode';
 import { DebounceSave } from './DebounceSaveExtension';
@@ -30,7 +30,7 @@ import { WebrtcProvider } from 'y-webrtc'
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
 import { useSession } from "next-auth/react"
 import { useEffect, useRef, useState, useMemo } from "react";
-import { fromUint8Array, toUint8Array } from 'js-base64'
+import { fromBase64, fromUint8Array, toUint8Array } from 'js-base64'
 import { yDocToProsemirrorJSON, prosemirrorJSONToYDoc } from 'y-prosemirror'
 
 EditorView.prototype.updateState = function updateState(state) {
@@ -131,7 +131,8 @@ export default function () {
 			DebounceSave().configure({
 				noteId: currentNote.id,
 				noteTitle: currentNote.title,
-				YDOC: ydoc
+				YDOC: ydoc,
+				PROVIDER: provider,
 			}),
 			TipTapCustomImage().configure({
 				HTMLAttributes: {
@@ -154,17 +155,26 @@ export default function () {
 				},
 			}) : (null)
 		],
+		onBeforeCreate({ editor }) {
+			// Before the view is created.
+			console.log("onBeforeCreate: collaborationCursor ",editor?.storage.collaborationCursor?.users?.length);
+			console.log("onBeforeCreate: provider state ",provider?.awareness?.states?.size);
+		 },
 		onUpdate({editor}){
-			console.log(currentNote.room==null || provider?.awareness?.states?.size==1);
-			console.log(provider?.awareness?.states?.size);
+			console.log("onUpdate: no room or only person ", currentNote.room==null || provider?.awareness?.states?.size==1);
+			console.log("onUpdate: provider state ",provider?.awareness?.states?.size);
 		},
 		onDestroy(){
 			provider?.destroy();
 		},
 		onCreate({editor}){
-			console.log(editor?.storage.collaborationCursor);
-			if(editor?.storage.collaborationCursor.users.length==1) editor.commands.setContent(currentNote.body);
+			console.log(provider);
+			console.log("onCreate: collaborationCursor ",editor?.storage.collaborationCursor.users);
+			console.log("onCreate: provider state ",provider?.awareness?.states?.size);
+			// if(editor?.storage.collaborationCursor.users.length==1) editor.commands.setContent(currentNote.body);
 		},
+
+		
 		...((currentNote.room==null) ? {content: currentNote.body} : {}),
 	}, [currentNote.id, provider]);
 

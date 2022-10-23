@@ -49,25 +49,27 @@ export const DebounceSave = () => {
 				noteTitle: undefined,
 				noteId: undefined,
 				YDOC: undefined,
+				PROVIDER: undefined,
 			};
 		},
 		onBeforeCreate({ editor }) {
 			if (this.options.noteId == undefined) console.warn("noteId not set");
 		},
 		onCreate({ editor }) {
-			console.log(this)
+			console.log(this);
+			console.log("extension user length", editor?.storage.collaborationCursor.users.length);
 			this.options.YDOC.on('update', function handler(update, origin,) {
 					console.log(this)
 					const yjson = prosemirrorJSONToYDoc(editor.schema, editor.getJSON());
 					const ut8arr = Y.encodeStateAsUpdate(yjson)
 					const ydocb64 = fromUint8Array(ut8arr);
 					
-					debounceSave({
-						id: this.options.noteId,
-						title: this.options.noteTitle,
-						json: editor.getJSON(),
-						ydoc: ydocb64
-					});
+					// debounceSave({
+					// 	id: this.options.noteId,
+					// 	title: this.options.noteTitle,
+					// 	json: editor.getJSON(),
+					// 	ydoc: ydocb64
+					// });
 					console.log(origin);
 			 }.bind(this))
 		},
@@ -77,12 +79,12 @@ export const DebounceSave = () => {
 			const ut8arr = Y.encodeStateAsUpdate(yjson)
 			const ydocb64 = fromUint8Array(ut8arr);
 			
-			debounceSave({
-				id: this.options.noteId,
-				title: this.options.noteTitle,
-				json: editor.getJSON(),
-				ydoc: ydocb64
-			});
+			// debounceSave({
+			// 	id: this.options.noteId,
+			// 	title: this.options.noteTitle,
+			// 	json: editor.getJSON(),
+			// 	ydoc: ydocb64
+			// });
 						
 			
 		},
