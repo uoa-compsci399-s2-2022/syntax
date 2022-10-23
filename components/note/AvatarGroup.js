@@ -14,7 +14,7 @@ const AvatarGroup = ({ users, setShareModal }) => {
 					pointer
 					key={index}
 					src={user.image}
-					text={user.name[0]}
+					text={user.name?.charAt(0)}
 					onClick={() => setShareModal(true)}
 					css={{
 						background: "$accents6",

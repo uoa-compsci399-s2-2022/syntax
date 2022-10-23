@@ -77,7 +77,7 @@ const ShareModal = ({ open, closeHandler, shareHandler, users }) => {
 						>
 							<Avatar
 								src={user.image}
-								text={user.name[0]}
+								text={user.name?.charAt(0)}
 								css={{
 									background: "$accents6"
 								}}
