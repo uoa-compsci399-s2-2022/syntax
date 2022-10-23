@@ -10,11 +10,21 @@ import {
 	Spacer,
 	useTheme
 } from "@nextui-org/react";
+import { useState, useEffect } from "react";
+import { useNote } from "../../modules/AppContext";
 
 const ShareModal = ({ open, closeHandler, shareHandler, users }) => {
 	const { checked, type } = useTheme();
 	const share_link = "Insert Link Here";
+	const [email, setEmail] = useState('');
+	const [sharedUsers, setSharedUsers] = useState([])
+	
 
+	const addEmail = (event) => {
+		setEmail(event.target.value)
+	}
+	
+	
 	return (
 		<Modal
 			blur
@@ -34,7 +44,8 @@ const ShareModal = ({ open, closeHandler, shareHandler, users }) => {
 					css={{ padding: "0", gap: "1rem" }}
 				>
 					<Input
-						clearable
+						onChange={addEmail}
+						clearable={true}
 						type="email"
 						label="Enter their email here"
 						animated={false}
@@ -49,7 +60,7 @@ const ShareModal = ({ open, closeHandler, shareHandler, users }) => {
 					<Button
 						auto
 						xs
-						onPress={closeHandler}
+						onPress={() => shareHandler(email, 'SHARE')}
 						css={{ alignSelf: "flex-end" }}
 					>
 						Invite
@@ -118,6 +129,7 @@ const ShareModal = ({ open, closeHandler, shareHandler, users }) => {
 								"Owner"
 							) : (
 								<Button
+								onPress={() => shareHandler(user.email, 'UNSHARE')}
 									auto
 									light
 									ripple={false}

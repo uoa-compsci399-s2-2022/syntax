@@ -39,7 +39,6 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 	const currentNote = useNote();
 	const setNotes = useDispatchNotes();
 	const { data: session, status } = useSession();
-
 	const placeholderUserData = [
 		{
 			name: session?.user.name,
@@ -122,13 +121,24 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 		}
 	};
 
-	const shareHandler = async () => {
-		router.push({
-			pathname: `/room/${currentNote.id}`,
-			query: { sharing: true },
-			options: { shallow: true }
-		});
-		setShareModal(false);
+	const shareHandler = async (email, type) => {
+		
+		if (type == 'SHARE') {
+			console.log('SHARE')
+		let res = await fetch(`/api/collab`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({email: email, id: currentNote.roomId})
+			});
+		}
+		if (type == 'UNSHARE') {
+			console.log('UNSHARE')
+			let res = await fetch(`/api/collab`, {
+				method: "DELETE",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({email: email, id: currentNote.roomId})
+			});
+		}
 	};
 
 	const closeHandler = () => {

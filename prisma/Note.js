@@ -272,3 +272,42 @@ export const createRoom = async (noteId, YDOC, session) => {
 	});
 	return newRoom;
 };
+
+export const addUser = async (email, roomId, session) => {
+	const users = await prisma.User.update({
+		where: {
+			email: email
+		},
+		data: {
+			rooms: {
+				connect: {
+					id: roomId
+				}
+			}
+		},
+	})
+}
+
+export const deleteUser = async(email, roomId, session) => {
+	await prisma.User.update({
+		where: {
+			email: email
+		},
+		data: {
+			rooms: {
+				disconnect: {
+					id: roomId
+				}
+			}
+		},
+	})
+}
+
+export const getSharedUsers = async (roomId) => {
+	const users = await prisma.Room.findUnique({
+		where: {
+			id: roomId
+		},
+	})
+	return users.userIds
+}
