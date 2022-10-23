@@ -113,6 +113,10 @@ div[contenteditable] {
 	color: white !important;
 }
 
+.nextui-avatar-bg {
+	background: none !important;
+}
+
 /* Youtube embed styling */
 iframe {
 	border: none;
