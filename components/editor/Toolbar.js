@@ -298,7 +298,7 @@ export default ({ editor, drawingOpenHandler }) => {
 				left: "0",
 				bottom: "0",
 				background: "$background",
-				padding: "0.3rem 0",
+				padding: "0.3rem 0 0.5rem 0",
 				margin: "0",
 				"@xs": {
 					justifyContent: "flex-start",

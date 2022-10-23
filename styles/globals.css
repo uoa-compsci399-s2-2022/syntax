@@ -35,6 +35,12 @@ a {
 }
 
 /* note page styling */
+@media (max-width: 650px) {
+	.note-metadata-table {
+		font-size: var(--nextui-fontSizes-sm);
+	}
+}
+
 .note-metadata-table td {
 	padding: 0;
 }
