@@ -48,39 +48,34 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 			router.push(`/note`, "/");
 			setDeleteModal(false);
 			setSelectedKey();
-			
 		} catch (error) {
 			console.log(error);
 		}
 	};
 
-	 const exportNoteHandler = async (fileType) => {
-	 	try{
-	 		console.log(fileType)
-	 		if (fileType =="HTML"){
-	 			let res = await fetch(`/api/note/${currentNote.id}/export/html`, {
-	 				method: "GET",
-          
-	 			});
-	 			let { text } = await res.json()
-	 			console.log(text)
-	 			const blob = new Blob([text], {type: "text/html"})
-	 			const link = document.createElement('a');
-	 			link.href = URL.createObjectURL(blob);
-	 			link.setAttribute('download', `${currentNote.title}.html`);
-	 			link.click();
-	 		} else if (fileType =="Markdown") {
-	 			const res = await fetch(`/api/note/${currentNote.id}/export/md`, {
-	 				method: "GET",
-	 			});
-	 			let { text } = await res.json()
-	 			const blob = new Blob([text], {type: "text/markdown"})
-	 			const link = document.createElement('a');
-	 			link.href = URL.createObjectURL(blob);
-	 			link.setAttribute('download', `${currentNote.title}.md`);
-	 			link.click();
-	 		}
-	 		else if (fileType == "PDF"){
+	const exportNoteHandler = async (fileType) => {
+		try {
+			if (fileType == "HTML") {
+				let res = await fetch(`/api/note/${currentNote.id}/export/html`, {
+					method: "GET"
+				});
+				let { text } = await res.json();
+				const blob = new Blob([text], { type: "text/html" });
+				const link = document.createElement("a");
+				link.href = URL.createObjectURL(blob);
+				link.setAttribute("download", `${currentNote.title}.html`);
+				link.click();
+			} else if (fileType == "Markdown") {
+				const res = await fetch(`/api/note/${currentNote.id}/export/md`, {
+					method: "GET"
+				});
+				let { text } = await res.json();
+				const blob = new Blob([text], { type: "text/markdown" });
+				const link = document.createElement("a");
+				link.href = URL.createObjectURL(blob);
+				link.setAttribute("download", `${currentNote.title}.md`);
+				link.click();
+			} else if (fileType == "PDF") {
 				let res = await fetch(`/api/note/${currentNote.id}/export/pdf`, {
 					method: "GET"
 				});
@@ -92,11 +87,11 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 				link.href = URL.createObjectURL(blob);
 				link.setAttribute("download", `${currentNote.title}.pdf`);
 				link.click();
-			} 
-	 	} catch (error) {
-	 		console.log(error)
-	 	}
-	 }
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
 	const closeHandler = () => {
 		setExportModal(false);
