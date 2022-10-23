@@ -5,7 +5,7 @@
 
 *Further information, documentation, and considerations can be found at https://github.com/uoa-compsci399-s2-2022/syntax/wiki*
 
-http://syntaxapp.vercel.app/
+Deployed at http://syntaxapp.vercel.app/
 
 [![https://vercel.com/?utm_source=10outof10&utm_campaign=oss](powered-by-vercel.svg)](https://vercel.com/?utm_source=10outof10&utm_campaign=oss)
 
@@ -68,7 +68,7 @@ $ npm run dev
 * [Notion](https://elegant-joke-27e.notion.site/CS399-Project-Team-10-c6ba4a95d1ae4e14bf42fd1657b88776)
 
 ## Future Plans
-TBA
+https://github.com/uoa-compsci399-s2-2022/syntax/wiki/Considerations-&-Future-Plans
 
 ## Acknowledgements
 
