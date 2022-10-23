@@ -103,7 +103,7 @@ const getInitialUser = () => {
 	};
 };
 
-export default function ({setCollabUsers}) {
+export default function ({ setCollabUsers }) {
 	const currentNote = useNote();
 	const [drawModal, setDrawModal] = useState(false);
 	const [drawContent, setDrawContent] = useState(null);
@@ -113,7 +113,7 @@ export default function ({setCollabUsers}) {
 
 	//Creates room based on note id. Deletes the old ydoc and creates a new blank one.
 	const ydoc = useMemo(() => new Y.Doc(), [currentNote.id]);
-	const provider = useMemo(() => {if(currentNote.room) return new WebrtcProvider(currentNote.id + "_43785b3457gt", ydoc)}, [currentNote.room]);
+	const provider = useMemo(() => { if (currentNote.room) return new WebrtcProvider(currentNote.id + "_43785b3457gt", ydoc) }, [currentNote.room]);
 
 	useEffect(() => {
 		if (currentNote.room == null) {
@@ -121,10 +121,7 @@ export default function ({setCollabUsers}) {
 			provider?.destroy();
 		}
 	}, [currentNote.id]);
-	
-	useEffect(() =>{
-		setCollabUsers();
-	}, [provider])
+
 	const editor = useEditor(
 		{
 			disablePasteRules: [Drawing, "drawing"],
@@ -151,19 +148,22 @@ export default function ({setCollabUsers}) {
 			],
 			onBeforeCreate({ editor }) {
 				provider?.once('synced', synced => {
-					if(ydoc.getXmlFragment().length == 0){
+					if (ydoc.getXmlFragment().length == 0) {
 						editor.commands.setContent(currentNote.body);
-					}else{
+					} else {
 						Y.applyUpdate(ydoc, fromBase64(currentNote.YDOC));
 					}
 					// console.log(editor?.storage.collaborationCursor?.users);
 					const users = editor?.storage.collaborationCursor?.users;
-					setCollabUsers([...users]);
+					setCollabUsers([...users] || []);
 					console.log('synced!', synced)
-				 })
+				})
 			},
 			onDestroy() {
 				provider?.destroy();
+			},
+			onCreate({editor}){
+				if(currentNote.room && ydoc.getXmlFragment().length == 0) editor.commands.setContent(currentNote.body);
 			},
 			...(currentNote.room == null ? { content: currentNote.body } : {})
 		},
