@@ -98,15 +98,15 @@ const htmlTemplate = (title, body, name, css) => {
 )} 
 
 const limiter = rateLimit({
-    interval: 1000,
-    uniqueTokenPerInterval: 500
+    interval: 1000, //resets token every second
+    uniqueTokenPerInterval: 500 //500 unique users per call
 })
 
 export default async function handle(req, res) {
     const session = await getSession({ req });
     if (session) {
         try{
-            await limiter.check(res, 60, 'CACHE_TOKEN')
+            await limiter.check(res, 2, 'CACHE_TOKEN') //2 requests per second is the limit
         } catch {
             return res.status(429).json({error: "Rate limit exceeded"})
         }
@@ -116,7 +116,8 @@ export default async function handle(req, res) {
                 const noteId = param[0]
                 const note = await getNoteByID(noteId)
                 const title = note.title
-                const body = generateHTML(note.body, [StarterKit, Drawing(), TipTapCustomImage(null)])
+                const body = generateHTML(note.body, [StarterKit, Drawing(), TipTapCustomImage(null), BulletList,
+                                                    Underline, Superscript, Subscript, Youtube, Link, CodeBlockNode])
                 if (param[2] === "md"){
                     const html = htmlTemplate(title, body, note.user.name, false)
                     const turndownService = new TurndownService()

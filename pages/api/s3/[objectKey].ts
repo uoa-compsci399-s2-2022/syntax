@@ -13,15 +13,15 @@ const s3Client = new aws.S3({
 });
 
 const limiter = rateLimit({
-  interval: 1000,
-  uniqueTokenPerInterval: 500
+  interval: 1000, //resets token every second
+  uniqueTokenPerInterval: 500 //500 unique users per call
 })
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({req})
   if (session){
     try{
-			await limiter.check(res, 2, 'CACHE_TOKEN')
+			await limiter.check(res, 2, 'CACHE_TOKEN') //2 requests per second is the limit
 		} catch {
 			res.status(429).json({error: "Rate limit exceeded"})
 		}
@@ -41,7 +41,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             }else {
               const json = JSON.parse(data.Body.toString())
               return res.status(200).json({
-                file: json
+                file: json //returns json file of the file requested
               });
             }
           })
@@ -62,6 +62,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               }]
             }
           };
+          //updates or adds the tag {Key: key, Value: value}
           const request = await s3Client.putObjectTagging(params);
           const response = await request.send();
           return res.status(204).json({});
@@ -76,6 +77,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         Bucket: process.env.AWS_BUCKET_NAME, 
         Key: (typeof objectKey === "string") ? objectKey : objectKey[0]
       };
+      //deletes object with the key [objectkey]
       const data = await s3Client.deleteObject(params, function(err, data) {
         if (err) {
           return res.status(400).json({

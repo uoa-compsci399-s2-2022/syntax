@@ -3,8 +3,8 @@ import { getSession } from "next-auth/react";
 import rateLimit from "../../utils/rate-limit"
 
 const limiter = rateLimit({
-	interval: 1000,
-	uniqueTokenPerInterval: 500
+	interval: 1000, //resets token every second
+	uniqueTokenPerInterval: 500 //500 unique users per call
 })
 
 export default async function handle(req, res) {
@@ -12,7 +12,7 @@ export default async function handle(req, res) {
 	const session = await getSession({ req });
 	if (session) {
 		try{
-			await limiter.check(res, 2, 'CACHE_TOKEN')
+			await limiter.check(res, 2, 'CACHE_TOKEN') //2 requests per second is the limit
 		} catch {
 			res.status(429).json({error: "Rate limit exceeded"})
 		}
