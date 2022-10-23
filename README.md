@@ -1,22 +1,24 @@
 # syntax
-Extended note-taking app for programming students
+COMPSCI 399 Project 10 (Extended note-taking app for programming students)
+
+**syntax** is a multi-platform note-taking application designed specifically for programming students. In order to meet the needs of its target audience, the application supports writing, compiling, and executing code. It also contains many additional note-taking features, including searchable code snippets, drawing & stylus support, exportable notes, image upload, Youtube video embeds, and collaborative note creation.
+
+http://syntaxapp.vercel.app/
 
 [![https://vercel.com/?utm_source=10outof10&utm_campaign=oss](powered-by-vercel.svg)](https://vercel.com/?utm_source=10outof10&utm_campaign=oss)
 
+## Interface
 #### Editor
 ![Editor (dark mode)](https://i.imgur.com/GbcE0gK.png)
 ![Editor (light mode)](https://i.imgur.com/8wLahnf.png)
 
 #### Home Page
-![Home page (dark mode)](https://i.imgur.com/I9CgjRp.png)
-![Home page (light mode)](https://i.imgur.com/KIF6Wy7.png)
+![Home page (dark mode)](https://i.imgur.com/WjYekpE.png)
+![Home page (light mode)](https://i.imgur.com/6Gxf73k.png)
 
 #### Sign In Page (via Google)
-![Sign-in page (dark mode)](https://i.imgur.com/O6DB0Pv.png)
-![Sign-in page (light mode)](https://i.imgur.com/ny3wFFQ.png)
-
-## Project Description
-The purpose of this project is to create a note-taking application designed for computer science students. To adapt our application to suit computer science students, the application is able to support writing and executing code, searching by code, collaboration as well as other major note-taking features.
+![Sign-in page (dark mode)](https://i.imgur.com/DjeHkxX.png)
+![Sign-in page (light mode)](https://i.imgur.com/t1nY8nY.png)
 
 ## Technologies
 
