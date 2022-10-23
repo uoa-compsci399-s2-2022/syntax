@@ -75,7 +75,8 @@ const notesReducer = (state, action) => {
 	}
 
 	if (type === "edit") {
-		let noteGroupIndex = state.groups.findIndex((x) => x.id === note.groupId);
+		var grpID = note.currentGroupId || note.groupId;
+		let noteGroupIndex = state.groups.findIndex((x) => x.id === grpID);
 
 		// if no match, return the previous state
 		if (noteGroupIndex < 0) return state;
@@ -83,13 +84,18 @@ const notesReducer = (state, action) => {
 		let noteIndex = state.groups[noteGroupIndex].notes.findIndex(
 			(x) => x.id === note.id
 		);
-
 		// if no match, return the previous state
 		if (noteIndex < 0) return state;
 		// update note at the defined index
+		// state.groups[noteGroupIndex].notes[noteIndex] = note;
+		if (note.currentGroupId) {
+			let newNoteGroupIndex = state.groups.findIndex((x) => x.id === note.groupId);
+			state.groups[noteGroupIndex].notes.splice(noteIndex, 1);
+			state.groups[newNoteGroupIndex].notes.push(note);
+			return state;
+		}
 		state.groups[noteGroupIndex].notes[noteIndex] = note;
 	}
-
 	if (type === "editGroup") {
 		let noteGroupIndex = state.groups.findIndex((x) => x.id === note.id);
 
