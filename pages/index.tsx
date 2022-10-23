@@ -82,14 +82,14 @@ drawing & stylus support, images, Youtube video embeds, and more.</p><p></p>
 				containerCss={{ background: "transparent !important" }}
 			>
 				<Navbar.Brand>
-					<Image
-						width={50}
-						height={50}
-						draggable="false"
-						src="/icons/icon-256x256.png"
-						alt="syntax logo"
-						objectFit="initial"
-					/>
+					<Link href="/">
+						<Image
+							width={40}
+							draggable="false"
+							src="/icons/icon-64x64.png"
+							alt="syntax logo"
+						/>
+					</Link>
 				</Navbar.Brand>
 				<Navbar.Content>
 					<Navbar.Item>

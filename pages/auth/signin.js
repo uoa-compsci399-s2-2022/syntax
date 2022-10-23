@@ -1,5 +1,14 @@
 import BlobBackground from "@/components/home/BlobBackground";
-import { Button, Text, Container, Card, useTheme } from "@nextui-org/react";
+import {
+	Button,
+	Text,
+	Container,
+	Card,
+	Navbar,
+	Link,
+	Image,
+	useTheme
+} from "@nextui-org/react";
 import { signIn, getCsrfToken, getProviders } from "next-auth/react";
 import Head from "next/head";
 
@@ -26,9 +35,33 @@ const SignIn = ({ csrfToken, providers }) => {
 			<Container
 				display="flex"
 				justify="center"
-				alignItems="center"
-				css={{ padding: "0", width: "100vw", height: "100vh" }}
+				alignItems="flex-start"
+				css={{
+					padding: "0",
+					width: "100vw",
+					height: "100vh"
+				}}
 			>
+				<Navbar
+					disableBlur
+					disableShadow
+					maxWidth="fluid"
+					css={{
+						background: "transparent"
+					}}
+					containerCss={{ background: "transparent !important" }}
+				>
+					<Navbar.Brand>
+						<Link href="/">
+							<Image
+								width={40}
+								draggable="false"
+								src="/icons/icon-64x64.png"
+								alt="syntax logo"
+							/>
+						</Link>
+					</Navbar.Brand>
+				</Navbar>
 				<Card
 					css={{ maxWidth: "400px", margin: "10px", background: "$background" }}
 				>
