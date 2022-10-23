@@ -18,7 +18,7 @@ const NoteDisplay = () => {
 	).current;
 
 	const saveContent = async (content) => {
-		console.log("save title debounce", content);
+		console.log("save title debounce", content, currentNote);
 		let note = {
 			id: content.id,
 			title: content.title,
@@ -32,6 +32,7 @@ const NoteDisplay = () => {
 		});
 
 		const updatedNote = await res.json();
+		updatedNote.currentGroupId = content.currentGroupId;
 		setNotes({ note: updatedNote, type: "edit" });
 		router.push(`/note/${updatedNote.id}`, undefined, {
 			shallow: true
@@ -127,7 +128,8 @@ const NoteDisplay = () => {
 											onAction={(e) =>
 												debounceSave({
 													id: currentNote.id,
-													groupId: e.target.value
+													groupId: e,
+													currentGroupId: currentNote.groupId,
 												})
 											}
 										>
