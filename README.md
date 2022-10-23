@@ -57,21 +57,20 @@ Deployed at http://syntaxapp.vercel.app/
 * Amazon S3 (AWS)
 
 ## Getting Started
-To get started clone this repo and install all dependancies 
+To get started, clone this repo and install all dependencies: 
 ```
 $ git clone https://github.com/uoa-compsci399-s2-2022/syntax.git
 $ npm install
 ```
-To use Prisma with the application, generate the schema bindings via
+To use Prisma with the application, generate the schema bindings via:
 ```
 $ npx prisma generate
 ```
-*this is a required step, not doing so will cause the compile to fail*
-Any changes made to the schema will require you to re-generate the Prisma client.
+*This is a required step, not doing so will cause the compile to fail.*
 
-this will also mean, any previously created objects that now break the schema could fail.
+Any changes made to the schema will require you to re-generate the Prisma client - this also means that any previously created objects that now break the schema may fail.
 
-These Enviroment variables will need to be set
+The following environment variables must be set:
 
 * `S3_SECRET_KEY`
 * `S3_ACCESS_KEY`
@@ -83,9 +82,9 @@ These Enviroment variables will need to be set
 * `GOOGLE_ID`
 * `DATABASE_URL`
 
-[you can read more about them here](wiki/Environment-Variables)
+[Read more about them here](wiki/Environment-Variables).
 
-If hosting through vercel, you can [link a project to handle storing these for dev, preview and prod](https://vercel.com/docs/concepts/projects/environment-variables#development-environment-variables)
+If hosting through Vercel, you can [link a project to handle storing the environment variables for dev, preview and prod](https://vercel.com/docs/concepts/projects/environment-variables#development-environment-variables):
 
 ```
 $ npm install -g vercel
@@ -94,8 +93,9 @@ $ vercel link
 $ vercel env pull
 ```
 
-When deploying to Vercel, It might be likely that you do not wish to build every branch in your repo. you can [skip "build-steps"](https://vercel.com/docs/concepts/deployments/configure-a-build#skip-build-step).
-An example to only track and build "Production"
+When deploying to Vercel, you may not wish to build every branch in your repo. To prevent this, you can [skip "build-steps"](https://vercel.com/docs/concepts/deployments/configure-a-build#skip-build-step).
+
+An example to only track and build "Production":
 
 ```
 [ "$VERCEL_ENV" != production ]
