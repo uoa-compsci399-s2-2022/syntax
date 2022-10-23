@@ -67,6 +67,7 @@ export const CodeBlockNode = Node.create({
 		return {
 			code_content: { default: "" },
 			code_output: { default: "" },
+			system_output: {default: ""},
 			language: { default: "python3" },
 		};
 	},

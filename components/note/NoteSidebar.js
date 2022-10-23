@@ -18,7 +18,7 @@ import {
 } from "../../modules/AppContext";
 import { NoteTemplate } from "./NewNote";
 
-const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
+const NoteSidebar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 	const { checked, type } = useTheme();
 	const [searchModal, setSearchModal] = useState(false);
 	const router = useRouter();
@@ -27,11 +27,11 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
 	const noteslist = useNotes();
 	const setNotes = useDispatchNotes();
 
-	const createNote = async (id=undefined) => {
+	const createNote = async (id = undefined) => {
 		let res = await fetch("/api/note", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({...NoteTemplate, ...{groupId: id}})
+			body: JSON.stringify({ ...NoteTemplate, ...{ groupId: id } })
 		});
 
 		const newNote = await res.json();
@@ -45,18 +45,21 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
 		let res = await fetch("/api/group", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ name: "new group", color: "grey" })
+			body: JSON.stringify({ name: "Untitled", color: "#ffffff" })
 		});
 
 		const newGroup = await res.json();
 		console.log("Create successful", { newGroup });
 		newGroup.notes = [];
-		setNotes({ note: newGroup, type: "addgroup" });
+		setNotes({ note: newGroup, type: "addGroup" });
 		router.push(`/note/${currentNote.id || ""}`, undefined, { shallow: true });
 	};
 
-	const closeModalHandler = () => {
+	const closeModalHandler = (searched) => {
 		setSearchModal(false);
+		if (searched && window.innerWidth < 650) {
+			handleSidebarDisplay();
+		}
 	};
 
 	return (
@@ -119,11 +122,10 @@ const NoteSidebar = ({ notes, sidebarDisplay, handleSidebarDisplay }) => {
 				}}
 			>
 				<NoteList
-					retrieved_notes={notes}
+					retrieved_notes={noteslist}
 					showEditor={undefined}
 					handleSidebarDisplay={handleSidebarDisplay}
 					createNote={createNote}
-					key={notes}
 				/>
 			</Container>
 

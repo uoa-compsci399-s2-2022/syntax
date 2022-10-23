@@ -1,7 +1,8 @@
-import { Button, Modal, Input, useInput } from "@nextui-org/react";
+import { Button, Modal, Input, useInput, useTheme } from "@nextui-org/react";
 import { useState } from "react";
 
 const InputModal = ({ open, closeHandler, inputType }) => {
+	const { checked, type } = useTheme();
 	const { value, reset, bindings } = useInput("");
 	const [helperText, setHelperText] = useState();
 
@@ -11,51 +12,65 @@ const InputModal = ({ open, closeHandler, inputType }) => {
 		closeHandler(value);
 	};
 
-	return (
-		<Modal blur open={open} onClose={closeHelper} css={{ margin: "10px" }}>
-			<Modal.Header css={{ tt: "capitalize" }}>Add {inputType}</Modal.Header>
-			<Modal.Body css={{ minHeight: "100px" }}>
-				<Input
-					{...bindings}
-					bordered
-					clearable
-					animated={false}
-					label={inputType === "video" ? "Video URL" : "Link"}
-					helperText={helperText}
-					helperColor="error"
-					placeholder={
-						`Paste ${inputType === "video" ? "Youtube URL" : "link"}`
-					}
-				/>
-			</Modal.Body>
-			<Modal.Footer>
-				<Button
-					auto
-					bordered
-					onPress={() => {
-						if (!value || value === "") {
-							setHelperText("URL is required");
-						} else {
-							closeHelper(value);
-						}
-					}}
-				>
-					Insert
-				</Button>
-				<Button
-					auto
-					bordered
-					flat
-					color="error"
-					onPress={() => {
-						closeHelper(null);
-					}}
-				>
-					Cancel
-				</Button>
-			</Modal.Footer>
-		</Modal>
-	);
+	const typeValues = {
+		video: {
+			header: "Add Video",
+			label: "Video URL",
+			placeholder: "Paste Youtube URL"
+		},
+		link: {
+			header: "Add Link",
+			label: "Link",
+			placeholder: "Paste link"
+		}
+	};
+
+	if (inputType) {
+		return (
+			<Modal blur open={open} onClose={closeHelper} css={{ margin: "10px" }}>
+				<Modal.Header>{typeValues[inputType].header}</Modal.Header>
+				<Modal.Body css={{ minHeight: "100px" }}>
+					<Input
+						{...bindings}
+						clearable
+						animated={false}
+						label={typeValues[inputType].label}
+						helperText={helperText}
+						helperColor="error"
+						placeholder={typeValues[inputType].placeholder}
+						css={{$$inputColor: type === "dark" ? "var(--nextui-colors-background)" : "var(--nextui-colors-accents0)"}}
+					/>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button
+						auto
+						onPress={() => {
+							if (!value || value === "") {
+								setHelperText("Value is required");
+							} else {
+								closeHelper(value);
+							}
+						}}
+					>
+						{inputType === "group" ? "Confirm": "Insert"}
+					</Button>
+					<Button
+						auto
+						bordered
+						flat
+						color="error"
+						onPress={() => {
+							closeHelper(null);
+						}}
+					>
+						Cancel
+					</Button>
+				</Modal.Footer>
+			</Modal>
+		);
+	} else {
+		return "";
+	}
 };
 
 export default InputModal;

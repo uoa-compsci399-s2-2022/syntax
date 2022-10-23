@@ -42,7 +42,7 @@ export const CodeBlockNode = Node.create({
 		]
 	},	
 	renderHTML({ node }) {
-		let output = ["div", {class:"output"},["pre",["code", node.attrs.code_output.split(/\r?\n/).slice(0, (node.attrs.code_output.split(/\r?\n/).length - 6)).join("\n")]]]
+		let output = ["div", {class:"output"},["pre",["code", node.attrs.code_output]]]
 		console.log(output)
 		return ['div', {class: "code"},
 				['h3',langDict[node.attrs.language]],

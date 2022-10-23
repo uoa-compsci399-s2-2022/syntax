@@ -15,18 +15,18 @@ const notesReducer = (state, action) => {
 
 	// if "add"
 	// return an array of the previous state and the note object
-	if (type === "add"){
+	if (type === "add") {
 		let noteGroupIndex = state.groups.findIndex((x) => x.id === note.groupId);
 		state.groups[noteGroupIndex].notes.push(note);
 		return state;
-	} 
+	}
 
-	if (type === "addgroup"){
+	if (type === "addGroup") {
 		var newState = [...state.groups];
 		newState.push(note);
 		state.groups = newState;
 		return state;
-	} 
+	}
 
 	// if "replace"
 	// replace entire array with new value
@@ -51,28 +51,63 @@ const notesReducer = (state, action) => {
 		// if no match, return the previous state
 		if (noteGroupIndex < 0) return state;
 
-		let noteIndex = state.groups[noteGroupIndex].notes.findIndex((x) => x.id === note.id);
+		let noteIndex = state.groups[noteGroupIndex].notes.findIndex(
+			(x) => x.id === note.id
+		);
 
 		// if no match, return the previous state
 		if (noteIndex < 0) return state;
 		const stateUpdate = state;
-		stateUpdate.groups[noteGroupIndex].notes.splice(noteIndex, 1)
+		stateUpdate.groups[noteGroupIndex].notes.splice(noteIndex, 1);
 		return stateUpdate;
 	}
 
-	if (type === "edit") {
-		let noteGroupIndex = state.groups.findIndex((x) => x.id === note.groupId);
+	if (type === "removeGroup") {
+		let noteGroupIndex = state.groups.findIndex((x) => x.id === note.id);
 
 		// if no match, return the previous state
 		if (noteGroupIndex < 0) return state;
 
-		let noteIndex = state.groups[noteGroupIndex].notes.findIndex((x) => x.id === note.id);
+		// if no match, return the previous state
+		const stateUpdate = state;
+		stateUpdate.groups.splice(noteGroupIndex, 1);
+		return stateUpdate;
+	}
 
+	if (type === "edit") {
+		var grpID = note.currentGroupId || note.groupId;
+		let noteGroupIndex = state.groups.findIndex((x) => x.id === grpID);
+
+		// if no match, return the previous state
+		if (noteGroupIndex < 0) return state;
+
+		let noteIndex = state.groups[noteGroupIndex].notes.findIndex(
+			(x) => x.id === note.id
+		);
 		// if no match, return the previous state
 		if (noteIndex < 0) return state;
 		// update note at the defined index
+		// state.groups[noteGroupIndex].notes[noteIndex] = note;
+		if (note.currentGroupId) {
+			let newNoteGroupIndex = state.groups.findIndex((x) => x.id === note.groupId);
+			state.groups[noteGroupIndex].notes.splice(noteIndex, 1);
+			state.groups[newNoteGroupIndex].notes.push(note);
+			return state;
+		}
 		state.groups[noteGroupIndex].notes[noteIndex] = note;
 	}
+	if (type === "editGroup") {
+		let noteGroupIndex = state.groups.findIndex((x) => x.id === note.id);
+
+		// if no match, return the previous state
+		if (noteGroupIndex < 0) return state;
+		console.log(noteGroupIndex, note);
+		// update note at the defined index
+		state.groups[noteGroupIndex] = note;
+		console.log(state);
+		return state;
+	}
+
 	return state;
 };
 
@@ -80,7 +115,7 @@ const notesReducer = (state, action) => {
 // providing all the nested state and dispatch context
 export const NoteProvider = ({ children }) => {
 	// useState for note, to get and set a single note
-	const [note, setNote] = useState({});
+	const [note, setNote] = useState(null);
 
 	// use Reducer for notes, to get all notes
 	// and add, edit or remove a note from the array
@@ -90,7 +125,9 @@ export const NoteProvider = ({ children }) => {
 		<NoteDispatchContext.Provider value={setNote}>
 			<NoteStateContext.Provider value={note}>
 				<NotesDispatchContext.Provider value={setNotes}>
-					<NotesStateContext.Provider value={notes}>{children}</NotesStateContext.Provider>
+					<NotesStateContext.Provider value={notes}>
+						{children}
+					</NotesStateContext.Provider>
 				</NotesDispatchContext.Provider>
 			</NoteStateContext.Provider>
 		</NoteDispatchContext.Provider>

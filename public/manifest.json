@@ -1,7 +1,8 @@
 {
   "name": "syntax",
   "short_name": "syntax",
-  "theme_color": "#ffffff",
+  "description": "Extended note-taking app for programming students",
+  "theme_color": "#1d1d1d",
   "background_color": "#1d1d1d",
   "display": "fullscreen",
   "orientation": "portrait",
@@ -9,27 +10,27 @@
   "start_url": "/",
   "icons": [
     {
-      "src": "icons/icon-16x16.png",
+      "src": "./icons/icon-16x16.png",
       "sizes": "16x16",
       "type": "image/png"
     },
     {
-      "src": "icons/icon-32x32.png",
+      "src": "./icons/icon-32x32.png",
       "sizes": "32x32",
       "type": "image/png"
     },
     {
-      "src": "icons/icon-64x64.png",
+      "src": "./icons/icon-64x64.png",
       "sizes": "64x64",
       "type": "image/png"
     },
     {
-      "src": "icons/icon-128x128.png",
+      "src": "./icons/icon-128x128.png",
       "sizes": "128x128",
       "type": "image/png"
     },
     {
-      "src": "icons/icon-256x256.png",
+      "src": "./icons/icon-256x256.png",
       "sizes": "256x256",
       "type": "image/png"
     }

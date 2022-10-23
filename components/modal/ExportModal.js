@@ -4,7 +4,7 @@ import { useState } from "react";
 const ExportModal = ({ open, oncloseHandler, closeHandler }) => {
   const [selected, setSelected] = useState(["HTML"]);
   return (
-    <Modal open={open} onClose={oncloseHandler} css={{ margin: "10px" }}>
+    <Modal blur open={open} onClose={oncloseHandler} css={{ margin: "10px" }}>
       <Modal.Header>Export Note</Modal.Header>
       <Modal.Body>
         <Grid.Container>
@@ -34,7 +34,7 @@ const ExportModal = ({ open, oncloseHandler, closeHandler }) => {
         </Grid.Container>
       </Modal.Body>
       <Modal.Footer>
-        <Button auto bordered onClick={() => closeHandler(selected)}>
+        <Button auto onPress={() => closeHandler(selected)}>
           Export
         </Button>
         <Button auto bordered flat color="error" onPress={oncloseHandler}>

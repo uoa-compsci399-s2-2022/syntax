@@ -5,7 +5,9 @@ const lightTheme = createTheme({
 	theme: {
 		colors: {
 			text: "#37352F",
-			textSecondary: "#666666"
+			textSecondary: "#666666",
+			textDisabled: "#C7C7C7",
+			selection: "#3297FD"
 		},
 		radii: {
 			xs: "3px",
