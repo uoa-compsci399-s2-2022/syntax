@@ -70,7 +70,6 @@ export const Extension = ({
 			"cpp-clang": cpp(),
 			"java-jdk": java(),
 		}
-		console.log(lang, langpick[lang]);
 		let isDark = type === "dark" ? true : false;
 		const view = new EditorView({
 			doc,
