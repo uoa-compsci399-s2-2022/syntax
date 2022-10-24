@@ -56,7 +56,7 @@ export default function Component() {
 		print(n)' code_output="" system_output="" language="python3"></code_block>
 
 <p>syntax also contains many other features designed to enhance your note-taking experience, including markdown,
-drawing & stylus support, images, Youtube video embeds, and more.</p><p></p>
+drawing & stylus support, images, YouTube video embeds, and more.</p><p></p>
 
 <p>Real-time collaborative editing is also supported - invite other users to collaborate on the same note and work efficiently together!</p>
 
