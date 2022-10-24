@@ -113,11 +113,7 @@ export default function ({ setCollabUsers }) {
 	const { data: session, status } = useSession();
 
 	//Creates room based on note id. Deletes the old ydoc and creates a new blank one.
-	const ydoc = useMemo(() => {
-		const predoc = new Y.Doc();
-		// if(currentNote.YDOC) Y.applyUpdate(predoc, toUint8Array(currentNote.YDOC));
-		return predoc;
-	}, [currentNote.id]);
+	const ydoc = useMemo(() => new Y.Doc(), [currentNote.id]);
 	const provider = useMemo(() => { if (currentNote.room) return new WebrtcProvider(currentNote.id + "_43785b3457gt", ydoc) }, [currentNote.room]);
 
 	useEffect(() => {
@@ -148,24 +144,14 @@ export default function ({ setCollabUsers }) {
 						user: {
 							name: session?.user?.name,
 							color: getRandomColour(),
-							avatar: session?.user?.avatar
+							image: session?.user?.image
 						}
 					})
 					: null
 			],
 			onBeforeCreate({ editor }) {
-				// provider?.once('synced', synced => {
-				// 	if (ydoc.getXmlFragment().length == 0) {
-				// 		editor.commands.setContent(currentNote.body);
-				// 	} else {
-				// 		Y.applyUpdate(ydoc, toUint8Array(currentNote.YDOC));
-				// 	}
-				// 	Y.applyUpdate(ydoc, toUint8Array(currentNote.YDOC))
-				// 	console.log('synced!', synced)
-				// })
-				Y.applyUpdate(ydoc, toUint8Array(currentNote.YDOC));
+				if(currentNote.YDOC) Y.applyUpdate(ydoc, toUint8Array(currentNote.YDOC));
 				provider?.on('synced', synced => {
-					// console.log(editor?.storage.collaborationCursor?.users);
 					const users = editor?.storage.collaborationCursor?.users;
 					setCollabUsers(users);
 				})
@@ -176,7 +162,6 @@ export default function ({ setCollabUsers }) {
 			onCreate({editor}){
 				const users = editor?.storage.collaborationCursor?.users;
 				setCollabUsers(users);
-				// if(currentNote.room && ydoc.getXmlFragment().length == 0) editor.commands.setContent(currentNote.body);
 			},
 			...(currentNote.room == null ? { content: currentNote.body } : {})
 		},

@@ -66,7 +66,7 @@ export const DebounceSave = () => {
 				console.log(origin);
 				// Y.applyUpdate(this.options.YDOC, update);
 				if (origin.key == 'y-sync$') {
-					const yjson = prosemirrorJSONToYDoc(editor.schema, editor.getJSON());
+					// const yjson = prosemirrorJSONToYDoc(editor.schema, editor.getJSON());
 					const ut8arr = Y.encodeStateAsUpdate(this.options.YDOC)
 					const ydocb64 = fromUint8Array(ut8arr);
 					// Y.applyUpdate(this.options.YDOC, update);

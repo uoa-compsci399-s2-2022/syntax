@@ -65,10 +65,7 @@ export const getNoteByID = async (id, session) => {
 	let userId = session?.user.id;
 	const note = await prisma.note.findUnique({
 		where: {
-			id_userId: {
-				id,
-				userId
-			}
+			id: id
 		},
 		include: {
 			user: true,
