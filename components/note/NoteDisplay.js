@@ -2,11 +2,17 @@ import Head from "next/head";
 import { Container, Spacer, Dropdown } from "@nextui-org/react";
 import Tiptap from "@/components/editor/Tiptap";
 import { debounce } from "lodash";
-import { useRef } from "react";
+import { useRef, forwardRef } from "react";
 import { useRouter } from "next/router";
-import { useNote, useNotes, useDispatchNotes, useDispatchNote } from "../../modules/AppContext";
+import {
+	useNote,
+	useNotes,
+	useDispatchNotes,
+	useDispatchNote
+} from "../../modules/AppContext";
+import ReactToPrint from 'react-to-print';
 
-const NoteDisplay = () => {
+const NoteDisplay = ({pdfRef}) => {
 	const currentNote = useNote();
 	const notes = useNotes();
 	const setNotes = useDispatchNotes();
@@ -41,11 +47,13 @@ const NoteDisplay = () => {
 		});
 	};
 
+	
+
 	if (!currentNote && notes) return null;
 	return (
 		<>
-			<Container 
-				className="print"
+			<Container
+				ref={pdfRef}
 				css={{
 					margin: "0",
 					padding: "0 10% 10% 10%",
@@ -132,7 +140,7 @@ const NoteDisplay = () => {
 												debounceSave({
 													id: currentNote.id,
 													groupId: e,
-													currentGroupId: currentNote.groupId,
+													currentGroupId: currentNote.groupId
 												})
 											}
 										>

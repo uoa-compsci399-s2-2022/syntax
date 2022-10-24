@@ -287,8 +287,8 @@ export default ({ editor, drawingOpenHandler }) => {
 
 	return (
 		<Container
-			className="noPrint"
 			fluid
+			className="no-print"
 			display="flex"
 			justify="center"
 			css={{

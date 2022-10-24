@@ -227,12 +227,9 @@ input[type="search"]::-webkit-search-results-decoration {
 	pointer-events: none;
 }
 
+/* hide elements not wanted in PDF export */
 @media print {
-	.print{
-		display: block;
-		-webkit-print-color-adjust: exact;
-	}
-	.noPrint{
-		display:none;
+	.no-print {
+		display: none;
 	}
 }

@@ -64,7 +64,7 @@ const NoteSidebar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 
 	return (
 		<Container 
-			className="noPrint"
+			className="no-print"
 			display="flex"
 			wrap="nowrap"
 			direction="column"

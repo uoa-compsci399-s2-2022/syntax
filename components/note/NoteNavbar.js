@@ -25,7 +25,7 @@ import {
 	useDispatchNotes
 } from "../../modules/AppContext";
 
-const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
+const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, pdfRef }) => {
 	const { setTheme } = useNextTheme();
 	const { checked, type } = useTheme();
 	const [selectedKey, setSelectedKey] = useState();
@@ -34,7 +34,6 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 	const currentNote = useNote();
 	const setNotes = useDispatchNotes();
 	const router = useRouter();
-	const { data: session, status } = useSession();
 
 	const deleteNoteHandler = async () => {
 		try {
@@ -115,10 +114,10 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 
 	return (
 		<Navbar 
-			className="noPrint"
-			variant="sticky"
 			disableShadow
 			disableBlur
+			className="no-print"
+			variant="sticky"
 			css={{ zIndex: 2 }}
 			containerCss={{
 				minWidth: "100%"
@@ -229,6 +228,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 					open={exportModal}
 					oncloseHandler={closeHandler}
 					closeHandler={exportNoteHandler}
+					pdfRef={pdfRef}
 				/>
 				<DeleteModal
 					open={deleteModal}
