@@ -31,6 +31,7 @@ export default ({ editor, drawingOpenHandler }) => {
 	if (!editor) {
 		return null;
 	}
+	
 	const iconSize = "1.5em";
 	const iconColor = "var(--nextui-colors-text)";
 	const [inputModal, setInputModal] = useState(false);
@@ -258,7 +259,7 @@ export default ({ editor, drawingOpenHandler }) => {
 			icon: <MdImage size={iconSize} color={iconColor} />,
 			label: "Image",
 			key: "image",
-			action: () => console.log("TO-DO"),
+			action: () => fileRef.current.click(),
 			breakpoint: "md"
 		},
 		video: {
@@ -482,6 +483,16 @@ export default ({ editor, drawingOpenHandler }) => {
 					</Dropdown.Menu>
 				</Dropdown>
 			</Tooltip>
+			<input
+				id="dropdown-upload"
+				name="dropdown-upload"
+				type="file"
+				accept="image/*"
+				ref={fileRef}
+				hidden
+				onClick={(e) => (e.target.value = "")}
+				onChange={handleFileChange}
+			/>
 			<InputModal
 				open={inputModal}
 				closeHandler={closeHandler}
