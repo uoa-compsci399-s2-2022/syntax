@@ -82,7 +82,7 @@ The following environment variables must be set:
 * `GOOGLE_ID`
 * `DATABASE_URL`
 
-[Read more about them here](wiki/Environment-Variables).
+[Read more about them here](https://github.com/uoa-compsci399-s2-2022/syntax/wiki/Environment-Variables).
 
 If hosting through Vercel, you can [link a project to handle storing the environment variables for dev, preview and prod](https://vercel.com/docs/concepts/projects/environment-variables#development-environment-variables):
 
@@ -107,7 +107,7 @@ An example to only track and build "Production":
 * [Notion](https://elegant-joke-27e.notion.site/CS399-Project-Team-10-c6ba4a95d1ae4e14bf42fd1657b88776)
 
 ## Future Plans
-[Read here in the Wiki](wiki)
+[Read here in the Wiki](https://github.com/uoa-compsci399-s2-2022/syntax/wiki/Considerations-&-Future-Plans#future-plans)
 
 ## Acknowledgements
 
