@@ -50,7 +50,6 @@ model Note {
    roomId    String?
    room      Room?
    YDOC      String?
-   noteText  String?
 
    @@unique([id, userId])
    @@unique([id, groupId])
@@ -85,7 +84,7 @@ model User {
 model Room {
    id      String   @id @default(auto()) @map("_id") @db.ObjectId
    noteId  String   @unique
-   note    Note     @relation(fields: [noteId], references: [id])
+   note    Note?     @relation(fields: [noteId], references: [id])
    userId  String?
    YDOC    String?
    user    User[]   @relation(fields: [userIds], references: [id])

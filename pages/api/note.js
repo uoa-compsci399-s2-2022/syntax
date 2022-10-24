@@ -30,7 +30,7 @@ export default async function handle(req, res) {
     }
   
     else if (req.method == "PUT") {
-      const { id, title, body, groupId } = req.body;
+      const { id, title, body, groupId, YDOC } = req.body;
       console.log(req.body);
   
       // const updatedData = {title, body}
@@ -42,7 +42,7 @@ export default async function handle(req, res) {
     }
   
   
-      const note = await updateNote(id, { title, body, groupId }, session);
+      const note = await updateNote(id, { title, body, groupId, YDOC }, session);
       return res.json(note);
     }
   

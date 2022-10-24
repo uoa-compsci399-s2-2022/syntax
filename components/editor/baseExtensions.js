@@ -16,7 +16,8 @@ export const baseExtensions = () => {
 	return [
 		StarterKit.configure({
 			codeBlock: false,
-			bulletList: false
+			bulletList: false,
+			history: false
 		}),
 		TrailingNode,
 		Underline,
