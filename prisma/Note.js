@@ -308,6 +308,10 @@ export const getSharedUsers = async (roomId) => {
 		where: {
 			id: roomId
 		},
+		include: {
+			user: true
+		}
 	})
-	return users.userIds
+	console.log(users, 'List of user return from database')
+	return users
 }

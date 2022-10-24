@@ -18,15 +18,26 @@ const ShareModal = ({ open, closeHandler, shareHandler, users }) => {
 	const share_link = "Insert Link Here";
 	const [email, setEmail] = useState('');
 	const [sharedUsers, setSharedUsers] = useState([])
+	const currentNote = useNote();
 	
 
 	const addEmail = (event) => {
 		setEmail(event.target.value)
 	}
 	
+	const getSharedUsers = async () => {
+		console.log(currentNote, '@@@@@@@')
+		let res = await fetch(`/api/collab`, {
+			method: "PUT",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({id: currentNote.roomId})
+		});
+		setSharedUsers(res)
+	}
 	
 	return (
 		<Modal
+			onOpen = {() => getSharedUsers()}
 			blur
 			scroll
 			closeButton
@@ -77,7 +88,7 @@ const ShareModal = ({ open, closeHandler, shareHandler, users }) => {
 				<Container css={{ padding: "0" }}>
 					People with access
 					<Spacer />
-					{users.map((user, index) => (
+					{sharedUsers.map((user, index) => (
 						<Row
 							align="center"
 							key={index}
