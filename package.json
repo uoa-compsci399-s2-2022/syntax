@@ -33,6 +33,7 @@
     "@tiptap/starter-kit": "^2.0.0-beta.191",
     "@tldraw/tldraw": "^1.24.5",
     "aws-sdk": "^2.1204.0",
+    "chrome-aws-lambda": "^10.1.0",
     "codemirror": "^6.0.1",
     "lodash": "^4.17.21",
     "lru-cache": "^7.14.0",
