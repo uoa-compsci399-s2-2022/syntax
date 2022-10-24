@@ -10,9 +10,9 @@ import {
 	useDispatchNotes,
 	useDispatchNote
 } from "../../modules/AppContext";
-import ReactToPrint from 'react-to-print';
+import ReactToPrint from "react-to-print";
 
-const NoteDisplay = ({pdfRef}) => {
+const NoteDisplay = ({ pdfRef }) => {
 	const currentNote = useNote();
 	const notes = useNotes();
 	const setNotes = useDispatchNotes();
@@ -46,8 +46,6 @@ const NoteDisplay = ({pdfRef}) => {
 			shallow: true
 		});
 	};
-
-	
 
 	if (!currentNote && notes) return null;
 	return (
@@ -84,7 +82,10 @@ const NoteDisplay = ({pdfRef}) => {
 				>
 					{currentNote.title}
 				</div>
-				<table className="note-metadata-table" style={{ textAlign: "left" }}>
+				<table
+					className="note-metadata-table no-print"
+					style={{ textAlign: "left" }}
+				>
 					<tbody>
 						<tr>
 							<th>Created by</th>

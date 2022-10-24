@@ -4,7 +4,6 @@ import { generateHTML } from "@tiptap/html";
 import { baseExtensions } from "../../../components/editor/baseExtensions";
 import { TipTapCustomImage } from "@/node/Image";
 import TurndownService from "turndown";
-import mdToPdf from "md-to-pdf";
 import rateLimit from "../../../utils/rate-limit";
 import { CodeBlockNode } from "../../../node/ExportCode";
 
@@ -122,15 +121,6 @@ export default async function handle(req, res) {
 					let html = htmlTemplate(title, body, note.user.name, true);
 					html = "<!doctype html>" + html;
 					return res.status(200).json({ text: html });
-				} else if (param[2] === "pdf") {
-                    const html = htmlTemplate(title, body, note.user.name, false)
-                    const turndownService = new TurndownService()
-                    const markdown = turndownService.turndown(html)
-                    const pdf = await mdToPdf({content: markdown})
-                    const json = pdf.content.toJSON()
-                    res.status(200).json({
-                        text: json.data
-                    })
 				} else {
 					return res.status(501).json({ message: "Method not allowed" });
 				}
