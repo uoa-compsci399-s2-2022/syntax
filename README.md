@@ -66,7 +66,11 @@ To use Prisma with the application, generate the schema bindings via:
 ```
 $ npx prisma generate
 ```
-*This is a required step, not doing so will cause the compile to fail.*
+And the init the database with the required collections:
+```
+$ npx prisma db push
+```
+*These are required steps, not doing so will cause the compile to fail.*
 
 Any changes made to the schema will require you to re-generate the Prisma client - this also means that any previously created objects that now break the schema may fail.
 
