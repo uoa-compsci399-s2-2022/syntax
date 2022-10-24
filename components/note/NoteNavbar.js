@@ -80,10 +80,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 			} else if (fileType == "PDF") {
 				setExportModal(false)
 				setTimeout(() => {
-					const link = document.createElement("a");
-					link.href = "javascript:window.print()";
-					link.setAttribute("download", `${currentNote.title}.pdf`);
-					link.click();
+					window.print()
 				}, 1000)
 			}
 		} catch (error) {

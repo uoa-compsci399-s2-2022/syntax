@@ -52,7 +52,6 @@ const NoteLayout = ({ allNotes, currentNote }) => {
 					handleSidebarDisplay={handleSidebarDisplay}
 				/>
 				<Container 
-					className="print"
 					css={{
 						padding: "0",
 						minHeight: "100%",
