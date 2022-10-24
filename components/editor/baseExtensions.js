@@ -4,6 +4,7 @@ import Underline from "@tiptap/extension-underline";
 import Superscript from "@tiptap/extension-superscript";
 import Subscript from "@tiptap/extension-subscript";
 import Youtube from "@tiptap/extension-youtube";
+import {TrailingNode} from "./TrailingNode";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import { TipTapCustomImage } from "@/node/Image";
@@ -17,6 +18,7 @@ export const baseExtensions = () => {
 			codeBlock: false,
 			bulletList: false
 		}),
+		TrailingNode,
 		Underline,
 		Superscript,
 		Subscript,

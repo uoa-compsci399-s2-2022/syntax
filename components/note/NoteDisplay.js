@@ -4,21 +4,18 @@ import dynamic from "next/dynamic";
 import { debounce } from "lodash";
 import { useRef } from "react";
 import { useRouter } from "next/router";
-import {
-	useNote,
-	useNotes,
-	useDispatchNotes
-} from "../../modules/AppContext";
+import { useNote, useNotes, useDispatchNotes, useDispatchNote } from "../../modules/AppContext";
+
 const Tiptap = dynamic(() => import("@/components/editor/Tiptap"), {
 	ssr: false
  });
-
 
 const NoteDisplay = ({setCollabUsers}) => {
 	const currentNote = useNote();
 	const notes = useNotes();
 	const setNotes = useDispatchNotes();
 	const router = useRouter();
+	const setCurrentNote = useDispatchNote();
 	const debounceSave = useRef(
 		debounce(async (criteria) => {
 			saveContent(criteria);
@@ -43,6 +40,7 @@ const NoteDisplay = ({setCollabUsers}) => {
 		const updatedNote = await res.json();
 		updatedNote.currentGroupId = content.currentGroupId;
 		setNotes({ note: updatedNote, type: "edit" });
+		setCurrentNote(updatedNote);
 		router.push(`/note/${updatedNote.id}`, undefined, {
 			shallow: true
 		});

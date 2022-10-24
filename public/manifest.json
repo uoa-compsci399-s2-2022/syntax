@@ -1,7 +1,8 @@
 {
   "name": "syntax",
   "short_name": "syntax",
-  "theme_color": "#ffffff",
+  "description": "Extended note-taking app for programming students",
+  "theme_color": "#1d1d1d",
   "background_color": "#1d1d1d",
   "display": "fullscreen",
   "orientation": "portrait",

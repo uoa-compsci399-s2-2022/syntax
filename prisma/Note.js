@@ -35,7 +35,7 @@ export const createNote = async (title, body, session) => {
 		},
 	});
 
-	const note = await getNoteByID(newNote.id);
+	const note = await getNoteByID(newNote.id, session);
 	return note;
 };
 
@@ -57,14 +57,18 @@ export const createNoteInGroup = async (title, body, groupId, session) => {
 		},
 	});
 
-	const note = await getNoteByID(newNote.id);
+	const note = await getNoteByID(newNote.id, session);
 	return note;
 };
 
-export const getNoteByID = async (id) => {
+export const getNoteByID = async (id, session) => {
+	let userId = session?.user.id;
 	const note = await prisma.note.findUnique({
 		where: {
-			id
+			id_userId: {
+				id,
+				userId
+			}
 		},
 		include: {
 			user: true,
@@ -117,7 +121,7 @@ export const updateNote = async (id, updatedData, session) => {
 			...updatedData,
 		}
 	});
-	const note = await getNoteByID(updatedNote.id);
+	const note = await getNoteByID(updatedNote.id, session);
 	return note;
 };
 

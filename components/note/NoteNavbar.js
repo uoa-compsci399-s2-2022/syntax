@@ -73,7 +73,6 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers }) => {
 			router.push(`/note`, "/");
 			setDeleteModal(false);
 			setSelectedKey();
-			
 		} catch (error) {
 			console.log(error);
 		}
@@ -81,13 +80,11 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers }) => {
 
 	const exportNoteHandler = async (fileType) => {
 		try {
-			console.log(fileType);
 			if (fileType == "HTML") {
 				let res = await fetch(`/api/note/${currentNote.id}/export/html`, {
 					method: "GET"
 				});
 				let { text } = await res.json();
-				console.log(text);
 				const blob = new Blob([text], { type: "text/html" });
 				const link = document.createElement("a");
 				link.href = URL.createObjectURL(blob);
@@ -226,27 +223,20 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers }) => {
 							icon={<EllipsisHorizontalIcon style={{ height: "30px" }} />}
 						/>
 						<Dropdown.Menu
-							disabledKeys={["lock"]}
 							onAction={setSelectedKey}
 							aria-label="Note Options"
 						>
 							<Dropdown.Section aria-label="Note Actions">
 								<Dropdown.Item
 									key="share"
+									textValue="Share"
 									icon={<ShareIcon style={{ height: "var(--icon-size-s)" }} />}
 								>
 									Share
 								</Dropdown.Item>
 								<Dropdown.Item
-									key="lock"
-									icon={
-										<LockClosedIcon style={{ height: "var(--icon-size-s)" }} />
-									}
-								>
-									Lock
-								</Dropdown.Item>
-								<Dropdown.Item
 									key="export"
+									textValue="Export"
 									icon={
 										<DocumentArrowUpIcon
 											style={{ height: "var(--icon-size-s)" }}
@@ -257,6 +247,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers }) => {
 								</Dropdown.Item>
 								<Dropdown.Item
 									key="delete"
+									textValue="Delete"
 									color="error"
 									icon={<TrashIcon style={{ height: "var(--icon-size-s)" }} />}
 								>
@@ -266,6 +257,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers }) => {
 							<Dropdown.Section aria-label="User Actions">
 								<Dropdown.Item
 									key="changeTheme"
+									textValue="Change theme"
 									icon={
 										type === "dark" ? (
 											<SunIcon style={{ height: "var(--icon-size-s)" }} />
@@ -278,6 +270,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers }) => {
 								</Dropdown.Item>
 								<Dropdown.Item
 									key="signOut"
+									textValue="Sign out"
 									icon={
 										<ArrowLeftOnRectangleIcon
 											style={{ height: "var(--icon-size-s)" }}
