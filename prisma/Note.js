@@ -305,7 +305,8 @@ export const deleteUser = async(email, roomId, session) => {
 }
 
 export const getSharedUsers = async (roomId) => {
-	const users = await prisma.Room.findUnique({
+	console.log(roomId);
+	const users = await prisma.room.findUnique({
 		where: {
 			id: roomId
 		},
@@ -313,6 +314,5 @@ export const getSharedUsers = async (roomId) => {
 			user: true
 		}
 	})
-	console.log(users, 'List of user return from database')
-	return users
+	return JSON.parse(JSON.stringify(users));
 }

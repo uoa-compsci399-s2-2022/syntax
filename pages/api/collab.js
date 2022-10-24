@@ -14,6 +14,6 @@ export default async function handle(req, res) {
     if (req.method == 'PUT') {
         const { id } = req.body;
         const users = await getSharedUsers(id)
-        return users
+        return res.json(users);
     }
 }

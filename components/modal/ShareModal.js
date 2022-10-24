@@ -32,7 +32,9 @@ const ShareModal = ({ open, closeHandler, shareHandler, users }) => {
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({id: currentNote.roomId})
 		});
-		setSharedUsers(res)
+		const updatedGroup = await res.json();
+		console.log(updatedGroup);
+		setSharedUsers(updatedGroup.user)
 	}
 	
 	return (
@@ -70,7 +72,7 @@ const ShareModal = ({ open, closeHandler, shareHandler, users }) => {
 					/>
 					<Button
 						auto
-						xs
+						xs="true"
 						onPress={() => shareHandler(email, 'SHARE')}
 						css={{ alignSelf: "flex-end" }}
 					>
