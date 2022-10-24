@@ -226,3 +226,13 @@ input[type="search"]::-webkit-search-results-decoration {
 	height: 0;
 	pointer-events: none;
 }
+
+@media print {
+	.print{
+		display: block;
+		-webkit-print-color-adjust: exact;
+	}
+	.noPrint{
+		display:none;
+	}
+}

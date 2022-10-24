@@ -11,7 +11,7 @@ const langDict = {
 	python3: "Python"
 };
 
-export const ExportCodeNode = Node.create({
+export const CodeBlockNode = Node.create({
 	name: "code_block",
 	group: "block",
 	code: true,

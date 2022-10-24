@@ -59,6 +59,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 				let res = await fetch(`/api/note/${currentNote.id}/export/html`, {
 					method: "GET"
 				});
+				setExportModal(false)
 				let { text } = await res.json();
 				const blob = new Blob([text], { type: "text/html" });
 				const link = document.createElement("a");
@@ -69,6 +70,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 				const res = await fetch(`/api/note/${currentNote.id}/export/md`, {
 					method: "GET"
 				});
+				setExportModal(false)
 				let { text } = await res.json();
 				const blob = new Blob([text], { type: "text/markdown" });
 				const link = document.createElement("a");
@@ -76,17 +78,13 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 				link.setAttribute("download", `${currentNote.title}.md`);
 				link.click();
 			} else if (fileType == "PDF") {
-				let res = await fetch(`/api/note/${currentNote.id}/export/pdf`, {
-					method: "GET"
-				});
-				const { text } = await res.json();
-				const blob = await new Blob([Buffer.from(text)], {
-					type: "application/pdf"
-				});
-				const link = document.createElement("a");
-				link.href = URL.createObjectURL(blob);
-				link.setAttribute("download", `${currentNote.title}.pdf`);
-				link.click();
+				setExportModal(false)
+				setTimeout(() => {
+					const link = document.createElement("a");
+					link.href = "javascript:window.print()";
+					link.setAttribute("download", `${currentNote.title}.pdf`);
+					link.click();
+				}, 1000)
 			}
 		} catch (error) {
 			console.log(error);
@@ -119,7 +117,8 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 	}, [selectedKey]);
 
 	return (
-		<Navbar
+		<Navbar 
+			className="noPrint"
 			variant="sticky"
 			disableShadow
 			disableBlur

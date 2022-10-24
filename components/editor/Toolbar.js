@@ -287,6 +287,7 @@ export default ({ editor, drawingOpenHandler }) => {
 
 	return (
 		<Container
+			className="noPrint"
 			fluid
 			display="flex"
 			justify="center"

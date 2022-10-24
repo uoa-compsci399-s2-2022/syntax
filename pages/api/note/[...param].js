@@ -6,7 +6,7 @@ import { TipTapCustomImage } from "@/node/Image";
 import TurndownService from "turndown";
 import mdToPdf from "md-to-pdf";
 import rateLimit from "../../../utils/rate-limit";
-import chrome from "chrome-aws-lambda"
+import { CodeBlockNode } from "../../../node/ExportCode";
 
 const CSS = `<style>
 /* general css */
@@ -109,8 +109,9 @@ export default async function handle(req, res) {
 				const note = await getNoteByID(noteId, session);
 				const title = note.title;
 				const body = generateHTML(note.body, [
-					...baseExtensions(true),
+					...baseExtensions(),
 					TipTapCustomImage(null),
+					CodeBlockNode
 				]);
 				if (param[2] === "md") {
 					const html = htmlTemplate(title, body, note.user.name, false);

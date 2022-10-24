@@ -11,9 +11,8 @@ import { TipTapCustomImage } from "@/node/Image";
 import { Drawing } from "@/node/Drawing";
 import { CodeBlockNode } from './CodeMirrorNode';
 import { DebounceSave } from './DebounceSaveExtension';
-import ExportCodeBlock from "../../node/ExportCode"
 
-export const baseExtensions = (exportCode=false) => {
+export const baseExtensions = () => {
 	return [
 		StarterKit.configure({
 			codeBlock: false,
@@ -34,7 +33,7 @@ export const baseExtensions = (exportCode=false) => {
 				class: "editor-link"
 			}
 		}),
-		exportCode ? ExportCodeBlock : CodeBlockNode,
+		CodeBlockNode,
 		Drawing().configure({
 			HTMLAttributes: {
 				class: 'drawing'
