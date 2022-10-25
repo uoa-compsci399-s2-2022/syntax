@@ -264,3 +264,10 @@ input[type="search"]::-webkit-search-results-decoration {
 	height: 0;
 	pointer-events: none;
 }
+
+/* hide elements not wanted in PDF export */
+@media print {
+	.no-print {
+		display: none;
+	}
+}

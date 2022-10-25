@@ -3,7 +3,6 @@ import { Avatar, Tooltip } from "@nextui-org/react";
 const AvatarGroup = ({ users, setShareModal }) => {
 	const avatarLimit = 5;
 	const avatarSize = "30px";
-	console.log(users);
 	if (!users) return null;
 	return (
 		<Avatar.Group

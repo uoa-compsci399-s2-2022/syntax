@@ -6,13 +6,13 @@ import { Dropdown, Button, Navbar, useTheme } from "@nextui-org/react";
 import { useTheme as useNextTheme } from "next-themes";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
+import { useReactToPrint } from "react-to-print";
 
 import {
 	EllipsisHorizontalIcon,
 	TrashIcon,
 	ShareIcon,
-	LockClosedIcon,
 	DocumentArrowUpIcon,
 	ChevronDoubleRightIcon,
 	ChevronDoubleLeftIcon,
@@ -20,46 +20,26 @@ import {
 	MoonIcon,
 	ArrowLeftOnRectangleIcon
 } from "@heroicons/react/24/solid";
-
 import {
 	useNote,
-	useDispatchNote,
-	useNotes,
 	useDispatchNotes
 } from "../../modules/AppContext";
 
-const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers }) => {
+const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers, pdfRef }) => {
 	const { setTheme } = useNextTheme();
 	const { checked, type } = useTheme();
-	const router = useRouter();
 	const [shareModal, setShareModal] = useState(false);
 	const [selectedKey, setSelectedKey] = useState();
 	const [exportModal, setExportModal] = useState(false);
 	const [deleteModal, setDeleteModal] = useState(false);
+	const router = useRouter();
 	const currentNote = useNote();
 	const setNotes = useDispatchNotes();
-	const { data: session, status } = useSession();
-	const placeholderUserData = [
-		{
-			name: session?.user.name,
-			email: session?.user.email,
-			image: session?.user.image,
-			owner: true
-		},
-		{ name: "Jane Doe", email: "jane.d@hotmail.com" },
-		{ name: "Test User 1", email: "testtest123@gmail.com" },
-		{ name: "Test User 2", email: "tu2@hotmail.com" },
-		{ name: "Test User 3", email: "tu3@hotmail.com" },
-		{ name: "Test User 4", email: "tu4@hotmail.com" },
-		{ name: "Test User 5", email: "tu5@hotmail.com" },
-		{ name: "Test User 6", email: "tu6@hotmail.com" },
-		{
-			name: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec metus enim, sodales vel nisl vel, lobortis suscipit enim. Praesent scelerisque fringilla urna, at semper mi aliquam sed. Ut nec placerat nulla. Sed non odio vel dolor sodales maximus. Duis ut leo velit. Duis egestas nisi sit amet diam egestas, quis aliquam odio fermentum. Morbi eu ultrices felis.",
-			color: "grey",
-			email:
-				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec metus enim, sodales vel nisl vel, lobortis suscipit enim. Praesent scelerisque fringilla urna, at semper mi aliquam sed. Ut nec placerat nulla. Sed non odio vel dolor sodales maximus. Duis ut leo velit. Duis egestas nisi sit amet diam egestas, quis aliquam odio fermentum. Morbi eu ultrices felis."
-		}
-	];
+
+	const handlePdf = useReactToPrint({
+		content: () => pdfRef?.current,
+		onAfterPrint: () => setExportModal(false)
+	});
 
 	const deleteNoteHandler = async () => {
 		try {
@@ -73,7 +53,6 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers }) => {
 			router.push(`/note`, "/");
 			setDeleteModal(false);
 			setSelectedKey();
-			
 		} catch (error) {
 			console.log(error);
 		}
@@ -81,13 +60,12 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers }) => {
 
 	const exportNoteHandler = async (fileType) => {
 		try {
-			console.log(fileType);
 			if (fileType == "HTML") {
 				let res = await fetch(`/api/note/${currentNote.id}/export/html`, {
 					method: "GET"
 				});
+				setExportModal(false);
 				let { text } = await res.json();
-				console.log(text);
 				const blob = new Blob([text], { type: "text/html" });
 				const link = document.createElement("a");
 				link.href = URL.createObjectURL(blob);
@@ -97,6 +75,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers }) => {
 				const res = await fetch(`/api/note/${currentNote.id}/export/md`, {
 					method: "GET"
 				});
+				setExportModal(false);
 				let { text } = await res.json();
 				const blob = new Blob([text], { type: "text/markdown" });
 				const link = document.createElement("a");
@@ -104,17 +83,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers }) => {
 				link.setAttribute("download", `${currentNote.title}.md`);
 				link.click();
 			} else if (fileType == "PDF") {
-				let res = await fetch(`/api/note/${currentNote.id}/export/pdf`, {
-					method: "GET"
-				});
-				const { text } = await res.json();
-				const blob = await new Blob([Buffer.from(text)], {
-					type: "application/pdf"
-				});
-				const link = document.createElement("a");
-				link.href = URL.createObjectURL(blob);
-				link.setAttribute("download", `${currentNote.title}.pdf`);
-				link.click();
+				handlePdf();
 			}
 		} catch (error) {
 			console.log(error);
@@ -128,7 +97,11 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers }) => {
 		let res = await fetch(`/api/collab`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({email: email, id: currentNote.roomId})
+			body: JSON.stringify({email: email, 
+				roomId: currentNote?.room?.id || null, 
+				noteId: currentNote.id,
+				YDOC: currentNote.YDOC
+			})
 			});
 		}
 		if (type == 'UNSHARE') {
@@ -136,7 +109,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers }) => {
 			let res = await fetch(`/api/collab`, {
 				method: "DELETE",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({email: email, id: currentNote.roomId})
+				body: JSON.stringify({email: email, id: currentNote?.room?.id || null})
 			});
 		}
 	};
@@ -172,9 +145,10 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers }) => {
 
 	return (
 		<Navbar
-			variant="sticky"
 			disableShadow
 			disableBlur
+			className="no-print"
+			variant="sticky"
 			css={{ zIndex: 2 }}
 			containerCss={{
 				minWidth: "100%"
@@ -226,27 +200,20 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers }) => {
 							icon={<EllipsisHorizontalIcon style={{ height: "30px" }} />}
 						/>
 						<Dropdown.Menu
-							disabledKeys={["lock"]}
 							onAction={setSelectedKey}
 							aria-label="Note Options"
 						>
 							<Dropdown.Section aria-label="Note Actions">
 								<Dropdown.Item
 									key="share"
+									textValue="Share"
 									icon={<ShareIcon style={{ height: "var(--icon-size-s)" }} />}
 								>
 									Share
 								</Dropdown.Item>
 								<Dropdown.Item
-									key="lock"
-									icon={
-										<LockClosedIcon style={{ height: "var(--icon-size-s)" }} />
-									}
-								>
-									Lock
-								</Dropdown.Item>
-								<Dropdown.Item
 									key="export"
+									textValue="Export"
 									icon={
 										<DocumentArrowUpIcon
 											style={{ height: "var(--icon-size-s)" }}
@@ -257,6 +224,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers }) => {
 								</Dropdown.Item>
 								<Dropdown.Item
 									key="delete"
+									textValue="Delete"
 									color="error"
 									icon={<TrashIcon style={{ height: "var(--icon-size-s)" }} />}
 								>
@@ -266,6 +234,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers }) => {
 							<Dropdown.Section aria-label="User Actions">
 								<Dropdown.Item
 									key="changeTheme"
+									textValue="Change theme"
 									icon={
 										type === "dark" ? (
 											<SunIcon style={{ height: "var(--icon-size-s)" }} />
@@ -278,6 +247,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers }) => {
 								</Dropdown.Item>
 								<Dropdown.Item
 									key="signOut"
+									textValue="Sign out"
 									icon={
 										<ArrowLeftOnRectangleIcon
 											style={{ height: "var(--icon-size-s)" }}
@@ -292,14 +262,13 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers }) => {
 				</Navbar.Item>
 				<ExportModal
 					open={exportModal}
-					oncloseHandler={closeHandler}
-					closeHandler={exportNoteHandler}
+					closeHandler={closeHandler}
+					exportHandler={exportNoteHandler}
 				/>
 				<ShareModal
 					open={shareModal}
 					closeHandler={closeHandler}
 					shareHandler={shareHandler}
-					users={placeholderUserData}
 				/>
 				<DeleteModal
 					open={deleteModal}

@@ -1,4 +1,3 @@
-import Head from "next/head";
 import { Container, Spacer, Dropdown } from "@nextui-org/react";
 import dynamic from "next/dynamic";
 import { debounce } from "lodash";
@@ -7,24 +6,25 @@ import { useRouter } from "next/router";
 import {
 	useNote,
 	useNotes,
-	useDispatchNotes
+	useDispatchNotes,
+	useDispatchNote
 } from "../../modules/AppContext";
+
 const Tiptap = dynamic(() => import("@/components/editor/Tiptap"), {
 	ssr: false
- });
+});
 
-
-const NoteDisplay = ({setCollabUsers}) => {
+const NoteDisplay = ({ setCollabUsers, pdfRef }) => {
 	const currentNote = useNote();
 	const notes = useNotes();
 	const setNotes = useDispatchNotes();
 	const router = useRouter();
+	const setCurrentNote = useDispatchNote();
 	const debounceSave = useRef(
 		debounce(async (criteria) => {
 			saveContent(criteria);
 		}, 500)
 	).current;
-
 
 	const saveContent = async (content) => {
 		console.log("save title debounce", content, currentNote);
@@ -43,6 +43,7 @@ const NoteDisplay = ({setCollabUsers}) => {
 		const updatedNote = await res.json();
 		updatedNote.currentGroupId = content.currentGroupId;
 		setNotes({ note: updatedNote, type: "edit" });
+		setCurrentNote(updatedNote);
 		router.push(`/note/${updatedNote.id}`, undefined, {
 			shallow: true
 		});
@@ -52,6 +53,7 @@ const NoteDisplay = ({setCollabUsers}) => {
 	return (
 		<>
 			<Container
+				ref={pdfRef}
 				css={{
 					margin: "0",
 					padding: "0 10% 10% 10%",
@@ -82,7 +84,10 @@ const NoteDisplay = ({setCollabUsers}) => {
 				>
 					{currentNote.title}
 				</div>
-				<table className="note-metadata-table" style={{ textAlign: "left" }}>
+				<table
+					className="note-metadata-table no-print"
+					style={{ textAlign: "left" }}
+				>
 					<tbody>
 						<tr>
 							<th>Created by</th>
@@ -138,7 +143,7 @@ const NoteDisplay = ({setCollabUsers}) => {
 												debounceSave({
 													id: currentNote.id,
 													groupId: e,
-													currentGroupId: currentNote.groupId,
+													currentGroupId: currentNote.groupId
 												})
 											}
 										>
@@ -166,7 +171,7 @@ const NoteDisplay = ({setCollabUsers}) => {
 						"@xs": { border: "none" }
 					}}
 				/>
-				<Tiptap setCollabUsers={setCollabUsers}/>
+				<Tiptap setCollabUsers={setCollabUsers} />
 			</Container>
 			<Spacer y={4} />
 		</>

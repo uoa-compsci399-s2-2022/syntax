@@ -30,6 +30,7 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import { baseExtensions } from './baseExtensions';
 import { fromBase64, fromUint8Array, toUint8Array } from 'js-base64'
 import { yDocToProsemirrorJSON, prosemirrorJSONToYDoc } from 'y-prosemirror'
+import { on } from "events";
 
 EditorView.prototype.updateState = function updateState(state) {
 	if (!this.docView) return; // This prevents the matchesNode error on hot reloads
@@ -116,6 +117,7 @@ export default function ({ setCollabUsers }) {
 	const provider = useMemo(() => { if (currentNote.room) return new WebrtcProvider(currentNote.id + "_43785b3457gt", ydoc) }, [currentNote.room]);
 
 	useEffect(() => {
+		console.log(currentNote);
 		if (currentNote.room == null) {
 			console.log("shared note");
 			provider?.destroy();
@@ -127,43 +129,44 @@ export default function ({ setCollabUsers }) {
 			disablePasteRules: [Drawing, "drawing"],
 			extensions: [
 				...baseExtensions(),
+				TipTapCustomImage(upload).configure({
+					HTMLAttributes: {
+						class: 'image'
+					}
+				}),
 				DebounceSave().configure({
 					noteId: currentNote.id,
 					noteTitle: currentNote.title,
 					YDOC: ydoc
 				}),
 				Collaboration.configure({
-					document: ydoc
+					// document: ydoc,
+					fragment: ydoc.getXmlFragment('prosemirror')
 				}),
-				currentNote.room !== null
+				"room" in currentNote && currentNote.room !== null
 					? CollaborationCursor.configure({
 						provider: provider,
 						user: {
 							name: session?.user?.name,
 							color: getRandomColour(),
-							avatar: session?.user?.avatar
+							image: session?.user?.image
 						}
 					})
 					: null
 			],
 			onBeforeCreate({ editor }) {
-				provider?.once('synced', synced => {
-					if (ydoc.getXmlFragment().length == 0) {
-						editor.commands.setContent(currentNote.body);
-					} else {
-						Y.applyUpdate(ydoc, fromBase64(currentNote.YDOC));
-					}
-					// console.log(editor?.storage.collaborationCursor?.users);
+				if(currentNote.YDOC) Y.applyUpdate(ydoc, toUint8Array(currentNote.YDOC));
+				provider?.on('synced', synced => {
 					const users = editor?.storage.collaborationCursor?.users;
-					setCollabUsers([...users] || []);
-					console.log('synced!', synced)
+					setCollabUsers(users);
 				})
 			},
 			onDestroy() {
 				provider?.destroy();
 			},
 			onCreate({editor}){
-				if(currentNote.room && ydoc.getXmlFragment().length == 0) editor.commands.setContent(currentNote.body);
+				const users = editor?.storage.collaborationCursor?.users;
+				setCollabUsers(users);
 			},
 			...(currentNote.room == null ? { content: currentNote.body } : {})
 		},
@@ -383,7 +386,7 @@ export default function ({ setCollabUsers }) {
 				content={drawContent}
 			/>
 			<div>
-				<p>Users: {editor?.storage.collaborationCursor?.users.length} </p>
+				{/* <p>Users: {editor?.storage.collaborationCursor?.users.length} </p> */}
 			</div>
 		</Container>
 	);

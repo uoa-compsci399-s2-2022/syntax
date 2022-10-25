@@ -9,10 +9,11 @@ import {
 	useNotes,
 	useDispatchNotes,
 } from "@/modules/AppContext";
+import { useSession } from "next-auth/react";
 
 const NoteList = ({ retrieved_notes, handleSidebarDisplay, createNote }) => {
 	const router = useRouter();
-
+	const { data: session, status } = useSession();
 	// this is where we assign the context to constants
 	// which we will use to read and modify our global state
 	const notes = useNotes();
@@ -35,7 +36,6 @@ const NoteList = ({ retrieved_notes, handleSidebarDisplay, createNote }) => {
 			handleSidebarDisplay();
 		}
 	};
-
 	return (
 		<>
 			<Container css={{ padding: "0 0.5rem", textOverflow: "break" }}>
@@ -44,7 +44,7 @@ const NoteList = ({ retrieved_notes, handleSidebarDisplay, createNote }) => {
 							name={"Shared Notes"}
 							key={notes.rooms.id}
 							color={"green"}
-							notes={notes.rooms.map(note => (note.note))}
+							notes={notes?.rooms?.filter(note => (note?.userId!=session?.user?.id) ).map(note => (note.note))}
 							openNote={openNote}
 							createNote={createNote}
 						/>
