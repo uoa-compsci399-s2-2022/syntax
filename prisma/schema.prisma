@@ -48,7 +48,7 @@ model Note {
    user      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
    group     Group?    @relation(fields: [groupId], references: [id], onDelete: Cascade, onUpdate: Cascade)
    roomId    String?
-   room      Room?
+   room      Room? 
    YDOC      String?
 
    @@unique([id, userId])
@@ -84,7 +84,7 @@ model User {
 model Room {
    id      String   @id @default(auto()) @map("_id") @db.ObjectId
    noteId  String   @unique
-   note    Note?     @relation(fields: [noteId], references: [id])
+   note    Note?     @relation(fields: [noteId], references: [id], onDelete: Cascade)
    userId  String?
    YDOC    String?
    user    User[]   @relation(fields: [userIds], references: [id])
