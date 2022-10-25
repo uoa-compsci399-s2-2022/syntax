@@ -2,83 +2,101 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+   provider = "mongodb"
+   url      = env("DATABASE_URL")
 }
 
 model Account {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.String
-  access_token      String? @db.String
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.String
-  session_state     String?
+   id                String  @id @default(auto()) @map("_id") @db.ObjectId
+   userId            String
+   type              String
+   provider          String
+   providerAccountId String
+   refresh_token     String? @db.String
+   access_token      String? @db.String
+   expires_at        Int?
+   token_type        String?
+   scope             String?
+   id_token          String? @db.String
+   session_state     String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([provider, providerAccountId])
+   @@unique([provider, providerAccountId])
 }
 
 model Session {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+   id           String   @id @default(auto()) @map("_id") @db.ObjectId
+   sessionToken String   @unique
+   userId       String
+   expires      DateTime
+   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Note {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  body        Json
-  createdAt   DateTime? @default(now())
-  updatedAt   DateTime? @updatedAt()
-  userId      String?
-  groupId     String?
-  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  @@unique([id, userId])
-  group Group?   @relation(fields: [groupId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  @@unique([id, groupId])
+   id        String    @id @default(auto()) @map("_id") @db.ObjectId
+   title     String
+   body      Json?
+   createdAt DateTime? @default(now())
+   updatedAt DateTime? @updatedAt()
+   userId    String?
+   groupId   String?
+   user      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+   group     Group?    @relation(fields: [groupId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+   roomId    String?
+   room      Room? 
+   YDOC      String?
+
+   @@unique([id, userId])
+   @@unique([id, groupId])
 }
 
-
 model Group {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  name          String
-  color         String?
-  notes         Note[]
-  userId        String?
-  default       String? @unique
-  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade) 
-  @@unique([id, userId])
+   id      String  @id @default(auto()) @map("_id") @db.ObjectId
+   name    String
+   color   String?
+   notes   Note[]
+   userId  String?
+   default String? @unique
+   user    User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+   @@unique([id, userId])
 }
 
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  notes         Note[]
-  groups        Group[]
+   id            String    @id @default(auto()) @map("_id") @db.ObjectId
+   name          String?
+   email         String?   @unique
+   emailVerified DateTime?
+   image         String?
+   accounts      Account[]
+   sessions      Session[]
+   notes         Note[]
+   groups        Group[]
+   roomIds       String[] @db.ObjectId
+   rooms         Room[] @relation(fields: [roomIds], references: [id])
+}
+
+model Room {
+   id      String   @id @default(auto()) @map("_id") @db.ObjectId
+   noteId  String   @unique
+   note    Note?     @relation(fields: [noteId], references: [id], onDelete: Cascade)
+   userId  String?
+   YDOC    String?
+   user    User[]   @relation(fields: [userIds], references: [id])
+   userIds String[] @db.ObjectId
+
+   @@unique([id, noteId])
 }
 
 model VerificationToken {
-  identifier String   @id @default(auto()) @map("_id") @db.ObjectId
-  token      String   @unique
-  expires    DateTime
+   identifier String   @id @default(auto()) @map("_id") @db.ObjectId
+   token      String   @unique
+   expires    DateTime
 
-  @@unique([identifier, token])
+   @@unique([identifier, token])
 }

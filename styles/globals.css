@@ -106,6 +106,17 @@ div[contenteditable] {
 	text-decoration: underline;
 }
 
+/* avatar styling */
+.nextui-avatar-text {
+	font-size: 1.5rem !important;
+	font-weight: normal !important;
+	color: white !important;
+}
+
+.nextui-avatar-bg {
+	background: none !important;
+}
+
 /* Youtube embed styling */
 iframe {
 	border: none;
@@ -219,10 +230,48 @@ input[type="search"]::-webkit-search-results-decoration {
 	white-space: pre-line;
 }
 
+/* give a remote user a caret */
+.collaboration-cursor__caret {
+	border-left: 1px solid #0d0d0d;
+	border-right: 1px solid #0d0d0d;
+	margin-left: -1px;
+	margin-right: -1px;
+	pointer-events: none;
+	position: relative;
+	word-break: normal;
+}
+
+/* render the username above the caret */
+.collaboration-cursor__label {
+	border-radius: 3px 3px 3px 0;
+	color: #0d0d0d;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: 600;
+	left: -1px;
+	line-height: normal;
+	padding: 0.1rem 0.3rem;
+	position: absolute;
+	top: -1.4em;
+	user-select: none;
+	white-space: nowrap;
+}
+
 .ProseMirror p.is-editor-empty:first-child::before {
 	color: var(--nextui-colors-textDisabled);
 	content: attr(data-placeholder);
 	float: left;
 	height: 0;
 	pointer-events: none;
+}
+
+/* hide elements not wanted in PDF export */
+@media print {
+	.no-print {
+		display: none;
+	}
+}
+
+#printWindow {
+	display: none;
 }

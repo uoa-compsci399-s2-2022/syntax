@@ -1,12 +1,20 @@
-import Head from "next/head";
 import { Container, Spacer, Dropdown } from "@nextui-org/react";
-import Tiptap from "@/components/editor/Tiptap";
+import dynamic from "next/dynamic";
 import { debounce } from "lodash";
 import { useRef } from "react";
 import { useRouter } from "next/router";
-import { useNote, useNotes, useDispatchNotes, useDispatchNote } from "../../modules/AppContext";
+import {
+	useNote,
+	useNotes,
+	useDispatchNotes,
+	useDispatchNote
+} from "../../modules/AppContext";
 
-const NoteDisplay = () => {
+const Tiptap = dynamic(() => import("@/components/editor/Tiptap"), {
+	ssr: false
+});
+
+const NoteDisplay = ({ setCollabUsers, pdfRef }) => {
 	const currentNote = useNote();
 	const notes = useNotes();
 	const setNotes = useDispatchNotes();
@@ -45,6 +53,7 @@ const NoteDisplay = () => {
 	return (
 		<>
 			<Container
+				ref={pdfRef}
 				css={{
 					margin: "0",
 					padding: "0 10% 10% 10%",
@@ -75,7 +84,10 @@ const NoteDisplay = () => {
 				>
 					{currentNote.title}
 				</div>
-				<table className="note-metadata-table" style={{ textAlign: "left" }}>
+				<table
+					className="note-metadata-table no-print"
+					style={{ textAlign: "left" }}
+				>
 					<tbody>
 						<tr>
 							<th>Created by</th>
@@ -131,7 +143,7 @@ const NoteDisplay = () => {
 												debounceSave({
 													id: currentNote.id,
 													groupId: e,
-													currentGroupId: currentNote.groupId,
+													currentGroupId: currentNote.groupId
 												})
 											}
 										>
@@ -159,7 +171,7 @@ const NoteDisplay = () => {
 						"@xs": { border: "none" }
 					}}
 				/>
-				<Tiptap />
+				<Tiptap setCollabUsers={setCollabUsers} />
 			</Container>
 			<Spacer y={4} />
 		</>

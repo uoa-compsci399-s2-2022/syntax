@@ -64,14 +64,12 @@ export const getNoteByID = async (id, session) => {
 	let userId = session?.user.id;
 	const note = await prisma.note.findUnique({
 		where: {
-			id_userId: {
-				id,
-				userId
-			}
+			id: id
 		},
 		include: {
 			user: true,
-			group: true
+			group: true,
+			room: true
 		}
 	});
 
@@ -82,15 +80,15 @@ export const getAllNotesBySearch = async (sq, active, sortingField, id) => {
 	var queryBase = {
 		titleChecked: { "title": { $regex: sq, '$options': 'i' } },
 		contentChecked: { "body.content": { $elemMatch: { content: { $elemMatch: { "text": { $regex: sq, '$options': 'i' } } } } } },
-		codeChecked: { "body.content": { $elemMatch: { "attrs.code_content": { $regex: sq, '$options': 'i'  } } } },
+		codeChecked: { "body.content": { $elemMatch: { "attrs.code_content": { $regex: sq, '$options': 'i' } } } },
 	}
-	const queries = [active.map(i=>queryBase[i])]; 
+	const queries = [active.map(i => queryBase[i])];
 	const notes = await prisma.note.findRaw({
 		filter: {
 			$and:
 				[{ "userId": id },
 				{
-					$or: {...queries}[0]
+					$or: { ...queries }[0]
 				}]
 		},
 		options: { sort: sortingField }
@@ -113,10 +111,7 @@ export const updateNote = async (id, updatedData, session) => {
 	let userId = session?.user.id;
 	const updatedNote = await prisma.note.update({
 		where: {
-			id_userId: {
-				id,
-				userId
-			}
+			id: id
 		},
 		data: {
 			...updatedData,
@@ -156,7 +151,19 @@ export const getAllNotesByUserID = async (id) => {
 					notes: {
 						include: {
 							group: true,
-							user: true
+							user: true,
+							room: true
+						}
+					}
+				}
+			},
+			rooms: {
+				include: {
+					note: {
+						include: {
+							group: true,
+							user: true,
+							room: true
 						}
 					}
 				}
@@ -237,3 +244,85 @@ export const deleteGroup = async (id, session) => {
 	});
 	return deletedGroup;
 };
+
+//
+// room specific calls
+// 
+
+
+export const addUser = async (email, roomId, noteId, YDOC, session) => {
+	var validRoomId = roomId;
+	const _userFromEmail = await prisma.user.findUnique({
+		where: {
+			email
+		}
+	});
+	console.log(email, validRoomId, noteId, session);
+	if (roomId == null) {
+		validRoomId = await prisma.room.create({
+			data: {
+				note: {
+					connect: {
+						id: noteId
+					}
+				},
+				userId: session?.user?.id,
+				user: {
+					connect: [{
+						email: email
+					},
+					{
+						email: session?.user?.email
+					}]
+				},
+				userIds: [_userFromEmail.id, session?.user?.id]
+			},
+		});
+		validRoomId = validRoomId.id;
+	} else {
+		await prisma.room.update({
+			where: {
+				id: validRoomId
+			},
+			data: {
+				user: {
+					connect: {
+						email: email
+					},
+
+				}, userIds: {
+					push: _userFromEmail.id
+				},
+			}
+		});
+	}
+}
+
+export const deleteUser = async (email, roomId, session) => {
+	const users = await prisma.user.update({
+		where: {
+			email: email
+		},
+		data: {
+			rooms: {
+				disconnect: {
+					id: roomId
+				}
+			}
+		},
+	})
+	return users;
+}
+
+export const getSharedUsers = async (roomId) => {
+	console.log(roomId);
+	const users = await prisma.room.findUnique({
+		where: {
+			id: roomId
+		},
+		include: {
+			user: true
+		}
+	})
+	return JSON.parse(JSON.stringify(users));
+}

@@ -63,7 +63,8 @@ const NoteSidebar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 	};
 
 	return (
-		<Container
+		<Container 
+			className="no-print"
 			display="flex"
 			wrap="nowrap"
 			direction="column"
@@ -82,7 +83,7 @@ const NoteSidebar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 				"@xs": {
 					position: sidebarDisplay ? "fixed" : "relative",
 					maxWidth: "15%",
-					minWidth: "250px"
+					minWidth: "270px"
 				}
 			}}
 		>

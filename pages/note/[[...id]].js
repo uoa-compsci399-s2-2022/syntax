@@ -3,10 +3,9 @@ import NoteSidebar from "../../components/note/NoteSidebar";
 import NoteNavbar from "../../components/note/NoteNavbar";
 import Head from "next/head";
 import { useSession, getSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { NoteTemplate } from "../../components/note/NewNote";
 import { Container, useTheme } from "@nextui-org/react";
-import Error from 'next/error'
 import { useDispatchNote, useDispatchNotes } from "../../modules/AppContext";
 
 const getNoteByID = require("../../prisma/Note").getNoteByID;
@@ -18,7 +17,7 @@ export const getServerSideProps = async ({ req, res, params }) => {
 	// 	"public, s-maxage=10, stale-while-revalidate=59"
 	// );
 	const session = await getSession({ req });
-	let ownership = true
+	let ownership = true;
 	const { id } = params;
 
 	if (!session) {
@@ -39,10 +38,10 @@ export const getServerSideProps = async ({ req, res, params }) => {
 	if (id && id.length == 1) {
 		//catches errors if user inputs invalid noteId then returns user to /note
 		note = await getNoteByID(id[0], session);
-		if (!note) {
+		if (!note || (note?.room!==null && session?.user?.id in note?.room?.userIds) || (note?.room==null && note?.userId!==session?.user?.id)) {
 			return {
 				notFound: true
-			}
+			};
 		}
 	} else {
 		note = {
@@ -65,7 +64,11 @@ const NoteLayout = ({ notes, note, ownership }) => {
 	const { data: session, status } = useSession();
 	const setCurrentNote = useDispatchNote();
 	const setNotes = useDispatchNotes();
+	const [collabUsers, setCollabUsers] = useState([]);
+	const pdfRef = useRef();
+
 	useEffect(() => {
+		console.log(notes);
 		setCurrentNote(note);
 		setNotes({ note: notes, type: "replace" });
 	}, []);
@@ -80,7 +83,6 @@ const NoteLayout = ({ notes, note, ownership }) => {
 				<title>{note.title}</title>
 				<meta name="theme-color" content={isDark ? "#121212" : "white"} />
 			</Head>
-
 			<Container
 				fluid
 				display="flex"
@@ -95,6 +97,7 @@ const NoteLayout = ({ notes, note, ownership }) => {
 				<NoteSidebar
 					sidebarDisplay={sidebarDisplay}
 					handleSidebarDisplay={handleSidebarDisplay}
+					collabUsers={collabUsers}
 				/>
 				<Container
 					display="flex"
@@ -111,6 +114,8 @@ const NoteLayout = ({ notes, note, ownership }) => {
 					<NoteNavbar
 						sidebarDisplay={sidebarDisplay}
 						handleSidebarDisplay={handleSidebarDisplay}
+						collabUsers={collabUsers}
+						pdfRef={pdfRef}
 					/>
 					<Container
 						css={{
@@ -121,7 +126,7 @@ const NoteLayout = ({ notes, note, ownership }) => {
 							overflowX: "hidden"
 						}}
 					>
-						<NoteDisplay />
+						<NoteDisplay setCollabUsers={setCollabUsers} pdfRef={pdfRef} />
 					</Container>
 				</Container>
 			</Container>

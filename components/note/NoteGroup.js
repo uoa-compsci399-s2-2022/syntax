@@ -15,12 +15,13 @@ import { useNote, useDispatchNotes } from "@/modules/AppContext";
 
 const NoteGroup = ({
 	name,
-	color = "white",
+	color = "#FFFFFF",
 	notes,
 	openNote,
 	id,
 	defaultGroup,
-	createNote
+	createNote,
+	shared = false
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [selectedKey, setSelectedKey] = useState();
@@ -55,9 +56,13 @@ const NoteGroup = ({
 			});
 			const deletedGroup = await res.json();
 			setNotes({ note: deletedGroup, type: "removeGroup" });
-			router.push(`/note/${id!=currentNote.groupId ? currentNote.groupId : ""}`, undefined, {
-				shallow: true
-			});
+			router.push(
+				`/note/${id != currentNote.groupId ? currentNote.groupId : ""}`,
+				undefined,
+				{
+					shallow: true
+				}
+			);
 			setDeleteModal(false);
 		} catch (error) {
 			console.log(error);
@@ -160,7 +165,7 @@ const NoteGroup = ({
 						<Dropdown.Button
 							light
 							ripple={false}
-							disabled={defaultGroup ? true : false}
+							disabled={defaultGroup || shared ? true : false}
 							icon={
 								<EllipsisHorizontalIcon
 									style={{ height: "var(--icon-size-xs)" }}
@@ -200,6 +205,7 @@ const NoteGroup = ({
 					<Button
 						light
 						ripple={false}
+						disabled={shared ? true : false}
 						onPress={() => {
 							createNote(id);
 							setIsOpen(true);

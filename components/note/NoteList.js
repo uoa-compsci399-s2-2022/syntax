@@ -7,12 +7,13 @@ import {
 	useNote,
 	useDispatchNote,
 	useNotes,
-	useDispatchNotes,
+	useDispatchNotes
 } from "@/modules/AppContext";
+import { useSession } from "next-auth/react";
 
 const NoteList = ({ retrieved_notes, handleSidebarDisplay, createNote }) => {
 	const router = useRouter();
-
+	const { data: session, status } = useSession();
 	// this is where we assign the context to constants
 	// which we will use to read and modify our global state
 	const notes = useNotes();
@@ -35,30 +36,41 @@ const NoteList = ({ retrieved_notes, handleSidebarDisplay, createNote }) => {
 			handleSidebarDisplay();
 		}
 	};
-
 	return (
-		<>
-			<Container css={{ padding: "0 0.5rem", textOverflow: "break" }}>
-				{"groups" in notes ? (
-					notes.groups.map((group) => (
-						<NoteGroup
-							name={group.name}
-							key={group.id}
-							id={group.id}
-							color={group.color}
-							notes={group.notes}
-							defaultGroup={group.default}
-							openNote={openNote}
-							createNote={createNote}
-						/>
-					))
-				) : (
-					<div>
-						<p>Oops... no notes yet</p>
-					</div>
-				)}
-			</Container>
-		</>
+		<Container css={{ padding: "0 0.5rem", textOverflow: "break" }}>
+			{"rooms" in notes && notes.rooms.length > 0 ? (
+				<NoteGroup
+					name="Shared with me"
+					color="#67A273"
+					key={notes.rooms.id}
+					notes={notes?.rooms
+						?.filter((note) => note?.userId != session?.user?.id)
+						.map((note) => note.note)}
+					openNote={openNote}
+					createNote={createNote}
+					shared={true}
+				/>
+			) : null}
+			{"groups" in notes ? (
+				notes.groups.map((group) => (
+					<NoteGroup
+						name={group.name}
+						key={group.id}
+						id={group.id}
+						color={group.color}
+						notes={group.notes}
+						defaultGroup={group.default}
+						openNote={openNote}
+						createNote={createNote}
+						shared={false}
+					/>
+				))
+			) : (
+				<div>
+					<p>Oops... no notes yet</p>
+				</div>
+			)}
+		</Container>
 	);
 };
 
