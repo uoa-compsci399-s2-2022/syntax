@@ -20,12 +20,14 @@ import {
 	MoonIcon,
 	ArrowLeftOnRectangleIcon
 } from "@heroicons/react/24/solid";
-import {
-	useNote,
-	useDispatchNotes
-} from "../../modules/AppContext";
+import { useNote, useDispatchNotes } from "../../modules/AppContext";
 
-const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers, pdfRef }) => {
+const NoteNavbar = ({
+	sidebarDisplay,
+	handleSidebarDisplay,
+	collabUsers,
+	pdfRef
+}) => {
 	const { setTheme } = useNextTheme();
 	const { checked, type } = useTheme();
 	const [shareModal, setShareModal] = useState(false);
@@ -91,25 +93,28 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers, pdfRef 
 	};
 
 	const shareHandler = async (email, type) => {
-		
-		if (type == 'SHARE') {
-			console.log('SHARE')
-		let res = await fetch(`/api/collab`, {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({email: email, 
-				roomId: currentNote?.room?.id || null, 
-				noteId: currentNote.id,
-				YDOC: currentNote.YDOC
-			})
+		if (type == "SHARE") {
+			console.log("SHARE");
+			let res = await fetch(`/api/collab`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					email: email,
+					roomId: currentNote?.room?.id || null,
+					noteId: currentNote.id,
+					YDOC: currentNote.YDOC
+				})
 			});
 		}
-		if (type == 'UNSHARE') {
-			console.log('UNSHARE')
+		if (type == "UNSHARE") {
+			console.log("UNSHARE");
 			let res = await fetch(`/api/collab`, {
 				method: "DELETE",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({email: email, id: currentNote?.room?.id || null})
+				body: JSON.stringify({
+					email: email,
+					id: currentNote?.room?.id || null
+				})
 			});
 		}
 	};
@@ -188,10 +193,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers, pdfRef 
 			</Navbar.Content>
 			<Navbar.Content gap={5}>
 				<Navbar.Item>
-					<AvatarGroup
-						users={collabUsers}
-						setShareModal={setShareModal}
-					/>
+					<AvatarGroup users={collabUsers} setShareModal={setShareModal} />
 				</Navbar.Item>
 				<Navbar.Item>
 					<Dropdown placement="bottom-right">
@@ -199,10 +201,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers, pdfRef 
 							light
 							icon={<EllipsisHorizontalIcon style={{ height: "30px" }} />}
 						/>
-						<Dropdown.Menu
-							onAction={setSelectedKey}
-							aria-label="Note Options"
-						>
+						<Dropdown.Menu onAction={setSelectedKey} aria-label="Note Options">
 							<Dropdown.Section aria-label="Note Actions">
 								<Dropdown.Item
 									key="share"
@@ -272,8 +271,9 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, collabUsers, pdfRef 
 				/>
 				<DeleteModal
 					open={deleteModal}
-					onclosehandler={closeHandler}
-					closeHandler={deleteNoteHandler}/>
+					closeHandler={closeHandler}
+					deleteHandler={deleteNoteHandler}
+				/>
 			</Navbar.Content>
 		</Navbar>
 	);
