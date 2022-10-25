@@ -87,7 +87,6 @@ export default ({ editor, drawingOpenHandler }) => {
 			}
 		}
 		setInputModal(false);
-		setShareModal(false);
 	};
 
 	useEffect(() => {
