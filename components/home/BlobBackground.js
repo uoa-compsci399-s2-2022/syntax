@@ -46,9 +46,9 @@ const BlobBackground = () => {
 					right: "-13%",
 					filter: "blur(160px)",
 
-					"-webkit-animation": "spin 20s linear infinite",
-					"-moz-animation": "spin 20s linear infinite",
-					animation: "spin 20s linear infinite"
+					// "-webkit-animation": "spin 20s linear infinite",
+					// "-moz-animation": "spin 20s linear infinite",
+					// animation: "spin 20s linear infinite"
 				}}
 			/>
 			<Blob1
@@ -57,15 +57,15 @@ const BlobBackground = () => {
 						"linear-gradient(rgba(198, 120, 221, 0.5) 0%, rgba(122, 50, 143, 0.5) 100%)",
 					float: "left",
 					bottom: "0",
-					bottom: "22%",
+					bottom: "0%",
 					left: "-27%",
 					filter: "blur(160px)",
-					"-webkit-animation": "spinleft 23s linear infinite",
-					"-moz-animation": "spinleft 23s linear infinite",
-					animation: "spinleft 23s  linear infinite"
+					// "-webkit-animation": "spinleft 23s linear infinite",
+					// "-moz-animation": "spinleft 23s linear infinite",
+					// animation: "spinleft 23s  linear infinite"
 				}}
 			/>
-			<Blob2
+			{/* <Blob2
 				css={{
 					background:
 						"linear-gradient(180deg, rgba(94, 197, 129, 0.5) 0%, rgba(109, 189, 126, 0.5) 90.62%)",
@@ -76,7 +76,7 @@ const BlobBackground = () => {
 					"-moz-animation": "spinleft 25s linear infinite",
 					animation: "spinleft 25s  linear infinite"
 				}}
-			/>
+			/> */}
 		</div>
 	);
 };

@@ -1,4 +1,4 @@
-import BlobBackground from "@/components/home/BlobBackground";
+
 import HomeToolbar from "@/components/home/HomeToolbar";
 import Head from "next/head";
 import { useTheme as useNextTheme } from "next-themes";
@@ -19,6 +19,9 @@ import {
 	Card,
 	Link
 } from "@nextui-org/react";
+import dynamic from 'next/dynamic';
+
+const BlobBackground = dynamic(() => import("@/components/home/BlobBackground"), {ssr: false});
 
 export const getServerSideProps = async ({ req }) => {
 	const session = await getSession({ req });
