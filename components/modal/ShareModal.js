@@ -48,7 +48,9 @@ const ShareModal = ({ open, closeHandler }) => {
 				})
 			});
 		}
-		getSharedUsers();
+		if (currentNote?.room !== null) {
+			getSharedUsers();
+		}
 	};
 
 	const getSharedUsers = async () => {
@@ -104,103 +106,109 @@ const ShareModal = ({ open, closeHandler }) => {
 						Invite
 					</Button>
 				</Container>
-				<Spacer
-					css={{
-						minWidth: "100%",
-						marginTop: "0 !important",
-						marginLeft: "0 !important",
-						borderBottom: "1px solid $border"
-					}}
-				/>
-				<Container css={{ padding: "0" }}>
-					People with access
-					<Spacer />
-					{sharedUsers.map((user, index) => (
-						<Row
-							align="center"
-							key={index}
+				{sharedUsers.length > 0 && (
+					<>
+						<Spacer
 							css={{
-								gap: "1rem",
-								padding: "0.3rem 0"
+								minWidth: "100%",
+								marginTop: "0 !important",
+								marginLeft: "0 !important",
+								borderBottom: "1px solid $border"
 							}}
-						>
-							<Avatar
-								src={user.image}
-								text={user.name?.charAt(0)}
-								css={{
-									background: "$accents6"
-								}}
-							/>
-							<Col
-								css={{
-									maxWidth: "70%"
-								}}
-							>
-								<Row>
-									<span
-										style={{
-											overflow: "hidden",
-											whiteSpace: "nowrap",
-											textOverflow: "ellipsis"
-										}}
-									>
-										{user.name}
-									</span>
-								</Row>
+						/>
+						<Container css={{ padding: "0" }}>
+							People with access
+							<Spacer />
+							{sharedUsers.map((user, index) => (
 								<Row
+									align="center"
+									key={index}
 									css={{
-										color: "$accents6"
+										gap: "1rem",
+										padding: "0.3rem 0"
 									}}
 								>
-									<span
-										style={{
-											overflow: "hidden",
-											whiteSpace: "nowrap",
-											textOverflow: "ellipsis"
+									<Avatar
+										src={user.image}
+										text={user.name?.charAt(0)}
+										css={{
+											background: "$accents6"
+										}}
+									/>
+									<Col
+										css={{
+											maxWidth: "70%"
 										}}
 									>
-										{user.email}
-									</span>
-								</Row>
-							</Col>
-							{currentNote.room.userId == user.id ? (
-								"Owner"
-							) : (
-								<Button
-									onPress={() => shareHandler(user.email, "UNSHARE")}
-									auto
-									light
-									ripple={false}
-									icon={
-										<XMarkIcon
-											style={{
-												height: "var(--icon-size-xs)"
+										<Row>
+											<span
+												style={{
+													overflow: "hidden",
+													whiteSpace: "nowrap",
+													textOverflow: "ellipsis"
+												}}
+											>
+												{user.name}
+											</span>
+										</Row>
+										<Row
+											css={{
+												color: "$accents6"
+											}}
+										>
+											<span
+												style={{
+													overflow: "hidden",
+													whiteSpace: "nowrap",
+													textOverflow: "ellipsis"
+												}}
+											>
+												{user.email}
+											</span>
+										</Row>
+									</Col>
+									{currentNote.room?.userId == user.id ? (
+										"Owner"
+									) : (
+										<Button
+											onPress={() => shareHandler(user.email, "UNSHARE")}
+											auto
+											light
+											ripple={false}
+											icon={
+												<XMarkIcon
+													style={{
+														height: "var(--icon-size-xs)"
+													}}
+												/>
+											}
+											css={{
+												color: "$accents6",
+												minWidth: "0",
+												maxWidth: "var(--icon-size-xs)",
+												height: "var(--icon-size-xs)",
+												padding: "0.8rem",
+												borderRadius: "var(--nextui-radii-sm)",
+												marginLeft: "auto",
+												"&:hover": {
+													background: "$accents4",
+													color: "$text"
+												}
 											}}
 										/>
-									}
-									css={{
-										color: "$accents6",
-										minWidth: "0",
-										maxWidth: "var(--icon-size-xs)",
-										height: "var(--icon-size-xs)",
-										padding: "0.8rem",
-										borderRadius: "var(--nextui-radii-sm)",
-										marginLeft: "auto",
-										"&:hover": {
-											background: "$accents4",
-											color: "$text"
-										}
-									}}
-								/>
-							)}
-						</Row>
-					))}
-				</Container>
+									)}
+								</Row>
+							))}
+						</Container>
+					</>
+				)}
 			</Modal.Body>
 			<Modal.Footer>
-				<Button auto onPress={closeHandler}>
-					Done
-				</Button>
+				{sharedUsers.length > 0 && (
+					<Button auto onPress={closeHandler}>
+						Done
+					</Button>
+				)}
 			</Modal.Footer>
 		</Modal>
 	);
