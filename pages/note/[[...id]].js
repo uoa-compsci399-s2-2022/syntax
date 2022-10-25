@@ -68,6 +68,7 @@ const NoteLayout = ({ notes, note, ownership }) => {
 	const [collabUsers, setCollabUsers] = useState([]);
 
 	useEffect(() => {
+		console.log(notes);
 		setCurrentNote(note);
 		setNotes({ note: notes, type: "replace" });
 	}, []);

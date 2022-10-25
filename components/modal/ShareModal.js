@@ -13,7 +13,7 @@ import {
 import { useState, useEffect } from "react";
 import { useNote } from "../../modules/AppContext";
 
-const ShareModal = ({ open, closeHandler, shareHandler, users }) => {
+const ShareModal = ({ open, closeHandler, shareHandler }) => {
 	const { checked, type } = useTheme();
 	const share_link = "Insert Link Here";
 	const [email, setEmail] = useState('');
@@ -30,7 +30,7 @@ const ShareModal = ({ open, closeHandler, shareHandler, users }) => {
 		let res = await fetch(`/api/collab`, {
 			method: "PUT",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({id: currentNote.roomId})
+			body: JSON.stringify({id: currentNote.room?.id})
 		});
 		const updatedGroup = await res.json();
 		console.log(updatedGroup);
@@ -39,7 +39,7 @@ const ShareModal = ({ open, closeHandler, shareHandler, users }) => {
 	
 	return (
 		<Modal
-			onOpen = {() => getSharedUsers()}
+			onOpen = {() => (currentNote.room !== null) ? getSharedUsers() : null}
 			blur
 			scroll
 			closeButton
@@ -138,7 +138,7 @@ const ShareModal = ({ open, closeHandler, shareHandler, users }) => {
 									</span>
 								</Row>
 							</Col>
-							{user.owner ? (
+							{currentNote.room.userId==user.id ? (
 								"Owner"
 							) : (
 								<Button
