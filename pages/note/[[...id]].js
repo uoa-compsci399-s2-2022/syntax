@@ -38,7 +38,8 @@ export const getServerSideProps = async ({ req, res, params }) => {
 	if (id && id.length == 1) {
 		//catches errors if user inputs invalid noteId then returns user to /note
 		note = await getNoteByID(id[0], session);
-		if (!note) {
+		console.log(note);
+		if (!note || (note?.room!==null && session?.user?.id in note?.room?.userIds) || (note?.room==null && note?.userId!==session?.user?.id)) {
 			return {
 				notFound: true
 			};
