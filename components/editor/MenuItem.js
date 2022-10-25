@@ -38,8 +38,8 @@ const MenuItem = ({
 					<>
 						{icon}
 						<input
-							id="upload"
-							name="upload"
+							id="button-upload"
+							name="button-upload"
 							type="file"
 							accept="image/*"
 							ref={fileRef}

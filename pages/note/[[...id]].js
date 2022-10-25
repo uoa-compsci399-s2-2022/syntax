@@ -3,10 +3,9 @@ import NoteSidebar from "../../components/note/NoteSidebar";
 import NoteNavbar from "../../components/note/NoteNavbar";
 import Head from "next/head";
 import { useSession, getSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { NoteTemplate } from "../../components/note/NewNote";
 import { Container, useTheme } from "@nextui-org/react";
-import Error from 'next/error'
 import { useDispatchNote, useDispatchNotes } from "../../modules/AppContext";
 
 const getNoteByID = require("../../prisma/Note").getNoteByID;
@@ -18,7 +17,7 @@ export const getServerSideProps = async ({ req, res, params }) => {
 	// 	"public, s-maxage=10, stale-while-revalidate=59"
 	// );
 	const session = await getSession({ req });
-	let ownership = true
+	let ownership = true;
 	const { id } = params;
 
 	if (!session) {
@@ -42,7 +41,7 @@ export const getServerSideProps = async ({ req, res, params }) => {
 		if (!note) {
 			return {
 				notFound: true
-			}
+			};
 		}
 	} else {
 		note = {
@@ -66,6 +65,7 @@ const NoteLayout = ({ notes, note, ownership }) => {
 	const setCurrentNote = useDispatchNote();
 	const setNotes = useDispatchNotes();
 	const [collabUsers, setCollabUsers] = useState([]);
+	const pdfRef = useRef();
 
 	useEffect(() => {
 		console.log(notes);
@@ -83,7 +83,6 @@ const NoteLayout = ({ notes, note, ownership }) => {
 				<title>{note.title}</title>
 				<meta name="theme-color" content={isDark ? "#121212" : "white"} />
 			</Head>
-
 			<Container
 				fluid
 				display="flex"
@@ -116,6 +115,7 @@ const NoteLayout = ({ notes, note, ownership }) => {
 						sidebarDisplay={sidebarDisplay}
 						handleSidebarDisplay={handleSidebarDisplay}
 						collabUsers={collabUsers}
+						pdfRef={pdfRef}
 					/>
 					<Container
 						css={{
@@ -126,7 +126,7 @@ const NoteLayout = ({ notes, note, ownership }) => {
 							overflowX: "hidden"
 						}}
 					>
-						<NoteDisplay setCollabUsers={setCollabUsers} />
+						<NoteDisplay setCollabUsers={setCollabUsers} pdfRef={pdfRef} />
 					</Container>
 				</Container>
 			</Container>
