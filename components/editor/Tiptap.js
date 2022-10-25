@@ -129,6 +129,11 @@ export default function ({ setCollabUsers }) {
 			disablePasteRules: [Drawing, "drawing"],
 			extensions: [
 				...baseExtensions(),
+				TipTapCustomImage(upload).configure({
+					HTMLAttributes: {
+						class: 'image'
+					}
+				}),
 				DebounceSave().configure({
 					noteId: currentNote.id,
 					noteTitle: currentNote.title,
