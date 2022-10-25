@@ -83,7 +83,7 @@ const NoteSidebar = ({ sidebarDisplay, handleSidebarDisplay }) => {
 				"@xs": {
 					position: sidebarDisplay ? "fixed" : "relative",
 					maxWidth: "15%",
-					minWidth: "250px"
+					minWidth: "270px"
 				}
 			}}
 		>

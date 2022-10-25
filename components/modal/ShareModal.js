@@ -1,4 +1,6 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
+import { useState } from "react";
+import { useNote } from "../../modules/AppContext";
 import {
 	Button,
 	Modal,
@@ -10,36 +12,31 @@ import {
 	Spacer,
 	useTheme
 } from "@nextui-org/react";
-import { useState, useEffect } from "react";
-import { useNote } from "../../modules/AppContext";
 
 const ShareModal = ({ open, closeHandler, shareHandler }) => {
 	const { checked, type } = useTheme();
-	const share_link = "Insert Link Here";
-	const [email, setEmail] = useState('');
-	const [sharedUsers, setSharedUsers] = useState([])
+	const [email, setEmail] = useState("");
+	const [sharedUsers, setSharedUsers] = useState([]);
 	const currentNote = useNote();
-	
 
 	const addEmail = (event) => {
-		setEmail(event.target.value)
-	}
-	
+		setEmail(event.target.value);
+	};
+
 	const getSharedUsers = async () => {
-		console.log(currentNote, '@@@@@@@')
 		let res = await fetch(`/api/collab`, {
 			method: "PUT",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({id: currentNote.room?.id})
+			body: JSON.stringify({ id: currentNote.room?.id })
 		});
 		const updatedGroup = await res.json();
-		console.log(updatedGroup);
-		setSharedUsers(updatedGroup.user)
-	}
-	
+		console.log(updatedGroup, "sdfsdf");
+		setSharedUsers(updatedGroup.user);
+	};
+
 	return (
 		<Modal
-			onOpen = {() => (currentNote.room !== null) ? getSharedUsers() : null}
+			onOpen={() => (currentNote.room !== null ? getSharedUsers() : null)}
 			blur
 			scroll
 			closeButton
@@ -73,7 +70,7 @@ const ShareModal = ({ open, closeHandler, shareHandler }) => {
 					<Button
 						auto
 						xs="true"
-						onPress={() => shareHandler(email, 'SHARE')}
+						onPress={() => shareHandler(email, "SHARE")}
 						css={{ alignSelf: "flex-end" }}
 					>
 						Invite
@@ -138,11 +135,11 @@ const ShareModal = ({ open, closeHandler, shareHandler }) => {
 									</span>
 								</Row>
 							</Col>
-							{currentNote.room.userId==user.id ? (
+							{currentNote.room.userId == user.id ? (
 								"Owner"
 							) : (
 								<Button
-								onPress={() => shareHandler(user.email, 'UNSHARE')}
+									onPress={() => shareHandler(user.email, "UNSHARE")}
 									auto
 									light
 									ripple={false}
@@ -172,17 +169,7 @@ const ShareModal = ({ open, closeHandler, shareHandler }) => {
 					))}
 				</Container>
 			</Modal.Body>
-			<Modal.Footer justify="space-between">
-				<Button
-					auto
-					bordered
-					flat
-					onPress={() => {
-						navigator.clipboard.writeText(share_link);
-					}}
-				>
-					Copy Link
-				</Button>
+			<Modal.Footer>
 				<Button auto onPress={closeHandler}>
 					Done
 				</Button>

@@ -7,7 +7,7 @@ import {
 	useNote,
 	useDispatchNote,
 	useNotes,
-	useDispatchNotes,
+	useDispatchNotes
 } from "@/modules/AppContext";
 import { useSession } from "next-auth/react";
 
@@ -37,38 +37,40 @@ const NoteList = ({ retrieved_notes, handleSidebarDisplay, createNote }) => {
 		}
 	};
 	return (
-		<>
-			<Container css={{ padding: "0 0.5rem", textOverflow: "break" }}>
-			{("rooms" in notes) ? (
-						<NoteGroup
-							name={"Shared Notes"}
-							key={notes.rooms.id}
-							color={"green"}
-							notes={notes?.rooms?.filter(note => (note?.userId!=session?.user?.id) ).map(note => (note.note))}
-							openNote={openNote}
-							createNote={createNote}
-						/>
-				) : null}
-				{("groups" in notes) ? (
-					notes.groups.map((group) => (
-						<NoteGroup
-							name={group.name}
-							key={group.id}
-							id={group.id}
-							color={group.color}
-							notes={group.notes}
-							defaultGroup={group.default}
-							openNote={openNote}
-							createNote={createNote}
-						/>
-					))
-				) : (
-					<div>
-						<p>Oops... no notes yet</p>
-					</div>
-				)}
-			</Container>
-		</>
+		<Container css={{ padding: "0 0.5rem", textOverflow: "break" }}>
+			{"rooms" in notes ? (
+				<NoteGroup
+					name="Shared with me"
+					color="#67A273"
+					key={notes.rooms.id}
+					notes={notes?.rooms
+						?.filter((note) => note?.userId != session?.user?.id)
+						.map((note) => note.note)}
+					openNote={openNote}
+					createNote={createNote}
+					shared={true}
+				/>
+			) : null}
+			{"groups" in notes ? (
+				notes.groups.map((group) => (
+					<NoteGroup
+						name={group.name}
+						key={group.id}
+						id={group.id}
+						color={group.color}
+						notes={group.notes}
+						defaultGroup={group.default}
+						openNote={openNote}
+						createNote={createNote}
+						shared={false}
+					/>
+				))
+			) : (
+				<div>
+					<p>Oops... no notes yet</p>
+				</div>
+			)}
+		</Container>
 	);
 };
 
