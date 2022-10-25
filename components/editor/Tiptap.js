@@ -30,7 +30,6 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import { baseExtensions } from './baseExtensions';
 import { fromBase64, fromUint8Array, toUint8Array } from 'js-base64'
 import { yDocToProsemirrorJSON, prosemirrorJSONToYDoc } from 'y-prosemirror'
-import { on } from "events";
 
 EditorView.prototype.updateState = function updateState(state) {
 	if (!this.docView) return; // This prevents the matchesNode error on hot reloads
