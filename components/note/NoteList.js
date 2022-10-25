@@ -41,6 +41,7 @@ const NoteList = ({ retrieved_notes, handleSidebarDisplay, createNote }) => {
 			{"rooms" in notes ? (
 				<NoteGroup
 					name="Shared with me"
+					color="#67A273"
 					key={notes.rooms.id}
 					notes={notes?.rooms
 						?.filter((note) => note?.userId != session?.user?.id)

@@ -7,9 +7,10 @@ const AvatarGroup = ({ users, setShareModal }) => {
 	return (
 		<Avatar.Group
 			count={users.length - avatarLimit > 0 && users.length - avatarLimit}
+			animated={false}
 		>
 			{users.slice(0, avatarLimit).map((user, index) => (
-				<Tooltip placement="bottom" content={user.name} key={index}>
+				<Tooltip placement="bottom" content={user.name} key={index} css={{ whiteSpace: "nowrap"}}>
 				<Avatar
 					pointer
 					key={index}
