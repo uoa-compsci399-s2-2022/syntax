@@ -381,7 +381,7 @@ export default function ({ setCollabUsers }) {
 				content={drawContent}
 			/>
 			<div>
-				<p>Users: {editor?.storage.collaborationCursor?.users.length} </p>
+				{/* <p>Users: {editor?.storage.collaborationCursor?.users.length} </p> */}
 			</div>
 		</Container>
 	);
