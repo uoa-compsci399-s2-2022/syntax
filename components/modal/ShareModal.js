@@ -13,7 +13,7 @@ import {
 	useTheme
 } from "@nextui-org/react";
 
-const ShareModal = ({ open, closeHandler, shareHandler }) => {
+const ShareModal = ({ open, closeHandler }) => {
 	const { checked, type } = useTheme();
 	const [email, setEmail] = useState("");
 	const [sharedUsers, setSharedUsers] = useState([]);
@@ -21,6 +21,34 @@ const ShareModal = ({ open, closeHandler, shareHandler }) => {
 
 	const addEmail = (event) => {
 		setEmail(event.target.value);
+	};
+
+	const shareHandler = async (email, type) => {
+		if (type == "SHARE") {
+			console.log("SHARE");
+			let res = await fetch(`/api/collab`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					email: email,
+					roomId: currentNote?.room?.id || null,
+					noteId: currentNote.id,
+					YDOC: currentNote.YDOC
+				})
+			});
+		}
+		if (type == "UNSHARE") {
+			console.log("UNSHARE");
+			let res = await fetch(`/api/collab`, {
+				method: "DELETE",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					email: email,
+					id: currentNote?.room?.id || null
+				})
+			});
+		}
+		getSharedUsers();
 	};
 
 	const getSharedUsers = async () => {

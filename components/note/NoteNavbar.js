@@ -267,7 +267,7 @@ const NoteNavbar = ({
 				<ShareModal
 					open={shareModal}
 					closeHandler={closeHandler}
-					shareHandler={shareHandler}
+					// shareHandler={shareHandler}
 				/>
 				<DeleteModal
 					open={deleteModal}
