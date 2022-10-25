@@ -1,20 +1,11 @@
 import { getNoteByID } from "../../../prisma/Note";
 import { getSession } from "next-auth/react";
 import { generateHTML } from "@tiptap/html";
-import StarterKit from "@tiptap/starter-kit";
-import BulletList from "@tiptap/extension-bullet-list";
-import Underline from "@tiptap/extension-underline";
-import Superscript from "@tiptap/extension-superscript";
-import Subscript from "@tiptap/extension-subscript";
-import Youtube from "@tiptap/extension-youtube";
-import Link from "@tiptap/extension-link";
 import { baseExtensions } from "../../../components/editor/baseExtensions";
 import { TipTapCustomImage } from "@/node/Image";
-import { Drawing } from "@/node/Drawing";
-import { CodeBlockNode } from "../../../node/ExportCode";
 import TurndownService from "turndown";
-import mdToPdf from "md-to-pdf";
 import rateLimit from "../../../utils/rate-limit";
+import { CodeBlockNode } from "../../../node/ExportCode";
 
 const CSS = `<style>
 /* general css */
@@ -119,7 +110,7 @@ export default async function handle(req, res) {
 				const body = generateHTML(note.body, [
 					...baseExtensions(),
 					TipTapCustomImage(null),
-                    CodeBlockNode
+					CodeBlockNode
 				]);
 				if (param[2] === "md") {
 					const html = htmlTemplate(title, body, note.user.name, false);
@@ -130,15 +121,6 @@ export default async function handle(req, res) {
 					let html = htmlTemplate(title, body, note.user.name, true);
 					html = "<!doctype html>" + html;
 					return res.status(200).json({ text: html });
-				} else if (param[2] === "pdf") {
-                    const html = htmlTemplate(title, body, note.user.name, false)
-                    const turndownService = new TurndownService()
-                    const markdown = turndownService.turndown(html)
-                    const pdf = await mdToPdf({content: markdown})
-                    const json = pdf.content.toJSON()
-                    res.status(200).json({
-                        text: json.data
-                    })
 				} else {
 					return res.status(501).json({ message: "Method not allowed" });
 				}
