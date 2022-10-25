@@ -12,12 +12,15 @@ import {
 	Spacer,
 	useTheme
 } from "@nextui-org/react";
+import { useSession } from "next-auth/react";
+
 
 const ShareModal = ({ open, closeHandler }) => {
 	const { checked, type } = useTheme();
 	const [email, setEmail] = useState("");
 	const [sharedUsers, setSharedUsers] = useState([]);
 	const currentNote = useNote();
+	const { data: session, status } = useSession();
 
 	const addEmail = (event) => {
 		setEmail(event.target.value);
@@ -169,7 +172,8 @@ const ShareModal = ({ open, closeHandler }) => {
 									</Col>
 									{currentNote.room?.userId == user.id ? (
 										"Owner"
-									) : (
+									) : null}
+									{currentNote.room?.userId == session?.user?.id && currentNote.room?.userId !== user.id ? (
 										<Button
 											onPress={() => shareHandler(user.email, "UNSHARE")}
 											auto
@@ -196,7 +200,7 @@ const ShareModal = ({ open, closeHandler }) => {
 												}
 											}}
 										/>
-									)}
+									): null}
 								</Row>
 							))}
 						</Container>
