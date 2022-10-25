@@ -16,7 +16,15 @@ const notesReducer = (state, action) => {
 	// if "add"
 	// return an array of the previous state and the note object
 	if (type === "add") {
+		
 		let noteGroupIndex = state.groups.findIndex((x) => x.id === note.groupId);
+		// console.log(state, noteGroupIndex, note);
+		if(noteGroupIndex<0){
+			var preGroup = note.group;
+			preGroup.notes = [note]
+			state.groups.push(preGroup);
+			return state;
+		} state.groups
 		state.groups[noteGroupIndex].notes.push(note);
 		return state;
 	}

@@ -38,7 +38,7 @@ const NoteList = ({ retrieved_notes, handleSidebarDisplay, createNote }) => {
 	};
 	return (
 		<Container css={{ padding: "0 0.5rem", textOverflow: "break" }}>
-			{"rooms" in notes ? (
+			{"rooms" in notes && notes.rooms.length > 0 ? (
 				<NoteGroup
 					name="Shared with me"
 					color="#67A273"
