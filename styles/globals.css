@@ -233,3 +233,7 @@ input[type="search"]::-webkit-search-results-decoration {
 		display: none;
 	}
 }
+
+#printWindow {
+	display: none;
+}
