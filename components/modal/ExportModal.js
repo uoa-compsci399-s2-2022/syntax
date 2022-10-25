@@ -1,15 +1,11 @@
-import { useReactToPrint } from "react-to-print";
 import { Button, Modal, Dropdown, Grid } from "@nextui-org/react";
 import { useState } from "react";
 
-const ExportModal = ({ open, oncloseHandler, closeHandler, pdfRef }) => {
+const ExportModal = ({ open, closeHandler, exportHandler }) => {
 	const [selected, setSelected] = useState(["HTML"]);
-	const handlePrint = useReactToPrint({
-		content: () => pdfRef?.current
-	});
 
 	return (
-		<Modal blur open={open} onClose={oncloseHandler} css={{ margin: "10px" }}>
+		<Modal blur open={open} onClose={closeHandler} css={{ margin: "10px" }}>
 			<Modal.Header>Export Note</Modal.Header>
 			<Modal.Body>
 				<Grid.Container>
@@ -39,16 +35,10 @@ const ExportModal = ({ open, oncloseHandler, closeHandler, pdfRef }) => {
 				</Grid.Container>
 			</Modal.Body>
 			<Modal.Footer>
-				<Button
-					auto
-					onPress={
-						selected === "PDF" ? handlePrint : () => closeHandler(selected)
-					}
-				>
+				<Button auto onPress={() => exportHandler(selected)}>
 					Export
 				</Button>
-
-				<Button auto bordered flat color="error" onPress={oncloseHandler}>
+				<Button auto bordered flat color="error" onPress={closeHandler}>
 					Cancel
 				</Button>
 			</Modal.Footer>

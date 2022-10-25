@@ -4,12 +4,12 @@ import { Dropdown, Button, Navbar, useTheme } from "@nextui-org/react";
 import { useTheme as useNextTheme } from "next-themes";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { useSession, signOut } from "next-auth/react";
+import { signOut } from "next-auth/react";
+import { useReactToPrint } from "react-to-print";
 import {
 	EllipsisHorizontalIcon,
 	TrashIcon,
 	ShareIcon,
-	LockClosedIcon,
 	DocumentArrowUpIcon,
 	ChevronDoubleRightIcon,
 	ChevronDoubleLeftIcon,
@@ -17,11 +17,8 @@ import {
 	MoonIcon,
 	ArrowLeftOnRectangleIcon
 } from "@heroicons/react/24/solid";
-
 import {
 	useNote,
-	useDispatchNote,
-	useNotes,
 	useDispatchNotes
 } from "../../modules/AppContext";
 
@@ -34,6 +31,11 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, pdfRef }) => {
 	const currentNote = useNote();
 	const setNotes = useDispatchNotes();
 	const router = useRouter();
+
+	const handlePdf = useReactToPrint({
+		content: () => pdfRef?.current,
+		onAfterPrint: () => setExportModal(false)
+	});
 
 	const deleteNoteHandler = async () => {
 		try {
@@ -58,7 +60,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, pdfRef }) => {
 				let res = await fetch(`/api/note/${currentNote.id}/export/html`, {
 					method: "GET"
 				});
-				setExportModal(false)
+				setExportModal(false);
 				let { text } = await res.json();
 				const blob = new Blob([text], { type: "text/html" });
 				const link = document.createElement("a");
@@ -69,7 +71,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, pdfRef }) => {
 				const res = await fetch(`/api/note/${currentNote.id}/export/md`, {
 					method: "GET"
 				});
-				setExportModal(false)
+				setExportModal(false);
 				let { text } = await res.json();
 				const blob = new Blob([text], { type: "text/markdown" });
 				const link = document.createElement("a");
@@ -77,10 +79,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, pdfRef }) => {
 				link.setAttribute("download", `${currentNote.title}.md`);
 				link.click();
 			} else if (fileType == "PDF") {
-				setExportModal(false)
-				setTimeout(() => {
-					window.print()
-				}, 1000)
+				handlePdf();
 			}
 		} catch (error) {
 			console.log(error);
@@ -113,7 +112,7 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, pdfRef }) => {
 	}, [selectedKey]);
 
 	return (
-		<Navbar 
+		<Navbar
 			disableShadow
 			disableBlur
 			className="no-print"
@@ -226,9 +225,8 @@ const NoteNavbar = ({ sidebarDisplay, handleSidebarDisplay, pdfRef }) => {
 				</Navbar.Item>
 				<ExportModal
 					open={exportModal}
-					oncloseHandler={closeHandler}
-					closeHandler={exportNoteHandler}
-					pdfRef={pdfRef}
+					closeHandler={closeHandler}
+					exportHandler={exportNoteHandler}
 				/>
 				<DeleteModal
 					open={deleteModal}
