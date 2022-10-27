@@ -1,7 +1,7 @@
 import { Container, Spacer, Dropdown } from "@nextui-org/react";
 import dynamic from "next/dynamic";
 import { debounce } from "lodash";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 import {
 	useNote,
@@ -42,14 +42,14 @@ const NoteDisplay = ({ setCollabUsers, pdfRef }) => {
 
 		const updatedNote = await res.json();
 		updatedNote.currentGroupId = content.currentGroupId;
-		
+
 		if (!content.id) {
 			setNotes({ note: updatedNote, type: "add" });
 		} else {
 			setNotes({ note: updatedNote, type: "edit" });
 		}
-			setCurrentNote(updatedNote);
-			router.push(`/note/${updatedNote.id}`, undefined, { shallow: true });
+		setCurrentNote(updatedNote);
+		router.push(`/note/${updatedNote.id}`, undefined, { shallow: true });
 	};
 
 	if (!currentNote && notes) return null;

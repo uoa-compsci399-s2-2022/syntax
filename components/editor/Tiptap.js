@@ -27,9 +27,9 @@ import { WebrtcProvider } from "y-webrtc";
 import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState, useMemo } from "react";
-import { baseExtensions } from './baseExtensions';
-import { fromBase64, fromUint8Array, toUint8Array } from 'js-base64'
-import { yDocToProsemirrorJSON, prosemirrorJSONToYDoc } from 'y-prosemirror'
+import { baseExtensions } from "./baseExtensions";
+import { fromBase64, fromUint8Array, toUint8Array } from "js-base64";
+import { yDocToProsemirrorJSON, prosemirrorJSONToYDoc } from "y-prosemirror";
 
 EditorView.prototype.updateState = function updateState(state) {
 	if (!this.docView) return; // This prevents the matchesNode error on hot reloads
@@ -113,7 +113,10 @@ export default function ({ setCollabUsers }) {
 
 	//Creates room based on note id. Deletes the old ydoc and creates a new blank one.
 	const ydoc = useMemo(() => new Y.Doc(), [currentNote.id]);
-	const provider = useMemo(() => { if (currentNote.room) return new WebrtcProvider(currentNote.id + "_43785b3457gt", ydoc) }, [currentNote.room]);
+	const provider = useMemo(() => {
+		if (currentNote.room)
+			return new WebrtcProvider(currentNote.id + "_43785b3457gt", ydoc);
+	}, [currentNote.room]);
 
 	useEffect(() => {
 		console.log(currentNote);
@@ -130,7 +133,7 @@ export default function ({ setCollabUsers }) {
 				...baseExtensions(),
 				TipTapCustomImage(upload).configure({
 					HTMLAttributes: {
-						class: 'image'
+						class: "image"
 					}
 				}),
 				DebounceSave().configure({
@@ -140,30 +143,31 @@ export default function ({ setCollabUsers }) {
 				}),
 				Collaboration.configure({
 					// document: ydoc,
-					fragment: ydoc.getXmlFragment('prosemirror')
+					fragment: ydoc.getXmlFragment("prosemirror")
 				}),
 				"room" in currentNote && currentNote.room !== null
 					? CollaborationCursor.configure({
-						provider: provider,
-						user: {
-							name: session?.user?.name,
-							color: getRandomColour(),
-							image: session?.user?.image
-						}
-					})
+							provider: provider,
+							user: {
+								name: session?.user?.name,
+								color: getRandomColour(),
+								image: session?.user?.image
+							}
+					  })
 					: null
 			],
 			onBeforeCreate({ editor }) {
-				if(currentNote.YDOC) Y.applyUpdate(ydoc, toUint8Array(currentNote.YDOC));
-				provider?.on('synced', synced => {
+				if (currentNote.YDOC)
+					Y.applyUpdate(ydoc, toUint8Array(currentNote.YDOC));
+				provider?.on("synced", (synced) => {
 					const users = editor?.storage.collaborationCursor?.users;
 					setCollabUsers(users);
-				})
+				});
 			},
 			onDestroy() {
 				provider?.destroy();
 			},
-			onCreate({editor}){
+			onCreate({ editor }) {
 				const users = editor?.storage.collaborationCursor?.users;
 				setCollabUsers(users);
 			},
@@ -204,6 +208,7 @@ export default function ({ setCollabUsers }) {
 
 	return (
 		<Container
+			className="tiptap-editor"
 			display="flex"
 			direction="column-reverse"
 			css={{

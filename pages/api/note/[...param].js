@@ -77,8 +77,6 @@ font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
 	white-space: pre-line;
 	line-height:1.1em;
 }
-}
-  
 </style>`;
 
 const htmlTemplate = (title, body, name, css) => {

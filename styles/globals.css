@@ -270,8 +270,25 @@ input[type="search"]::-webkit-search-results-decoration {
 	.no-print {
 		display: none;
 	}
+
+	.code-block-output:after {
+		display: block !important;
+	}
+
+	.code-language-dropdown {
+		line-height: var(--nextui-space-14);
+	}
+
+	.tiptap-editor {
+		display: block;
+	}
 }
 
 #printWindow {
+	display: none;
+}
+
+.code-block-output:after {
+	content: attr(data-content);
 	display: none;
 }
