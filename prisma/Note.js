@@ -296,6 +296,7 @@ export const addUser = async (email, roomId, noteId, YDOC, session) => {
 			}
 		});
 	}
+	return await getSharedUsers(validRoomId);
 }
 
 export const deleteUser = async (email, roomId, session) => {
@@ -311,7 +312,7 @@ export const deleteUser = async (email, roomId, session) => {
 			}
 		},
 	})
-	return users;
+	return await getSharedUsers(roomId);
 }
 
 export const getSharedUsers = async (roomId) => {

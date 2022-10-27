@@ -42,11 +42,14 @@ const NoteDisplay = ({ setCollabUsers, pdfRef }) => {
 
 		const updatedNote = await res.json();
 		updatedNote.currentGroupId = content.currentGroupId;
-		setNotes({ note: updatedNote, type: "edit" });
-		setCurrentNote(updatedNote);
-		router.push(`/note/${updatedNote.id}`, undefined, {
-			shallow: true
-		});
+		
+		if (!content.id) {
+			setNotes({ note: updatedNote, type: "add" });
+		} else {
+			setNotes({ note: updatedNote, type: "edit" });
+		}
+			setCurrentNote(updatedNote);
+			router.push(`/note/${updatedNote.id}`, undefined, { shallow: true });
 	};
 
 	if (!currentNote && notes) return null;

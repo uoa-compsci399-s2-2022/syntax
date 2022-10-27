@@ -7,7 +7,6 @@ import Youtube from "@tiptap/extension-youtube";
 import {TrailingNode} from "./TrailingNode";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
-import { TipTapCustomImage } from "@/node/Image";
 import { Drawing } from "@/node/Drawing";
 import { CodeBlockNode } from './CodeMirrorNode';
 import { DebounceSave } from './DebounceSaveExtension';
@@ -16,8 +15,7 @@ export const baseExtensions = () => {
 	return [
 		StarterKit.configure({
 			codeBlock: false,
-			bulletList: false,
-			history: false
+			bulletList: false
 		}),
 		TrailingNode,
 		Underline,
