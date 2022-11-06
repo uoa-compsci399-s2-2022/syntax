@@ -54,8 +54,8 @@ export const Extension = ({
 
 	const run = async (event) => {
 		const compiled = await TIO.run(doc, input, lang);
-		const output = compiled.slice(0, compiled.length - 6).join("\n");
-		const system = compiled.slice(compiled.length - 6).join("\n");
+		const output = compiled.slice(0, compiled.length - 5).join("\n");
+		const system = compiled.slice(compiled.length - 5).join("\n");
 		updateAttributes({ code_output: output, system_output: system });
 		setSystemInfo(false);
 		console.log(compiled);

@@ -16,6 +16,7 @@ export const CodeBlockNode = Node.create({
 	marks: '',
 	defining: true,
 	isolating: true,
+	draggable: true,
 	addOptions() {
 		return {
 			exitOnTripleEnter: true,
@@ -86,7 +87,7 @@ export const CodeBlockNode = Node.create({
 				find: backtickInputRegex,
 				type: this.type,
 				getAttributes: (match) => ({
-					language: match[1],
+					language: "python3",
 				}),
 			}),
 		];
