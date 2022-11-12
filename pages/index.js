@@ -23,7 +23,11 @@ import dynamic from 'next/dynamic';
 
 const BlobBackground = dynamic(() => import("@/components/home/BlobBackground"), {ssr: false});
 
-export const getServerSideProps = async ({ req }) => {
+export const getServerSideProps = async ({ req, res }) => {
+	res.setHeader(
+		"Cache-Control",
+		"public, s-maxage=10, stale-while-revalidate=59"
+	);
 	const session = await getSession({ req });
 
 	if (session) {

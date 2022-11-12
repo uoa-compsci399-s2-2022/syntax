@@ -34,13 +34,25 @@ const NoteNavbar = ({
 	const [selectedKey, setSelectedKey] = useState();
 	const [exportModal, setExportModal] = useState(false);
 	const [deleteModal, setDeleteModal] = useState(false);
+	const [testState, setTestState] = useState(false);
 	const router = useRouter();
 	const currentNote = useNote();
 	const setNotes = useDispatchNotes();
 
 	const handlePdf = useReactToPrint({
 		content: () => pdfRef?.current,
-		onAfterPrint: () => setExportModal(false)
+		onAfterPrint: () => setExportModal(false),
+		pageStyle: `@page {
+			size: auto;
+			margin: 10mm 0;
+		  }
+		  
+		  @media print {
+			body {
+			  -webkit-print-color-adjust: exact;
+			}
+		  }`,
+		removeAfterPrint: true
 	});
 
 	const deleteNoteHandler = async () => {

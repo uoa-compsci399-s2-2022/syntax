@@ -39,6 +39,9 @@ const ShareModal = ({ open, closeHandler }) => {
 					YDOC: currentNote.YDOC
 				})
 			});
+			const updatedGroup = await res.json();
+			console.log(updatedGroup, "sdfsdf");
+			setSharedUsers(updatedGroup.user);
 		}
 		if (type == "UNSHARE") {
 			console.log("UNSHARE");
@@ -50,9 +53,9 @@ const ShareModal = ({ open, closeHandler }) => {
 					id: currentNote?.room?.id || null
 				})
 			});
-		}
-		if (currentNote?.room !== null) {
-			getSharedUsers();
+			const updatedGroup = await res.json();
+			console.log(updatedGroup, "sdfsdf");
+			setSharedUsers(updatedGroup.user);
 		}
 	};
 

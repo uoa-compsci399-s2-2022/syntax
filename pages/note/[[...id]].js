@@ -7,15 +7,13 @@ import { useEffect, useState, useRef } from "react";
 import { NoteTemplate } from "../../components/note/NewNote";
 import { Container, useTheme } from "@nextui-org/react";
 import { useDispatchNote, useDispatchNotes } from "../../modules/AppContext";
-
+import dynamic from 'next/dynamic';
 const getNoteByID = require("../../prisma/Note").getNoteByID;
 const getAllNotesByUserID = require("../../prisma/Note").getAllNotesByUserID;
 
+
 export const getServerSideProps = async ({ req, res, params }) => {
-	// res.setHeader(
-	// 	"Cache-Control",
-	// 	"public, s-maxage=10, stale-while-revalidate=59"
-	// );
+	
 	const session = await getSession({ req });
 	let ownership = true;
 	const { id } = params;
