@@ -94,6 +94,7 @@ export const Extension = ({
 	return (
 		<NodeViewWrapper>
 			<Container
+				display="inline-block"
 				contentEditable={false}
 				css={{
 					background: type === "dark" ? oneDarkColors.background : "white",
