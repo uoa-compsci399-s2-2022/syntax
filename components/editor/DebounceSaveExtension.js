@@ -36,9 +36,9 @@ export const DebounceSave = () => {
 
 		const updatedNote = await res.json();
 		if (!content.id) {
-			router.push(`/note/${updatedNote.id}`, undefined, { shallow: true });
 			setNotes({ note: updatedNote, type: "add" });
 			setCurrentNote(updatedNote);
+			router.push(`/note/${updatedNote.id}`, undefined, { shallow: true });
 		} else {
 			setNotes({ note: updatedNote, type: "edit" });
 		}
@@ -70,6 +70,7 @@ export const DebounceSave = () => {
 					const ut8arr = Y.encodeStateAsUpdate(this.options.YDOC)
 					const ydocb64 = fromUint8Array(ut8arr);
 					// Y.applyUpdate(this.options.YDOC, update);
+					// console.log(editor.getHTML());
 					debounceSave({
 						id: this.options.noteId,
 						title: this.options.noteTitle,

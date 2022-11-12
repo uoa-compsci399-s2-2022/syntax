@@ -77,8 +77,6 @@ font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
 	white-space: pre-line;
 	line-height:1.1em;
 }
-}
-  
 </style>`;
 
 const htmlTemplate = (title, body, name, css) => {
@@ -95,12 +93,12 @@ const limiter = rateLimit({
 
 export default async function handle(req, res) {
 	const session = await getSession({ req });
-	if (session) {
-		try {
-			await limiter.check(res, 2, "CACHE_TOKEN"); //2 requests per second is the limit
-		} catch {
-			return res.status(429).json({ error: "Rate limit exceeded" });
-		}
+	// if (session) {
+	// 	try {
+	// 		await limiter.check(res, 2, "CACHE_TOKEN"); //2 requests per second is the limit
+	// 	} catch {
+	// 		return res.status(429).json({ error: "Rate limit exceeded" });
+	// 	}
 		const { param } = req.query;
 		if (param.length === 3) {
 			if (param[1] === "export") {
@@ -134,7 +132,7 @@ export default async function handle(req, res) {
 				.status(501)
 				.json({ message: `/api/note/${param.join("/")} is not implemented` });
 		}
-	} else {
-		return res.status(401).json({ message: "Unauthorized access" });
-	}
+	// } else {
+	// 	return res.status(401).json({ message: "Unauthorized access" });
+	// }
 }
